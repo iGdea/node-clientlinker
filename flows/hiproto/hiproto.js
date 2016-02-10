@@ -49,7 +49,9 @@ function hiproto(runtime, callback)
 							}
 							else
 							{
-								client.hiprotoServer = servers[client.name] = new Service(content, options.hiprotoClientPath);
+								client.hiprotoServer = servers[client.name] =
+									new Service(content, options.hiprotoClientPath);
+
 								resolve();
 							}
 						});
@@ -61,12 +63,14 @@ function hiproto(runtime, callback)
 
 	promise.then(function()
 	{
-		var handlerName = (options.hiprotoClientAlias || client.name)+'.'+runtime.methodName;
+		var clientAlias = options.hiprotoClientAlias || client.name;
+		var handlerName = clientAlias+'.'+runtime.methodName;
 		var handler = client.hiprotoServer[handlerName];
 
 		if (typeof handler == 'function')
 		{
-			handler.call(client.hiprotoServer, runtime.query, runtime.body, callback, runtime.runOptions);
+			handler.call(client.hiprotoServer, runtime.query, runtime.body, callback,
+				runtime.runOptions && runtime.runOptions.hiprotoNotParseBuffer);
 		}
 		else
 		{
