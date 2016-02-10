@@ -1,0 +1,33 @@
+{
+  "name": "client_linker",
+  "version": "3.0.0",
+  "description": "Client Linker all.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/test_*"
+  },
+  "keywords": [
+    "client",
+    "linker",
+    "proxy"
+  ],
+  "author": "bacrawu <bacra.woo@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "underscore": "^1.8.3"
+  },
+  "optionalDependencies":{
+    "express": "^4.6.0",
+    "request": "^2.69.0",
+    "body-parser": "^1.14.2",
+    "mkdirp": "*",
+    "mail.addon_hiproto": "*"
+  }
+}
