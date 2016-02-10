@@ -12,16 +12,23 @@ function logger(runtime, callback)
 	callback.next();
 	runtime.promise.then(function(data)
 		{
-			logger(runtime.methodKey, runtime.query, runtime.body, null, data, runtime);
+			logger(runtime, false, null, data);
 		},
 		function(err)
 		{
-			logger(runtime.methodKey, runtime.query, runtime.body, err, null, runtime);
+			logger(runtime, true, err, null);
 		});
 }
 
-function log(methodKey, query, body, err, data, runtime)
+function log(runtime, isError, err, data)
 {
 	var timing = runtime.timing;
-	debug('task info <%s>, query:%o, body:%o, err:%o, data:%o, options:%o, use:%dms run:%dms', methodKey, query, body, err, data, runtime.runOptions, timing.flowsEnd - timing.navigationStart, timing.lastFlowEnd - timing.lastFlowStart);
+	debug('task info <%s> query:%o, body:%o, err:%d,%o, data:%o, options:%o, use:%dms run:%dms',
+		runtime.methodKey,
+		runtime.query,
+		runtime.body,
+		isError ? 1 : 0, err, data,
+		runtime.runOptions,
+		timing.flowsEnd - timing.navigationStart,
+		timing.lastFlowEnd - timing.lastFlowStart);
 }
