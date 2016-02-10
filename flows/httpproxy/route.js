@@ -1,12 +1,13 @@
-var debug		= require('debug')('client_linker:httpproxy:route');
-var json		= require('../../lib/json');
-var bodyParser	= require('body-parser').json({limit: '200mb'});
+var debug				= require('debug')('client_linker:httpproxy:route');
+var json				= require('../../lib/json');
+var defaultBodyParser	= require('body-parser').json({limit: '200mb'});
 
 module.exports = HttpProxyRoute;
 
-function HttpProxyRoute(linker)
+function HttpProxyRoute(linker, bodyParser)
 {
 	if (!linker) return function(req, res, next){next()};
+	bodyParser || (bodyParser = defaultBodyParser);
 
 	return function(req, res, next)
 	{
