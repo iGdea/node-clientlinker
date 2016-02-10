@@ -12,9 +12,9 @@ catch(e)
 }
 
 
-function hiproto(args, callback)
+function hiproto(runtime, callback)
 {
-	var client = args.client;
+	var client = runtime.client;
 	var options = client.options;
 
 	var promise = Promise.resolve();
@@ -61,12 +61,12 @@ function hiproto(args, callback)
 
 	promise.then(function()
 	{
-		var handlerName = (options.hiprotoClientAlias || client.name)+'.'+args.methodName;
+		var handlerName = (options.hiprotoClientAlias || client.name)+'.'+runtime.methodName;
 		var handler = client.hiprotoServer[handlerName];
 
 		if (typeof handler == 'function')
 		{
-			handler.call(client.hiprotoServer, args.query, args.body, callback, args.runOptions);
+			handler.call(client.hiprotoServer, runtime.query, runtime.body, callback, runtime.runOptions);
 		}
 		else
 		{

@@ -3,9 +3,9 @@ var runHandler = require('../confighandler/confighandler').runHandler;
 
 exports = module.exports = pkghandler;
 
-function pkghandler(args, callback)
+function pkghandler(runtime, callback)
 {
-	var client = args.client;
+	var client = runtime.client;
 	var options = client.options;
 
 	if (!options.pkghandler) return callback.next();
@@ -23,15 +23,15 @@ function pkghandler(args, callback)
 	}
 
 	if (!client.pkghandlerModule) return callback.next();
-	var handler = client.pkghandlerModule[args.methodName];
+	var handler = client.pkghandlerModule[runtime.methodName];
 	if (!handler)
 	{
-		debug('no handler:%s', args.methodName);
+		debug('no handler:%s', runtime.methodName);
 		return callback.next();
 	}
 	else
 	{
-		runHandler(args, callback, handler);
+		runHandler(runtime, callback, handler);
 	}
 }
 

@@ -11,22 +11,22 @@ catch(e)
 	debug('load httpproxy pkg err:%o', err);
 }
 
-function httpproxy(args, callback)
+function httpproxy(runtime, callback)
 {
-	var client = args.client;
+	var client = runtime.client;
 	var options = client.options;
 	if (!options.httpproxy) return callback.next();
 
-	var url = options.httpproxy+'action='+args.methodKey;
+	var url = options.httpproxy+'action='+runtime.methodKey;
 	var body = {
-		query		: args.query,
-		body		: args.body,
+		query		: runtime.query,
+		body		: runtime.body,
 		CONST_VARS	: json.CONST_VARS,
-		runOptions	: args.runOptions
+		runOptions	: runtime.runOptions
 	};
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
-	var timeout = (args.runOptions && args.runOptions.timeout) || options.httpproxyTimeout;
+	var timeout = (runtime.runOptions && runtime.runOptions.timeout) || options.httpproxyTimeout;
 
 	debug('request url:%s', url);
 

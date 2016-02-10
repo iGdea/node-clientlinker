@@ -29,6 +29,7 @@ describe('savefile', function()
 			.then(function(content)
 			{
 				var data = parseContent(content, 'json');
+				assert(data.result instanceof Error);
 				assert.equal(data.result.message, 'errmsg123');
 				assert.equal(data.data.data, 'data');
 				assert(Buffer.isBuffer(data.data.buffer));

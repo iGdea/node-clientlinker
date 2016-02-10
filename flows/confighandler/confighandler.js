@@ -2,25 +2,24 @@ var debug = require('debug')('client_linker:confighandler');
 
 exports = module.exports = confighandler;
 
-function confighandler(args, callback)
+function confighandler(runtime, callback)
 {
-	var client = args.client;
+	var client = runtime.client;
 	var options = client.options;
-	if (!options.confighandler || !args.methodName in options.confighandler) return callback.next();
+	if (!options.confighandler || !runtime.methodName in options.confighandler) return callback.next();
 
-	var handler = options.confighandler[args.methodName];
+	var handler = options.confighandler[runtime.methodName];
 
 	if (typeof handler == 'function')
-		runHandler(args, callback, handler);
+		runHandler(runtime, callback, handler);
 	else
 		callback(null, handler);
 }
 
 exports.runHandler = runHandler;
-function runHandler(args, callback, handler)
+function runHandler(runtime, callback, handler)
 {
-	// callback 是包装过的，本身是一个callback
-	var ret = handler(args.query, args.body, callback, args.runOptions);
+	var ret = handler(runtime.query, runtime.body, callback, runtime.runOptions);
 
 	if (ret instanceof Promise)
 	{

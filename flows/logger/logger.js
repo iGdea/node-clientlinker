@@ -1,32 +1,27 @@
 var debug = require('debug')('client_linker:logger');
 exports = module.exports = logger;
 
-function logger(args, callback)
+function logger(runtime, callback)
 {
-	var client = args.client;
+	var client = runtime.client;
 	var options = client.options;
 
 	if (!options.logger) return callback.next();
 	var logger = typeof options.logger == 'function' ? options.logger : log;
 
-	callback.next().then(function(data)
+	callback.next();
+	runtime.promise.then(function(data)
 		{
-			setTimeout(function()
-			{
-				logger(args.methodKey, args.query, args.body, null, data, args);
-			},10);
+			logger(runtime.methodKey, runtime.query, runtime.body, null, data, runtime);
 		},
 		function(err)
 		{
-			setTimeout(function()
-			{
-				logger(args.methodKey, args.query, args.body, err, null, args);
-			},10);
+			logger(runtime.methodKey, runtime.query, runtime.body, err, null, runtime);
 		});
 }
 
-function log(methodKey, query, body, err, data, args)
+function log(methodKey, query, body, err, data, runtime)
 {
-	var timing = args.timing;
-	debug('task info <%s>, query:%o, body:%o, err:%o, data:%o, options:%o, use:%dms run:%dms', methodKey, query, body, err, data, args.runOptions, timing.flowsEnd - timing.navigationStart, timing.lastFlowEnd - timing.lastFlowStart);
+	var timing = runtime.timing;
+	debug('task info <%s>, query:%o, body:%o, err:%o, data:%o, options:%o, use:%dms run:%dms', methodKey, query, body, err, data, runtime.runOptions, timing.flowsEnd - timing.navigationStart, timing.lastFlowEnd - timing.lastFlowStart);
 }

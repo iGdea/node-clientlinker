@@ -5,14 +5,14 @@ var json = require('../../lib/json');
 
 exports = module.exports = localfile;
 
-function localfile(args, callback)
+function localfile(runtime, callback)
 {
-	var client = args.client;
+	var client = runtime.client;
 	var options = client.options;
 
 	if (!options.localfile) return callback.next();
 
-	var file = options.localfile+'/'+args.methodName;
+	var file = options.localfile+'/'+runtime.methodName;
 
 	checkExists(file, ['js', 'json'])
 		.then(function(exists)

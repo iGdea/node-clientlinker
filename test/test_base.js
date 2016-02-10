@@ -50,7 +50,7 @@ describe('init', function()
 				flows: ['custom'],
 				customFlows:
 				{
-					custom: function custom(args, callback)
+					custom: function custom(runtime, callback)
 					{
 						runned = true;
 						callback();
@@ -74,17 +74,17 @@ describe('init', function()
 				flows: ['assertHandler', 'custom1', 'custom2'],
 				customFlows:
 				{
-					custom1: function custom1(args, callback)
+					custom1: function custom1(runtime, callback)
 					{
 						setTimeout(callback.next, 100);
 					},
-					custom2: function custom2(args, callback)
+					custom2: function custom2(runtime, callback)
 					{
 						setTimeout(callback, 100);
 					},
-					assertHandler: function assertHandler(args, callback)
+					assertHandler: function assertHandler(runtime, callback)
 					{
-						var timing = args.timing;
+						var timing = runtime.timing;
 						assert(timing.lastFlowStart - timing.navigationStart < 10);
 						assert.equal(timing.lastFlowStart, timing.flowsStart);
 
