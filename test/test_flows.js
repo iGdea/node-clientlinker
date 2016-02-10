@@ -66,12 +66,22 @@ describe('flows', function()
 		var linker = ClientLinker(
 			{
 				flows: ['logger', 'custom'],
-				logger: true,
+				logger: function(runtime, err, data)
+				{
+					var timing = runtime.timing;
+					assert(timing.lastFlowStart);
+					assert(timing.lastFlowEnd);
+					assert(timing.flowsStart);
+					assert(timing.flowsEnd);
+					assert(!err);
+					assert.equal(data.respone, 'respone');
+					done();
+				},
 				customFlows:
 				{
 					custom: function custom(runtime, callback)
 					{
-						callback(null, {reponse: 'reponse'});
+						callback(null, {respone: 'respone'});
 					}
 				},
 				clients:
@@ -80,7 +90,6 @@ describe('flows', function()
 				}
 			});
 
-		linker.run('client.method', 123, {body:456})
-			.then(function(){done()}, done);
+		linker.run('client.method', 123, {body:456}).catch(done);
 	})
 });
