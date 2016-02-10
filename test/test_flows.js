@@ -69,7 +69,7 @@ describe('flows', function()
 				logger: true,
 				customFlows:
 				{
-					custom: function custom(args, callback)
+					custom: function custom(runtime, callback)
 					{
 						callback(null, {reponse: 'reponse'});
 					}
