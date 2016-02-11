@@ -12,10 +12,7 @@ function runClientHandler(linker)
 		});
 
 	var promise2 = linker.run('client.method2')
-		.then(function()
-		{
-			assert(false);
-		},
+		.then(function(){assert(false)},
 		function(err)
 		{
 			assert.equal(err, 123);
