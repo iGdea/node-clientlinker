@@ -23,6 +23,7 @@ exports = module.exports = function(options)
 	var clientDefaultOptions = options.clientDefaultOptions || (options.clientDefaultOptions = {});
 	if (options.httpproxy) clientDefaultOptions.httpproxy = options.httpproxy;
 	if (options.logger) clientDefaultOptions.logger = options.logger;
+	if (options.anyToError) clientDefaultOptions.anyToError = options.anyToError;
 
 	if (options.flows)
 	{
@@ -69,13 +70,7 @@ exports = module.exports = function(options)
 	{
 		_.each(clients, function(clientOptions, name)
 		{
-			if (!clientOptions)
-			{
-				if (clientDefaultOptions)
-					clientOptions = _.extend({}, clientDefaultOptions);
-				else
-					clientOptions = {};
-			}
+			clientOptions = _.extend({}, clientOptions, clientDefaultOptions);
 
 			clientOptions.flows || (clientOptions.flows = options.flows.slice());
 

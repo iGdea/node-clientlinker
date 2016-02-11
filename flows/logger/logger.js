@@ -16,7 +16,7 @@ function logger(runtime, callback)
 		},
 		function(err)
 		{
-			logger(runtime, err || 'ERROR', null);
+			logger(runtime, err || 'CLIENT_LINKER_DEFERT_ERROR', null);
 		});
 }
 

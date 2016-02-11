@@ -2,7 +2,7 @@ require('debug').enable('client_linker*');
 var ClientLinker = require('../');
 var assert = require('assert');
 
-describe('init', function()
+describe('client linker', function()
 {
 	it('ownlist', function()
 	{
@@ -109,5 +109,50 @@ describe('init', function()
 			});
 
 		linker.run('client.method').catch(done);
+	});
+
+
+	it('anyToError', function()
+	{
+		var linker = ClientLinker(
+			{
+				anyToError: true,
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method1: function(query, body, callback)
+							{
+								callback('errmsg');
+							},
+							method2: function(query, body, callback)
+							{
+								callback.reject();
+							}
+						}
+					}
+				}
+			});
+
+		var promise1 = linker.run('client.method1')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert(err instanceof Error);
+					assert.equal(err.message, 'errmsg');
+				});
+
+		var promise2 = linker.run('client.method2')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert(err instanceof Error);
+					assert.equal(err.message, 'CLIENT_LINKER_DEFERT_ERROR');
+				});
+
+		return Promise.all([promise1, promise2]);
 	});
 });
