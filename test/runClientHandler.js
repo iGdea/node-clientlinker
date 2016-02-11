@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 module.exports = runClientHandler;
-function runClientHandler(linker, done)
+function runClientHandler(linker)
 {
 	var promise1 = linker.run('client.method1', 123,
 		{name:'bb', buffer: new Buffer('buffer')},
@@ -27,6 +27,5 @@ function runClientHandler(linker, done)
 			assert.equal(data, 789);
 		})
 
-	Promise.all([promise1, promise2, promise3])
-		.then(function(){done()}, done);
+	return Promise.all([promise1, promise2, promise3]);
 }

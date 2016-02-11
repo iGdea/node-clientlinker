@@ -4,7 +4,7 @@ var runClientHandler = require('./runClientHandler');
 
 describe('flows', function()
 {
-	it('localfile', function(done)
+	it('localfile', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -13,10 +13,7 @@ describe('flows', function()
 			});
 
 		var promise1 = linker.run('client.js')
-			.then(function()
-			{
-				assert(false);
-			},
+			.then(function(){assert(false)},
 			function(err)
 			{
 				assert.equal(err.message, 'local file errmsg')
@@ -28,13 +25,12 @@ describe('flows', function()
 				assert.equal(data.string, 'string');
 			});
 
-		Promise.all([promise1, promise2])
-			.then(function(){done()}, done);
+		return Promise.all([promise1, promise2]);
 	});
 
 
 
-	it('confighandler', function(done)
+	it('confighandler', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -46,11 +42,11 @@ describe('flows', function()
 				}
 			});
 
-		runClientHandler(linker, done);
+		return runClientHandler(linker);
 	});
 
 
-	it('pkghandler', function(done)
+	it('pkghandler', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -58,7 +54,7 @@ describe('flows', function()
 				pkghandlerDir: __dirname+'/pkghandler'
 			});
 
-		runClientHandler(linker, done);
+		return runClientHandler(linker);
 	});
 
 	it('logger', function(done)

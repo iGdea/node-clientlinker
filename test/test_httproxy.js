@@ -38,7 +38,7 @@ describe('httpproxy', function()
 		svr.close();
 	});
 
-	it('httproxy', function(done)
+	it('httproxy', function()
 	{
 		var linker = ClientLinker(
 		{
@@ -49,6 +49,6 @@ describe('httpproxy', function()
 			}
 		});
 
-		runClientHandler(linker, done);
+		return runClientHandler(linker);
 	});
 });
