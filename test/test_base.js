@@ -88,16 +88,14 @@ describe('client linker', function()
 						assert(timing.lastFlowStart - timing.navigationStart < 10);
 						assert.equal(timing.lastFlowStart, timing.flowsStart);
 
-						var promise = callback.next();
-						promise.then(function()
+						callback.next();
+						callback.promise.then(function()
 						{
-							setTimeout(function()
-							{
-								assert.equal(timing.lastFlowEnd, timing.flowsEnd);
-								assert(timing.lastFlowStart - timing.flowsStart >= 100);
-								assert(timing.lastFlowEnd - timing.lastFlowStart >= 100);
-								done();
-							}, 20);
+							console.log(timing);
+							assert.equal(timing.lastFlowEnd, timing.flowsEnd);
+							assert(timing.lastFlowStart - timing.flowsStart >= 100);
+							assert(timing.lastFlowEnd - timing.lastFlowStart >= 100);
+							done();
 						});
 					}
 				},

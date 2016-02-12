@@ -15,7 +15,8 @@ var debug = require('debug')('client_linker');
  * 	localfileDir
  * 	pkghandlerDir
  */
-exports = module.exports = function(options)
+exports = module.exports = ClientLinker;
+function ClientLinker(options)
 {
 	var linker = new Linker();
 
