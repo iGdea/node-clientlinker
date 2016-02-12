@@ -91,7 +91,6 @@ describe('client linker', function()
 						callback.next();
 						callback.promise.then(function()
 						{
-							console.log(timing);
 							assert.equal(timing.lastFlowEnd, timing.flowsEnd);
 							assert(timing.lastFlowStart - timing.flowsStart >= 100);
 							assert(timing.lastFlowEnd - timing.lastFlowStart >= 100);

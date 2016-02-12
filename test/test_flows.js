@@ -42,7 +42,17 @@ describe('flows', function()
 				}
 			});
 
-		return runClientHandler(linker);
+		var promise1 = runClientHandler(linker);
+		var promise2 = linker.methods()
+				.then(function(list)
+				{
+					assert(list.client);
+					var methods = Object.keys(list.client.methods);
+					methods = methods.sort(function(a,b){return a > b});
+					assert.equal(methods.join(), 'method1,method2,method3');
+				});
+
+		return Promise.all([promise1, promise2]);
 	});
 
 

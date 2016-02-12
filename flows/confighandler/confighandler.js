@@ -16,6 +16,16 @@ function confighandler(runtime, callback)
 		callback(null, handler);
 }
 
+exports.methods = methods;
+function methods(client)
+{
+	var options = client.options;
+	if (typeof options.confighandler == 'object')
+	{
+		return Object.keys(options.confighandler);
+	}
+}
+
 exports.runHandler = runHandler;
 function runHandler(runtime, callback, handler)
 {
