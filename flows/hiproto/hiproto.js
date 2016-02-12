@@ -11,6 +11,7 @@ catch(e)
 	debug('load hiproto err:%o', e);
 }
 
+exports.initConfig = require('./initConfig');
 
 function hiproto(runtime, callback)
 {
@@ -80,4 +81,3 @@ function hiproto(runtime, callback)
 	});
 }
 
-hiproto.initConfig = require('./initConfig');
