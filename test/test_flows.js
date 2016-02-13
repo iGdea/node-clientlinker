@@ -32,6 +32,7 @@ describe('flows', function()
 				var methods = Object.keys(list.client.methods);
 				methods = methods.sort(function(a,b){return a > b});
 				assert.equal(methods.join(), 'js,json');
+				assert.equal(typeof list.client.methods.js[0], 'function');
 			});
 
 		return Promise.all([promise1, promise2, promise3]);
@@ -59,6 +60,7 @@ describe('flows', function()
 					var methods = Object.keys(list.client.methods);
 					methods = methods.sort(function(a,b){return a > b});
 					assert.equal(methods.join(), 'method1,method2,method3');
+					assert.equal(typeof list.client.methods.method1[0], 'function');
 				});
 
 		return Promise.all([promise1, promise2]);
@@ -81,6 +83,7 @@ describe('flows', function()
 					var methods = Object.keys(list.client.methods);
 					methods = methods.sort(function(a,b){return a > b});
 					assert.equal(methods.join(), 'method1,method2,method3');
+					assert.equal(typeof list.client.methods.method1[0], 'function');
 				});
 
 		return Promise.all([promise1, promise2]);
