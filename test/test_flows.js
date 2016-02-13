@@ -25,7 +25,16 @@ describe('flows', function()
 				assert.equal(data.string, 'string');
 			});
 
-		return Promise.all([promise1, promise2]);
+		var promise3 = linker.methods()
+			.then(function(list)
+			{
+				assert(list.client);
+				var methods = Object.keys(list.client.methods);
+				methods = methods.sort(function(a,b){return a > b});
+				assert.equal(methods.join(), 'js,json');
+			});
+
+		return Promise.all([promise1, promise2, promise3]);
 	});
 
 

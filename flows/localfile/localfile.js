@@ -4,6 +4,8 @@ var vm = require('vm');
 var json = require('../../lib/json');
 
 exports = module.exports = localfile;
+exports.initConfig = require('./initConfig');
+exports.methods = require('./methods');
 
 function localfile(runtime, callback)
 {
@@ -43,7 +45,6 @@ function localfile(runtime, callback)
 		});
 }
 
-exports.initConfig = require('./initConfig');
 
 function checkExists(file, extnames)
 {

@@ -1,6 +1,7 @@
 var debug = require('debug')('client_linker:confighandler');
 
 exports = module.exports = confighandler;
+exports.methods = require('./methods');
 
 function confighandler(runtime, callback)
 {
@@ -14,16 +15,6 @@ function confighandler(runtime, callback)
 		runHandler(runtime, callback, handler);
 	else
 		callback(null, handler);
-}
-
-exports.methods = methods;
-function methods(client)
-{
-	var options = client.options;
-	if (typeof options.confighandler == 'object')
-	{
-		return Object.keys(options.confighandler);
-	}
 }
 
 exports.runHandler = runHandler;
