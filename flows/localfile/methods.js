@@ -5,6 +5,7 @@ function methods(client)
 {
 	var pathdir = client.options.localfile;
 	if (!pathdir) return;
+
 	return new Promise(function(resolve, reject)
 		{
 			fs.readdir(pathdir, function(err, dirs)
