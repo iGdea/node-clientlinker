@@ -1,12 +1,7 @@
 var fs		= require('fs');
 var debug	= require('debug')('client_linker:localfile:save');
 var json	= require('../../lib/json');
-var mkdirp;
-
-try {
-	mkdirp = require('mkdirp');
-}
-catch(e){}
+var mkdirp	= require('mkdirp');
 
 module.exports = savefile;
 
@@ -16,7 +11,6 @@ function savefile(localfile, methodName, err, data)
 
 	return new Promise(function(resolve, reject)
 		{
-			if (!mkdirp) return resolve();
 			mkdirp(localfile, function(err)
 			{
 				err ? reject(err) : resolve();

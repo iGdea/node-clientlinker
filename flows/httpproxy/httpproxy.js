@@ -1,15 +1,8 @@
 var debug	= require('debug')('client_linker:httpproxy');
 var json	= require('../../lib/json');
+var request	= require('request');
 
-try {
-	var request	= require('request');
-	require('body-parser').
-	exports = module.exports = httpproxy;
-}
-catch(e)
-{
-	debug('load httpproxy pkg err:%o', err);
-}
+exports = module.exports = httpproxy;
 
 function httpproxy(runtime, callback)
 {

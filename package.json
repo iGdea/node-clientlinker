@@ -20,19 +20,19 @@
   "author": "bacrawu <bacra.woo@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "express": "^4.6.0",
     "mocha": "^2.4.5"
   },
   "dependencies": {
+    "body-parser": "^1.14.2",
     "debug": "^2.2.0",
+    "mkdirp": "^0.5.1",
     "promise": "^7.1.1",
+    "request": "^2.69.0",
     "table": "^3.7.8",
     "underscore": "^1.8.3"
   },
   "optionalDependencies": {
-    "express": "^4.6.0",
-    "request": "^2.69.0",
-    "body-parser": "^1.14.2",
-    "mkdirp": "^0.5.1",
     "mail.addon_hiproto": "*"
   }
 }
