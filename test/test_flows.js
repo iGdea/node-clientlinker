@@ -1,6 +1,6 @@
-var assert = require('assert');
-var ClientLinker = require('../');
-var runClientHandler = require('./runClientHandler');
+var assert				= require('assert');
+var ClientLinker		= require('../');
+var runClientHandler	= require('./runClientHandler');
 
 describe('flows', function()
 {

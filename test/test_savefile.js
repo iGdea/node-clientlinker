@@ -1,26 +1,26 @@
-var fs = require('fs');
-var assert = require('assert');
-var mkdirp = require('mkdirp');
-var dir = __dirname+'/tmp/';
-var savefile = require('../flows/localfile/savefile');
-var parseContent = require('../flows/localfile/localfile').parseContent;
+var fs				= require('fs');
+var assert			= require('assert');
+var mkdirp			= require('mkdirp');
+var savefile		= require('../flows/localfile/savefile');
+var parseContent	= require('../flows/localfile/localfile').parseContent;
+var DIR				= __dirname+'/tmp/';
 
 describe('savefile', function()
 {
 	before(function(done)
 	{
-		mkdirp(dir, done);
+		mkdirp(DIR, done);
 	});
 
 	it('savefile', function(done)
 	{
 		var filename = process.pid+Math.random();
-		savefile(dir, filename, new Error('errmsg123'), {data: 'data', buffer: new Buffer('buffer')})
+		savefile(DIR, filename, new Error('errmsg123'), {data: 'data', buffer: new Buffer('buffer')})
 			.then(function()
 			{
 				return new Promise(function(resolve, reject)
 					{
-						fs.readFile(dir+filename+'.json', {encoding: 'utf8'}, function(err, content)
+						fs.readFile(DIR+filename+'.json', {encoding: 'utf8'}, function(err, content)
 						{
 							err ? reject(err) : resolve(content);
 						});

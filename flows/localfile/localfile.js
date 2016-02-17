@@ -1,7 +1,7 @@
-var debug = require('debug')('client_linker:localfile');
-var fs = require('fs');
-var vm = require('vm');
-var json = require('../../lib/json');
+var debug	= require('debug')('client_linker:localfile');
+var fs		= require('fs');
+var vm		= require('vm');
+var json	= require('../../lib/json');
 
 exports = module.exports = localfile;
 exports.initConfig = require('./initConfig');

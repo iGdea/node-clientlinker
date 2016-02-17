@@ -1,11 +1,11 @@
-var assert = require('assert');
-var PORT = 3423;
-var expr = require('express');
-var http = require('http');
-var ClientLinker = require('../');
-var proxyRoute = require('../flows/httpproxy/route');
-var runClientHandler = require('./runClientHandler');
-var debug = require('debug')('client_linker:test_httproxy');
+var assert				= require('assert');
+var expr				= require('express');
+var http				= require('http');
+var ClientLinker		= require('../');
+var proxyRoute			= require('../flows/httpproxy/route');
+var runClientHandler	= require('./runClientHandler');
+var debug				= require('debug')('client_linker:test_httproxy');
+var PORT				= 3423;
 
 describe('httpproxy', function()
 {

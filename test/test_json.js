@@ -1,5 +1,5 @@
-var assert = require('assert');
-var json = require('../lib/json');
+var assert	= require('assert');
+var json	= require('../lib/json');
 
 describe('json', function()
 {
