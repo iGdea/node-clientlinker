@@ -8,7 +8,7 @@ function logger(runtime, callback)
 	var options = client.options;
 
 	if (!options.logger) return callback.next();
-	var logger = typeof options.logger == 'function' ? options.logger : log;
+	var logger = typeof options.logger == 'function' ? options.logger : loggerHandler;
 
 	callback.next();
 	runtime.promise.then(function(data)
@@ -21,15 +21,16 @@ function logger(runtime, callback)
 		});
 }
 
-function log(runtime, err, data)
+function loggerHandler(runtime, err, data)
 {
 	var timing = runtime.timing;
-	debug('task info <%s> query:%o, body:%o, err:%o, data:%o, options:%o, use:%dms run:%dms',
+	debug('client action <%s> %d/%dms query:%o, body:%o, err:%o, data:%o, options:%o',
 		runtime.methodKey,
+		timing.lastFlowEnd - timing.lastFlowStart,
+		timing.flowsEnd - timing.navigationStart,
 		runtime.query,
 		runtime.body,
 		err, data,
-		runtime.runOptions,
-		timing.flowsEnd - timing.navigationStart,
-		timing.lastFlowEnd - timing.lastFlowStart);
+		runtime.runOptions
+	);
 }
