@@ -152,4 +152,32 @@ describe('client linker', function()
 
 		return Promise.all([promise1, promise2]);
 	});
+
+	it('flow run Error', function(done)
+	{
+		var linker = ClientLinker(
+			{
+				anyToError: true,
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function()
+							{
+								throw 333;
+							}
+						}
+					}
+				}
+			});
+
+		linker.run('client.method', null, null, function(err)
+			{
+				assert(err instanceof Error);
+				done();
+			});
+	});
 });
