@@ -1,6 +1,7 @@
 require('debug').enable('client_linker*');
-var ClientLinker = require('../');
-var assert = require('assert');
+
+var ClientLinker	= require('../');
+var assert			= require('assert');
 
 describe('client linker', function()
 {
@@ -179,5 +180,45 @@ describe('client linker', function()
 				assert(err instanceof Error);
 				done();
 			});
+	});
+
+	it('callback err', function(done)
+	{
+		var linker = ClientLinker(
+			{
+				anyToError: true,
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function()
+							{
+								return Promise.resolve();
+							}
+						}
+					}
+				}
+			});
+
+		var domain = require('domain');
+		var dm = domain.create();
+
+		dm.on('error', function(err)
+			{
+				assert.equal(err, 333);
+				done();
+			});
+		dm.run(function()
+			{
+				linker.run('client.method', null, null, function(err)
+				{
+					assert(!err);
+					throw 333;
+				});
+			});
+
 	});
 });
