@@ -1,4 +1,5 @@
 var fs		= require('fs');
+var path	= require('path');
 var debug	= require('debug')('client_linker:hiproto');
 
 var Service;
@@ -11,8 +12,8 @@ catch(e)
 	debug('load hiproto err:%o', e);
 }
 
-exports.initConfig = require('./initConfig');
-exports.methods = require('./methods');
+exports.initConfig	= require('./initConfig');
+exports.methods		= require('./methods');
 
 function hiproto(runtime, callback)
 {
@@ -29,7 +30,7 @@ function hiproto(runtime, callback)
 			if (typeof handler == 'function')
 			{
 				handler.call(client.hiprotoServer, runtime.query, runtime.body, callback,
-					runtime.runOptions && runtime.runOptions.hiprotoNotParseBuffer);
+					runtime.runOptions && runtime.runOptions.hiprotoParseBuffer);
 			}
 			else
 			{
@@ -51,12 +52,12 @@ function initClient(client)
 {
 	var options = client.options;
 
-	if (!client.hiprotoServer)
+	if (!client.hiprotoServer && options.hiproto)
 	{
 		var servers = client.linker.hiprotoServers || (client.linker.hiprotoServers = {});
-		client.hiprotoServer = servers[client.name];
-		var hiprotoDesPath = options.hiproto;
-		
+		var hiprotoDesPath = path.normalize(options.hiproto);
+		client.hiprotoServer = servers[client.name] || servers['/'+hiprotoDesPath];
+
 		if (!client.hiprotoServer && hiprotoDesPath)
 		{
 			return new Promise(function(resolve, reject)
@@ -69,8 +70,10 @@ function initClient(client)
 					}
 					else
 					{
-						client.hiprotoServer = servers[client.name] =
-							new Service(content, options.hiprotoClientPath);
+						client.hiprotoServer
+							= servers[client.name]
+							= servers['/'+hiprotoDesPath]
+							= new Service(content, options.hiprotoClientPath);
 
 						resolve(client.hiprotoServer);
 					}
@@ -79,6 +82,7 @@ function initClient(client)
 		}
 	}
 
-	return client.hiprotoServer ?
-		Promise.resolve(client.hiprotoServer) : Promise.reject('SERVICE NOT INITED');
+	return client.hiprotoServer
+		? Promise.resolve(client.hiprotoServer)
+		: Promise.reject('SERVICE NOT INITED');
 }
