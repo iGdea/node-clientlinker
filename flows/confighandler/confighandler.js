@@ -7,14 +7,17 @@ function confighandler(runtime, callback)
 {
 	var client = runtime.client;
 	var options = client.options;
-	if (!options.confighandler || !runtime.methodName in options.confighandler) return callback.next();
+	if (!options.confighandler) return callback.next();
 
 	var handler = options.confighandler[runtime.methodName];
 
 	if (typeof handler == 'function')
 		runHandler(runtime, callback, handler);
 	else
-		callback(null, handler);
+	{
+		debug('config no handler:%s', runtime.methodName);
+		callback.next();
+	}
 }
 
 exports.runHandler = runHandler;
