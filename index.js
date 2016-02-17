@@ -1,9 +1,10 @@
-var _ = require('underscore');
-var fs =  require('fs');
-var Linker = require('./lib/main').Linker;
-var flowsPath = __dirname+'/flows/';
-var debug = require('debug')('client_linker');
+if (typeof Promise == 'undefined') global.Promise = require('promise');
 
+var _			= require('underscore');
+var fs			=  require('fs');
+var Linker		= require('./lib/main').Linker;
+var flowsPath	= __dirname+'/flows/';
+var debug		= require('debug')('client_linker');
 
 /**
  * [options]
@@ -22,6 +23,7 @@ function ClientLinker(options)
 
 	options || (options = {});
 	var clientDefaultOptions = options.clientDefaultOptions || (options.clientDefaultOptions = {});
+
 	if (options.httpproxy) clientDefaultOptions.httpproxy = options.httpproxy;
 	if (options.logger) clientDefaultOptions.logger = options.logger;
 	if (options.anyToError) clientDefaultOptions.anyToError = options.anyToError;
