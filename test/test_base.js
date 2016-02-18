@@ -221,4 +221,39 @@ describe('client linker', function()
 			});
 
 	});
+
+	it('throw null err', function(done)
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function()
+							{
+								return Promise.reject();
+							}
+						}
+					}
+				}
+			});
+
+		linker.run('client.method', null, null, function(err)
+			{
+				assert.equal(err, 'CLIENT_LINKER_DEFERT_ERROR');
+				setTimeout(done, 10);
+			})
+			.then(function()
+			{
+				assert(false);
+			},
+			function(err)
+			{
+				assert.equal(err, undefined);
+			});
+	});
 });
