@@ -9,6 +9,9 @@
   "scripts": {
     "test": "mocha test/test_*"
   },
+  "engines": {
+    "node": ">=0.12"
+  },
   "bin": {
     "clientlinker": "bin/clientlinker.js"
   },
@@ -17,6 +20,14 @@
     "linker",
     "proxy"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Bacra/node-client_linker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bacra/node-client_linker/issues"
+  },
+  "homepage": "https://github.com/Bacra/node-client_linker#readme",
   "author": "bacrawu <bacra.woo@gmail.com>",
   "license": "MIT",
   "devDependencies": {
@@ -27,7 +38,6 @@
     "body-parser": "^1.14.2",
     "debug": "^2.2.0",
     "mkdirp": "^0.5.1",
-    "promise": "^7.1.1",
     "request": "^2.69.0",
     "table": "^3.7.8",
     "underscore": "^1.8.3"
