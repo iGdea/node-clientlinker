@@ -19,17 +19,20 @@ function httpproxy(runtime, callback)
 	};
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
-	var timeout = (runtime.runOptions && runtime.runOptions.timeout) || options.httpproxyTimeout;
+
+	var runOptions	= runtime.runOptions || {};
+	var timeout		= runOptions.timeout || options.httpproxyTimeout || 10000;
+	var proxy		= runOptions.httpproxyProxy || options.httpproxyProxy || process.env.clientlinker_http_proxy || process.env.http_proxy;
 
 	debug('request url:%s', url);
 
 	request.post(
 	{
-		url			: url,
-		body		: JSON.stringify(json.stringify(body)),
-		headers		: headers,
-		timeout		: timeout || 10000,
-		proxy		: options.httpproxyProxy || process.env.http_proxy
+		url		: url,
+		body	: JSON.stringify(json.stringify(body)),
+		headers	: headers,
+		timeout	: timeout,
+		proxy	: proxy
 	},
 	function(err, respone, body)
 	{
