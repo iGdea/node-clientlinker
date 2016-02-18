@@ -1,10 +1,8 @@
-if (typeof Promise == 'undefined') global.Promise = require('promise');
-
 var _			= require('underscore');
 var fs			=  require('fs');
 var Linker		= require('./lib/main').Linker;
-var flowsPath	= __dirname+'/flows/';
 var debug		= require('debug')('client_linker');
+var flowsPath	= __dirname+'/flows/';
 
 /**
  * [options]
