@@ -1,5 +1,5 @@
 var _		= require('underscore');
-var rl		= require('./rl');
+var utils	= require('./utils');
 var debug	= require('debug')('client_linker:run_argv');
 
 
@@ -7,12 +7,12 @@ exports.runActionByArgv = runActionByArgv;
 function runActionByArgv(linker, allMethods)
 {
 	var action = process.argv[3];
-	action && (action = rl.parseAction(action, allMethods));
+	action && (action = utils.parseAction(action, allMethods));
 	if (!action) return false;
 
-	var query		= rl.parseParam(process.argv[4]);
-	var body		= rl.parseParam(process.argv[5]);
-	var runOptions	= rl.parseParam(process.argv[6]);
+	var query		= utils.parseParam(process.argv[4]);
+	var body		= utils.parseParam(process.argv[5]);
+	var runOptions	= utils.parseParam(process.argv[6]);
 
 	console.log('\n ========= run <%s> =========', action);
 	debug('run action:%s, query:%o, body:%o, runOptions:%o', action, query, body, runOptions);
@@ -21,8 +21,8 @@ function runActionByArgv(linker, allMethods)
 	{
 		console.log('\n ========= result <%s> =========\nerr :  %s\ndata :  %s',
 			action,
-			rl.printObject(err),
-			rl.printObject(data)
+			utils.printObject(err),
+			utils.printObject(data)
 		);
 	},
 	runOptions);
@@ -37,7 +37,7 @@ function getAllMethods(list)
 	var allMethods	= [];
 	var lines		= [];
 	var allFlowFrom	= [];
-	var clientNames	= Object.keys(list).sort(sortHandler);
+	var clientNames	= Object.keys(list).sort(utils.sortHandler);
 
 	clientNames.forEach(function(clientName)
 	{
@@ -48,7 +48,7 @@ function getAllMethods(list)
 			client: clientName
 		});
 
-		var methods = item.methods && Object.keys(item.methods).sort(sortHandler);
+		var methods = item.methods && Object.keys(item.methods).sort(utils.sortHandler);
 		if (methods && methods.length)
 		{
 			methods.forEach(function(methodName)
@@ -80,7 +80,7 @@ function getAllMethods(list)
 
 	allMethods.lines = lines;
 	allMethods.allFlowFrom = _.uniq(allFlowFrom)
-		.sort(sortHandler)
+		.sort(utils.sortHandler)
 		.map(function(name)
 		{
 			return name === undefined ? 'undefined' : name;
@@ -88,5 +88,3 @@ function getAllMethods(list)
 
 	return allMethods;
 }
-
-function sortHandler(a,b){return a>b}
