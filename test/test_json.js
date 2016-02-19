@@ -23,6 +23,7 @@ describe('json', function()
 		assert.equal(newData.result.data.message, 'err message');
 		assert.equal(newData.result.data.stack.indexOf('Error: err message'), 0);
 		assert.equal(newData.result.data.errCode, -499);
+		assert.equal(newData.result.data.originalStack, undefined);
 
 		assert(!!newData.data.buffer);
 		assert.equal(newData.data.buffer.type, json.CONST_VARS.BUFFER_KEY);
@@ -68,6 +69,8 @@ describe('json', function()
 		assert.equal(newData.result.message, 'err message');
 		assert.equal(newData.result.errCode, -499);
 		assert.equal(newData.result.stack, 'Error: err message');
+		assert(newData.result.originalStack);
+		assert.notEqual(newData.result.originalStack, 'Error: err message');
 
 		assert(Buffer.isBuffer(newData.data.buffer));
 		assert(newData.data.buffer.toString(), 'buffer');
