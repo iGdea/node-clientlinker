@@ -3,7 +3,7 @@ require('debug').enable('client_linker*');
 var ClientLinker	= require('../');
 var assert			= require('assert');
 
-describe('client linker', function()
+describe('base', function()
 {
 	it('ownlist', function()
 	{
@@ -182,11 +182,10 @@ describe('client linker', function()
 			});
 	});
 
-	it('callback err', function(done)
+	it('callback domain', function(done)
 	{
 		var linker = ClientLinker(
 			{
-				anyToError: true,
 				flows: ['confighandler'],
 				clients:
 				{
@@ -219,7 +218,69 @@ describe('client linker', function()
 					throw 333;
 				});
 			});
+	});
 
+	it('promise domain', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method1: function()
+							{
+								return Promise.resolve(111);
+							},
+							method2: function()
+							{
+								return Promise.resolve(222);
+							},
+							method3: function()
+							{
+								return Promise.reject(333);
+							}
+						}
+					}
+				}
+			});
+
+		var domain = require('domain');
+		var dm = domain.create();
+		dm._mark_assert = 234;
+
+		return new Promise(function(resolve, reject)
+			{
+				dm.on('error', reject);
+				dm.run(function()
+					{
+						linker.run('client.method1')
+							.then(function(data)
+							{
+								assert(domain.active);
+								assert.equal(domain.active._mark_assert, 234);
+								assert.equal(data, 111);
+								return linker.run('client.method2');
+							})
+							.then(function(data)
+							{
+								assert(domain.active);
+								assert.equal(domain.active._mark_assert, 234);
+								assert.equal(data, 222);
+								var promise = linker.run('client.method3');
+								promise.catch(function(err)
+									{
+										assert.equal(err, 333);
+										resolve();
+									});
+								return promise;
+							});
+					});
+			});
+		
 	});
 
 	it('throw null err', function(done)

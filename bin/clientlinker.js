@@ -2,6 +2,8 @@
 'use strict';
 process.title = 'clientlinker';
 
+global.Promise	= require('bluebird');
+
 var path		= require('path');
 var printTable	= require('./print_table').printTable;
 var rl			= require('./rl');
