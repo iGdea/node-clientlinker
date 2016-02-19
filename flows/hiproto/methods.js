@@ -7,7 +7,7 @@ function methods(client)
 	return hiproto.initClient(client)
 		.then(function(server)
 		{
-			var clientAlias = client.options.hiprotoClientAlias || client.name;
+			var clientAlias = client.options.hiprotoClientAlias || client.name+'.'+client.name;
 			return server.GetAllMethods(clientAlias);
 		});
 }
