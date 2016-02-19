@@ -3,10 +3,12 @@ var table = require('table');
 exports.printTable = printTable;
 function printTable(data, allFlowFrom)
 {
-	var defaultFlowFromArr = (new Array(allFlowFrom.length)).fill('');
+	var defaultFlowFromArr = [];
 	var flowFromIndexMap = {};
+
 	allFlowFrom.forEach(function(from, index)
 		{
+			defaultFlowFromArr.push('');
 			flowFromIndexMap[from] = index;
 		});
 
@@ -17,7 +19,7 @@ function printTable(data, allFlowFrom)
 			{
 				case 'header':
 					if (tableData.length)
-						tableData.push(['', '', ''].concat(defaultFlowFromArr));
+						tableData.push([' ', '', ''].concat(defaultFlowFromArr));
 
 					tableData.push(['', item.client, ' ' || 'flow list'].concat(allFlowFrom));
 					break;
