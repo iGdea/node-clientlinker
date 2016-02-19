@@ -20,5 +20,9 @@ module.exports = {
 	method3: function()
 	{
 		return Promise.resolve(789);
+	},
+	method4: function()
+	{
+		return Promise.reject(new Error('err123'));
 	}
 };

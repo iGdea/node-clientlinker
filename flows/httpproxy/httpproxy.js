@@ -54,13 +54,12 @@ function httpproxy(runtime, callback)
 			return options.httpproxyErrorNext ? callback.next() : callback(e);
 		}
 
+		if (data.CONST_VARS) data = json.parse(data, data.CONST_VARS);
+
 		if (data.result)
 			callback(data.result);
 		else
-		{
-			data.data = json.parse(data.data, data.CONST_VARS);
 			callback(null, data.data);
-		}
 	});
 }
 

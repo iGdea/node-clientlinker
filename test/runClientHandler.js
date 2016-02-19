@@ -22,7 +22,15 @@ function runClientHandler(linker)
 		.then(function(data)
 		{
 			assert.equal(data, 789);
-		})
+		});
 
-	return Promise.all([promise1, promise2, promise3]);
+	var promise4 = linker.run('client.method4')
+		.then(function(){assert(false)},
+		function(err)
+		{
+			assert(err instanceof Error);
+			assert.equal(err.message, 'err123');
+		});
+
+	return Promise.all([promise1, promise2, promise3, promise4]);
 }

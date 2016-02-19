@@ -59,7 +59,7 @@ describe('flows', function()
 					assert(list.client);
 					var methods = Object.keys(list.client.methods);
 					methods = methods.sort(function(a,b){return a > b});
-					assert.equal(methods.join(), 'method1,method2,method3');
+					assert.equal(methods.join(), 'method1,method2,method3,method4');
 					assert.equal(typeof list.client.methods.method1[0], 'function');
 				});
 
@@ -82,7 +82,7 @@ describe('flows', function()
 					assert(list.client);
 					var methods = Object.keys(list.client.methods);
 					methods = methods.sort(function(a,b){return a > b});
-					assert.equal(methods.join(), 'method1,method2,method3');
+					assert.equal(methods.join(), 'method1,method2,method3,method4');
 					assert.equal(typeof list.client.methods.method1[0], 'function');
 				});
 
