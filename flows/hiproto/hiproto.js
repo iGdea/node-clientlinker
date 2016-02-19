@@ -23,7 +23,7 @@ function hiproto(runtime, callback)
 	initClient(client)
 		.then(function()
 		{
-			var clientAlias = options.hiprotoClientAlias || client.name;
+			var clientAlias = options.hiprotoClientAlias || client.name+'.'+client.name;
 			var handlerName = clientAlias+'.'+runtime.methodName;
 			var handler = client.hiprotoServer[handlerName];
 
