@@ -51,11 +51,10 @@ function parseParam(str)
 			}
 		}
 
-
 		// 判断参数是不是文件
 		if (!parseDataSuc && !/['"\{\}\n\r\t]/.test(str))
 		{
-			if (/^(((~|\.|\.\.)\/\\)|\/)/.test(str))
+			if (/^(((~|\.|\.\.)[\/\\])|\/)/.test(str))
 			{
 				var file;
 				if (str[0] == '~')
@@ -68,7 +67,9 @@ function parseParam(str)
 
 				if (file)
 				{
-					data = require(path.resolve(file));
+					file = path.resolve(file);
+					debug('require pkg:%s', file);
+					data = require(file);
 					parseDataSuc = true;
 				}
 			}
@@ -83,6 +84,7 @@ function parseParam(str)
 	}
 
 	if (data && data.CONST_VARS) data = json.parse(data, data.CONST_VARS);
+
 	return data;
 }
 

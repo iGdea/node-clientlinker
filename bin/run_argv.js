@@ -19,7 +19,7 @@ function runActionByArgv(linker, allMethods)
 
 	linker.run(action, query, body, function(err, data)
 	{
-		console.log('\n ========= result <%s> =========\nerr :  %s\ndata :  %s',
+		console.log('\n ========= result <%s> =========\nerr  :  %s\ndata :  %s',
 			action,
 			utils.printObject(err),
 			utils.printObject(data)

@@ -62,7 +62,7 @@ function testStart(allMethods, linker)
 			linker.run(ActionParams.action, ActionParams.query, ActionParams.body,
 				function(err, data)
 				{
-					console.log('\n ========= result <%s> =========\nerr :  %s\ndata :  %s',
+					console.log('\n ========= result <%s> =========\nerr  :  %s\ndata :  %s',
 							ActionParams.action,
 							utils.printObject(err),
 							utils.printObject(data)
