@@ -317,4 +317,72 @@ describe('base', function()
 				assert.equal(err, undefined);
 			});
 	});
+
+
+	it('addon domain', function()
+	{
+		var addon = require('nan-async-example');
+		var linker = ClientLinker(
+			{
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							callback: function(query, body, callback)
+							{
+								addon(callback);
+							},
+							resolve: function()
+							{
+								return new Promise(function(resolve)
+								{
+									addon(function(err, data)
+									{
+										resolve(data);
+									});
+								});
+							}
+						}
+					}
+				}
+			});
+
+		var domain = require('domain');
+		var dm = domain.create();
+		dm._mark_assert = 222;
+
+		var promise1;
+		dm.run(function()
+		{
+			promise1 = linker.run('client.callback', null, null, function(err, data)
+				{
+					assert.equal(data, 'hello world');
+					assert.equal(domain.active._mark_assert, 222);
+				})
+				.then(function(data)
+				{
+					assert.equal(data, 'hello world');
+					assert.equal(domain.active._mark_assert, 222);
+				});
+		});
+		
+		var dm2 = domain.create();
+		dm2._mark_assert = 333;
+
+		var promise2;
+		dm2.run(function()
+		{
+			promise2 = linker.run('client.resolve')
+				.then(function(data)
+				{
+					assert.equal(data, 'hello world');
+					assert.equal(domain.active._mark_assert, 333);
+				});
+		});
+
+		return Promise.all([promise1, promise2]);
+	});
 });
