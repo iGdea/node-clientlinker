@@ -42,7 +42,7 @@
     "underscore": "^1.8.3"
   },
   "optionalDependencies": {
-    "nan-async-example": "^0.1.1",
-    "mail.addon_hiproto": "*"
+    "mail.addon_hiproto": "*",
+    "nan-async-example": "^0.1.1"
   }
 }
