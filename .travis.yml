@@ -1,3 +1,14 @@
+os:
+  - linux
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
+
 language: node_js
 node_js:
   - "0.10"
@@ -5,5 +16,14 @@ node_js:
   - "iojs"
   - "stable"
   - "unstable"
+
+
+install:
+  - export CXX=g++-4.8
+  - $CXX --version
+  - npm i 
+
 before_install:
   - npm install -g npm@latest
+  - npm install -g node-gyp
+  - rm -rf ~/.node-gyp/
