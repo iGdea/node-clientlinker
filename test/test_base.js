@@ -356,20 +356,23 @@ describe('base', function()
 
 		var promise1 = dm.run(function()
 		{
-			var defer = Promise.defer();
-			var promise11 = linker.run('client.callback', null, null, function(err, data)
+			var promise11;
+			var promise12 = new Promise(function(resolve, reject)
 				{
-					assert.equal(data, 'hello world');
-					assert.equal(domain.active._mark_assert, 222);
-					defer.resolve();
-				})
-				.then(function(data)
-				{
-					assert.equal(data, 'hello world');
-					assert.equal(domain.active._mark_assert, 222);
+					promise11 = linker.run('client.callback', null, null, function(err, data)
+					{
+						assert.equal(data, 'hello world');
+						assert.equal(domain.active._mark_assert, 222);
+						resolve();
+					})
+					.then(function(data)
+					{
+						assert.equal(data, 'hello world');
+						assert.equal(domain.active._mark_assert, 222);
+					});
 				});
 
-			return Promise.all([defer.promise, promise11]);
+			return Promise.all([promise11, promise12]);
 		});
 		
 		var dm2 = domain.create();
