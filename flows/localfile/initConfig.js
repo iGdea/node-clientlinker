@@ -37,7 +37,7 @@ function initConfig(options)
 									clientOptions.localfile = path;
 									// clientOptions.flows || (clientOptions.flows = ['localfile']);
 									debug('add localfile client:%s %s', pathname, path);
-									linker.add(pathname, clientOptions);
+									linker.add(pathname, clientOptions, true);
 								}
 
 								// 屏蔽错误

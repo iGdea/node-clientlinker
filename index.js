@@ -73,8 +73,7 @@ function ClientLinker(options)
 	{
 		_.each(clients, function(clientOptions, name)
 		{
-			clientOptions = _.extend({}, clientOptions, clientDefaultOptions);
-
+			clientOptions = _.extend({}, clientDefaultOptions, clientOptions);
 			clientOptions.flows || (clientOptions.flows = options.flows.slice());
 
 			linker.add(name, clientOptions);

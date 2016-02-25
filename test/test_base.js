@@ -79,6 +79,28 @@ describe('base', function()
 		return Promise.all([promise1, promise2]);
 	});
 
+	it('client options override', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['logger', 'pkghandler'],
+				pkghandlerDir: __dirname+'/pkghandler',
+				clients:
+				{
+					client:
+					{
+						flows: ['pkghandler']
+					}
+				}
+			});
+
+		return linker.clients()
+				.then(function(clients)
+				{
+					assert.equal(clients.client.options.flows[0], 'pkghandler');
+				});
+	});
+
 	it('clientrun', function(done)
 	{
 		// this.timeout(60*1000);

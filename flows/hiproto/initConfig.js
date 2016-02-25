@@ -39,7 +39,7 @@ function initConfig(options)
 									var name = filename.substr(0, filename.length-5);
 									// clientOptions.flows || (clientOptions.flows = ['hiproto']);
 									debug('add hiproto client:%s %s', name, file);
-									linker.add(name, clientOptions);
+									linker.add(name, clientOptions, true);
 								}
 
 								// 屏蔽错误
