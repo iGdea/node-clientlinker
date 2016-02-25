@@ -37,7 +37,7 @@ function getAllMethods(list)
 	var allMethods	= [];
 	var lines		= [];
 	var allFlowFrom	= [];
-	var clientNames	= Object.keys(list).sort(utils.sortHandler);
+	var clientNames	= Object.keys(list).sort();
 
 	clientNames.forEach(function(clientName)
 	{
@@ -48,7 +48,7 @@ function getAllMethods(list)
 			client: clientName
 		});
 
-		var methods = item.methods && Object.keys(item.methods).sort(utils.sortHandler);
+		var methods = item.methods && Object.keys(item.methods).sort();
 		if (methods && methods.length)
 		{
 			methods.forEach(function(methodName)
@@ -80,7 +80,7 @@ function getAllMethods(list)
 
 	allMethods.lines = lines;
 	allMethods.allFlowFrom = _.uniq(allFlowFrom)
-		.sort(utils.sortHandler)
+		.sort()
 		.map(function(name)
 		{
 			return name === undefined ? 'undefined' : name;

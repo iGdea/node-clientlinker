@@ -97,6 +97,3 @@ function printObject(obj)
 	else
 		return util.inspect(obj, {depth: 8, colors: true});
 }
-
-exports.sortHandler = sortHandler;
-function sortHandler(a,b){return a>b}
