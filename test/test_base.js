@@ -42,6 +42,43 @@ describe('base', function()
 		assert.equal(Object.keys(linker.flows).length, 1);
 	});
 
+	it('clients', function()
+	{
+		var linker1 = ClientLinker(
+			{
+				flows: ['pkghandler'],
+				clients: {
+					client1: null
+				}
+			});
+
+		var linker2 = ClientLinker(
+			{
+				flows: ['pkghandler'],
+				pkghandlerDir: __dirname+'/pkghandler',
+				clients: {
+					client1: null
+				}
+			});
+
+		var promise1 = linker1.clients()
+				.then(function(clients)
+				{
+					var list = Object.keys(clients);
+					assert.equal(list.length, 1);
+					assert.equal(list[0], 'client1');
+				});
+
+		var promise2 = linker2.clients()
+				.then(function(clients)
+				{
+					var list = Object.keys(clients);
+					assert.equal(list.length, 2);
+				});
+
+		return Promise.all([promise1, promise2]);
+	});
+
 	it('clientrun', function(done)
 	{
 		// this.timeout(60*1000);

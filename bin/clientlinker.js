@@ -18,26 +18,8 @@ if (process.env.HOME && /^~[\/\\]/.test(pkg))
 var linker = require(path.resolve(pkg));
 
 
-var clients = linker.clients;
-function clientReady()
-{
-	return clients.then(function(list)
-		{
-			if (linker.clients !== clients)
-			{
-				clients = linker.clients;
-				return clientReady();
-			}
-			else
-			{
-				return list;
-			}
-		});
-}
-
-
-clientReady()
-	.then(function(list)
+linker.clients()
+	.then(function()
 	{
 		return linker.methods()
 			.then(function(list)

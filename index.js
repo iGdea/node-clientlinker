@@ -81,7 +81,8 @@ function ClientLinker(options)
 		});
 	}
 
-	linker.clients.then(function(clients)
+	linker.clients()
+		.then(function(clients)
 		{
 			debug('init clients:%s', Object.keys(clients));
 		});
