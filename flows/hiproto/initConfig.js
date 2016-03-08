@@ -2,6 +2,8 @@ var _		= require('underscore');
 var fs		= require('fs');
 var debug	= require('debug')('client_linker:hiproto');
 
+var FilenameReg = /^([^\.\-\s]+)(?:-((?:[^\.\-\s]+)\.(?:[^\.\-\s]+)))?\.desc$/i;
+
 module.exports = initConfig;
 function initConfig(options)
 {
@@ -19,8 +21,13 @@ function initConfig(options)
 		{
 			var running = dirs.map(function(filename)
 				{
-					// 忽略. ..和影藏文件夹
-					if (filename[0] == '.' || filename.substr(-5) != '.desc') return;
+					var filenameInfo;
+
+					// 忽略. ..和隐藏文件夹
+					if (filename[0] != '.')
+						filenameInfo = filename.match(FilenameReg);
+
+					if (!filenameInfo) return;
 
 					return new Promise(function(resolve)
 						{
@@ -34,12 +41,14 @@ function initConfig(options)
 									conn.log('is not file:%s', file);
 								else
 								{
+									var clientName = filenameInfo[1];
 									var clientOptions = _.extend({}, options.clientDefaultOptions);
 									clientOptions.hiproto = file;
-									var name = filename.substr(0, filename.length-5);
+									clientOptions.hiprotoClientAlias = filenameInfo[2] || clientName+'.'+clientName;
+
 									// clientOptions.flows || (clientOptions.flows = ['hiproto']);
-									debug('add hiproto client:%s %s', name, file);
-									linker.add(name, clientOptions, true);
+									debug('add hiproto client:%s %s', clientName, file);
+									linker.add(clientName, clientOptions, true);
 								}
 
 								// 屏蔽错误
