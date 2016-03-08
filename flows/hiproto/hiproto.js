@@ -23,7 +23,7 @@ function hiproto(runtime, callback)
 	initClient(client)
 		.then(function()
 		{
-			var clientAlias = options.hiprotoClientAlias || client.name+'.'+client.name;
+			var clientAlias = options.hiprotoClientAlias;
 			var handlerName = clientAlias+'.'+runtime.methodName;
 			var handler = client.hiprotoServer[handlerName];
 
@@ -52,11 +52,16 @@ function initClient(client)
 {
 	var options = client.options;
 
-	if (!client.hiprotoServer && options.hiproto)
+	if (!client.hiprotoServer && options.hiproto && options.hiprotoClientAlias)
 	{
 		var servers = client.linker.hiprotoServers || (client.linker.hiprotoServers = {});
-		var hiprotoDesPath = path.normalize(options.hiproto);
-		client.hiprotoServer = servers[client.name] || servers['/'+hiprotoDesPath];
+		var hiprotoDesPath = path.normalize(path.resolve(options.hiproto));
+		var hiprotoClientPath = options.hiprotoClientPath;
+		if (hiprotoClientPath)
+			hiprotoClientPath = path.normalize(path.resolve(hiprotoClientPath));
+
+		var clienKey = hiprotoDesPath+path.delimiter+(hiprotoClientPath || '');
+		client.hiprotoServer = servers[client.name] || servers[clienKey];
 
 		if (!client.hiprotoServer && hiprotoDesPath)
 		{
@@ -72,8 +77,8 @@ function initClient(client)
 					{
 						client.hiprotoServer
 							= servers[client.name]
-							= servers['/'+hiprotoDesPath]
-							= new Service(content, options.hiprotoClientPath);
+							= servers[clienKey]
+							= new Service(content, hiprotoClientPath);
 
 						resolve(client.hiprotoServer);
 					}
