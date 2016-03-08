@@ -24,10 +24,6 @@ function ClientLinker(options)
 	options || (options = {});
 	var clientDefaultOptions = options.clientDefaultOptions || (options.clientDefaultOptions = {});
 
-	if (options.httpproxy) clientDefaultOptions.httpproxy = options.httpproxy;
-	if (options.logger) clientDefaultOptions.logger = options.logger;
-	if (options.anyToError) clientDefaultOptions.anyToError = options.anyToError;
-
 	if (options.flows)
 	{
 		options.flows.forEach(function(name)

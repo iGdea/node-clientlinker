@@ -30,7 +30,7 @@ describe('flows', function()
 			{
 				assert(list.client);
 				var methods = Object.keys(list.client.methods);
-				methods = methods.sort(function(a,b){return a > b});
+				methods = methods.sort();
 				assert.equal(methods.join(), 'js,json');
 				assert.equal(typeof list.client.methods.js[0], 'function');
 			});
@@ -58,7 +58,7 @@ describe('flows', function()
 				{
 					assert(list.client);
 					var methods = Object.keys(list.client.methods);
-					methods = methods.sort(function(a,b){return a > b});
+					methods = methods.sort();
 					assert.equal(methods.join(), 'method1,method2,method3,method4');
 					assert.equal(typeof list.client.methods.method1[0], 'function');
 				});
@@ -81,7 +81,7 @@ describe('flows', function()
 				{
 					assert(list.client);
 					var methods = Object.keys(list.client.methods);
-					methods = methods.sort(function(a,b){return a > b});
+					methods = methods.sort();
 					assert.equal(methods.join(), 'method1,method2,method3,method4');
 					assert.equal(typeof list.client.methods.method1[0], 'function');
 				});
@@ -94,16 +94,18 @@ describe('flows', function()
 		var linker = ClientLinker(
 			{
 				flows: ['logger', 'custom'],
-				logger: function(runtime, err, data)
-				{
-					var timing = runtime.timing;
-					assert(timing.lastFlowStart);
-					assert(timing.lastFlowEnd);
-					assert(timing.flowsStart);
-					assert(timing.flowsEnd);
-					assert(!err);
-					assert.equal(data.respone, 'respone');
-					done();
+				clientDefaultOptions: {
+					logger: function(runtime, err, data)
+					{
+						var timing = runtime.timing;
+						assert(timing.lastFlowStart);
+						assert(timing.lastFlowEnd);
+						assert(timing.flowsStart);
+						assert(timing.flowsEnd);
+						assert(!err);
+						assert.equal(data.respone, 'respone');
+						done();
+					},
 				},
 				customFlows:
 				{

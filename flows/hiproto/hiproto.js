@@ -54,7 +54,9 @@ function initClient(client)
 
 	if (!client.hiprotoServer && options.hiproto && options.hiprotoClientAlias)
 	{
-		var servers = client.linker.hiprotoServers || (client.linker.hiprotoServers = {});
+		var linker = client.linker;
+		var servers = linker.hiprotoServers || (linker.hiprotoServers = {});
+		var retryTimes = linker.hiprotoRetryTimes || (linker.hiprotoRetryTimes = {});
 		var hiprotoDesPath = path.normalize(path.resolve(options.hiproto));
 		var hiprotoClientPath = options.hiprotoClientPath;
 		if (hiprotoClientPath)
@@ -63,7 +65,8 @@ function initClient(client)
 		var clienKey = hiprotoDesPath+path.delimiter+(hiprotoClientPath || '');
 		client.hiprotoServer = servers[client.name] || servers[clienKey];
 
-		if (!client.hiprotoServer && hiprotoDesPath)
+		if ((options.debug || !retryTimes[clienKey])
+			&& !client.hiprotoServer && hiprotoDesPath)
 		{
 			return new Promise(function(resolve, reject)
 			{
@@ -71,6 +74,11 @@ function initClient(client)
 				{
 					if (err)
 					{
+						if (retryTimes[clienKey])
+							retryTimes[clienKey]++;
+						else
+							retryTimes[clienKey] = 1;
+
 						reject(err);
 					}
 					else

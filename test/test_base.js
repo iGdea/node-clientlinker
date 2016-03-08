@@ -173,8 +173,8 @@ describe('base', function()
 	{
 		var linker = ClientLinker(
 			{
-				anyToError: true,
 				flows: ['confighandler'],
+				clientDefaultOptions: {anyToError: true},
 				clients:
 				{
 					client:
@@ -217,8 +217,8 @@ describe('base', function()
 	{
 		var linker = ClientLinker(
 			{
-				anyToError: true,
 				flows: ['confighandler'],
+				clientDefaultOptions: {anyToError: true},
 				clients:
 				{
 					client:

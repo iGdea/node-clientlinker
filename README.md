@@ -35,18 +35,21 @@ Assert cmd:
 # Options
 
 `flows`：启用这些系统组件，同时设置`clientDefaultOptions.flows`
-`anyToError`：将所有错误信息转化为Error对象，同设置`clientDefaultOptions.anyToError`
 `clients`：注册独立的clients配置
 `customFlows`：自定义flows流程
 `clientDefaultOptions`：client的默认配置
+	`debug`：debug模式
+	`anyToError`：将所有错误信息转化为Error对象，同设置`clientDefaultOptions.anyToError`
 
 ### Options Example
 
 ```
 {
 	flows: ['logger', 'custom', 'hiproto', 'localfile', 'httpproxy'],
-	anyToError: true,
-	clientDefaultOptions: {timeout: 4000},
+	clientDefaultOptions: {
+		anyToError: true,
+		timeout: 4000
+	},
 	customFlows:
 	{
 		custom: function(query, body, callback, runOptions) {}
@@ -166,9 +169,6 @@ clientName: {
 
 ## Flow:httpproxy
 
-### linkerOptions
-
-`httpproxy`
 
 ### clientOptions
 
@@ -200,9 +200,6 @@ clientName: {
 
 ## Flow:logger
 
-### linkerOptions
-
-`logger`
 
 ### clientOptions
 

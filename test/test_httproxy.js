@@ -43,7 +43,10 @@ describe('httpproxy', function()
 		var linker = ClientLinker(
 		{
 			flows: ['httpproxy'],
-			httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
+			clientDefaultOptions:
+			{
+				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
+			},
 			clients: {
 				client: null
 			}
