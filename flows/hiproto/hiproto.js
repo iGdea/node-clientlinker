@@ -72,6 +72,9 @@ function initClient(client)
 			{
 				fs.readFile(hiprotoDesPath, function(err, content)
 				{
+					client.hiprotoServer = servers[client.name] || servers[clienKey];
+					if (client.hiprotoServer) return resolve(client.hiprotoServer);
+
 					if (err)
 					{
 						if (retryTimes[clienKey])
