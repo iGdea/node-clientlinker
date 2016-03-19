@@ -17,30 +17,36 @@ function testStart(allMethods, linker)
 
 	printStart();
 
+
 	var ActionParams = {};
 	new Promise(function(resolve, reject)
 		{
-			rl.question('Action :  ', function(str)
-				{
-					try {
-						var action = utils.parseAction(str, allMethods);
-						if (action)
-						{
-							ActionParams.action = action;
-							console.log(' ==> Action is <%s> <==', action);
-							resolve();
-						}
-						else
-						{
-							rl.close();
-							process.exit();
-						}
-					}
-					catch(err)
+			function question()
+			{
+				rl.question('Action :  ', function(str)
 					{
-						reject(err);
-					}
-				});
+						try {
+							var action = utils.parseAction(str, allMethods);
+							if (action)
+							{
+								ActionParams.action = action;
+								console.log(' ==> Action is <%s> <==', action);
+								resolve();
+							}
+							else
+							{
+								console.log(' ==> No Action <%s> <==', action);
+								question();
+							}
+						}
+						catch(err)
+						{
+							reject(err);
+						}
+					});
+			}
+
+			question();
 		})
 		.then(function()
 		{
@@ -56,26 +62,25 @@ function testStart(allMethods, linker)
 		})
 		.then(function()
 		{
-			console.log('\n ========= run <%s> =========', ActionParams.action);
+			console.log('\n ========= Action Run <%s> =========', ActionParams.action);
 			debug('run action:%s, query:%o, body:%o, runOptions:%o', ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.runOptions);
 
-			linker.run(ActionParams.action, ActionParams.query, ActionParams.body,
-				function(err, data)
+			return linker.run(ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.RunOptions)
+				.then(function(data)
 				{
-					console.log('\n ========= result <%s> =========\nerr  :  %s\ndata :  %s',
-							ActionParams.action,
-							utils.printObject(err),
-							utils.printObject(data)
-						);
-
-					console.log('\n\n\n');
-					testStart(allMethods, linker);
+					console.log('\n ========= Action Result Success <%s> =========\n%s', ActionParams.action, utils.printObject(data));
 				},
-				ActionParams.RunOptions);
+				function(err)
+				{
+					console.log('\n ========= Action Result Error <%s> =========\n%s', ActionParams.action, utils.printObject(err));
+				});
 		})
 		.catch(function(err)
 		{
-			console.log(err);
+			console.log('\n ========= Unexpected Error <%s> =========\n%s', ActionParams.action, utils.printObject(err));
+		})
+		.then(function()
+		{
 			console.log('\n\n\n');
 			testStart(allMethods, linker);
 		});
