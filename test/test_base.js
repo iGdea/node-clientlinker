@@ -241,6 +241,56 @@ describe('base', function()
 			});
 	});
 
+	it('retry', function()
+	{
+		var runTimes = 0;
+		var linker = ClientLinker(
+			{
+				flows: ['timingCheck', 'confighandler'],
+				customFlows:
+				{
+					timingCheck: function(runtime, callback)
+					{
+						runTimes++;
+						if (runTimes == 2)
+							assert(runtime.timing.retry_1.flowsEnd);
+
+						callback.next();
+					}
+				},
+				clientDefaultOptions:
+				{
+					retry: 5,
+					anyToError: true
+				},
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function(query, body, callback)
+							{
+								if (runTimes == 1)
+									throw 333;
+								else
+								{
+									callback(null, 555);
+								}
+							}
+						}
+					}
+				}
+			});
+
+		return linker.run('client.method')
+				.then(function(data)
+				{
+					assert.equal(data, 555);
+					assert.equal(runTimes, 2);
+				});
+	});
+
 	it('callback domain', function(done)
 	{
 		var linker = ClientLinker(

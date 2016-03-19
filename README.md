@@ -40,6 +40,7 @@ Assert cmd:
 `clientDefaultOptions`：client的默认配置
 	`debug`：debug模式
 	`anyToError`：将所有错误信息转化为Error对象，同设置`clientDefaultOptions.anyToError`
+	`retry`：接口失败重试次数
 
 ### Options Example
 
@@ -94,16 +95,15 @@ exports.initConfig = function(linkerOptions)
 
 ### runtime
 
-`methodKey`
-`methodName`
-`query`
-`body`
-`runOptions`
-`activeDomain`
-`client`
-`promise`
-`timing`
-
+`methodKey`：接口调用key
+`methodName`：接口名
+`query`：参数1，路由信息
+`body`：参数2，请求主体
+`runOptions`：参数3，请求配置
+`client`：client对象
+`promise`：主promise
+`timing`：时间信息
+`retry`：已重试次数
 
 ### callback
 
