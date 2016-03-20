@@ -4,6 +4,7 @@ describe('promise', function()
 {
 	it('global promise', function()
 	{
-		assert.notStrictEqual(Promise, require('bluebird'));
+		if (global.Promise)
+			assert.notStrictEqual(Promise, require('bluebird'));
 	});
 });
