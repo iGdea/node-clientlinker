@@ -1,3 +1,4 @@
+var Promise				= require('bluebird');
 var assert				= require('assert');
 var ClientLinker		= require('../');
 var runClientHandler	= require('./runClientHandler');

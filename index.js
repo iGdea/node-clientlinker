@@ -1,5 +1,4 @@
-global.Promise	= require('bluebird');
-
+var Promise		= require('bluebird');
 var _			= require('underscore');
 var fs			=  require('fs');
 var Linker		= require('./lib/main').Linker;

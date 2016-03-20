@@ -1,4 +1,5 @@
-var fs = require('fs');
+var Promise	= require('bluebird');
+var fs		= require('fs');
 
 module.exports = methods;
 function methods(client)

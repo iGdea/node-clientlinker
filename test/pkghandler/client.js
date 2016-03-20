@@ -1,4 +1,5 @@
-var assert = require('assert');
+var Promise	= require('bluebird');
+var assert	= require('assert');
 
 module.exports = {
 	method1: function(req, body, callback, runOptions)

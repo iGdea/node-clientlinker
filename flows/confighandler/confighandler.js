@@ -1,4 +1,5 @@
-var debug = require('debug')('client_linker:confighandler');
+var debug		= require('debug')('client_linker:confighandler');
+var isPromise	= require('is-promise');
 
 exports = module.exports = confighandler;
 exports.methods = require('./methods');
@@ -25,8 +26,6 @@ function runHandler(runtime, callback, handler)
 {
 	var ret = handler(runtime.query, runtime.body, callback, runtime.runOptions);
 
-	if (ret instanceof Promise)
-	{
+	if (isPromise(ret))
 		ret.then(callback.resolve, callback.reject);
-	}
 }

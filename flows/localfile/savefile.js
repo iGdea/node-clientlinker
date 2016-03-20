@@ -1,3 +1,4 @@
+var Promise	= require('bluebird');
 var fs		= require('fs');
 var debug	= require('debug')('client_linker:localfile:save');
 var json	= require('../../lib/json');

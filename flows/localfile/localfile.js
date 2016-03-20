@@ -1,3 +1,4 @@
+var Promise	= require('bluebird');
 var debug	= require('debug')('client_linker:localfile');
 var fs		= require('fs');
 var vm		= require('vm');
