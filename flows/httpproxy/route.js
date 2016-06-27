@@ -11,14 +11,19 @@ function HttpProxyRoute(linker, bodyParser)
 
 	return function(req, res, next)
 	{
-		if (!req.query.action) return next();
-
 		bodyParser(req, res, function(err)
 		{
-			if (err) return next(err);
+			if (err)
+			{
+				if (!req.query.action) return next();
+				return next(err);
+			}
 
 			var data = req.body;
-			var methodKey = req.query.action;
+			var methodKey = data.action || req.query.action;
+			if (!methodKey) return next();
+			if (data.action != req.query.action) debug('action not equal, query:%s, body:%s', req.query.action, body.action);
+
 			if (data.CONST_VARS) data = json.parse(data, data.CONST_VARS);
 
 			debug('catch proxy route:%s', methodKey);
