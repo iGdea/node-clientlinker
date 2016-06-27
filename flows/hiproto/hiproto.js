@@ -2,15 +2,18 @@ var Promise	= require('bluebird');
 var fs		= require('fs');
 var path	= require('path');
 var debug	= require('debug')('client_linker:hiproto');
-
 var Service;
+
+
+
+
 try {
-	Service = require('mail.addon_hiproto').Service;
+  	Service = require('mail.addon_hiproto').Service;
 	exports = module.exports = hiproto;
 }
 catch(e)
 {
-	debug('load hiproto err:%o', e);
+  debug('load hiproto err:%o', e);
 }
 
 exports.initConfig	= require('./initConfig');
@@ -18,7 +21,7 @@ exports.methods		= require('./methods');
 
 function hiproto(runtime, callback)
 {
-	var client = runtime.client;
+  var client = runtime.client;
 	var options = client.options;
 
 	initClient(client)
@@ -30,8 +33,7 @@ function hiproto(runtime, callback)
 
 			if (typeof handler == 'function')
 			{
-				handler.call(client.hiprotoServer, runtime.query, runtime.body, callback,
-					runtime.runOptions && runtime.runOptions.hiprotoParseBuffer);
+				handler.call(client.hiprotoServer, runtime.query, runtime.body, callback, runtime.runOptions);
 			}
 			else
 			{
@@ -47,13 +49,12 @@ function hiproto(runtime, callback)
 		.catch(callback.reject);
 }
 
-
 exports.initClient = initClient;
 function initClient(client)
 {
 	var options = client.options;
 
-	if (!client.hiprotoServer && options.hiproto && options.hiprotoClientAlias)
+  	if (!client.hiprotoServer && options.hiproto && options.hiprotoClientAlias)
 	{
 		var linker = client.linker;
 		var servers = linker.hiprotoServers || (linker.hiprotoServers = {});

@@ -161,7 +161,8 @@ clientName: {
 
 ### runOptions
 
-`hiprotoParseBuffer`：不自动转返回的buffer数据 (默认true)
+`buf2str`：自动转返回的buffer数据 (默认true)
+`hiver`：兼容旧server
 
 
 
