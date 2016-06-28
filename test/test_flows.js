@@ -122,5 +122,5 @@ describe('flows', function()
 			});
 
 		linker.run('client.method', 123, {body:456}).catch(done);
-	})
+	});
 });

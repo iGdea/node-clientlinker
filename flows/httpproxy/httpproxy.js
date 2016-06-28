@@ -1,6 +1,7 @@
 var debug	= require('debug')('client_linker:httpproxy');
 var json	= require('../../lib/json');
 var request	= require('request');
+var aes		= require('../../lib/aes_cipher');
 
 exports = module.exports = httpproxy;
 
@@ -18,6 +19,9 @@ function httpproxy(runtime, callback)
 		CONST_VARS	: json.CONST_VARS,
 		runOptions	: runtime.runOptions
 	};
+	// check aes key
+	if (options.httpproxyKey) body.key = aes.cipher(runtime.methodKey+','+Date.now(), options.httpproxyKey);
+
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
 

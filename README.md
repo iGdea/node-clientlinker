@@ -178,6 +178,8 @@ clientName: {
 `httpproxyTimeout`
 `httpproxyProxy`
 `httpproxyErrorNext`
+`httpproxyKey`
+`httpproxyKeyRemain`
 
 ### runOptions
 
