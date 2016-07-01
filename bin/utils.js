@@ -29,30 +29,19 @@ function parseParam(str)
 	str = str && str.trim();
 	if (!str) return;
 
+	debug('run str start:%s', str);
+
 	var data;
 	try {
-		data = vm.runInThisContext(str);
+		data = vm.runInNewContext('('+str+')', {});
 	}
 	catch(err)
 	{
 		debug('run str err:%o', err);
 
 		var parseDataSuc = false;
-		if (str[0] == '{' && str[str.length-1] == '}')
-		{
-			try
-			{
-				data = vm.runInThisContext('('+str+')');
-				parseDataSuc = true;
-			}
-			catch(err2)
-			{
-				debug('run (str) err:%o', err2);
-			}
-		}
-
 		// 判断参数是不是文件
-		if (!parseDataSuc && !/['"\{\}\n\r\t]/.test(str))
+		if (!/['"\{\}\n\r\t]/.test(str))
 		{
 			if (/^(((~|\.|\.\.)[\/\\])|\/)/.test(str))
 			{
