@@ -63,22 +63,13 @@ function testStart(allMethods, linker)
 		})
 		.then(function()
 		{
-			console.log('\n ========= Action Run <%s> =========', ActionParams.action);
-			debug('run action:%s, query:%o, body:%o, runOptions:%o', ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.runOptions);
-
-			return linker.run(ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.RunOptions)
-				.then(function(data)
-				{
-					console.log('\n ========= Action Result Success <%s> =========\n%s', ActionParams.action, utils.printObject(data));
-				},
-				function(err)
-				{
-					console.log('\n ========= Action Result Error <%s> =========\n%s', ActionParams.action, utils.printObject(err));
-				});
+			return utils.run(ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.runoptions);
 		})
 		.catch(function(err)
 		{
-			console.log('\n ========= Unexpected Error <%s> =========\n%s', ActionParams.action, utils.printObject(err));
+			console.log('\n ========= Unexpected Error %s =========\n%s',
+				utils.printObject(ActionParams.action),
+				utils.printObject(err));
 		})
 		.then(function()
 		{

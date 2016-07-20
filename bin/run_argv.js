@@ -11,22 +11,10 @@ function runActionByArgv(linker, argvInfo, allMethods)
 	action && (action = utils.parseAction(action, allMethods));
 	if (!action) return false;
 
-	var query		= utils.parseParam(argvInfo['clk-query'] || argvInfo.query);
-	var body		= utils.parseParam(argvInfo['clk-body'] || argvInfo.body);
-	var runOptions	= utils.parseParam(argvInfo['clk-options'] || argvInfo);
-
-	console.log('\n ========= run <%s> =========', action);
-	debug('run action:%s, query:%o, body:%o, runOptions:%o', action, query, body, runOptions);
-
-	linker.run(action, query, body, function(err, data)
-	{
-		console.log('\n ========= result <%s> =========\nerr  :  %s\ndata :  %s',
-			action,
-			utils.printObject(err),
-			utils.printObject(data)
-		);
-	},
-	runOptions);
+	utils.run(linker, action,
+		utils.parseParam(argvInfo['clk-query'] || argvInfo.query),
+		utils.parseParam(argvInfo['clk-body'] || argvInfo.body),
+		utils.parseParam(argvInfo['clk-options'] || argvInfo.options));
 
 	return true;
 }

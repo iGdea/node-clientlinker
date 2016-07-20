@@ -86,3 +86,32 @@ function printObject(obj)
 	else
 		return util.inspect(obj, {depth: 8, colors: true});
 }
+
+
+exports.run = run;
+function run(linker, action, query, body, runOptions)
+{
+	console.log('\n ========= Action Run %s =========\n'
+		+' >>> Query <<<\n%s\n\n'
+		+' >>> Body <<<\n%s\n\n'
+		+' >>> RunOptions <<<\n%s',
+		printObject(action),
+		printObject(query),
+		printObject(body),
+		printObject(runOptions));
+
+	return linker.run(action, query, body, runOptions)
+		.then(function(data)
+		{
+			console.log('\n ========= Action Result Success %s =========\n%s',
+				printObject(action),
+				printObject(data));
+		},
+		function(err)
+		{
+			console.log('\n ========= Action Result Error %s =========\n%s',
+				printObject(action),
+				printObject(err));
+		});
+}
+
