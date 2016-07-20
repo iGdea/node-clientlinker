@@ -3,16 +3,17 @@ var utils	= require('./utils');
 var debug	= require('debug')('client_linker:run_argv');
 
 
+
 exports.runActionByArgv = runActionByArgv;
-function runActionByArgv(linker, allMethods)
+function runActionByArgv(linker, argvInfo, allMethods)
 {
-	var action = process.argv[3];
+	var action = argvInfo['clk-action'] || argvInfo.action;
 	action && (action = utils.parseAction(action, allMethods));
 	if (!action) return false;
 
-	var query		= utils.parseParam(process.argv[4]);
-	var body		= utils.parseParam(process.argv[5]);
-	var runOptions	= utils.parseParam(process.argv[6]);
+	var query		= utils.parseParam(argvInfo['clk-query'] || argvInfo.query);
+	var body		= utils.parseParam(argvInfo['clk-body'] || argvInfo.body);
+	var runOptions	= utils.parseParam(argvInfo['clk-options'] || argvInfo);
 
 	console.log('\n ========= run <%s> =========', action);
 	debug('run action:%s, query:%o, body:%o, runOptions:%o', action, query, body, runOptions);

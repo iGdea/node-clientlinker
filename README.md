@@ -29,7 +29,8 @@ Assert cmd:
 
 ```
 # clientlinker ./client_linker.js
-# clientlinker ./client_linker.js method query body options
+# clientlinker ./client_linker.js --action=method --query=query --body=body --options=options
+# clientlinker --linker=./client_linker.js --clk-action=method --clk-query=query --clk-body=body --clk-options=options
 ```
 
 # Options
