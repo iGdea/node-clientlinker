@@ -1,8 +1,3 @@
-#!/usr/bin/env node
-'use strict';
-process.title = 'clientlinker';
-
-var Promise		= require('bluebird');
 var path		= require('path');
 var printTable	= require('./print_table').printTable;
 var rl			= require('./rl');
@@ -70,3 +65,4 @@ else
 	console.log('[List] clientlinker --linker=./config/client_linker.conf.js');
 	console.log('[Run]  clientlinker --linker=./config/client_linker.conf.js --action=xxx --query=xxx --body=xxxx --options=xxxxx');
 }
+
