@@ -119,7 +119,7 @@ describe('base', function()
 				}
 			});
 
-		linker.add('client', {flows: ['custom']});
+		linker.addClient('client', {flows: ['custom']});
 		linker.run('client.xxxx', null, null, function(err)
 		{
 			assert(!err);

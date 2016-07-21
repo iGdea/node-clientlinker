@@ -1,11 +1,8 @@
 {
-  "name": "client_linker",
-  "version": "3.1.2",
+  "name": "clientlinker",
+  "version": "3.2.0",
   "description": "Client Linker all.",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "start": "node ./bin/client_linker_cli.js ./test/client_linker.conf.js",
     "test": "mocha test/test_*"
@@ -20,12 +17,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Bacra/node-client_linker.git"
+    "url": "git+ssh://git@github.com/Bacra/node-clientlinker.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-client_linker/issues"
+    "url": "https://github.com/Bacra/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/Bacra/node-client_linker#readme",
+  "homepage": "https://github.com/Bacra/node-clientlinker#readme",
   "author": "bacrawu <bacra.woo@gmail.com>",
   "license": "MIT",
   "devDependencies": {

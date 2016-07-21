@@ -39,7 +39,7 @@ function ClientLinker(options)
 				}
 
 				if (pkg && typeof pkg == 'function')
-					linker.bind(name, pkg);
+					linker.bindFlow(name, pkg);
 				else
 					debug('not pkg:%s, %o', name, pkg);
 			}
@@ -56,7 +56,7 @@ function ClientLinker(options)
 	{
 		_.each(options.customFlows, function(handle, name)
 		{
-			linker.bind(name, handle);
+			linker.bindFlow(name, handle);
 		});
 	}
 
@@ -73,7 +73,7 @@ function ClientLinker(options)
 			if (!clientOptions.flows && options.flows)
 				clientOptions.flows = options.flows.slice();
 
-			linker.add(name, clientOptions);
+			linker.addClient(name, clientOptions);
 		});
 	}
 

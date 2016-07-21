@@ -49,7 +49,7 @@ function initConfig(options)
 
 									// clientOptions.flows || (clientOptions.flows = ['hiproto']);
 									debug('add hiproto client:%s %s', clientName, file);
-									linker.add(clientName, clientOptions, true);
+									linker.addClient(clientName, clientOptions, true);
 								}
 
 								// 屏蔽错误

@@ -40,7 +40,7 @@ function initConfig(options)
 									var name = filename.substr(0, filename.length-3);
 									// clientOptions.flows || (clientOptions.flows = ['pkghandler']);
 									debug('add pkghandler client:%s %s', name, file);
-									linker.add(name, clientOptions, true);
+									linker.addClient(name, clientOptions, true);
 								}
 
 								// 屏蔽错误
