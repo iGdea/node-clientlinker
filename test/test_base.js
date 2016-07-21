@@ -19,14 +19,10 @@ describe('base', function()
 				flows: ClientLinker.supportMiddlewares
 			});
 
-		var noHiproto = !linker.flows['hiproto'];
-		assert.equal(Object.keys(linker.flows).length, ClientLinker.supportMiddlewares.length+(noHiproto ? -1 : 0));
+		assert.equal(Object.keys(linker.flows).length, ClientLinker.supportMiddlewares.length);
 		ClientLinker.supportMiddlewares.forEach(function(name)
 		{
-			if (name != 'hiproto' || !noHiproto)
-			{
-				assert.equal(typeof linker.flows[name], 'function');
-			}
+			assert.equal(typeof linker.flows[name], 'function');
 		});
 	});
 
