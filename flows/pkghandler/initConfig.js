@@ -4,9 +4,8 @@ var fs		= require('fs');
 var debug	= require('debug')('client_linker:pkghandler');
 
 module.exports = initConfig;
-function initConfig(options)
+function initConfig(options, linker)
 {
-	var linker = this;
 	if (!options || !options.pkghandlerDir) return;
 
 	return new Promise(function(resolve, reject)

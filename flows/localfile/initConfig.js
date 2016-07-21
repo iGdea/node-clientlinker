@@ -4,9 +4,8 @@ var fs		= require('fs');
 var debug	= require('debug')('client_linker:localfile');
 
 module.exports = initConfig;
-function initConfig(options)
+function initConfig(options, linker)
 {
-	var linker = this;
 	if (!options || !options.localfileDir) return;
 
 	return new Promise(function(resolve, reject)
