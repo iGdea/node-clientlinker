@@ -12,17 +12,16 @@ var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';
  * 	httpproxy
  * 	clients
  * 	clientDefaultOptions
- * 	hiprotoDir
  * 	localfileDir
  * 	pkghandlerDir
  */
 exports = module.exports = ClientLinker;
 function ClientLinker(options)
 {
-	var linker = new Linker();
-
 	options || (options = {});
 	var clientDefaultOptions = options.clientDefaultOptions || (options.clientDefaultOptions = {});
+	clientDefaultOptions.flows || (clientDefaultOptions.flows = options.flows);
+	var linker = new Linker(options);
 
 	if (options.flows)
 	{
@@ -33,12 +32,6 @@ function ClientLinker(options)
 				linker.loadFlow(name, DEFAULT_FLOWS_PATH+name+'/'+name, module);
 			}
 		});
-
-		// 延续flows
-		if (!clientDefaultOptions.flows)
-		{
-			clientDefaultOptions.flows = options.flows;
-		}
 	}
 
 	if (options.customFlows)
