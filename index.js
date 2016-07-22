@@ -20,7 +20,7 @@ function ClientLinker(options)
 {
 	options || (options = {});
 	var clientDefaultOptions = options.clientDefaultOptions || (options.clientDefaultOptions = {});
-	clientDefaultOptions.flows || (clientDefaultOptions.flows = options.flows);
+	!clientDefaultOptions.flows && options.flows && (clientDefaultOptions.flows = options.flows.slice());
 	var linker = new Linker(options);
 
 	if (options.flows)
