@@ -120,7 +120,7 @@ exports.initConfig = function(linkerOptions)
 `flowStart_*`
 `flowEnd_*`
 `flowsStart`
-`flowsEnd`travis.yml
+`flowsEnd`
 
 
 
