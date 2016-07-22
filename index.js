@@ -3,7 +3,8 @@ var _			= require('underscore');
 var fs			=  require('fs');
 var Linker		= require('./lib/main').Linker;
 var debug		= require('debug')('client_linker');
-var flowsPath	= __dirname+'/flows/';
+
+var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';
 
 /**
  * [options]
@@ -29,19 +30,7 @@ function ClientLinker(options)
 		{
 			if (exports.supportMiddlewares.indexOf(name) != -1)
 			{
-				var pkg;
-				try {
-					pkg = require(flowsPath+name+'/'+name);
-				}
-				catch(e)
-				{
-					debug('load flow pkg <%s> err:%o', name, e);
-				}
-
-				if (pkg && typeof pkg == 'function')
-					linker.bindFlow(name, pkg);
-				else
-					debug('not pkg:%s, %o', name, pkg);
+				linker.loadFlow(name, DEFAULT_FLOWS_PATH+name+'/'+name, module);
 			}
 		});
 
@@ -86,7 +75,7 @@ function ClientLinker(options)
 	return linker;
 };
 
-exports.supportMiddlewares = fs.readdirSync(flowsPath)
+exports.supportMiddlewares = fs.readdirSync(DEFAULT_FLOWS_PATH)
 	.filter(function(b)
 	{
 		return b != '.' && b != '..' && b[0] != '.';
