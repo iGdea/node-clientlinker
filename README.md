@@ -9,41 +9,7 @@ npm install client_linker -g
 
 # Useage
 
-Linker config file:
-```
-var ClientLinker = require('client_linker');
-var linker = ClientLinker(
-	{
-		flows: ['confighandler'],
-		clients: {
-			client: {
-				confighandler: require('./pkghandler/client')
-			}
-		}
-	});
-
-module.exports = linker;
-```
-
-Assert cmd:
-
-```
-# clientlinker ./client_linker.js
-# clientlinker ./client_linker.js --action=method --query=query --body=body --options=options
-# clientlinker --linker=./client_linker.js --clk-action=method --clk-query=query --clk-body=body --clk-options=options
-```
-
-# Options
-
-`flows`：启用这些系统组件，同时设置`clientDefaultOptions.flows`
-`clients`：注册独立的clients配置
-`customFlows`：自定义flows流程
-`clientDefaultOptions`：client的默认配置
-	`debug`：debug模式
-	`anyToError`：将所有错误信息转化为Error对象，同设置`clientDefaultOptions.anyToError`
-	`retry`：接口失败重试次数
-
-### Options Example
+Linker Options Exmaple
 
 ```
 {
@@ -64,6 +30,38 @@ Assert cmd:
 	}
 }
 ```
+
+
+Init Linker
+
+
+```
+var ClientLinker = require('client_linker');
+var linker = ClientLinker(options);
+linker.loadFlow(name, path, module);
+linker.addClient(name, options);
+
+module.exports = linker;
+```
+
+
+Run in Cmd
+
+```
+# clientlinker ./client_linker.js
+# clientlinker ./client_linker.js --action=method --query=query --body=body --options=options
+# clientlinker --linker=./client_linker.js --clk-action=method --clk-query=query --clk-body=body --clk-options=options
+```
+
+# Options
+
+`flows`：启用这些系统组件，同时设置`clientDefaultOptions.flows`
+`clients`：注册独立的clients配置
+`customFlows`：自定义flows流程
+`clientDefaultOptions`：client的默认配置
+	`debug`：debug模式
+	`anyToError`：将所有错误信息转化为Error对象，同设置`clientDefaultOptions.anyToError`
+	`retry`：接口失败重试次数
 
 
 
@@ -144,26 +142,6 @@ clientName: {
 	}
 }
 ```
-
-
-
-
-## Flow:hiproto
-
-### linkerOptions
-
-`hiprotoDir`：扫描这个目录下的.des文件，添加成client
-
-### clientOptions
-
-`hiproto`：proto描述文件地址
-`hiprotoClientPath`：server配置文件地址，默认：/home/qspace/etc/clients/xxx.conf
-`hiprotoClientAlias`：server命名空间，默认：client.name
-
-### runOptions
-
-`buf2str`：自动转返回的buffer数据 (默认true)
-`hiver`：兼容旧server
 
 
 
