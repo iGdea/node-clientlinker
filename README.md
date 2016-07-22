@@ -1,10 +1,10 @@
-Client Linker  [![Build Status](https://travis-ci.org/Bacra/node-client_linker.svg?branch=master)](https://travis-ci.org/Bacra/node-client_linker)
+Client Linker  [![Build Status](https://travis-ci.org/Bacra/node-clientlinker.svg?branch=master)](https://travis-ci.org/Bacra/node-clientlinker)
 ==================
 
 # Install
 ```
-npm install client_linker --save
-npm install client_linker -g
+npm install clientlinker --save
+npm install clientlinker -g
 ```
 
 # Useage
@@ -36,7 +36,7 @@ Init Linker
 
 
 ```
-var ClientLinker = require('client_linker');
+var ClientLinker = require('clientlinker');
 var linker = ClientLinker(options);
 linker.loadFlow(name, path, module);
 linker.addClient(name, options);
@@ -48,9 +48,9 @@ module.exports = linker;
 Run in Cmd
 
 ```
-# clientlinker ./client_linker.js
-# clientlinker ./client_linker.js --action=method --query=query --body=body --options=options
-# clientlinker --linker=./client_linker.js --clk-action=method --clk-query=query --clk-body=body --clk-options=options
+# clientlinker ./clientlinker.conf.js
+# clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
+# clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 ```
 
 # Options
