@@ -99,13 +99,22 @@ describe('flows', function()
 					logger: function(runtime, err, data)
 					{
 						var timing = runtime.timing;
-						assert(timing.lastFlowStart);
-						assert(timing.lastFlowEnd);
-						assert(timing.flowsStart);
-						assert(timing.flowsEnd);
-						assert(!err);
-						assert.equal(data.respone, 'respone');
-						done();
+						var lastFlowTiming = runtime.lastFlow().timing;
+
+						try {
+							assert(lastFlowTiming.start);
+							assert(lastFlowTiming.end);
+							assert(timing.flowsStart);
+							assert(timing.flowsEnd);
+							assert(!err);
+							assert.equal(data.respone, 'respone');
+
+							done();
+						}
+						catch(err)
+						{
+							done(err);
+						}
 					},
 				},
 				customFlows:

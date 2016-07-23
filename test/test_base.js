@@ -141,16 +141,18 @@ describe('base', function()
 					},
 					assertHandler: function assertHandler(runtime, callback)
 					{
+						var lastFlowTiming = runtime.lastFlow().timing;
 						var timing = runtime.timing;
-						assert(timing.lastFlowStart - timing.navigationStart < 10);
-						assert.equal(timing.lastFlowStart, timing.flowsStart);
+						assert(lastFlowTiming.start - timing.navigationStart < 10);
+						assert(lastFlowTiming.start - timing.flowsStart < 10);
 
 						callback.next();
 						callback.promise.then(function()
 						{
-							assert.equal(timing.lastFlowEnd, timing.flowsEnd);
-							assert(timing.lastFlowStart - timing.flowsStart >= 100);
-							assert(timing.lastFlowEnd - timing.lastFlowStart >= 100);
+							var lastFlowTiming = runtime.lastFlow().timing;
+							assert(timing.flowsEnd - lastFlowTiming.end < 3);
+							assert(lastFlowTiming.start - timing.flowsStart >= 100);
+							assert(lastFlowTiming.end - lastFlowTiming.start >= 100);
 							done();
 						});
 					}
