@@ -51,19 +51,19 @@ function testStart(allMethods, linker)
 		})
 		.then(function()
 		{
-			return rlparam(rl, 'Query', ActionParams);
+			return rlparam(linker, rl, 'Query', ActionParams);
 		})
 		.then(function()
 		{
-			return rlparam(rl, 'Body', ActionParams);
+			return rlparam(linker, rl, 'Body', ActionParams);
 		})
 		.then(function()
 		{
-			return rlparam(rl, 'RunOptions', ActionParams);
+			return rlparam(linker, rl, 'RunOptions', ActionParams);
 		})
 		.then(function()
 		{
-			return utils.run(ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.runoptions);
+			return utils.run(linker, ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.runoptions);
 		})
 		.catch(function(err)
 		{
@@ -81,7 +81,7 @@ function testStart(allMethods, linker)
 
 
 
-function rlparam(rl, key, ActionParams)
+function rlparam(linker, rl, key, ActionParams)
 {
 	return new Promise(function(resolve, reject)
 		{
@@ -96,7 +96,7 @@ function rlparam(rl, key, ActionParams)
 					catch(err)
 					{
 						console.log(err);
-						rlparam(rl, key, ActionParams)
+						rlparam(linker, rl, key, ActionParams)
 							.then(resolve, reject);
 					}
 				});

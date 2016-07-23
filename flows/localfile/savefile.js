@@ -1,12 +1,11 @@
 var Promise	= require('bluebird');
 var fs		= require('fs');
 var debug	= require('debug')('client_linker:localfile:save');
-var json	= require('../../lib/json');
 var mkdirp	= require('mkdirp');
 
 module.exports = savefile;
 
-function savefile(localfile, methodName, err, data)
+function savefile(linker, localfile, methodName, err, data)
 {
 	if (!localfile || !methodName) return Promise.reject('NO_FILE_INFO');
 
@@ -22,8 +21,8 @@ function savefile(localfile, methodName, err, data)
 			return new Promise(function(resolve, reject)
 				{
 					var file = localfile+'/'+methodName + '.json';
-					var content = {result: err, data: data, CONST_VARS: json.CONST_VARS};
-					content = JSON.stringify(json.stringify(content));
+					var content = {result: err, data: data, CONST_VARS: linker.JSON.CONST_VARS};
+					content = JSON.stringify(linker.JSON.stringify(content));
 
 					fs.writeFile(file, content, {encoding: 'utf8'}, function(err)
 					{

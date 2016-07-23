@@ -1,5 +1,4 @@
 var debug	= require('debug')('client_linker:httpproxy');
-var json	= require('../../lib/json');
 var request	= require('request');
 var aes		= require('../../lib/aes_cipher');
 
@@ -9,6 +8,7 @@ function httpproxy(runtime, callback)
 {
 	var client = runtime.client;
 	var options = client.options;
+	var linker = client.linker;
 	if (!options.httpproxy) return callback.next();
 
 	var url = options.httpproxy+'action='+runtime.methodKey;
@@ -16,7 +16,7 @@ function httpproxy(runtime, callback)
 		action		: runtime.methodKey,
 		query		: runtime.query,
 		body		: runtime.body,
-		CONST_VARS	: json.CONST_VARS,
+		CONST_VARS	: linker.JSON.CONST_VARS,
 		runOptions	: runtime.runOptions
 	};
 	// check aes key
@@ -34,7 +34,7 @@ function httpproxy(runtime, callback)
 	request.post(
 	{
 		url		: url,
-		body	: JSON.stringify(json.stringify(body)),
+		body	: JSON.stringify(linker.JSON.stringify(body)),
 		headers	: headers,
 		timeout	: timeout,
 		proxy	: proxy
@@ -59,7 +59,7 @@ function httpproxy(runtime, callback)
 			return options.httpproxyErrorNext ? callback.next() : callback(e);
 		}
 
-		if (data.CONST_VARS) data = json.parse(data, data.CONST_VARS);
+		if (data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
 
 		if (data.result)
 			callback(data.result);

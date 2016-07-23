@@ -1,5 +1,4 @@
 var debug	= require('debug')('client_linker:httpproxy:route');
-var json	= require('../../lib/json');
 var aes		= require('../../lib/aes_cipher');
 var defaultBodyParser	= require('body-parser').json({limit: '200mb'});
 
@@ -68,7 +67,7 @@ function HttpProxyRoute(linker, bodyParser)
 						}
 					}
 
-					if (data.CONST_VARS) data = json.parse(data, data.CONST_VARS);
+					if (data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
 
 					debug('catch proxy route:%s', methodKey);
 					linker.run(methodKey, data.query, data.body, function(err, data)
@@ -79,11 +78,11 @@ function HttpProxyRoute(linker, bodyParser)
 								return next();
 							}
 
-							res.json(json.stringify(
+							res.json(linker.JSON.stringify(
 							{
 								result		: err,
 								data		: data,
-								CONST_VARS	: json.CONST_VARS
+								CONST_VARS	: linker.JSON.CONST_VARS
 							}));
 						},
 						data.runOptions);

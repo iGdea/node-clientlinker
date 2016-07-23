@@ -2,7 +2,6 @@ var Promise	= require('bluebird');
 var debug	= require('debug')('client_linker:localfile');
 var fs		= require('fs');
 var vm		= require('vm');
-var json	= require('../../lib/json');
 
 exports = module.exports = localfile;
 exports.initConfig = require('./initConfig');
@@ -33,7 +32,7 @@ function localfile(runtime, callback)
 				// 数据处理
 				.then(function(content)
 				{
-					return parseContent(content, fileInfo.extname);
+					return parseContent(client.linker, content, fileInfo.extname);
 				})
 				.then(function(data)
 				{
@@ -75,7 +74,7 @@ function checkExists(file, extnames)
 }
 
 exports.parseContent = parseContent;
-function parseContent(content, extname)
+function parseContent(linker, content, extname)
 {
 	if (extname == 'js')
 	{
@@ -86,7 +85,7 @@ function parseContent(content, extname)
 		var data = JSON.parse(content);
 
 		if (data && data.CONST_VARS)
-			data = json.parse(data, data.CONST_VARS);
+			data = linker.JSON.parse(data, data.CONST_VARS);
 
 		return data;
 	}

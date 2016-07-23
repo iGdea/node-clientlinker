@@ -1,7 +1,6 @@
 var debug	= require('debug')('client_linker:bin_utils');
 var util	= require('util');
 var vm		= require('vm');
-var json	= require('../lib/json');
 var path	= require('path');
 
 
@@ -24,7 +23,7 @@ function parseAction(str, allMethods)
 
 
 exports.parseParam = parseParam;
-function parseParam(str)
+function parseParam(linker, str)
 {
 	str = str && str.trim();
 	if (!str) return;
@@ -72,7 +71,7 @@ function parseParam(str)
 		if (!parseDataSuc) throw err;
 	}
 
-	if (data && data.CONST_VARS) data = json.parse(data, data.CONST_VARS);
+	if (data && data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
 
 	return data;
 }

@@ -12,9 +12,9 @@ function runActionByArgv(linker, argvInfo, allMethods)
 	if (!action) return false;
 
 	utils.run(linker, action,
-		utils.parseParam(argvInfo['clk-query'] || argvInfo.query),
-		utils.parseParam(argvInfo['clk-body'] || argvInfo.body),
-		utils.parseParam(argvInfo['clk-options'] || argvInfo.options));
+		utils.parseParam(linker, argvInfo['clk-query'] || argvInfo.query),
+		utils.parseParam(linker, argvInfo['clk-body'] || argvInfo.body),
+		utils.parseParam(linker, argvInfo['clk-options'] || argvInfo.options));
 
 	return true;
 }

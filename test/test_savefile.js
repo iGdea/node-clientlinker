@@ -4,6 +4,7 @@ var assert			= require('assert');
 var mkdirp			= require('mkdirp');
 var savefile		= require('../flows/localfile/savefile');
 var parseContent	= require('../flows/localfile/localfile').parseContent;
+var ClientLinker	= require('../');
 var DIR				= __dirname+'/tmp/';
 
 describe('savefile', function()
@@ -16,7 +17,8 @@ describe('savefile', function()
 	it('savefile', function(done)
 	{
 		var filename = process.pid+Math.random();
-		savefile(DIR, filename, new Error('errmsg123'), {data: 'data', buffer: new Buffer('buffer')})
+		var linker = new ClientLinker;
+		savefile(linker, DIR, filename, new Error('errmsg123'), {data: 'data', buffer: new Buffer('buffer')})
 			.then(function()
 			{
 				return new Promise(function(resolve, reject)
@@ -29,7 +31,7 @@ describe('savefile', function()
 			})
 			.then(function(content)
 			{
-				var data = parseContent(content, 'json');
+				var data = parseContent(linker, content, 'json');
 				assert(data.result instanceof Error);
 				assert.equal(data.result.message, 'errmsg123');
 				assert.equal(data.data.data, 'data');
