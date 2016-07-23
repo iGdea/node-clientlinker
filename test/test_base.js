@@ -250,7 +250,7 @@ describe('base', function()
 					{
 						runTimes++;
 						if (runTimes == 2)
-							assert(runtime.timing.retry_1.flowsEnd);
+							assert(runtime.retry[0].timing.flowsEnd);
 
 						callback.next();
 					}
