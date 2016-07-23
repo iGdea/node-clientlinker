@@ -1,7 +1,7 @@
 var Promise		= require('bluebird');
 var _			= require('underscore');
 var fs			=  require('fs');
-var Linker		= require('./lib/main').Linker;
+var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('client_linker');
 
 var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';

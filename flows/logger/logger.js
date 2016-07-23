@@ -1,5 +1,5 @@
 var debug = require('debug')('client_linker:logger');
-var DEFAULT_ERRMSG = require('../../lib/main').DEFAULT_ERRMSG;
+var DEFAULT_ERRMSG = require('../../lib/linker').DEFAULT_ERRMSG;
 exports = module.exports = logger;
 
 function logger(runtime, callback)
