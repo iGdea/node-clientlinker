@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/client_linker_cli.js ./test/client_linker.conf.js",
-    "test": "mocha test/test_*"
+    "test": "NODE_DEBUG=client_linker* mocha test/test_*"
   },
   "bin": {
     "clientlinker": "bin/client_linker_cli.js"

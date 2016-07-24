@@ -1,5 +1,3 @@
-require('debug').enable('client_linker*');
-
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
 var assert			= require('assert');

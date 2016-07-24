@@ -92,6 +92,7 @@ describe('flows', function()
 
 	it('logger', function(done)
 	{
+		var logger = require('../flows/logger/logger');
 		var linker = ClientLinker(
 			{
 				flows: ['logger', 'custom'],
@@ -100,6 +101,8 @@ describe('flows', function()
 					{
 						var timing = runtime.timing;
 						var lastFlowTiming = runtime.lastFlow().timing;
+
+						logger.loggerHandler.apply(null, arguments);
 
 						try {
 							assert(lastFlowTiming.start);
