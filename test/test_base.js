@@ -143,7 +143,7 @@ describe('base', function()
 					{
 						var lastFlowTiming = runtime.lastFlow().timing;
 						var timing = runtime.timing;
-						assert(lastFlowTiming.start - timing.navigationStart < 10);
+						assert(lastFlowTiming.start - runtime.navigationStart < 10);
 						assert(lastFlowTiming.start - timing.flowsStart < 10);
 
 						callback.next();
