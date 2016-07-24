@@ -59,7 +59,7 @@ function testStart(allMethods, linker)
 		})
 		.then(function()
 		{
-			return rlparam(linker, rl, 'RunOptions', ActionParams);
+			return rlparam(linker, rl, 'Options', ActionParams);
 		})
 		.then(function()
 		{

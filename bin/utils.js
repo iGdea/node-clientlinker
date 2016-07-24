@@ -93,7 +93,7 @@ function run(linker, action, query, body, options)
 	console.log('\n ========= Action Run %s =========\n'
 		+' >>> Query <<<\n%s\n\n'
 		+' >>> Body <<<\n%s\n\n'
-		+' >>> RunOptions <<<\n%s',
+		+' >>> Options <<<\n%s',
 		printObject(action),
 		printObject(query),
 		printObject(body),
