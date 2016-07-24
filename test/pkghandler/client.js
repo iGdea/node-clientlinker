@@ -2,7 +2,7 @@ var Promise	= require('bluebird');
 var assert	= require('assert');
 
 module.exports = {
-	method1: function(req, body, callback, runOptions)
+	method1: function(req, body, callback, options)
 	{
 		assert.equal(req, 123);
 		assert.equal(body.name, 'bb');
@@ -10,7 +10,7 @@ module.exports = {
 		assert.equal(body.buffer.toString(), 'buffer');
 		assert.equal(body.buffer.toString('base64'), 'YnVmZmVy');
 		assert.equal(typeof callback, 'function');
-		assert.equal(runOptions.timeout, 1000);
+		assert.equal(options.timeout, 1000);
 
 		callback(null, 334);
 	},

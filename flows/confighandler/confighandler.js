@@ -24,7 +24,7 @@ function confighandler(runtime, callback)
 exports.runHandler = runHandler;
 function runHandler(runtime, callback, handler)
 {
-	var ret = handler(runtime.query, runtime.body, callback, runtime.runOptions);
+	var ret = handler(runtime.query, runtime.body, callback, runtime.options);
 
 	if (isPromise(ret))
 		ret.then(callback.resolve, callback.reject);

@@ -85,7 +85,7 @@ function HttpProxyRoute(linker, bodyParser)
 								CONST_VARS	: linker.JSON.CONST_VARS
 							}));
 						},
-						data.runOptions);
+						data.options);
 				})
 				.catch(function(err)
 				{

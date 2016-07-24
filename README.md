@@ -21,7 +21,7 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 	},
 	customFlows:
 	{
-		custom: function(query, body, callback, runOptions) {}
+		custom: function(query, body, callback, options) {}
 	},
 	clients: {
 		mail: {

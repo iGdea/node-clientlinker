@@ -16,8 +16,8 @@ function httpproxy(runtime, callback)
 		action		: runtime.methodKey,
 		query		: runtime.query,
 		body		: runtime.body,
+		options	    : runtime.options,
 		CONST_VARS	: linker.JSON.CONST_VARS,
-		runOptions	: runtime.runOptions
 	};
 	// check aes key
 	if (options.httpproxyKey) body.key = aes.cipher(runtime.methodKey+','+Date.now(), options.httpproxyKey);
@@ -25,7 +25,7 @@ function httpproxy(runtime, callback)
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
 
-	var runOptions	= runtime.runOptions || {};
+	var runOptions	= runtime.options || {};
 	var timeout		= runOptions.timeout || options.httpproxyTimeout || 10000;
 	var proxy		= runOptions.httpproxyProxy || options.httpproxyProxy || process.env.clientlinker_http_proxy || process.env.http_proxy;
 

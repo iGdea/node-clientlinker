@@ -31,6 +31,6 @@ function loggerHandler(runtime, err, data)
 		runtime.query,
 		runtime.body,
 		err, data,
-		runtime.runOptions
+		runtime.options
 	);
 }

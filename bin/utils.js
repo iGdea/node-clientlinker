@@ -88,7 +88,7 @@ function printObject(obj)
 
 
 exports.run = run;
-function run(linker, action, query, body, runOptions)
+function run(linker, action, query, body, options)
 {
 	console.log('\n ========= Action Run %s =========\n'
 		+' >>> Query <<<\n%s\n\n'
@@ -97,9 +97,9 @@ function run(linker, action, query, body, runOptions)
 		printObject(action),
 		printObject(query),
 		printObject(body),
-		printObject(runOptions));
+		printObject(options));
 
-	return linker.run(action, query, body, runOptions)
+	return linker.run(action, query, body, options)
 		.then(function(data)
 		{
 			console.log('\n ========= Action Result Success %s =========\n%s',
