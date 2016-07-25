@@ -34,25 +34,10 @@ function ClientLinker(options)
 		});
 	}
 
-	if (options.customFlows)
-	{
-		_.each(options.customFlows, function(handle, name)
-		{
-			linker.bindFlow(name, handle);
-		});
-	}
-
-	linker.initConfig(options);
-
+	if (options.customFlows) linker.bindFlow(options.customFlows);
 	// client options
-	var clients = options.clients;
-	if (clients)
-	{
-		_.each(clients, function(clientOptions, name)
-		{
-			linker.addClient(name, clientOptions);
-		});
-	}
+	if (options.clients) linker.addClient(options.clients);
+	linker.initConfig(options);
 
 	linker.clients()
 		.then(function(clients)

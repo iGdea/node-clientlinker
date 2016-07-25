@@ -24,6 +24,38 @@ describe('base', function()
 		});
 	});
 
+	it('addClient', function()
+	{
+		var linker = new ClientLinker;
+
+		linker.addClient('client1');
+		return linker.clients()
+			.then(function(clients)
+			{
+				assert.equal(Object.keys(clients).length, 1);
+			})
+			.then(function()
+			{
+				linker.addClient({client2: null, client3: {}});
+				return linker.clients();
+			})
+			.then(function(clients)
+			{
+				assert.equal(Object.keys(clients).length, 3);
+			});
+	});
+
+	it('bindFlow', function()
+	{
+		var linker = new ClientLinker;
+
+		linker.bindFlow('flow1', function flow1(){});
+		assert.equal(Object.keys(linker.flows).length, 1);
+		linker.bindFlow({flow2: function flow2(){}, flow3: function flow3(){}});
+		assert.equal(Object.keys(linker.flows).length, 3);
+	});
+
+
 	it('custom', function()
 	{
 		var linker = ClientLinker(
@@ -37,7 +69,7 @@ describe('base', function()
 		assert.equal(Object.keys(linker.flows).length, 1);
 	});
 
-	it('clients', function()
+	it('pkg clients', function()
 	{
 		var linker1 = ClientLinker(
 			{
