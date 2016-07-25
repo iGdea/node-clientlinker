@@ -20,7 +20,7 @@ describe('base', function()
 		assert.equal(Object.keys(linker.flows).length, ClientLinker.supportMiddlewares.length);
 		ClientLinker.supportMiddlewares.forEach(function(name)
 		{
-			assert.equal(typeof linker.flows[name], 'function');
+			assert.equal(typeof linker.flows[name].handler, 'function');
 		});
 	});
 
