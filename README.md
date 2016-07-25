@@ -9,7 +9,7 @@ npm install clientlinker -g
 
 # Useage
 
-Linker Options Exmaple, see [#Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
+Linker Options Exmaple, see [Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
 or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flows-Options)
 
 ```
@@ -48,7 +48,7 @@ module.exports = linker;
 You can custom flows [like this](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow)
 
 
-Run in Cmd
+Run in Terminal
 
 ```
 # clientlinker ./clientlinker.conf.js
