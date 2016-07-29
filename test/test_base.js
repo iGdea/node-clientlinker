@@ -55,6 +55,25 @@ describe('base', function()
 		assert.equal(Object.keys(linker.flows).length, 3);
 	});
 
+	it('loadFlow', function()
+	{
+		var linker = new ClientLinker;
+
+		assert.throws(function(){linker.loadFlow('no_exists_flow')});
+		assert.throws(function(){linker.loadFlow('flow1')});
+		assert.throws(function(){linker.loadFlow('flow1', './flows/flow1')});
+		assert(!linker.loadFlow('flow2', './flows/flow2', module));
+		assert(linker.loadFlow('flow2', './flows/flow3', module));
+
+		linker.addClient('client1', {flows: ['flow1', 'flow2', 'flow3']});
+
+		return linker.run('client1.flow3')
+			.then(function(data)
+			{
+				assert.equal(data, 'ok3');
+			});
+	});
+
 
 	it('custom', function()
 	{
