@@ -40,15 +40,15 @@ function getAllMethods(list)
 		var methods = item.methods && Object.keys(item.methods).sort();
 		if (methods && methods.length)
 		{
-			methods.forEach(function(methodName)
+			methods.forEach(function(method)
 			{
-				var froms = item.methods[methodName]
+				var froms = item.methods[method]
 						.map(function(from)
 						{
 							return from && from.name;
 						});
 
-				var runKey = clientName+'.'+methodName;
+				var runKey = clientName+'.'+method;
 				allFlowFrom.push.apply(allFlowFrom, froms);
 
 				lines.push(

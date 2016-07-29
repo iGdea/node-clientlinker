@@ -5,9 +5,9 @@ var mkdirp	= require('mkdirp');
 
 module.exports = savefile;
 
-function savefile(linker, localfile, methodName, err, data)
+function savefile(linker, localfile, method, err, data)
 {
-	if (!localfile || !methodName) return Promise.reject('NO_FILE_INFO');
+	if (!localfile || !method) return Promise.reject('NO_FILE_INFO');
 
 	return new Promise(function(resolve, reject)
 		{
@@ -20,7 +20,7 @@ function savefile(linker, localfile, methodName, err, data)
 		{
 			return new Promise(function(resolve, reject)
 				{
-					var file = localfile+'/'+methodName + '.json';
+					var file = localfile+'/'+method + '.json';
 					var content = {result: err, data: data, CONST_VARS: linker.JSON.CONST_VARS};
 					content = JSON.stringify(linker.JSON.stringify(content));
 

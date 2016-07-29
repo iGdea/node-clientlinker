@@ -11,13 +11,13 @@ function pkghandler(runtime, callback)
 	var mod = initClient(client);
 
 	if (!mod) return callback.next();
-	var handler = mod[runtime.methodName];
+	var handler = mod[runtime.method];
 
 	if (handler)
 		runHandler(runtime, callback, handler);
 	else
 	{
-		debug('pkg no handler:%s', runtime.methodName);
+		debug('pkg no handler:%s', runtime.method);
 		callback.next();
 	}
 }

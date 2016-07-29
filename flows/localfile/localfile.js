@@ -14,7 +14,7 @@ function localfile(runtime, callback)
 
 	if (!options.localfile) return callback.next();
 
-	var file = options.localfile+'/'+runtime.methodName;
+	var file = options.localfile+'/'+runtime.method;
 
 	checkExists(file, ['js', 'json'])
 		.then(function(exists)

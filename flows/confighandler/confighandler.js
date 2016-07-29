@@ -10,13 +10,13 @@ function confighandler(runtime, callback)
 	var options = client.options;
 	if (!options.confighandler) return callback.next();
 
-	var handler = options.confighandler[runtime.methodName];
+	var handler = options.confighandler[runtime.method];
 
 	if (typeof handler == 'function')
 		runHandler(runtime, callback, handler);
 	else
 	{
-		debug('config no handler:%s', runtime.methodName);
+		debug('config no handler:%s', runtime.method);
 		callback.next();
 	}
 }
