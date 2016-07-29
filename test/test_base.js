@@ -62,15 +62,16 @@ describe('base', function()
 		assert.throws(function(){linker.loadFlow('no_exists_flow')});
 		assert.throws(function(){linker.loadFlow('flow1')});
 		assert.throws(function(){linker.loadFlow('flow1', './flows/flow1')});
-		assert(!linker.loadFlow('flow2', './flows/flow2', module));
-		assert(linker.loadFlow('flow2', './flows/flow3', module));
+		assert(!linker.loadFlow('flow_empty', './flows/flow_empty', module));
+		assert(linker.loadFlow('flow_resolve', './flows/flow_resolve', module));
+		assert(linker.loadFlow('flow_next', './flows/flow_next', module));
 
-		linker.addClient('client1', {flows: ['flow1', 'flow2', 'flow3']});
+		linker.addClient('client1', {flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']});
 
-		return linker.run('client1.flow3')
+		return linker.run('client1.xxxx')
 			.then(function(data)
 			{
-				assert.equal(data, 'ok3');
+				assert.equal(data, 'flow_resolve');
 			});
 	});
 
