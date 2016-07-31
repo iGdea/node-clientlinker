@@ -438,7 +438,7 @@ describe('base', function()
 							});
 					});
 			});
-		
+
 	});
 
 	it('throw null err', function(done)
@@ -532,7 +532,7 @@ describe('base', function()
 
 			return Promise.all([promise11, promise12]);
 		});
-		
+
 		var dm2 = domain.create();
 		dm2._mark_assert = 333;
 
