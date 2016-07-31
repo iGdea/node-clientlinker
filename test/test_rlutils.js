@@ -1,3 +1,5 @@
+"use strict";
+
 require('debug').enable('client_linker*');
 
 var utils			= require('../bin/utils');
@@ -16,4 +18,3 @@ describe('rlutils', function()
 		assert.equal(utils.parseParam(linker, './test/localfile/client/json.json').data.string, 'string', 'filepath');
 	});
 });
-

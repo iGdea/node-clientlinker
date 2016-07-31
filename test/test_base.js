@@ -1,3 +1,5 @@
+"use strict";
+
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
 var assert			= require('assert');

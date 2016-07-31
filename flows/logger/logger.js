@@ -1,3 +1,5 @@
+"use strict";
+
 var debug = require('debug')('client_linker:logger');
 var DEFAULT_ERRMSG = require('../../lib/linker').DEFAULT_ERRMSG;
 exports = module.exports = logger;

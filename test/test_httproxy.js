@@ -1,3 +1,5 @@
+"use strict";
+
 var assert				= require('assert');
 var expr				= require('express');
 var http				= require('http');

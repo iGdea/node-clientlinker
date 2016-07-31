@@ -1,3 +1,5 @@
+"use strict";
+
 var _		= require('underscore');
 var utils	= require('./utils');
 var debug	= require('debug')('client_linker:run_argv');

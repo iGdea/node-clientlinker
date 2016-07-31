@@ -1,3 +1,5 @@
+"use strict";
+
 var table = require('table');
 
 exports.printTable = printTable;

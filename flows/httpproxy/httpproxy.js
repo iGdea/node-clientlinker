@@ -1,3 +1,5 @@
+"use strict";
+
 var debug	= require('debug')('client_linker:httpproxy');
 var request	= require('request');
 var aes		= require('../../lib/aes_cipher');
@@ -67,4 +69,3 @@ function httpproxy(runtime, callback)
 			callback(null, data.data);
 	});
 }
-

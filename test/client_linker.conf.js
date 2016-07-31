@@ -1,3 +1,5 @@
+"use strict";
+
 var ClientLinker = require('../');
 
 var linker = ClientLinker(

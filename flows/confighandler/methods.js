@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = methods;
 function methods(client)
 {

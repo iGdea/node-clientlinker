@@ -1,3 +1,5 @@
+"use strict";
+
 var debug	= require('debug')('client_linker:httpproxy:route');
 var aes		= require('../../lib/aes_cipher');
 var defaultBodyParser	= require('body-parser').json({limit: '200mb'});
@@ -96,4 +98,3 @@ function HttpProxyRoute(linker, bodyParser)
 		});
 	};
 }
-

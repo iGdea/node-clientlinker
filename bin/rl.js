@@ -1,3 +1,5 @@
+"use strict";
+
 var Promise		= require('bluebird');
 var utils		= require('./utils');
 var readline	= require('readline');
@@ -117,4 +119,3 @@ function printStart()
 			' ***********************'
 		].join('\n'));
 }
-

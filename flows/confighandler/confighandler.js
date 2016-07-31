@@ -1,3 +1,5 @@
+"use strict";
+
 var debug		= require('debug')('client_linker:confighandler');
 var isPromise	= require('is-promise');
 

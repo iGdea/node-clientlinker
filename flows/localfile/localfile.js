@@ -1,3 +1,5 @@
+"use strict";
+
 var Promise	= require('bluebird');
 var debug	= require('debug')('client_linker:localfile');
 var fs		= require('fs');
@@ -21,7 +23,7 @@ function localfile(runtime, callback)
 		{
 			var fileInfo = exists[0];
 			if (!fileInfo) return callback.next();
-			
+
 			new Promise(function(resolve, reject)
 				{
 					fs.readFile(fileInfo.file, {encoding: 'utf8'}, function(err, content)

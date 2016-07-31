@@ -1,3 +1,5 @@
+"use strict";
+
 var debug	= require('debug')('client_linker:bin_utils');
 var util	= require('util');
 var vm		= require('vm');
@@ -113,4 +115,3 @@ function run(linker, action, query, body, options)
 				printObject(err));
 		});
 }
-

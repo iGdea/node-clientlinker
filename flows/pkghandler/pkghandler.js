@@ -1,3 +1,5 @@
+"use strict";
+
 var debug		= require('debug')('client_linker:pkghandler');
 var runHandler	= require('../confighandler/confighandler').runHandler;
 

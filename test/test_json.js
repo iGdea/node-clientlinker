@@ -1,3 +1,5 @@
+"use strict";
+
 var assert	= require('assert');
 var json	= require('../lib/json');
 
@@ -62,7 +64,7 @@ describe('json', function()
 			BUFFER_KEY: 'buf_1454824224156',
 			ERROR_KEY: 'err_1454824224156'
 		}
-		
+
 		var newData = json.parse(data, TYPES);
 		assert(!!newData.data);
 		assert(newData.result instanceof Error);
