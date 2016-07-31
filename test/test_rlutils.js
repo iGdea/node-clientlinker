@@ -1,7 +1,5 @@
 "use strict";
 
-require('debug').enable('client_linker*');
-
 var utils			= require('../bin/utils');
 var assert			= require('assert');
 var ClientLinker	= require('../');
