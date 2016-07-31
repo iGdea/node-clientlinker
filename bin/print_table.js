@@ -1,6 +1,7 @@
 "use strict";
 
 var table = require('table');
+var useSymbole = process.platform == 'win32' ? '\u221A' : '✓';
 
 exports.printTable = printTable;
 function printTable(data, allFlowFrom)
@@ -20,10 +21,11 @@ function printTable(data, allFlowFrom)
 			switch(item.type)
 			{
 				case 'header':
+					// 空一行
 					if (tableData.length)
 						tableData.push([' ', '', ''].concat(defaultFlowFromArr));
 
-					tableData.push(['', item.client, ' ' || 'flow list'].concat(allFlowFrom));
+					tableData.push(['', item.client, ' '].concat(allFlowFrom));
 					break;
 				case 'nomethods':
 					tableData.push(['', '** No Methods **', ''].concat(defaultFlowFromArr));
@@ -33,7 +35,7 @@ function printTable(data, allFlowFrom)
 					var froms = item.froms.map(function(name)
 						{
 							if (name === undefined) name = 'undefined';
-							realFlowList[flowFromIndexMap[name]] = '+';
+							realFlowList[flowFromIndexMap[name]] = name+' '+useSymbole;
 							return name;
 						});
 					tableData.push([item.index, item.method, '' && froms.join(',')].concat(realFlowList));
