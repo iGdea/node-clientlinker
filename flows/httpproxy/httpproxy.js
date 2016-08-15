@@ -13,6 +13,12 @@ function httpproxy(runtime, callback)
 	var linker = client.linker;
 	if (!options.httpproxy) return callback.next();
 
+	if (linker.__bind_httpproxy_route__ && options.httpproxyNotRunWhenBindRoute !== false)
+	{
+		debug('[%s] not request httpproxy when bind route', runtime.methodKey);
+		return callback.next();
+	}
+
 	var url = options.httpproxy+'action='+runtime.methodKey;
 	var body = {
 		query		: runtime.query,

@@ -66,7 +66,7 @@ describe('httpproxyKey', function()
 	{
 		var linker = ClientLinker(
 			{
-				flows: ['confighandler'],
+				flows: ['confighandler', 'httpproxy'],
 				clientDefaultOptions:
 				{
 					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',

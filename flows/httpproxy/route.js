@@ -11,6 +11,9 @@ function HttpProxyRoute(linker, bodyParser)
 	if (!linker) return function(req, res, next){next()};
 	bodyParser || (bodyParser = defaultBodyParser);
 
+
+	linker.__bind_httpproxy_route__ = true;
+
 	return function(req, res, next)
 	{
 		var methodKey = req.query.action;
