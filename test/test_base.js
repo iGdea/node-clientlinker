@@ -220,6 +220,50 @@ describe('base', function()
 	});
 
 
+	it('flow run Error', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function()
+							{
+								throw 333;
+							}
+						}
+					}
+				}
+			});
+
+		var promise = new Promise(function(resolve)
+			{
+				linker.run('client.method', null, null, function(err)
+					{
+						assert.equal(err, 333);
+						resolve();
+					});
+			});
+
+		return Promise.all(
+			[
+				promise,
+				linker.run('client.method')
+					.then(function()
+					{
+						assert(false)
+					},
+					function(err)
+					{
+						assert.equal(err, 333);
+					})
+			]);
+	});
+
 	it('anyToError', function()
 	{
 		var linker = ClientLinker(
@@ -264,33 +308,6 @@ describe('base', function()
 		return Promise.all([promise1, promise2]);
 	});
 
-	it('flow run Error', function(done)
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clientDefaultOptions: {anyToError: true},
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method: function()
-							{
-								throw 333;
-							}
-						}
-					}
-				}
-			});
-
-		linker.run('client.method', null, null, function(err)
-			{
-				assert(err instanceof Error);
-				done();
-			});
-	});
 
 	it('retry', function()
 	{
