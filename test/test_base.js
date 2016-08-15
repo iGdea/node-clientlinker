@@ -240,7 +240,7 @@ describe('base', function()
 				}
 			});
 
-		var promise = new Promise(function(resolve)
+		var promise1 = new Promise(function(resolve)
 			{
 				linker.run('client.method', null, null, function(err)
 					{
@@ -249,28 +249,37 @@ describe('base', function()
 					});
 			});
 
-		return Promise.all(
-			[
-				promise,
-				linker.run('client.method1')
-					.then(function()
-					{
-						assert(false);
-					},
-					function(err)
-					{
-						assert.equal(err.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
-					}),
-				linker.run('client.method')
-					.then(function()
-					{
-						assert(false)
-					},
-					function(err)
-					{
-						assert.equal(err, 333);
-					})
-			]);
+		var promise2 = linker.run('client.method')
+			.then(function()
+			{
+				assert(false)
+			},
+			function(err)
+			{
+				assert.equal(err, 333);
+			});
+
+		var promise3 = linker.run('client.method1')
+			.then(function()
+			{
+				assert(false);
+			},
+			function(err)
+			{
+				assert.equal(err.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+			});
+
+		var promise4 = linker.run('client1.method')
+			.then(function()
+			{
+				assert(false);
+			},
+			function(err)
+			{
+				assert.equal(err.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
+			});
+
+		return Promise.all([promise1, promise2, promise3, promise4]);
 	});
 
 	it('anyToError', function()
