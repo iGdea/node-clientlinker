@@ -66,14 +66,15 @@ describe('httpproxyKey', function()
 	{
 		var linker = ClientLinker(
 			{
-				flows: ['confighandler', 'httpproxy'],
+				flows: ['confighandler'],
 				clientDefaultOptions:
 				{
 					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
 					httpproxyKey: 'xdfegg&xx'
 				},
 				clients: {
-					client: {
+					client:
+					{
 						confighandler: require('./pkghandler/client')
 					}
 				}
@@ -87,6 +88,7 @@ describe('httpproxyKey', function()
 				debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
 				done();
 			});
+
 		app.listen(svr);
 	});
 
@@ -110,7 +112,31 @@ describe('httpproxyKey', function()
 			}
 		});
 
-		return runClientHandler(linker);
+
+		var promise1 = linker.run('client.method5')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+					assert.equal(err.CLIENTLINKER_TYPE, 'CLIENT FLOW OUT');
+					assert.equal(err.CLIENTLINKER_METHODKEY, 'client.method5');
+					assert.equal(err.CLIENTLINKER_CLIENT, 'client');
+				});
+
+		var promise2 = linker.run('client1.method')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert.equal(err.message.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
+					assert.equal(err.CLIENTLINKER_TYPE, 'NO CLIENT');
+					assert.equal(err.CLIENTLINKER_METHODKEY, 'client1.method');
+				});
+
+		return Promise.all(
+			[
+				runClientHandler(linker),
+				promise1, promise2
+			]);
 	});
 
 	it('err403', function()

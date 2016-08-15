@@ -18,7 +18,12 @@ function HttpProxyRoute(linker, bodyParser)
 
 		bodyParser(req, res, function(err)
 		{
-			if (err) return next(err);
+			if (err)
+			{
+				debug('[%s] parse body err:%o', methodKey, err);
+				res.sendStatus(500);
+				return;
+			}
 
 			var data = req.body;
 
@@ -34,14 +39,14 @@ function HttpProxyRoute(linker, bodyParser)
 					{
 						if (!data.key)
 						{
-							debug('no httpproxy aes key');
+							debug('[%s] no httpproxy aes key', methodKey);
 							res.sendStatus(403);
 							return;
 						}
 
 						if (httpproxyKey == data.key)
 						{
-							debug('pass:use data key');
+							debug('[%s] pass:use data key', methodKey);
 						}
 						else
 						{
@@ -51,7 +56,7 @@ function HttpProxyRoute(linker, bodyParser)
 							}
 							catch(err)
 							{
-								debug('can not decipher key:%s, err:%o', data.key, err);
+								debug('[%s] can not decipher key:%s, err:%o', methodKey, data.key, err);
 								res.sendStatus(403);
 								return;
 							}
@@ -61,14 +66,14 @@ function HttpProxyRoute(linker, bodyParser)
 
 							if (remain > httpproxyKeyRemain)
 							{
-								debug('key expired, remain:%sms', remain);
+								debug('[%s] key expired, remain:%sms', methodKey, remain);
 								res.sendStatus(403);
 								return;
 							}
 
 							if (realMethodKey != methodKey)
 							{
-								debug('inval aes key, query:%s, aes:%s', methodKey, realMethodKey);
+								debug('[%s] inval aes key, query:%s, aes:%s', methodKey, methodKey, realMethodKey);
 								res.sendStatus(403);
 								return;
 							}
@@ -77,13 +82,19 @@ function HttpProxyRoute(linker, bodyParser)
 
 					if (data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
 
-					debug('catch proxy route:%s', methodKey);
+					debug('[%s] catch proxy route', methodKey);
 					linker.run(methodKey, data.query, data.body, function(err, data)
 						{
-							if (typeof err == 'string'
-								&& err.substr(0,13) == 'CLIENTLINKER:')
+							debug('[%s] return err:%o data:%o', methodKey, err, data);
+
+							if (err
+								&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
+									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
+									|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
 							{
-								return next();
+								debug('[%s] %s', methodKey, err);
+								res.sendStatus(501);
+								return;
 							}
 
 							res.json(linker.JSON.stringify(
@@ -97,8 +108,8 @@ function HttpProxyRoute(linker, bodyParser)
 				})
 				.catch(function(err)
 				{
-					debug('linker run err:%o', err);
-					next(err);
+					debug('[%s] linker run err:%o', methodKey, err);
+					res.sendStatus(500);
 				});
 
 		});

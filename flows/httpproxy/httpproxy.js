@@ -42,7 +42,16 @@ function httpproxy(runtime, callback)
 	},
 	function(err, respone, body)
 	{
-		if (!err && respone.statusCode != 200) err = 'respone!200,'+respone.statusCode;
+		if (!err && respone.statusCode != 200)
+		{
+			if (respone.statusCode == 501)
+			{
+				debug('[%s] respone 501, go next flow', runtime.methodKey);
+				return callback.next();
+			}
+			else
+				err = 'respone!200,'+respone.statusCode;
+		}
 
 		if (err)
 		{
