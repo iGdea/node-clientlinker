@@ -250,34 +250,25 @@ describe('base', function()
 			});
 
 		var promise2 = linker.run('client.method')
-			.then(function()
-			{
-				assert(false)
-			},
-			function(err)
-			{
-				assert.equal(err, 333);
-			});
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert.equal(err, 333);
+				});
 
 		var promise3 = linker.run('client.method1')
-			.then(function()
-			{
-				assert(false);
-			},
-			function(err)
-			{
-				assert.equal(err.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
-			});
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert.equal(err.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+				});
 
 		var promise4 = linker.run('client1.method')
-			.then(function()
-			{
-				assert(false);
-			},
-			function(err)
-			{
-				assert.equal(err.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
-			});
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert.equal(err.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
+				});
 
 		return Promise.all([promise1, promise2, promise3, promise4]);
 	});
@@ -323,7 +314,23 @@ describe('base', function()
 					assert.equal(err.message, 'CLIENT_LINKER_DEFERT_ERROR');
 				});
 
-		return Promise.all([promise1, promise2]);
+		var promise3 = linker.run('client.method3')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert(err instanceof Error);
+					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+				});
+
+		var promise4 = linker.run('client1.method')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert(err instanceof Error);
+					assert.equal(err.message.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
+				});
+
+		return Promise.all([promise1, promise2, promise3, promise4]);
 	});
 
 
