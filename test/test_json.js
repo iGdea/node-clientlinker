@@ -1,6 +1,6 @@
 "use strict";
 
-var assert	= require('assert');
+var expect	= require('expect.js');
 var json	= require('../lib/json');
 
 describe('json', function()
@@ -19,20 +19,20 @@ describe('json', function()
 		};
 
 		var newData = json.stringify(data);
-		assert(!(newData.result instanceof Error));
-		assert.equal(newData.result.type, json.CONST_VARS.ERROR_KEY);
-		assert(!!newData.result.data);
-		assert.equal(newData.result.data.message, 'err message');
-		assert.equal(newData.result.data.stack.indexOf('Error: err message'), 0);
-		assert.equal(newData.result.data.errCode, -499);
-		assert.equal(newData.result.data.originalStack, undefined);
+		expect(newData.result).not.to.be.a(Error);
+		expect(newData.result.type).to.be( json.CONST_VARS.ERROR_KEY);
+		expect(newData.result.data).to.be.an('object');
+		expect(newData.result.data.message).to.be('err message');
+		expect(newData.result.data.stack).to.contain('Error: err message');
+		expect(newData.result.data.errCode).to.be(-499);
+		expect(newData.result.data.originalStack).to.be(undefined);
 
-		assert(!!newData.data.buffer);
-		assert.equal(newData.data.buffer.type, json.CONST_VARS.BUFFER_KEY);
-		assert(Array.isArray(newData.data.buffer.data));
+		expect(newData.data.buffer).to.be.an('object');
+		expect(newData.data.buffer.type).to.be(json.CONST_VARS.BUFFER_KEY);
+		expect(newData.data.buffer.data).to.be.an(Array);
 
-		assert.equal(newData.data.string, 'string');
-		assert.equal(newData.data.number, 123);
+		expect(newData.data.string).to.be('string');
+		expect(newData.data.number).to.be(123);
 	});
 
 	it('parse', function()
@@ -66,20 +66,20 @@ describe('json', function()
 		}
 
 		var newData = json.parse(data, TYPES);
-		assert(!!newData.data);
-		assert(newData.result instanceof Error);
-		assert.equal(newData.result.message, 'err message');
-		assert.equal(newData.result.errCode, -499);
-		assert.equal(newData.result.stack, 'Error: err message');
-		assert(newData.result.originalStack);
-		assert.notEqual(newData.result.originalStack, 'Error: err message');
+		expect(newData.data).to.be.an('object');
+		expect(newData.result).to.be.an(Error);
+		expect(newData.result.message).to.be('err message');
+		expect(newData.result.errCode).to.be(-499);
+		expect(newData.result.stack).to.be('Error: err message');
+		expect(newData.result.originalStack).to.not.empty();
+		expect(newData.result.originalStack).to.not.be('Error: err message');
 
-		assert(Buffer.isBuffer(newData.data.buffer));
-		assert(newData.data.buffer.toString(), 'buffer');
-		assert(newData.data.buffer.toString('base64'), 'YnVmZmVy');
-		assert(!Buffer.isBuffer(newData.data.buffer2));
+		expect(newData.data.buffer).to.be.a(Buffer);
+		expect(newData.data.buffer.toString()).to.be('buffer');
+		expect(newData.data.buffer.toString('base64')).to.be('YnVmZmVy');
+		expect(newData.data.buffer2).to.not.be.a(Buffer);
 
-		assert.equal(newData.data.string, 'string');
-		assert.equal(newData.data.number, 123);
+		expect(newData.data.string).to.be('string');
+		expect(newData.data.number).to.be(123);
 	});
 });

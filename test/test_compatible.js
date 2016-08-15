@@ -2,7 +2,7 @@
 
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
-var assert			= require('assert');
+var expect			= require('expect.js');
 
 describe('compatible', function()
 {
@@ -12,11 +12,12 @@ describe('compatible', function()
 			{
 				flows: [function flow(runtime, callback)
 					{
-						assert.equal(runtime.runOptions.param, 'pp');
+						expect(runtime.runOptions.param).to.be('pp');
 						runtime.runOptions.param = 'p1';
-						assert.equal(runtime.options.param, 'p1');
+						expect(runtime.options.param).to.be('p1');
 						runtime.runOptions = {param: 'p2'}
-						assert.equal(runtime.options.param, 'p2');
+						expect(runtime.options.param).to.be('p2');
+
 						callback();
 					}],
 				clients:
