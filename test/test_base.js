@@ -236,6 +236,10 @@ describe('base', function()
 								throw 333;
 							}
 						}
+					},
+					client2:
+					{
+						flows: []
 					}
 				}
 			});
@@ -260,17 +264,33 @@ describe('base', function()
 			.then(function(){assert(false)},
 				function(err)
 				{
-					assert.equal(err.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+					assert.equal(err.CLIENTLINKER_TYPE, 'CLIENT FLOW OUT');
+					assert.equal(err.CLIENTLINKER_METHODKEY, 'client.method1');
+					assert.equal(err.CLIENTLINKER_CLIENT, 'client');
 				});
 
 		var promise4 = linker.run('client1.method')
 			.then(function(){assert(false)},
 				function(err)
 				{
-					assert.equal(err.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
+					assert.equal(err.message.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
+					assert.equal(err.CLIENTLINKER_TYPE, 'NO CLIENT');
+					assert.equal(err.CLIENTLINKER_METHODKEY, 'client1.method');
 				});
 
-		return Promise.all([promise1, promise2, promise3, promise4]);
+		var promise5 = linker.run('client2.method')
+			.then(function(){assert(false)},
+				function(err)
+				{
+					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT NO FLOWS');
+					assert.equal(err.CLIENTLINKER_TYPE, 'CLIENT NO FLOWS');
+					assert.equal(err.CLIENTLINKER_METHODKEY, 'client2.method');
+					assert.equal(err.CLIENTLINKER_CLIENT, 'client2');
+				});
+
+
+		return Promise.all([promise1, promise2, promise3, promise4, promise5]);
 	});
 
 	it('anyToError', function()
@@ -319,7 +339,6 @@ describe('base', function()
 				function(err)
 				{
 					assert(err instanceof Error);
-					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
 				});
 
 		var promise4 = linker.run('client1.method')
@@ -327,7 +346,6 @@ describe('base', function()
 				function(err)
 				{
 					assert(err instanceof Error);
-					assert.equal(err.message.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
 				});
 
 		return Promise.all([promise1, promise2, promise3, promise4]);
