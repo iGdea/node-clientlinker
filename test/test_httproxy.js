@@ -70,7 +70,7 @@ describe('httpproxyKey', function()
 				flows: ['confighandler', 'httpproxy'],
 				clientDefaultOptions:
 				{
-					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
+					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy',
 					httpproxyKey: 'xdfegg&xx'
 				},
 				clients: {
