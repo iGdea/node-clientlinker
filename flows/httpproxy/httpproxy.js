@@ -15,7 +15,6 @@ function httpproxy(runtime, callback)
 
 	var url = options.httpproxy+'action='+runtime.methodKey;
 	var body = {
-		action		: runtime.methodKey,
 		query		: runtime.query,
 		body		: runtime.body,
 		options	    : runtime.options,

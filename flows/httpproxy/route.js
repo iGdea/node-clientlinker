@@ -22,9 +22,8 @@ function HttpProxyRoute(linker, bodyParser)
 			}
 
 			var data = req.body;
-			var methodKey = data.action || req.query.action;
+			var methodKey = req.query.action;
 			if (!methodKey) return next();
-			if (data.action != req.query.action) debug('action not equal, query:%s, body:%s', req.query.action, body.action);
 
 			linker.parseMethodKey(methodKey)
 				.then(function(methodInfo)
