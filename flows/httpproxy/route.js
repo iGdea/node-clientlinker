@@ -13,17 +13,14 @@ function HttpProxyRoute(linker, bodyParser)
 
 	return function(req, res, next)
 	{
+		var methodKey = req.query.action;
+		if (!methodKey) return next();
+
 		bodyParser(req, res, function(err)
 		{
-			if (err)
-			{
-				if (!req.query.action) return next();
-				return next(err);
-			}
+			if (err) return next(err);
 
 			var data = req.body;
-			var methodKey = req.query.action;
-			if (!methodKey) return next();
 
 			linker.parseMethodKey(methodKey)
 				.then(function(methodInfo)
