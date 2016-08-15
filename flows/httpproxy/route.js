@@ -35,7 +35,7 @@ function HttpProxyRoute(linker, bodyParser)
 						if (!data.key)
 						{
 							debug('no httpproxy aes key');
-							next(new Error('no httpproxy key'));
+							res.sendStatus(403);
 							return;
 						}
 
@@ -45,21 +45,31 @@ function HttpProxyRoute(linker, bodyParser)
 						}
 						else
 						{
-							var realMethodKey = aes.decipher(data.key, httpproxyKey).split(',');
-							var remain = Date.now() - realMethodKey.pop();
+							var realMethodKey, remain;
+							try {
+								realMethodKey = aes.decipher(data.key, httpproxyKey).split(',');
+							}
+							catch(err)
+							{
+								debug('can not decipher key:%s, err:%o', data.key, err);
+								res.sendStatus(403);
+								return;
+							}
+
+							remain = Date.now() - realMethodKey.pop();
 							realMethodKey = realMethodKey.join(',');
 
 							if (remain > httpproxyKeyRemain)
 							{
 								debug('key expired, remain:%sms', remain);
-								next(new Error('key expired'));
+								res.sendStatus(403);
 								return;
 							}
 
 							if (realMethodKey != methodKey)
 							{
 								debug('inval aes key, query:%s, aes:%s', methodKey, realMethodKey);
-								next(new Error('inval key'));
+								res.sendStatus(403);
 								return;
 							}
 						}

@@ -95,7 +95,7 @@ describe('httpproxyKey', function()
 		svr.close();
 	});
 
-	it('httpproxyKey', function()
+	it('run', function()
 	{
 		var linker = ClientLinker(
 		{
@@ -111,5 +111,31 @@ describe('httpproxyKey', function()
 		});
 
 		return runClientHandler(linker);
+	});
+
+	it('err403', function()
+	{
+		var linker = ClientLinker(
+		{
+			flows: ['httpproxy'],
+			clientDefaultOptions:
+			{
+				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
+				httpproxyKey: 'xx'
+			},
+			clients: {
+				client: null
+			}
+		});
+
+		return linker.run('client.method3')
+			.then(function()
+			{
+				assert(false);
+			},
+			function(err)
+			{
+				assert.equal(err, 'respone!200,403');
+			});
 	});
 });
