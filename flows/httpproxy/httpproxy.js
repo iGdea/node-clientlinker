@@ -36,7 +36,7 @@ function httpproxy(runtime, callback)
 	request.post(
 	{
 		url		: url,
-		body	: JSON.stringify(linker.JSON.stringify(body)),
+		body	: JSON.stringify(linker.JSON.stringify(body), null, '\t'),
 		headers	: headers,
 		timeout	: timeout,
 		proxy	: proxy
