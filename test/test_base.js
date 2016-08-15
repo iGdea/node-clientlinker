@@ -252,6 +252,15 @@ describe('base', function()
 		return Promise.all(
 			[
 				promise,
+				linker.run('client.method1')
+					.then(function()
+					{
+						assert(false);
+					},
+					function(err)
+					{
+						assert.equal(err.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
+					}),
 				linker.run('client.method')
 					.then(function()
 					{
