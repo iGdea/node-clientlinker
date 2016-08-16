@@ -27,7 +27,7 @@ describe('json', function()
 		expect(newData.result.data.errCode).to.be(-499);
 		expect(newData.result.data.originalStack).to.be(undefined);
 
-		expect(newData.data.buffer).to.be.an('object');
+		expect(newData.data.buffer).to.not.be.a(Buffer);
 		expect(newData.data.buffer.type).to.be(json.CONST_VARS.BUFFER_KEY);
 		expect(newData.data.buffer.data).to.be.an(Array);
 
@@ -63,7 +63,7 @@ describe('json', function()
 		var TYPES = {
 			BUFFER_KEY: 'buf_1454824224156',
 			ERROR_KEY: 'err_1454824224156'
-		}
+		};
 
 		var newData = json.parse(data, TYPES);
 		expect(newData.data).to.be.an('object');
@@ -81,5 +81,13 @@ describe('json', function()
 
 		expect(newData.data.string).to.be('string');
 		expect(newData.data.number).to.be(123);
+	});
+
+
+	it('array like', function()
+	{
+		var data = {length: 5};
+		expect(json.stringify(data)).to.be.eql(data);
+		expect(json.parse(data, {})).to.be.eql(data);
 	});
 });
