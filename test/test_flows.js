@@ -1,7 +1,7 @@
 "use strict";
 
 var Promise				= require('bluebird');
-var assert				= require('assert');
+var expect				= require('expect.js');
 var ClientLinker		= require('../');
 var runClientHandler	= require('./runClientHandler');
 
@@ -16,26 +16,25 @@ describe('flows', function()
 			});
 
 		var promise1 = linker.run('client.js')
-			.then(function(){assert(false)},
-			function(err)
-			{
-				assert.equal(err.message, 'local file errmsg')
-			});
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err.message).to.be('local file errmsg')
+				});
 
 		var promise2 = linker.run('client.json')
 			.then(function(data)
 			{
-				assert.equal(data.string, 'string');
+				expect(data.string).to.be('string');
 			});
 
 		var promise3 = linker.methods()
 			.then(function(list)
 			{
-				assert(list.client);
+				expect(list.client).to.be.an('object');
 				var methods = Object.keys(list.client.methods);
-				methods = methods.sort();
-				assert.equal(methods.join(), 'js,json');
-				assert.equal(typeof list.client.methods.js[0].handler, 'function');
+				expect(methods).to.eql(['js','json']);
+				expect(list.client.methods.js[0].handler).to.be.an('function');
 			});
 
 		return Promise.all([promise1, promise2, promise3]);
@@ -59,11 +58,10 @@ describe('flows', function()
 		var promise2 = linker.methods()
 				.then(function(list)
 				{
-					assert(list.client);
+					expect(list.client).to.be.an('object');
 					var methods = Object.keys(list.client.methods);
-					methods = methods.sort();
-					assert.equal(methods.join(), 'method1,method2,method3,method4');
-					assert.equal(typeof list.client.methods.method1[0].handler, 'function');
+					expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
+					expect(list.client.methods.method1[0].handler).to.be.an('function');
 				});
 
 		return Promise.all([promise1, promise2]);
@@ -82,11 +80,10 @@ describe('flows', function()
 		var promise2 = linker.methods()
 				.then(function(list)
 				{
-					assert(list.client);
+					expect(list.client).to.be.an('object');
 					var methods = Object.keys(list.client.methods);
-					methods = methods.sort();
-					assert.equal(methods.join(), 'method1,method2,method3,method4');
-					assert.equal(typeof list.client.methods.method1[0].handler, 'function');
+					expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
+					expect(list.client.methods.method1[0].handler).to.be.an('function');
 				});
 
 		return Promise.all([promise1, promise2]);
@@ -107,12 +104,12 @@ describe('flows', function()
 						logger.loggerHandler.apply(null, arguments);
 
 						try {
-							assert(lastFlowTiming.start);
-							assert(lastFlowTiming.end);
-							assert(timing.flowsStart);
-							assert(timing.flowsEnd);
-							assert(!err);
-							assert.equal(data.respone, 'respone');
+							expect(lastFlowTiming.start).to.be.an('number');
+							expect(lastFlowTiming.end).to.be.an('number');
+							expect(timing.flowsStart).to.be.an('number');
+							expect(timing.flowsEnd).to.be.an('number');
+							expect(err).to.be(null);
+							expect(data.respone).to.be('respone');
 
 							done();
 						}

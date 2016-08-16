@@ -1,7 +1,7 @@
 "use strict";
 
 var utils			= require('../bin/utils');
-var assert			= require('assert');
+var expect			= require('expect.js');
 var ClientLinker	= require('../');
 
 describe('rlutils', function()
@@ -9,10 +9,10 @@ describe('rlutils', function()
 	it('parseParam', function()
 	{
 		var linker = new ClientLinker;
-		assert.equal(utils.parseParam(linker, '{"key": "value"}').key, 'value', 'JSON');
-		assert.equal(utils.parseParam(linker, '{key: "value"}').key, 'value', 'JS1');
-		assert.equal(utils.parseParam(linker, '{\'key\': "value"}').key, 'value', 'JS2');
-		assert.equal(utils.parseParam(linker, '({key: "value"})').key, 'value', 'JS3');
-		assert.equal(utils.parseParam(linker, './test/localfile/client/json.json').data.string, 'string', 'filepath');
+		expect(utils.parseParam(linker, '{"key": "value"}').key).to.be('value');
+		expect(utils.parseParam(linker, '{key: "value"}').key).to.be('value');
+		expect(utils.parseParam(linker, '{\'key\': "value"}').key).to.be('value');
+		expect(utils.parseParam(linker, '({key: "value"})').key).to.be('value');
+		expect(utils.parseParam(linker, './test/localfile/client/json.json').data.string).to.be('string');
 	});
 });

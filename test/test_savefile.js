@@ -2,7 +2,7 @@
 
 var Promise			= require('bluebird');
 var fs				= require('fs');
-var assert			= require('assert');
+var expect			= require('expect.js');
 var mkdirp			= require('mkdirp');
 var savefile		= require('../flows/localfile/savefile');
 var parseContent	= require('../flows/localfile/localfile').parseContent;
@@ -34,11 +34,11 @@ describe('savefile', function()
 			.then(function(content)
 			{
 				var data = parseContent(linker, content, 'json');
-				assert(data.result instanceof Error);
-				assert.equal(data.result.message, 'errmsg123');
-				assert.equal(data.data.data, 'data');
-				assert(Buffer.isBuffer(data.data.buffer));
-				assert.equal(data.data.buffer.toString(), 'buffer');
+				expect(data.result).to.be.an(Error);
+				expect(data.result.message).to.be('errmsg123');
+				expect(data.data.data).to.be('data');
+				expect(data.data.buffer).to.be.a(Buffer);
+				expect(data.data.buffer.toString()).to.be('buffer');
 			})
 			.then(done, done);
 

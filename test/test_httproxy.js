@@ -1,7 +1,7 @@
 "use strict";
 
 var Promise				= require('bluebird');
-var assert				= require('assert');
+var expect				= require('expect.js');
 var expr				= require('express');
 var http				= require('http');
 var ClientLinker		= require('../');
@@ -115,22 +115,22 @@ describe('httpproxyKey', function()
 
 
 		var promise1 = linker.run('client.method5')
-			.then(function(){assert(false)},
+			.then(function(){expect().fail()},
 				function(err)
 				{
-					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
-					assert.equal(err.CLIENTLINKER_TYPE, 'CLIENT FLOW OUT');
-					assert.equal(err.CLIENTLINKER_METHODKEY, 'client.method5');
-					assert.equal(err.CLIENTLINKER_CLIENT, 'client');
+					expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT');
+					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+					expect(err.CLIENTLINKER_METHODKEY).to.be('client.method5');
+					expect(err.CLIENTLINKER_CLIENT).to.be('client');
 				});
 
 		var promise2 = linker.run('client1.method')
-			.then(function(){assert(false)},
+			.then(function(){expect().fail()},
 				function(err)
 				{
-					assert.equal(err.message.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
-					assert.equal(err.CLIENTLINKER_TYPE, 'NO CLIENT');
-					assert.equal(err.CLIENTLINKER_METHODKEY, 'client1.method');
+					expect(err.message).to.contain('CLIENTLINKER:NO CLIENT');
+					expect(err.CLIENTLINKER_TYPE).to.be('NO CLIENT');
+					expect(err.CLIENTLINKER_METHODKEY).to.be('client1.method');
 				});
 
 		return Promise.all(
@@ -156,13 +156,10 @@ describe('httpproxyKey', function()
 		});
 
 		return linker.run('client.method3')
-			.then(function()
-			{
-				assert(false);
-			},
-			function(err)
-			{
-				assert.equal(err, 'respone!200,403');
-			});
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err).to.be('respone!200,403');
+				});
 	});
 });

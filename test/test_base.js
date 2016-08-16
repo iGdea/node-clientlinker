@@ -2,14 +2,15 @@
 
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
-var assert			= require('assert');
+var expect			= require('expect.js');
+
 
 describe('base', function()
 {
 	it('ownlist', function()
 	{
-		assert(ClientLinker.supportMiddlewares.length > 0);
-		assert(ClientLinker.supportMiddlewares.indexOf('httpproxy') != -1);
+		expect(ClientLinker.supportMiddlewares.length).to.be.above(0);
+		expect(ClientLinker.supportMiddlewares).to.contain('httpproxy');
 	});
 
 	it('own', function()
@@ -19,10 +20,10 @@ describe('base', function()
 				flows: ClientLinker.supportMiddlewares
 			});
 
-		assert.equal(Object.keys(linker.flows).length, ClientLinker.supportMiddlewares.length);
+		expect(Object.keys(linker.flows).length).to.be(ClientLinker.supportMiddlewares.length);
 		ClientLinker.supportMiddlewares.forEach(function(name)
 		{
-			assert.equal(typeof linker.flows[name].handler, 'function');
+			expect(linker.flows[name].handler).to.be.an('function');
 		});
 	});
 
@@ -34,7 +35,7 @@ describe('base', function()
 		return linker.clients()
 			.then(function(clients)
 			{
-				assert.equal(Object.keys(clients).length, 1);
+				expect(Object.keys(clients).length).to.be(1);
 			})
 			.then(function()
 			{
@@ -43,7 +44,7 @@ describe('base', function()
 			})
 			.then(function(clients)
 			{
-				assert.equal(Object.keys(clients).length, 3);
+				expect(Object.keys(clients).length).to.be(3);
 			});
 	});
 
@@ -52,28 +53,28 @@ describe('base', function()
 		var linker = new ClientLinker;
 
 		linker.bindFlow('flow1', function flow1(){});
-		assert.equal(Object.keys(linker.flows).length, 1);
+		expect(Object.keys(linker.flows).length).to.be(1);
 		linker.bindFlow({flow2: function flow2(){}, flow3: function flow3(){}});
-		assert.equal(Object.keys(linker.flows).length, 3);
+		expect(Object.keys(linker.flows).length).to.be(3);
 	});
 
 	it('loadFlow', function()
 	{
 		var linker = new ClientLinker;
 
-		assert.throws(function(){linker.loadFlow('no_exists_flow')});
-		assert.throws(function(){linker.loadFlow('flow1')});
-		assert.throws(function(){linker.loadFlow('flow1', './flows/flow1')});
-		assert(!linker.loadFlow('flow_empty', './flows/flow_empty', module));
-		assert(linker.loadFlow('flow_resolve', './flows/flow_resolve', module));
-		assert(linker.loadFlow('flow_next', './flows/flow_next', module));
+		expect(function(){linker.loadFlow('no_exists_flow')}).to.throwError();
+		expect(function(){linker.loadFlow('flow1')}).to.throwError();
+		expect(function(){linker.loadFlow('flow1', './flows/flow1')}).to.throwError();
+		expect(linker.loadFlow('flow_empty', './flows/flow_empty', module)).to.not.be.ok();
+		expect(linker.loadFlow('flow_resolve', './flows/flow_resolve', module)).to.be.ok();
+		expect(linker.loadFlow('flow_next', './flows/flow_next', module)).to.be.ok();
 
 		linker.addClient('client1', {flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']});
 
 		return linker.run('client1.xxxx')
 			.then(function(data)
 			{
-				assert.equal(data, 'flow_resolve');
+				expect(data).to.be('flow_resolve');
 			});
 	});
 
@@ -88,7 +89,7 @@ describe('base', function()
 				}
 			});
 
-		assert.equal(Object.keys(linker.flows).length, 1);
+		expect(Object.keys(linker.flows).length).to.be(1);
 	});
 
 	it('pkg clients', function()
@@ -114,15 +115,15 @@ describe('base', function()
 				.then(function(clients)
 				{
 					var list = Object.keys(clients);
-					assert.equal(list.length, 1);
-					assert.equal(list[0], 'client1');
+					expect(list.length).to.be(1);
+					expect(list[0]).to.be('client1');
 				});
 
 		var promise2 = linker2.clients()
 				.then(function(clients)
 				{
 					var list = Object.keys(clients);
-					assert.equal(list.length, 2);
+					expect(list.length).to.be(2);
 				});
 
 		return Promise.all([promise1, promise2]);
@@ -146,7 +147,7 @@ describe('base', function()
 		return linker.clients()
 				.then(function(clients)
 				{
-					assert.equal(clients.client.options.flows[0], 'pkghandler');
+					expect(clients.client.options.flows[0]).to.be('pkghandler');
 				});
 	});
 
@@ -170,8 +171,8 @@ describe('base', function()
 		linker.addClient('client', {flows: ['custom']});
 		linker.run('client.xxxx', null, null, function(err)
 		{
-			assert(!err);
-			assert(runned);
+			expect(err).to.be(null);
+			expect(runned).to.be.ok();
 			done();
 		});
 	});
@@ -195,16 +196,27 @@ describe('base', function()
 					{
 						var lastFlowTiming = runtime.lastFlow().timing;
 						var timing = runtime.timing;
-						assert(lastFlowTiming.start - runtime.navigationStart < 10);
-						assert(lastFlowTiming.start - timing.flowsStart < 10);
+
+						expect(lastFlowTiming.start).to.be.above(runtime.navigationStart-1);
+						expect(lastFlowTiming.start - runtime.navigationStart).to.be.below(10);
+
+						expect(lastFlowTiming.start).to.be.above(timing.flowsStart-1);
+						expect(lastFlowTiming.start - timing.flowsStart).to.below(10);
 
 						callback.next();
 						callback.promise.then(function()
 						{
 							var lastFlowTiming = runtime.lastFlow().timing;
-							assert(timing.flowsEnd - lastFlowTiming.end < 3);
-							assert(lastFlowTiming.start - timing.flowsStart >= 100);
-							assert(lastFlowTiming.end - lastFlowTiming.start >= 100);
+
+							expect(timing.flowsEnd).to.be.above(lastFlowTiming.end-1);
+							expect(timing.flowsEnd - lastFlowTiming.end).to.be.below(10);
+
+							expect(lastFlowTiming.start).to.be.above(timing.flowsStart);
+							expect(lastFlowTiming.start - timing.flowsStart).to.above(100);
+
+							expect(lastFlowTiming.end).to.be.above(lastFlowTiming.start);
+							expect(lastFlowTiming.end - lastFlowTiming.start).to.be.above(100);
+
 							done();
 						});
 					}
@@ -219,395 +231,4 @@ describe('base', function()
 		linker.run('client.method').catch(done);
 	});
 
-
-	it('flow run Error', function()
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method: function()
-							{
-								throw 333;
-							}
-						}
-					},
-					client2:
-					{
-						flows: []
-					}
-				}
-			});
-
-		var promise1 = new Promise(function(resolve)
-			{
-				linker.run('client.method', null, null, function(err)
-					{
-						assert.equal(err, 333);
-						resolve();
-					});
-			});
-
-		var promise2 = linker.run('client.method')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert.equal(err, 333);
-				});
-
-		var promise3 = linker.run('client.method1')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT FLOW OUT');
-					assert.equal(err.CLIENTLINKER_TYPE, 'CLIENT FLOW OUT');
-					assert.equal(err.CLIENTLINKER_METHODKEY, 'client.method1');
-					assert.equal(err.CLIENTLINKER_CLIENT, 'client');
-				});
-
-		var promise4 = linker.run('client1.method')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert.equal(err.message.substr(0, 22), 'CLIENTLINKER:NO CLIENT');
-					assert.equal(err.CLIENTLINKER_TYPE, 'NO CLIENT');
-					assert.equal(err.CLIENTLINKER_METHODKEY, 'client1.method');
-				});
-
-		var promise5 = linker.run('client2.method')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert.equal(err.message.substr(0, 28), 'CLIENTLINKER:CLIENT NO FLOWS');
-					assert.equal(err.CLIENTLINKER_TYPE, 'CLIENT NO FLOWS');
-					assert.equal(err.CLIENTLINKER_METHODKEY, 'client2.method');
-					assert.equal(err.CLIENTLINKER_CLIENT, 'client2');
-				});
-
-
-		return Promise.all([promise1, promise2, promise3, promise4, promise5]);
-	});
-
-	it('anyToError', function()
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clientDefaultOptions: {anyToError: true},
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method1: function(query, body, callback)
-							{
-								callback('errmsg');
-							},
-							method2: function(query, body, callback)
-							{
-								callback.reject();
-							}
-						}
-					}
-				}
-			});
-
-		var promise1 = linker.run('client.method1')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert(err instanceof Error);
-					assert.equal(err.message, 'errmsg');
-				});
-
-		var promise2 = linker.run('client.method2')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert(err instanceof Error);
-					assert.equal(err.message, 'CLIENT_LINKER_DEFERT_ERROR');
-				});
-
-		var promise3 = linker.run('client.method3')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert(err instanceof Error);
-				});
-
-		var promise4 = linker.run('client1.method')
-			.then(function(){assert(false)},
-				function(err)
-				{
-					assert(err instanceof Error);
-				});
-
-		return Promise.all([promise1, promise2, promise3, promise4]);
-	});
-
-
-	it('retry', function()
-	{
-		var runTimes = 0;
-		var linker = ClientLinker(
-			{
-				flows: ['timingCheck', 'confighandler'],
-				customFlows:
-				{
-					timingCheck: function(runtime, callback)
-					{
-						runTimes++;
-						if (runTimes == 2)
-							assert(runtime.retry[0].timing.flowsEnd);
-
-						callback.next();
-					}
-				},
-				clientDefaultOptions:
-				{
-					retry: 5,
-					anyToError: true
-				},
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method: function(query, body, callback)
-							{
-								if (runTimes == 1)
-									throw 333;
-								else
-								{
-									callback(null, 555);
-								}
-							}
-						}
-					}
-				}
-			});
-
-		return linker.run('client.method')
-				.then(function(data)
-				{
-					assert.equal(data, 555);
-					assert.equal(runTimes, 2);
-				});
-	});
-
-	it('callback domain', function(done)
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method: function()
-							{
-								return Promise.resolve();
-							}
-						}
-					}
-				}
-			});
-
-		var domain = require('domain');
-		var dm = domain.create();
-
-		dm.on('error', function(err)
-			{
-				assert.equal(err, 333);
-				done();
-			});
-		dm.run(function()
-			{
-				linker.run('client.method', null, null, function(err)
-				{
-					assert(!err);
-					throw 333;
-				});
-			});
-	});
-
-	it('promise domain', function()
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method1: function()
-							{
-								return Promise.resolve(111);
-							},
-							method2: function()
-							{
-								return Promise.resolve(222);
-							},
-							method3: function()
-							{
-								return Promise.reject(333);
-							}
-						}
-					}
-				}
-			});
-
-		var domain = require('domain');
-		var dm = domain.create();
-		dm._mark_assert = 234;
-
-		return new Promise(function(resolve, reject)
-			{
-				dm.on('error', reject);
-				dm.run(function()
-					{
-						linker.run('client.method1')
-							.then(function(data)
-							{
-								assert(domain.active);
-								assert.equal(domain.active._mark_assert, 234);
-								assert.equal(data, 111);
-								return linker.run('client.method2');
-							})
-							.then(function(data)
-							{
-								assert(domain.active);
-								assert.equal(domain.active._mark_assert, 234);
-								assert.equal(data, 222);
-								var promise = linker.run('client.method3');
-								promise.catch(function(err)
-									{
-										assert.equal(err, 333);
-										resolve();
-									});
-								return promise;
-							});
-					});
-			});
-
-	});
-
-	it('throw null err', function(done)
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method: function()
-							{
-								return Promise.reject();
-							}
-						}
-					}
-				}
-			});
-
-		linker.run('client.method', null, null, function(err)
-			{
-				assert.equal(err, 'CLIENT_LINKER_DEFERT_ERROR');
-				setTimeout(done, 10);
-			})
-			.then(function()
-			{
-				assert(false);
-			},
-			function(err)
-			{
-				assert.equal(err, undefined);
-			});
-	});
-
-
-	it('addon domain', function()
-	{
-		var addon = require('nan-async-example');
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							callback: function(query, body, callback)
-							{
-								addon(callback);
-							},
-							resolve: function()
-							{
-								return new Promise(function(resolve)
-								{
-									addon(function(err, data)
-									{
-										resolve(data);
-									});
-								});
-							}
-						}
-					}
-				}
-			});
-
-		var domain = require('domain');
-		var dm = domain.create();
-		dm._mark_assert = 222;
-
-		var promise1 = dm.run(function()
-		{
-			var promise11;
-			var promise12 = new Promise(function(resolve, reject)
-				{
-					promise11 = linker.run('client.callback', null, null, function(err, data)
-					{
-						assert.equal(data, 'hello world');
-						assert.equal(domain.active._mark_assert, 222);
-						resolve();
-					})
-					.then(function(data)
-					{
-						assert.equal(data, 'hello world');
-						assert.equal(domain.active._mark_assert, 222);
-					});
-				});
-
-			return Promise.all([promise11, promise12]);
-		});
-
-		var dm2 = domain.create();
-		dm2._mark_assert = 333;
-
-		var promise2 = dm2.run(function()
-		{
-			return linker.run('client.resolve')
-				.then(function(data)
-				{
-					assert.equal(data, 'hello world');
-					assert.equal(domain.active._mark_assert, 333);
-				});
-		});
-
-		return Promise.all([promise1, promise2]);
-	});
 });

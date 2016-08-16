@@ -1,18 +1,18 @@
 "use strict";
 
 var Promise	= require('bluebird');
-var assert	= require('assert');
+var expect	= require('expect.js');
 
 module.exports = {
 	method1: function(req, body, callback, options)
 	{
-		assert.equal(req, 123);
-		assert.equal(body.name, 'bb');
-		assert(Buffer.isBuffer(body.buffer));
-		assert.equal(body.buffer.toString(), 'buffer');
-		assert.equal(body.buffer.toString('base64'), 'YnVmZmVy');
-		assert.equal(typeof callback, 'function');
-		assert.equal(options.timeout, 1000);
+		expect(req).to.be(123);
+		expect(body.name).to.be('bb');
+		expect(body.buffer).to.be.a(Buffer);
+		expect(body.buffer.toString()).to.be('buffer');
+		expect(body.buffer.toString('base64')).to.be('YnVmZmVy');
+		expect(callback).to.be.an('function')
+		expect(options.timeout).to.be(1000);
 
 		callback(null, 334);
 	},
