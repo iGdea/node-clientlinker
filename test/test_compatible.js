@@ -28,4 +28,25 @@ describe('compatible', function()
 
 		return linker.run('client.method', null, null, null, {param: 'pp'});
 	});
+
+
+	it('navigationStart', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['debug'],
+				clients:
+				{
+					client: null
+				}
+			});
+
+		return linker.run('client.method')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err.__runtime__.timing.navigationStart).to.be.a('number');
+					expect(err.__runtime__.timing.navigationStart).to.be(err.__runtime__.navigationStart);
+				});
+	});
 });
