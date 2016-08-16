@@ -134,4 +134,28 @@ describe('flows', function()
 
 		linker.run('client.method', 123, {body:456}).catch(done);
 	});
+
+
+
+	it('debug', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['debug'],
+				clients:
+				{
+					client: null
+				}
+			});
+
+		return linker.run('client.method')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err).to.be.an(Error);
+					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+					expect(err.__runtime__).to.be.an('object');
+					expect(err.__runtime__.navigationStart).to.be.a('number');
+				});
+	});
 });
