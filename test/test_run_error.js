@@ -11,6 +11,10 @@ describe('run_error', function()
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
+				clientDefaultOptions:
+				{
+					exportErrorInfo: true
+				},
 				clients:
 				{
 					client:
@@ -20,7 +24,11 @@ describe('run_error', function()
 							method: function()
 							{
 								throw 333;
-							}
+							},
+							method2: function()
+							{
+								throw new Error;
+							},
 						}
 					},
 					client2:
@@ -75,8 +83,21 @@ describe('run_error', function()
 					expect(err.CLIENTLINKER_CLIENT).to.be('client2');
 				});
 
+		var promise6 = linker.run('client.method1')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err).to.be.a(Error);
+					expect(err.fromClient).to.be('client');
+					expect(err.fromClientFlow).to.be('confighandler');
+					expect(err.fromClientMethod).to.be('method1');
+				});
 
-		return Promise.all([promise1, promise2, promise3, promise4, promise5]);
+
+		return Promise.all(
+			[
+				promise1, promise2, promise3, promise4, promise5, promise6
+			]);
 	});
 
 	it('anyToError', function()
