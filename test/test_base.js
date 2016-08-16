@@ -194,31 +194,38 @@ describe('base', function()
 					},
 					assertHandler: function assertHandler(runtime, callback)
 					{
-						var lastFlowTiming = runtime.lastFlow().timing;
-						var timing = runtime.timing;
-
-						expect(lastFlowTiming.start).to.be.above(runtime.navigationStart-1);
-						expect(lastFlowTiming.start - runtime.navigationStart).to.be.below(10);
-
-						expect(lastFlowTiming.start).to.be.above(timing.flowsStart-1);
-						expect(lastFlowTiming.start - timing.flowsStart).to.below(10);
-
-						callback.next();
-						callback.promise.then(function()
-						{
+						try {
 							var lastFlowTiming = runtime.lastFlow().timing;
+							var timing = runtime.timing;
 
-							expect(timing.flowsEnd).to.be.above(lastFlowTiming.end-1);
-							expect(timing.flowsEnd - lastFlowTiming.end).to.be.below(10);
+							expect(lastFlowTiming.start).to.be.above(runtime.navigationStart-1);
+							expect(lastFlowTiming.start - runtime.navigationStart).to.be.below(10);
 
-							expect(lastFlowTiming.start).to.be.above(timing.flowsStart);
-							expect(lastFlowTiming.start - timing.flowsStart).to.above(100);
+							expect(lastFlowTiming.start).to.be.above(timing.flowsStart-1);
+							expect(lastFlowTiming.start - timing.flowsStart).to.below(10);
 
-							expect(lastFlowTiming.end).to.be.above(lastFlowTiming.start);
-							expect(lastFlowTiming.end - lastFlowTiming.start).to.be.above(100);
+							callback.next();
+							callback.promise.then(function()
+							{
+								var lastFlowTiming = runtime.lastFlow().timing;
 
-							done();
-						});
+								expect(timing.flowsEnd).to.be.above(lastFlowTiming.end-1);
+								expect(timing.flowsEnd - lastFlowTiming.end).to.be.below(10);
+
+								expect(lastFlowTiming.start).to.be.above(timing.flowsStart);
+								expect(lastFlowTiming.start - timing.flowsStart).to.above(100-1);
+
+								expect(lastFlowTiming.end).to.be.above(lastFlowTiming.start);
+								expect(lastFlowTiming.end - lastFlowTiming.start).to.be.above(100-1);
+
+								done();
+							})
+							.catch(done);
+						}
+						catch(err)
+						{
+							done(err);
+						}
 					}
 				},
 				clients: {
