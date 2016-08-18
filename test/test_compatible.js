@@ -49,4 +49,55 @@ describe('compatible', function()
 					expect(err.__runtime__.timing.navigationStart).to.be(err.__runtime__.navigationStart);
 				});
 	});
+
+
+	it('runByKey', function()
+	{
+		var linker = new ClientLinker(
+			{
+				flows: ['confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function(query, body, callback)
+							{
+								callback();
+							}
+						}
+					}
+				}
+			});
+
+		return Promise.all(
+			[
+				linker.runByKey('client.method'),
+				linker.runByKey('client:method')
+			]);
+	});
+
+
+	it('proxyRoute', function()
+	{
+		var linker = new ClientLinker;
+
+		expect(linker.proxyRoute().name).to.be('HttpProxyRouteHandle');
+	});
+
+
+	it('add', function()
+	{
+		var linker = new ClientLinker;
+		linker.add('clientName1', {opt: 'myOpt'});
+
+		return linker.clients()
+			.then(function(map)
+			{
+				expect(map).to.be.an('object');
+				expect(map.clientName1.name).to.be('clientName1');
+				expect(map.clientName1.options).to.be.eql({opt: 'myOpt'});
+			});
+	})
 });
