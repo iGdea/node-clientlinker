@@ -12,7 +12,18 @@ describe('flows', function()
 		var linker = ClientLinker(
 			{
 				flows: ['localfile'],
-				localfileDir: __dirname+'/localfile'
+				defaults:
+				{
+					opt: 'myOpt'
+				},
+				localfileDir: __dirname+'/localfile',
+				clients:
+				{
+					client2:
+					{
+						localfile: __dirname+'/localfile/not_exsits'
+					}
+				}
 			});
 
 		var promise1 = linker.run('client.js')
@@ -29,12 +40,16 @@ describe('flows', function()
 			});
 
 		var promise3 = linker.methods()
-			.then(function(list)
+			.then(function(map)
 			{
-				expect(list.client).to.be.an('object');
-				var methods = Object.keys(list.client.methods);
+				expect(map.client).to.be.an('object');
+				expect(map.client.client.options.opt).to.be('myOpt');
+				expect(map.client.client.options.localfile).to.contain(__dirname);
+				expect(map.client2.client.options.localfile).to.contain('localfile/not_exsits');
+
+				var methods = Object.keys(map.client.methods);
 				expect(methods).to.eql(['js','json']);
-				expect(list.client.methods.js[0].handler).to.be.an('function');
+				expect(map.client.methods.js[0].handler).to.be.an('function');
 			});
 
 		return Promise.all([promise1, promise2, promise3]);
@@ -56,12 +71,12 @@ describe('flows', function()
 
 		var promise1 = runClientHandler(linker);
 		var promise2 = linker.methods()
-				.then(function(list)
+				.then(function(map)
 				{
-					expect(list.client).to.be.an('object');
-					var methods = Object.keys(list.client.methods);
+					expect(map.client).to.be.an('object');
+					var methods = Object.keys(map.client.methods);
 					expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
-					expect(list.client.methods.method1[0].handler).to.be.an('function');
+					expect(map.client.methods.method1[0].handler).to.be.an('function');
 				});
 
 		return Promise.all([promise1, promise2]);
@@ -73,18 +88,33 @@ describe('flows', function()
 		var linker = ClientLinker(
 			{
 				flows: ['pkghandler'],
-				pkghandlerDir: __dirname+'/pkghandler'
+				defaults:
+				{
+					opt: 'myOpt'
+				},
+				pkghandlerDir: __dirname+'/pkghandler',
+				clients:
+				{
+					client2:
+					{
+						pkghandler: __dirname+'/pkghandler/not_exsits'
+					}
+				}
 			});
 
 		var promise1 = runClientHandler(linker);
 		var promise2 = linker.methods()
-				.then(function(list)
-				{
-					expect(list.client).to.be.an('object');
-					var methods = Object.keys(list.client.methods);
-					expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
-					expect(list.client.methods.method1[0].handler).to.be.an('function');
-				});
+			.then(function(map)
+			{
+				expect(map.client).to.be.an('object');
+				expect(map.client.client.options.opt).to.be('myOpt');
+				expect(map.client.client.options.pkghandler).to.contain(__dirname);
+				expect(map.client2.client.options.pkghandler).to.contain('pkghandler/not_exsits');
+
+				var methods = Object.keys(map.client.methods);
+				expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
+				expect(map.client.methods.method1[0].handler).to.be.an('function');
+			});
 
 		return Promise.all([promise1, promise2]);
 	});
