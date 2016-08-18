@@ -11,7 +11,7 @@ describe('run_error', function()
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
-				clientDefaultOptions:
+				defaults:
 				{
 					exportErrorInfo: true
 				},
@@ -105,7 +105,7 @@ describe('run_error', function()
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
-				clientDefaultOptions: {anyToError: true},
+				defaults: {anyToError: true},
 				clients:
 				{
 					client:
@@ -176,7 +176,7 @@ describe('run_error', function()
 						callback.next();
 					}
 				},
-				clientDefaultOptions:
+				defaults:
 				{
 					retry: 5,
 					anyToError: true

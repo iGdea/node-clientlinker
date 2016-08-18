@@ -46,7 +46,7 @@ describe('httpproxy', function()
 		var linker = ClientLinker(
 		{
 			flows: ['httpproxy'],
-			clientDefaultOptions:
+			defaults:
 			{
 				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
 			},
@@ -68,7 +68,7 @@ describe('httpproxyKey', function()
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler', 'httpproxy'],
-				clientDefaultOptions:
+				defaults:
 				{
 					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy',
 					httpproxyKey: 'xdfegg&xx'
@@ -103,7 +103,7 @@ describe('httpproxyKey', function()
 		var linker = ClientLinker(
 		{
 			flows: ['httpproxy'],
-			clientDefaultOptions:
+			defaults:
 			{
 				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
 				httpproxyKey: 'xdfegg&xx'
@@ -145,7 +145,7 @@ describe('httpproxyKey', function()
 		var linker = ClientLinker(
 		{
 			flows: ['httpproxy'],
-			clientDefaultOptions:
+			defaults:
 			{
 				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
 				httpproxyKey: 'xx'

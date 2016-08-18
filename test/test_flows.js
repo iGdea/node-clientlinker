@@ -95,7 +95,7 @@ describe('flows', function()
 		var linker = ClientLinker(
 			{
 				flows: ['logger', 'custom'],
-				clientDefaultOptions: {
+				defaults: {
 					logger: function(runtime, err, data)
 					{
 						var timing = runtime.timing;

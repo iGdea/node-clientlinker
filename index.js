@@ -13,7 +13,7 @@ var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';
  * 	flows
  * 	httpproxy
  * 	clients
- * 	clientDefaultOptions
+ * 	defaults
  * 	localfileDir
  * 	pkghandlerDir
  */
@@ -21,8 +21,9 @@ exports = module.exports = ClientLinker;
 function ClientLinker(options)
 {
 	options || (options = {});
-	var clientDefaultOptions = options.clientDefaultOptions || (options.clientDefaultOptions = {});
-	!clientDefaultOptions.flows && options.flows && (clientDefaultOptions.flows = options.flows.slice());
+	var defaults = options.defaults || options.clientDefaultOptions || (options.defaults = {});
+	!defaults.flows && options.flows && (defaults.flows = options.flows.slice());
+
 	var linker = new Linker(options);
 
 	if (options.flows)

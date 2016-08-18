@@ -99,5 +99,57 @@ describe('compatible', function()
 				expect(map.clientName1.name).to.be('clientName1');
 				expect(map.clientName1.options).to.be.eql({opt: 'myOpt'});
 			});
-	})
+	});
+
+
+	it('clientDefaultOptions', function()
+	{
+		var linker = new ClientLinker(
+			{
+				clientDefaultOptions:
+				{
+					opt: 'default',
+					some: 'hihi'
+				},
+				clients:
+				{
+					client1: null,
+					client2:
+					{
+						opt: 'myOpt'
+					}
+				}
+			});
+
+		linker.options.clientDefaultOptions = {opt: 'newOpt'};
+		linker.addClient('client3');
+		linker.addClient('client4', {some: 'ctd'});
+
+		return linker.clients()
+			.then(function(map)
+			{
+				expect(map.client1.options).to.be.eql(
+					{
+						opt: 'default',
+						some: 'hihi'
+					});
+
+				expect(map.client2.options).to.be.eql(
+					{
+						opt: 'myOpt',
+						some: 'hihi'
+					});
+
+				expect(map.client3.options).to.be.eql(
+					{
+						opt: 'newOpt'
+					});
+
+				expect(map.client4.options).to.be.eql(
+					{
+						opt: 'newOpt',
+						some: 'ctd'
+					});
+			});
+	});
 });

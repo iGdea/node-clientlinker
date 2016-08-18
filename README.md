@@ -15,7 +15,7 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 ```
 {
 	flows: ['logger', 'custom', 'hiproto', 'localfile', 'httpproxy'],
-	clientDefaultOptions: {
+	defaults: {
 		anyToError: true,
 		timeout: 4000
 	},
