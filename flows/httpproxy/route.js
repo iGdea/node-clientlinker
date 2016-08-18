@@ -28,7 +28,7 @@ function HttpProxyRoute(linker, bodyParser)
 				return;
 			}
 
-			var data = req.body;
+			var body = req.body;
 
 			linker.parseMethodKey(methodKey)
 				.then(function(methodInfo)
@@ -40,26 +40,26 @@ function HttpProxyRoute(linker, bodyParser)
 
 					if (httpproxyKey)
 					{
-						if (!data.key)
+						if (!body.key)
 						{
 							debug('[%s] no httpproxy aes key', methodKey);
 							res.sendStatus(403);
 							return;
 						}
 
-						if (httpproxyKey == data.key)
+						if (httpproxyKey == body.key)
 						{
-							debug('[%s] pass:use data key', methodKey);
+							debug('[%s] pass:use body key', methodKey);
 						}
 						else
 						{
 							var realMethodKey, remain;
 							try {
-								realMethodKey = aes.decipher(data.key, httpproxyKey).split(',');
+								realMethodKey = aes.decipher(body.key, httpproxyKey).split(',');
 							}
 							catch(err)
 							{
-								debug('[%s] can not decipher key:%s, err:%o', methodKey, data.key, err);
+								debug('[%s] can not decipher key:%s, err:%o', methodKey, body.key, err);
 								res.sendStatus(403);
 								return;
 							}
@@ -83,31 +83,34 @@ function HttpProxyRoute(linker, bodyParser)
 						}
 					}
 
-					if (data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
+					if (body.CONST_VARS) body = linker.JSON.parse(body, body.CONST_VARS);
+
+
+					function sendBackData(err, data)
+					{
+						debug('[%s] return err:%o data:%o', methodKey, err, data);
+
+						if (err
+							&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
+								|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
+								|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
+						{
+							debug('[%s] %s', methodKey, err);
+							res.sendStatus(501);
+							return;
+						}
+
+						res.json(linker.JSON.stringify(
+						{
+							result		: err,
+							data		: data,
+							CONST_VARS	: linker.JSON.CONST_VARS
+						}));
+					}
 
 					debug('[%s] catch proxy route', methodKey);
-					linker.run(methodKey, data.query, data.body, function(err, data)
-						{
-							debug('[%s] return err:%o data:%o', methodKey, err, data);
+					linker.run(methodKey, body.query, body.body, sendBackData, body.options);
 
-							if (err
-								&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
-									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
-									|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
-							{
-								debug('[%s] %s', methodKey, err);
-								res.sendStatus(501);
-								return;
-							}
-
-							res.json(linker.JSON.stringify(
-							{
-								result		: err,
-								data		: data,
-								CONST_VARS	: linker.JSON.CONST_VARS
-							}));
-						},
-						data.options);
 				})
 				.catch(function(err)
 				{
