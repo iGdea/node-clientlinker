@@ -36,12 +36,9 @@ function initConfig(options, linker)
 									conn.log('is not file:%s', file);
 								else
 								{
-									var clientOptions = _.extend({}, options.clientDefaultOptions);
-									clientOptions.pkghandler = file;
 									var name = filename.substr(0, filename.length-3);
-									// clientOptions.flows || (clientOptions.flows = ['pkghandler']);
 									debug('add pkghandler client:%s %s', name, file);
-									linker.addClient(name, clientOptions, true);
+									linker.addClient(name, {pkghandler: file}, true);
 								}
 
 								// 屏蔽错误

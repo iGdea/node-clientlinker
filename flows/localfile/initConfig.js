@@ -35,11 +35,8 @@ function initConfig(options, linker)
 									conn.log('is not path:%s', path);
 								else
 								{
-									var clientOptions = _.extend({}, options.clientDefaultOptions);
-									clientOptions.localfile = path;
-									// clientOptions.flows || (clientOptions.flows = ['localfile']);
 									debug('add localfile client:%s %s', pathname, path);
-									linker.addClient(pathname, clientOptions, true);
+									linker.addClient(pathname, {localfile: path}, true);
 								}
 
 								// 屏蔽错误
