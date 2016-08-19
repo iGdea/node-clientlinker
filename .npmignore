@@ -1,4 +1,10 @@
 node_modules
-test
+
 .gitignore
 .travis.yml
+.gitattributes
+.eslintrc
+.editorconfig
+.npmignore
+
+test
