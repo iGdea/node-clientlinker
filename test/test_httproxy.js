@@ -10,13 +10,28 @@ var runClientHandler	= require('./pkghandler/lib/run');
 var debug				= require('debug')('client_linker:test_httproxy');
 var PORT				= 3423;
 
+
 describe('httpproxy', function()
 {
-
-	function initSvrLinker(config)
+	function initLinker(options)
 	{
+		options || (options = {});
+		options.flows || (options.flows = ['httpproxy']);
+
+		(options.defaults || (options.defaults = {})).httpproxy
+			= 'http://127.0.0.1:'+PORT+'/route_proxy';
+		(options.clients || (options.clients = {})).client
+			= {confighandler: require('./pkghandler/client')};
+
+		return ClientLinker(options);
+	}
+	function initSvrLinker(options)
+	{
+		options || (options = {});
+		options.flows = ['confighandler', 'httpproxy'];
+
 		var svr;
-		var linker = ClientLinker(config);
+		var linker = initLinker(options);
 
 		before(function(done)
 		{
@@ -43,16 +58,7 @@ describe('httpproxy', function()
 
 	describe('base', function()
 	{
-		var svrLinker = initSvrLinker(
-			{
-				flows: ['confighandler', 'httpproxy'],
-				clients: {
-					client: {
-						confighandler: require('./pkghandler/client')
-					}
-				}
-			});
-
+		var svrLinker = initSvrLinker({});
 
 		it('run client', function()
 		{
@@ -61,19 +67,7 @@ describe('httpproxy', function()
 
 		it('run new client', function()
 		{
-			var linker = ClientLinker(
-			{
-				flows: ['httpproxy'],
-				defaults:
-				{
-					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
-				},
-				clients: {
-					client: null
-				}
-			});
-
-			return runClientHandler(linker);
+			return runClientHandler(initLinker({}));
 		});
 	});
 
@@ -82,17 +76,8 @@ describe('httpproxy', function()
 	{
 		var svrLinker = initSvrLinker(
 			{
-				flows: ['confighandler', 'httpproxy'],
-				defaults:
-				{
-					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy',
-					httpproxyKey: 'xdfegg&xx'
-				},
-				clients: {
-					client:
-					{
-						confighandler: require('./pkghandler/client')
-					}
+				defaults: {
+					httpproxyKey: 'xxfde&d023'
 				}
 			});
 
@@ -103,18 +88,12 @@ describe('httpproxy', function()
 
 		it('err403', function()
 		{
-			var linker = ClientLinker(
-			{
-				flows: ['httpproxy'],
-				defaults:
+			var linker = initLinker(
 				{
-					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
-					httpproxyKey: 'xx'
-				},
-				clients: {
-					client: null
-				}
-			});
+					defaults: {
+						httpproxyKey: 'xxx'
+					}
+				});
 
 			return linker.run('client.method3')
 				.then(function(){expect().fail()},
