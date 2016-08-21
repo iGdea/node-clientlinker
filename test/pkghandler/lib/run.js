@@ -35,5 +35,24 @@ function runClientHandler(linker)
 				expect(err.message).to.be('err123');
 			});
 
-	return Promise.all([promise1, promise2, promise3, promise4]);
+	var promise5 = linker.run('client.method5')
+		.then(function(){expect().fail()},
+			function(err)
+			{
+				expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT');
+				expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+				expect(err.CLIENTLINKER_METHODKEY).to.be('client.method5');
+				expect(err.CLIENTLINKER_CLIENT).to.be('client');
+			});
+
+	var promise6 = linker.run('client1001001.method')
+		.then(function(){expect().fail()},
+			function(err)
+			{
+				expect(err.message).to.contain('CLIENTLINKER:NO CLIENT');
+				expect(err.CLIENTLINKER_TYPE).to.be('NO CLIENT');
+				expect(err.CLIENTLINKER_METHODKEY).to.be('client1001001.method');
+			});
+
+	return Promise.all([promise1, promise2, promise3, promise4, promise5, promise6]);
 }

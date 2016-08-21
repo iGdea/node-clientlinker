@@ -3,7 +3,7 @@
 var Promise				= require('bluebird');
 var expect				= require('expect.js');
 var ClientLinker		= require('../');
-var runClientHandler	= require('./runClientHandler');
+var runClientHandler	= require('./pkghandler/lib/run');
 
 describe('flows', function()
 {

@@ -6,18 +6,46 @@ var expr				= require('express');
 var http				= require('http');
 var ClientLinker		= require('../');
 var proxyRoute			= require('../flows/httpproxy/route');
-var runClientHandler	= require('./runClientHandler');
+var runClientHandler	= require('./pkghandler/lib/run');
 var debug				= require('debug')('client_linker:test_httproxy');
 var PORT				= 3423;
 
 describe('httpproxy', function()
 {
-	var svr;
-	before(function(done)
+
+	function initSvrLinker(config)
 	{
-		var linker = ClientLinker(
+		var svr;
+		var linker = ClientLinker(config);
+
+		before(function(done)
+		{
+			var app = expr();
+			app.use('/route_proxy', proxyRoute(linker));
+			svr = http.createServer();
+			svr.listen(PORT, function()
+				{
+					debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
+					done();
+				});
+
+			app.listen(svr);
+		});
+
+		after(function()
+		{
+			svr.close();
+		});
+
+		return linker;
+	}
+
+
+	describe('base', function()
+	{
+		var svrLinker = initSvrLinker(
 			{
-				flows: ['confighandler'],
+				flows: ['confighandler', 'httpproxy'],
 				clients: {
 					client: {
 						confighandler: require('./pkghandler/client')
@@ -25,47 +53,34 @@ describe('httpproxy', function()
 				}
 			});
 
-		var app = expr();
-		app.use('/route_proxy', proxyRoute(linker));
-		svr = http.createServer();
-		svr.listen(PORT, function()
-			{
-				debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
-				done();
-			});
-		app.listen(svr);
-	});
 
-	after(function()
-	{
-		svr.close();
-	});
-
-	it('httproxy', function()
-	{
-		var linker = ClientLinker(
+		it('run client', function()
 		{
-			flows: ['httpproxy'],
-			defaults:
-			{
-				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
-			},
-			clients: {
-				client: null
-			}
+			return runClientHandler(svrLinker);
 		});
 
-		return runClientHandler(linker);
+		it('run new client', function()
+		{
+			var linker = ClientLinker(
+			{
+				flows: ['httpproxy'],
+				defaults:
+				{
+					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
+				},
+				clients: {
+					client: null
+				}
+			});
+
+			return runClientHandler(linker);
+		});
 	});
-});
 
 
-describe('httpproxyKey', function()
-{
-	var svr;
-	before(function(done)
+	describe('httpproxyKey', function()
 	{
-		var linker = ClientLinker(
+		var svrLinker = initSvrLinker(
 			{
 				flows: ['confighandler', 'httpproxy'],
 				defaults:
@@ -81,85 +96,32 @@ describe('httpproxyKey', function()
 				}
 			});
 
-		var app = expr();
-		app.use('/route_proxy', proxyRoute(linker));
-		svr = http.createServer();
-		svr.listen(PORT, function()
+		it('run client', function()
+		{
+			return runClientHandler(svrLinker);
+		});
+
+		it('err403', function()
+		{
+			var linker = ClientLinker(
 			{
-				debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
-				done();
+				flows: ['httpproxy'],
+				defaults:
+				{
+					httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
+					httpproxyKey: 'xx'
+				},
+				clients: {
+					client: null
+				}
 			});
 
-		app.listen(svr);
-	});
-
-	after(function()
-	{
-		svr.close();
-	});
-
-	it('run', function()
-	{
-		var linker = ClientLinker(
-		{
-			flows: ['httpproxy'],
-			defaults:
-			{
-				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
-				httpproxyKey: 'xdfegg&xx'
-			},
-			clients: {
-				client: null
-			}
+			return linker.run('client.method3')
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						expect(err).to.be('respone!200,403');
+					});
 		});
-
-
-		var promise1 = linker.run('client.method5')
-			.then(function(){expect().fail()},
-				function(err)
-				{
-					expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT');
-					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client.method5');
-					expect(err.CLIENTLINKER_CLIENT).to.be('client');
-				});
-
-		var promise2 = linker.run('client1.method')
-			.then(function(){expect().fail()},
-				function(err)
-				{
-					expect(err.message).to.contain('CLIENTLINKER:NO CLIENT');
-					expect(err.CLIENTLINKER_TYPE).to.be('NO CLIENT');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client1.method');
-				});
-
-		return Promise.all(
-			[
-				runClientHandler(linker),
-				promise1, promise2
-			]);
-	});
-
-	it('err403', function()
-	{
-		var linker = ClientLinker(
-		{
-			flows: ['httpproxy'],
-			defaults:
-			{
-				httpproxy: 'http://127.0.0.1:'+PORT+'/route_proxy?',
-				httpproxyKey: 'xx'
-			},
-			clients: {
-				client: null
-			}
-		});
-
-		return linker.run('client.method3')
-			.then(function(){expect().fail()},
-				function(err)
-				{
-					expect(err).to.be('respone!200,403');
-				});
 	});
 });
