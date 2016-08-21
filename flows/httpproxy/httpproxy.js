@@ -34,7 +34,10 @@ function httpproxy(runtime, callback)
 
 	var runOptions	= runtime.options || {};
 	var timeout		= runOptions.timeout || options.httpproxyTimeout || 10000;
-	var proxy		= runOptions.httpproxyProxy || options.httpproxyProxy || process.env.clientlinker_http_proxy || process.env.http_proxy;
+	var proxy		= runOptions.httpproxyProxy
+			|| options.httpproxyProxy
+			|| process.env.clientlinker_http_proxy
+			|| process.env.http_proxy;
 
 	var url = appendUrl(options.httpproxy, 'action='+runtime.methodKey);
 	debug('request url:%s', url);
@@ -89,7 +92,8 @@ function httpproxy(runtime, callback)
 function appendUrl(url, query)
 {
 	var lastChar = url.charAt(url.length-1);
-	var splitChar = lastChar == '?' || lastChar == '&' ? '' : (url.indexOf('?') != -1 ? '&' : '?');
+	var splitChar = lastChar == '?' || lastChar == '&'
+			? '' : (url.indexOf('?') != -1 ? '&' : '?');
 
 	return url + splitChar + query;
 }
