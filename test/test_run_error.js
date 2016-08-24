@@ -119,6 +119,14 @@ describe('run_error', function()
 							method2: function(query, body, callback)
 							{
 								callback.reject();
+							},
+							method3: function(query, body, callback)
+							{
+								callback(-1);
+							},
+							method4: function(query, body, callback)
+							{
+								callback(new Error('errmsg'));
 							}
 						}
 					}
@@ -131,6 +139,7 @@ describe('run_error', function()
 				{
 					expect(err).to.be.an(Error);
 					expect(err.message).to.be('errmsg');
+					expect(err.isClientLinkerNewError).to.be.ok();
 				});
 
 		var promise2 = linker.run('client.method2')
@@ -139,6 +148,7 @@ describe('run_error', function()
 				{
 					expect(err).to.be.an(Error);
 					expect(err.message).to.be('CLIENT_LINKER_DEFERT_ERROR');
+					expect(err.isClientLinkerNewError).to.be.ok();
 				});
 
 		var promise3 = linker.run('client.method3')
@@ -146,16 +156,29 @@ describe('run_error', function()
 				function(err)
 				{
 					expect(err).to.be.an(Error);
+					expect(err.message).to.be('client,client.method3,-1');
+					expect(err.isClientLinkerNewError).to.be.ok();
 				});
 
-		var promise4 = linker.run('client1.method')
+		var promise4 = linker.run('client.method4')
 			.then(function(){expect().fail()},
 				function(err)
 				{
 					expect(err).to.be.an(Error);
+					expect(err.message).to.be('errmsg');
+					expect(err.isClientLinkerNewError).to.not.be.ok();
 				});
 
-		return Promise.all([promise1, promise2, promise3, promise4]);
+		var promise5 = linker.run('client.method5')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err).to.be.an(Error);
+					expect(err.message).to.be('CLIENTLINKER:CLIENT FLOW OUT,client.method5,1');
+					expect(err.isClientLinkerNewError).to.not.be.ok();
+				});
+
+		return Promise.all([promise1, promise2, promise3, promise4, promise5]);
 	});
 
 
