@@ -167,11 +167,11 @@ describe('flows', function()
 
 
 
-	it('debug', function()
+	it('debugger', function()
 	{
 		var linker = ClientLinker(
 			{
-				flows: ['debug'],
+				flows: ['debugger'],
 				clients:
 				{
 					client: null

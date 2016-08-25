@@ -32,7 +32,7 @@ function ClientLinker(options)
 		{
 			if (exports.supportMiddlewares.indexOf(name) != -1)
 			{
-				linker.loadFlow(name, DEFAULT_FLOWS_PATH+name+'/'+name, module);
+				linker.loadFlow(DEFAULT_FLOWS_PATH+name+'/'+name, module);
 			}
 		});
 	}

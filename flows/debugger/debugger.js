@@ -1,6 +1,6 @@
 "use strict";
 
-exports = module.exports = debug;
+exports = module.exports = {handler: debug, name: 'debugger'};
 
 function debug(runtime, callback)
 {

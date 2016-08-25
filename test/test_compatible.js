@@ -34,7 +34,7 @@ describe('compatible', function()
 	{
 		var linker = ClientLinker(
 			{
-				flows: ['debug'],
+				flows: ['debugger'],
 				clients:
 				{
 					client: null

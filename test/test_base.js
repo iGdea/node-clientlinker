@@ -64,10 +64,10 @@ describe('base', function()
 
 		expect(function(){linker.loadFlow('no_exists_flow')}).to.throwError();
 		expect(function(){linker.loadFlow('flow1')}).to.throwError();
-		expect(function(){linker.loadFlow('flow1', './flows/flow1')}).to.throwError();
-		expect(linker.loadFlow('flow_empty', './flows/flow_empty', module)).to.not.be.ok();
-		expect(linker.loadFlow('flow_resolve', './flows/flow_resolve', module)).to.be.ok();
-		expect(linker.loadFlow('flow_next', './flows/flow_next', module)).to.be.ok();
+		expect(function(){linker.loadFlow('./flows/flow1')}).to.throwError();
+		expect(linker.loadFlow('./flows/flow_empty', module)).to.not.be.ok();
+		expect(linker.loadFlow('./flows/flow_resolve', module)).to.be.ok();
+		expect(linker.loadFlow('./flows/flow_next', module)).to.be.ok();
 
 		linker.addClient('client1', {flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']});
 
