@@ -69,6 +69,22 @@ describe('httpproxy', function()
 		{
 			return runClientHandler(initLinker({}));
 		});
+
+		it('no client', function()
+		{
+			var linker = initLinker({});
+			linker.addClient('client10');
+
+			return linker.run('client10.method')
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						// 注意：不是NO CLIENT
+						expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT,client10.method,1');
+						expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+						expect(err.CLIENTLINKER_METHODKEY).to.be('client10.method');
+					});
+		});
 	});
 
 

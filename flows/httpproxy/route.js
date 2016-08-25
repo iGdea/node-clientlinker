@@ -98,30 +98,39 @@ function HttpProxyRoute(linker, bodyParser)
 						.then(function(runtime)
 						{
 							_.extend(runtime.data, body.data);
+							return linker.runByRuntime(runtime);
+						})
+						.then(function(data)
+						{
+							var json = linker.JSON.stringify(
+								{
+									data: data,
+									CONST_VARS: linker.JSON.CONST_VARS
+								});
 
-							return linker.runByRuntime(runtime, function(err, data)
+							res.json(json);
+						})
+						.catch(function(err)
+						{
+							if (err
+								&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
+									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
+									|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
 							{
-								debug('[%s] return err:%o data:%o', methodKey, err, data);
+								debug('[%s] %s', methodKey, err);
+								res.sendStatus(501);
+							}
+							else
+							{
+								var json = linker.JSON.stringify(
+									{
+										result: err,
+										CONST_VARS: linker.JSON.CONST_VARS
+									});
 
-								if (err
-									&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
-										|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
-										|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
-								{
-									debug('[%s] %s', methodKey, err);
-									res.sendStatus(501);
-									return;
-								}
-
-								res.json(linker.JSON.stringify(
-								{
-									result		: err,
-									data		: data,
-									CONST_VARS	: linker.JSON.CONST_VARS
-								}));
-							});
+								res.json(json);
+							}
 						});
-
 				})
 				.catch(function(err)
 				{
