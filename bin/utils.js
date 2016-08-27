@@ -104,7 +104,7 @@ function run(linker, action, query, body, options)
 	return linker.newRuntime(action, query, body, options)
 		.then(function(runtime)
 		{
-			runtime.data.source = 'cli';
+			runtime.env.source = 'cli';
 			return linker.runByRuntime(runtime);
 		})
 		.then(function(data)

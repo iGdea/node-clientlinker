@@ -31,7 +31,7 @@ function HttpProxyRoute(linker, bodyParser)
 
 			var body = req.body;
 
-			linker.parseMethodKey(action)
+			linker.parseAction(action)
 				.then(function(methodInfo)
 				{
 					var httpproxyKey = methodInfo.client
@@ -58,9 +58,9 @@ function HttpProxyRoute(linker, bodyParser)
 						}
 						else
 						{
-							var realMethodKey, remain;
+							var realAction, remain;
 							try {
-								realMethodKey = aes.decipher(body.key, httpproxyKey)
+								realAction = aes.decipher(body.key, httpproxyKey)
 													.split(',');
 							}
 							catch(err)
@@ -71,8 +71,8 @@ function HttpProxyRoute(linker, bodyParser)
 								return;
 							}
 
-							remain = Date.now() - realMethodKey.pop();
-							realMethodKey = realMethodKey.join(',');
+							remain = Date.now() - realAction.pop();
+							realAction = realAction.join(',');
 
 							if (remain > httpproxyKeyRemain)
 							{
@@ -81,10 +81,10 @@ function HttpProxyRoute(linker, bodyParser)
 								return;
 							}
 
-							if (realMethodKey != action)
+							if (realAction != action)
 							{
 								debug('[%s] inval aes key, query:%s, aes:%s',
-										action, action, realMethodKey);
+										action, action, realAction);
 								res.sendStatus(403);
 								return;
 							}
@@ -97,8 +97,8 @@ function HttpProxyRoute(linker, bodyParser)
 					linker.newRuntime(action, body.query, body.body, body.options)
 						.then(function(runtime)
 						{
-							_.extend(runtime.data, body.data);
-							runtime.data.source = 'httpproxy';
+							_.extend(runtime.env, body.data);
+							runtime.env.source = 'httpproxy';
 							return linker.runByRuntime(runtime);
 						})
 						.then(function(data)

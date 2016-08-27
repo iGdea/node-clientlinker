@@ -257,7 +257,7 @@ describe('#base', function()
 			.then(function(){expect().fail()},
 				function(runtime)
 				{
-					expect(runtime.data.source).to.be('run');
+					expect(runtime.env.source).to.be('run');
 				});
 	});
 

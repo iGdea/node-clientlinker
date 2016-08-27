@@ -11,7 +11,7 @@ function httpproxy(runtime, callback)
 	var client = runtime.client;
 	var options = client.options;
 	var linker = client.linker;
-	var runData = runtime.data;
+	var runEnv = runtime.env;
 	if (!options.httpproxy) return callback.next();
 
 	if (linker.__bind_httpproxy_route__ && options.httpproxyNotRunWhenBindRoute !== false)
@@ -21,7 +21,7 @@ function httpproxy(runtime, callback)
 	}
 
 	var httpproxyLevel = options.httpproxyLevel;
-	var nextHttpproxyLevel = runData.httpproxyLevel || 0;
+	var nextHttpproxyLevel = runEnv.httpproxyLevel || 0;
 	nextHttpproxyLevel++;
 	if ((!httpproxyLevel && httpproxyLevel !== 0)
 		|| httpproxyLevel < 0)
@@ -35,14 +35,14 @@ function httpproxy(runtime, callback)
 		return callback.next();
 	}
 
-	runData.httpproxyLevel = nextHttpproxyLevel;
+	runEnv.httpproxyLevel = nextHttpproxyLevel;
 
 
 	var body = {
 		query		: runtime.query,
 		body		: runtime.body,
 		options	    : runtime.options,
-		data		: runtime.data,
+		data		: runtime.env,
 		CONST_VARS	: linker.JSON.CONST_VARS,
 	};
 	// check aes key

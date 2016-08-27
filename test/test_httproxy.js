@@ -32,7 +32,7 @@ describe('#httpproxy', function()
 		options.customFlows = {
 			custom: function(runtime, callback)
 			{
-				expect(runtime.data.source).to.be('httpproxy');
+				expect(runtime.env.source).to.be('httpproxy');
 				callback.next();
 			}
 		};
