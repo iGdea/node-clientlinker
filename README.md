@@ -1,6 +1,10 @@
 Client Linker
 ==================
 
+Linker all clients whether rpc, addon, http request, mock data, local file ...
+
+Here is a solution to break out of network and OS.
+
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
 [![Dependencies][dependencies-image]][dependencies-url]

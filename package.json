@@ -1,7 +1,7 @@
 {
   "name": "clientlinker",
   "version": "4.3.2",
-  "description": "Client Linker all.",
+  "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/client_linker_cli.js ./test/client_linker.conf.js",
