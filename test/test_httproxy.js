@@ -6,7 +6,7 @@ var expr				= require('express');
 var http				= require('http');
 var ClientLinker		= require('../');
 var proxyRoute			= require('../flows/httpproxy/route');
-var runClientHandler	= require('./pkghandler/lib/run');
+var runClientHandlerIts	= require('./pkghandler/lib/run');
 var debug				= require('debug')('client_linker:test_httproxy');
 var PORT				= 3423;
 
@@ -20,15 +20,15 @@ describe('#httpproxy', function()
 
 		(options.defaults || (options.defaults = {})).httpproxy
 			= 'http://127.0.0.1:'+PORT+'/route_proxy';
-		(options.clients || (options.clients = {})).client
-			= {confighandler: require('./pkghandler/client')};
+		options.pkghandlerDir = __dirname+'/pkghandler';
+		(options.clients || (options.clients = {})).client_its = {};
 
 		return ClientLinker(options);
 	}
 	function initSvrLinker(options)
 	{
 		options || (options = {});
-		options.flows = ['confighandler', 'httpproxy'];
+		options.flows = ['pkghandler', 'httpproxy'];
 
 		var svr;
 		var linker = initLinker(options);
@@ -60,29 +60,29 @@ describe('#httpproxy', function()
 	{
 		var svrLinker = initSvrLinker({});
 
-		it('#run client', function()
+		describe('#run client', function()
 		{
-			return runClientHandler(svrLinker);
+			runClientHandlerIts(svrLinker);
 		});
 
-		it('#run new client', function()
+		describe('#run new client', function()
 		{
-			return runClientHandler(initLinker({}));
+			runClientHandlerIts(initLinker({}));
 		});
 
 		it('#no client', function()
 		{
 			var linker = initLinker({});
-			linker.addClient('client10');
+			linker.addClient('client_not_exists');
 
-			return linker.run('client10.method')
+			return linker.run('client_not_exists.method')
 				.then(function(){expect().fail()},
 					function(err)
 					{
 						// 注意：不是NO CLIENT
-						expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT,client10.method,1');
+						expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT,client_not_exists.method,len1');
 						expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-						expect(err.CLIENTLINKER_METHODKEY).to.be('client10.method');
+						expect(err.CLIENTLINKER_METHODKEY).to.be('client_not_exists.method');
 					});
 		});
 	});
@@ -97,9 +97,9 @@ describe('#httpproxy', function()
 				}
 			});
 
-		it('#run client', function()
+		describe('#run client', function()
 		{
-			return runClientHandler(svrLinker);
+			runClientHandlerIts(svrLinker);
 		});
 
 		it('#err403', function()
@@ -111,7 +111,7 @@ describe('#httpproxy', function()
 					}
 				});
 
-			return linker.run('client.method3')
+			return linker.run('client_its.method')
 				.then(function(){expect().fail()},
 					function(err)
 					{

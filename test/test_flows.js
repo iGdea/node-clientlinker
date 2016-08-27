@@ -3,7 +3,7 @@
 var Promise				= require('bluebird');
 var expect				= require('expect.js');
 var ClientLinker		= require('../');
-var runClientHandler	= require('./pkghandler/lib/run');
+var runClientHandlerIts	= require('./pkghandler/lib/run');
 
 describe('#flows', function()
 {
@@ -57,33 +57,43 @@ describe('#flows', function()
 
 
 
-	it('#confighandler', function()
+	describe('#confighandler', function()
 	{
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
 				clients: {
-					client: {
-						confighandler: require('./pkghandler/client')
+					client_its: {
+						confighandler: require('./pkghandler/client_its')
 					}
 				}
 			});
 
-		var promise1 = runClientHandler(linker);
-		var promise2 = linker.methods()
+		runClientHandlerIts(linker);
+
+		it('#methods', function()
+		{
+			return linker.methods()
 				.then(function(map)
 				{
-					expect(map.client).to.be.an('object');
-					var methods = Object.keys(map.client.methods);
-					expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
-					expect(map.client.methods.method1[0].handler).to.be.an('function');
+					expect(map.client_its).to.be.an('object');
+					var methods = Object.keys(map.client_its.methods);
+					expect(methods).to.eql([
+						'method_params',
+						'method_promise_resolve',
+						'method_promise_reject_number',
+						'method_promise_reject_error',
+						'method_callback_data',
+						'method_callback_error_number',
+						'method_callback_error_error'
+					]);
+					expect(map.client_its.methods.method_params[0].handler).to.be.an('function');
 				});
-
-		return Promise.all([promise1, promise2]);
+		});
 	});
 
 
-	it('#pkghandler', function()
+	describe('#pkghandler', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -102,67 +112,80 @@ describe('#flows', function()
 				}
 			});
 
-		var promise1 = runClientHandler(linker);
-		var promise2 = linker.methods()
-			.then(function(map)
-			{
-				expect(map.client).to.be.an('object');
-				expect(map.client.client.options.opt).to.be('myOpt');
-				expect(map.client.client.options.pkghandler).to.contain(__dirname);
-				expect(map.client2.client.options.pkghandler).to.contain('pkghandler/not_exsits');
+		runClientHandlerIts(linker);
 
-				var methods = Object.keys(map.client.methods);
-				expect(methods).to.eql(['method1', 'method2', 'method3', 'method4']);
-				expect(map.client.methods.method1[0].handler).to.be.an('function');
-			});
+		it('#methods', function()
+		{
+			return linker.methods()
+				.then(function(map)
+				{
+					expect(map.client_its).to.be.an('object');
+					expect(map.client_its.client.options.opt).to.be('myOpt');
+					expect(map.client_its.client.options.pkghandler).to.contain(__dirname);
+					expect(map.client2.client.options.pkghandler).to.contain('pkghandler/not_exsits');
 
-		return Promise.all([promise1, promise2]);
+					var methods = Object.keys(map.client_its.methods);
+					expect(methods).to.eql([
+						'method_params',
+						'method_promise_resolve',
+						'method_promise_reject_number',
+						'method_promise_reject_error',
+						'method_callback_data',
+						'method_callback_error_number',
+						'method_callback_error_error'
+					]);
+					expect(map.client_its.methods.method_params[0].handler).to.be.an('function');
+				});
+		});
 	});
 
-	it('#logger', function(done)
+	describe('#logger', function()
 	{
 		var logger = require('../flows/logger/logger');
-		var linker = ClientLinker(
-			{
-				flows: ['logger', 'custom'],
-				defaults: {
-					logger: function(runtime, err, data)
-					{
-						var timing = runtime.timing;
-						var lastFlowTiming = runtime.lastFlow().timing;
-
-						logger.loggerHandler.apply(null, arguments);
-
-						try {
-							expect(lastFlowTiming.start).to.be.an('number');
-							expect(lastFlowTiming.end).to.be.an('number');
-							expect(timing.flowsStart).to.be.an('number');
-							expect(timing.flowsEnd).to.be.an('number');
-							expect(err).to.be(null);
-							expect(data.respone).to.be('respone');
-
-							done();
-						}
-						catch(err)
+		it('#run', function(done)
+		{
+			var linker = ClientLinker(
+				{
+					flows: ['logger', 'custom'],
+					defaults: {
+						logger: function(runtime, err, data)
 						{
-							done(err);
+							var timing = runtime.timing;
+							var lastFlowTiming = runtime.lastFlow().timing;
+
+							logger.loggerHandler.apply(null, arguments);
+
+							try {
+								expect(lastFlowTiming.start).to.be.an('number');
+								expect(lastFlowTiming.end).to.be.an('number');
+								expect(timing.flowsStart).to.be.an('number');
+								expect(timing.flowsEnd).to.be.an('number');
+								expect(err).to.be(null);
+								expect(data.respone).to.be('respone');
+
+								done();
+							}
+							catch(err)
+							{
+								done(err);
+							}
+						},
+					},
+					customFlows:
+					{
+						custom: function custom(runtime, callback)
+						{
+							callback(null, {respone: 'respone'});
 						}
 					},
-				},
-				customFlows:
-				{
-					custom: function custom(runtime, callback)
+					clients:
 					{
-						callback(null, {respone: 'respone'});
+						client: null
 					}
-				},
-				clients:
-				{
-					client: null
-				}
-			});
+				});
 
-		linker.run('client.method', 123, {body:456}).catch(done);
+			linker.run('client.method', 123, {body:456}).catch(done);
+		});
 	});
 
 
