@@ -60,3 +60,12 @@ Run in Terminal
 # clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
 # clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 ```
+
+
+
+[npm-image]: http://img.shields.io/npm/v/clientlinker.svg
+[downloads-image]: http://img.shields.io/npm/dm/clientlinker.svg
+[dependencies-image]: http://img.shields.io/david/Bacra/node-clientlinker.svg
+[npm-url]: https://www.npmjs.org/package/clientlinker
+[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg
+[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
