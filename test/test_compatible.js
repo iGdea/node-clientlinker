@@ -45,8 +45,9 @@ describe('#compatible', function()
 			.then(function(){expect().fail()},
 				function(err)
 				{
-					expect(err.__runtime__.timing.navigationStart).to.be.a('number');
-					expect(err.__runtime__.timing.navigationStart).to.be(err.__runtime__.navigationStart);
+					var navigationStart = err.__runtime__.timing.navigationStart;
+					expect(navigationStart).to.be.a('number');
+					expect(navigationStart).to.be(err.__runtime__.navigationStart);
 				});
 	});
 
@@ -157,12 +158,17 @@ describe('#compatible', function()
 	it('#loadFlow', function()
 	{
 		var linker = ClientLinker()
+		var flow = linker.loadFlow('flow_empty', './flows/flow_empty', module);
+		expect(flow).to.not.be.ok();
+		flow = linker.loadFlow('flow_resolve', './flows/flow_resolve', module);
+		expect(flow).to.be.ok();
+		flow = linker.loadFlow('flow_next', './flows/flow_next', module);
+		expect(flow).to.be.ok();
 
-		expect(linker.loadFlow('flow_empty', './flows/flow_empty', module)).to.not.be.ok();
-		expect(linker.loadFlow('flow_resolve', './flows/flow_resolve', module)).to.be.ok();
-		expect(linker.loadFlow('flow_next', './flows/flow_next', module)).to.be.ok();
-
-		linker.addClient('client1', {flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']});
+		linker.addClient('client1',
+			{
+				flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']
+			});
 
 		return linker.run('client1.xxxx')
 			.then(function(data)
