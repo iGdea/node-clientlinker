@@ -200,4 +200,28 @@ describe('#compatible', function()
 						.be(runtime.action);
 				});
 	});
+
+
+	it('#parseMethodKey', function()
+	{
+		var linker = ClientLinker(
+			{
+				clients:
+				{
+					client: null
+				}
+			});
+
+		return Promise.all(
+			[
+				linker.parseMethodKey('client.method'),
+				linker.parseAction('client.method')
+			])
+			.then(function(data)
+			{
+				expect(data[0].client.name).to.be('client');
+				expect(data[0].method).to.be('method');
+				expect(data[0]).to.eql(data[1]);
+			});
+	});
 });
