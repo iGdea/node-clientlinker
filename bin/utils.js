@@ -101,7 +101,12 @@ function run(linker, action, query, body, options)
 		printObject(body),
 		printObject(options));
 
-	return linker.run(action, query, body, options)
+	return linker.newRuntime(action, query, body, options)
+		.then(function(runtime)
+		{
+			runtime.data.source = 'cli';
+			return linker.runByRuntime(runtime);
+		})
 		.then(function(data)
 		{
 			console.log('\n ========= Action Result Success %s =========\n%s',

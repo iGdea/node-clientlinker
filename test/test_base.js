@@ -238,4 +238,27 @@ describe('#base', function()
 		linker.run('client.method').catch(done);
 	});
 
+
+	it('#data of runtime', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['debugger'],
+				clients:
+				{
+					client:
+					{
+						debuggerRuntime: true
+					}
+				}
+			});
+
+		return linker.run('client.method')
+			.then(function(){expect().fail()},
+				function(runtime)
+				{
+					expect(runtime.data.source).to.be('run');
+				});
+	});
+
 });

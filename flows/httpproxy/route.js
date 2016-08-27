@@ -98,6 +98,7 @@ function HttpProxyRoute(linker, bodyParser)
 						.then(function(runtime)
 						{
 							_.extend(runtime.data, body.data);
+							runtime.data.source = 'httpproxy';
 							return linker.runByRuntime(runtime);
 						})
 						.then(function(data)

@@ -28,7 +28,14 @@ describe('#httpproxy', function()
 	function initSvrLinker(options)
 	{
 		options || (options = {});
-		options.flows = ['pkghandler', 'httpproxy'];
+		options.flows = ['custom', 'pkghandler', 'httpproxy'];
+		options.customFlows = {
+			custom: function(runtime, callback)
+			{
+				expect(runtime.data.source).to.be('httpproxy');
+				callback.next();
+			}
+		};
 
 		var svr;
 		var linker = initLinker(options);
@@ -60,10 +67,10 @@ describe('#httpproxy', function()
 	{
 		var svrLinker = initSvrLinker({});
 
-		describe('#run client', function()
-		{
-			runClientHandlerIts(svrLinker);
-		});
+		// describe('#run client', function()
+		// {
+		// 	runClientHandlerIts(svrLinker);
+		// });
 
 		describe('#run new client', function()
 		{
@@ -90,16 +97,22 @@ describe('#httpproxy', function()
 
 	describe('#httpproxyKey', function()
 	{
+		var httpproxyKey = 'xxfde&d023';
 		var svrLinker = initSvrLinker(
 			{
 				defaults: {
-					httpproxyKey: 'xxfde&d023'
+					httpproxyKey: httpproxyKey
 				}
 			});
 
 		describe('#run client', function()
 		{
-			runClientHandlerIts(svrLinker);
+			runClientHandlerIts(initLinker(
+				{
+					defaults: {
+						httpproxyKey: httpproxyKey
+					}
+				}));
 		});
 
 		it('#err403', function()
