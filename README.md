@@ -1,5 +1,10 @@
-Client Linker  [![Build Status](https://travis-ci.org/Bacra/node-clientlinker.svg?branch=master)](https://travis-ci.org/Bacra/node-clientlinker)
+Client Linker
 ==================
+
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][npm-url]
+[![Dependencies][dependencies-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
 
 # Install
 ```
@@ -55,4 +60,3 @@ Run in Terminal
 # clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
 # clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 ```
-
