@@ -8,7 +8,7 @@ describe('#rlutils', function()
 {
 	it('#parseParam', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 		expect(utils.parseParam(linker, '{"key": "value"}').key).to.be('value');
 		expect(utils.parseParam(linker, '{key: "value"}').key).to.be('value');
 		expect(utils.parseParam(linker, '{\'key\': "value"}').key).to.be('value');

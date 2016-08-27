@@ -8,7 +8,7 @@ describe('#compatible', function()
 {
 	it('#runOptions', function()
 	{
-		var linker = new ClientLinker(
+		var linker = ClientLinker(
 			{
 				flows: [function flow(runtime, callback)
 					{
@@ -53,7 +53,7 @@ describe('#compatible', function()
 
 	it('#runByKey', function()
 	{
-		var linker = new ClientLinker(
+		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
 				clients:
@@ -81,7 +81,7 @@ describe('#compatible', function()
 
 	it('#proxyRoute', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 
 		expect(linker.proxyRoute().name).to.be('HttpProxyRouteHandle');
 	});
@@ -89,7 +89,7 @@ describe('#compatible', function()
 
 	it('#add', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 		linker.add('clientName1', {opt: 'myOpt'});
 
 		return linker.clients()
@@ -104,7 +104,7 @@ describe('#compatible', function()
 
 	it('#clientDefaultOptions', function()
 	{
-		var linker = new ClientLinker(
+		var linker = ClientLinker(
 			{
 				clientDefaultOptions:
 				{
@@ -156,7 +156,7 @@ describe('#compatible', function()
 
 	it('#loadFlow', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 
 		expect(linker.loadFlow('flow_empty', './flows/flow_empty', module)).to.not.be.ok();
 		expect(linker.loadFlow('flow_resolve', './flows/flow_resolve', module)).to.be.ok();

@@ -29,7 +29,7 @@ describe('#base', function()
 
 	it('#addClient', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 
 		linker.addClient('client1');
 		return linker.clients()
@@ -50,7 +50,7 @@ describe('#base', function()
 
 	it('#bindFlow', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 
 		linker.bindFlow('flow1', function flow1(){});
 		expect(Object.keys(linker.flows).length).to.be(1);
@@ -60,7 +60,7 @@ describe('#base', function()
 
 	it('#loadFlow', function()
 	{
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 
 		expect(function(){linker.loadFlow('no_exists_flow')}).to.throwError();
 		expect(function(){linker.loadFlow('flow1')}).to.throwError();

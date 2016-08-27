@@ -19,7 +19,7 @@ describe('#savefile', function()
 	it('#savefile', function(done)
 	{
 		var filename = process.pid+Math.random();
-		var linker = new ClientLinker;
+		var linker = ClientLinker()
 		savefile(linker, DIR, filename, new Error('errmsg123'), {data: 'data', buffer: new Buffer('buffer')})
 			.then(function()
 			{
