@@ -60,17 +60,17 @@ describe('#httpproxy', function()
 	{
 		var svrLinker = initSvrLinker({});
 
-		it('!run client', function()
+		it('#run client', function()
 		{
 			return runClientHandler(svrLinker);
 		});
 
-		it('!run new client', function()
+		it('#run new client', function()
 		{
 			return runClientHandler(initLinker({}));
 		});
 
-		it('!no client', function()
+		it('#no client', function()
 		{
 			var linker = initLinker({});
 			linker.addClient('client10');
@@ -97,12 +97,12 @@ describe('#httpproxy', function()
 				}
 			});
 
-		it('!run client', function()
+		it('#run client', function()
 		{
 			return runClientHandler(svrLinker);
 		});
 
-		it('!err403', function()
+		it('#err403', function()
 		{
 			var linker = initLinker(
 				{

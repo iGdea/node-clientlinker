@@ -6,7 +6,7 @@ var expect			= require('expect.js');
 
 describe('#domain', function()
 {
-	it('!callback', function(done)
+	it('#callback', function(done)
 	{
 		var linker = ClientLinker(
 			{
@@ -44,7 +44,7 @@ describe('#domain', function()
 			});
 	});
 
-	it('!promise', function()
+	it('#promise', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -109,7 +109,7 @@ describe('#domain', function()
 
 
 
-	it('!addon', function()
+	it('#addon', function()
 	{
 		var addon = require('nan-async-example');
 		var linker = ClientLinker(

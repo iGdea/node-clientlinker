@@ -6,7 +6,7 @@ var expect			= require('expect.js');
 
 describe('#run_error', function()
 {
-	it('!flow run Error', function()
+	it('#flow run Error', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -100,7 +100,7 @@ describe('#run_error', function()
 			]);
 	});
 
-	it('!anyToError', function()
+	it('#anyToError', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -182,7 +182,7 @@ describe('#run_error', function()
 	});
 
 
-	it('!retry', function()
+	it('#retry', function()
 	{
 		var runTimes = 0;
 		var linker = ClientLinker(
@@ -232,7 +232,7 @@ describe('#run_error', function()
 				});
 	});
 
-	it('!throw null err', function(done)
+	it('#throw null err', function(done)
 	{
 		var linker = ClientLinker(
 			{

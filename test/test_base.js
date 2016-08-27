@@ -7,13 +7,13 @@ var expect			= require('expect.js');
 
 describe('#base', function()
 {
-	it('!ownlist', function()
+	it('#ownlist', function()
 	{
 		expect(ClientLinker.supportMiddlewares.length).to.be.above(0);
 		expect(ClientLinker.supportMiddlewares).to.contain('httpproxy');
 	});
 
-	it('!own', function()
+	it('#own', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -27,7 +27,7 @@ describe('#base', function()
 		});
 	});
 
-	it('!addClient', function()
+	it('#addClient', function()
 	{
 		var linker = new ClientLinker;
 
@@ -48,7 +48,7 @@ describe('#base', function()
 			});
 	});
 
-	it('!bindFlow', function()
+	it('#bindFlow', function()
 	{
 		var linker = new ClientLinker;
 
@@ -58,7 +58,7 @@ describe('#base', function()
 		expect(Object.keys(linker.flows).length).to.be(3);
 	});
 
-	it('!loadFlow', function()
+	it('#loadFlow', function()
 	{
 		var linker = new ClientLinker;
 
@@ -79,7 +79,7 @@ describe('#base', function()
 	});
 
 
-	it('!custom', function()
+	it('#custom', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -92,7 +92,7 @@ describe('#base', function()
 		expect(Object.keys(linker.flows).length).to.be(1);
 	});
 
-	it('!pkg clients', function()
+	it('#pkg clients', function()
 	{
 		var linker1 = ClientLinker(
 			{
@@ -129,7 +129,7 @@ describe('#base', function()
 		return Promise.all([promise1, promise2]);
 	});
 
-	it('!client options override', function()
+	it('#client options override', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -151,7 +151,7 @@ describe('#base', function()
 				});
 	});
 
-	it('!clientrun', function(done)
+	it('#clientrun', function(done)
 	{
 		// this.timeout(60*1000);
 		var runned = false;
@@ -177,7 +177,7 @@ describe('#base', function()
 		});
 	});
 
-	it('!timing', function(done)
+	it('#timing', function(done)
 	{
 		var linker = ClientLinker(
 			{
