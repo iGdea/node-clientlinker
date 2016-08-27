@@ -8,8 +8,8 @@ var linker = ClientLinker(
 		localfileDir: __dirname+'/localfile',
 		pkghandlerDir: __dirname+'/pkghandler',
 		clients: {
-			client: {
-				confighandler: require('./pkghandler/client')
+			client_conf: {
+				confighandler: require('./pkghandler/client_its')
 			}
 		},
 		customFlows:
