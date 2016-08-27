@@ -6,7 +6,7 @@ var expect			= require('expect.js');
 
 describe('#compatible', function()
 {
-	it('runOptions', function()
+	it('!runOptions', function()
 	{
 		var linker = new ClientLinker(
 			{
@@ -30,7 +30,7 @@ describe('#compatible', function()
 	});
 
 
-	it('navigationStart', function()
+	it('!navigationStart', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -51,7 +51,7 @@ describe('#compatible', function()
 	});
 
 
-	it('runByKey', function()
+	it('!runByKey', function()
 	{
 		var linker = new ClientLinker(
 			{
@@ -79,7 +79,7 @@ describe('#compatible', function()
 	});
 
 
-	it('proxyRoute', function()
+	it('!proxyRoute', function()
 	{
 		var linker = new ClientLinker;
 
@@ -87,7 +87,7 @@ describe('#compatible', function()
 	});
 
 
-	it('add', function()
+	it('!add', function()
 	{
 		var linker = new ClientLinker;
 		linker.add('clientName1', {opt: 'myOpt'});
@@ -102,7 +102,7 @@ describe('#compatible', function()
 	});
 
 
-	it('clientDefaultOptions', function()
+	it('!clientDefaultOptions', function()
 	{
 		var linker = new ClientLinker(
 			{
@@ -154,7 +154,7 @@ describe('#compatible', function()
 	});
 
 
-	it('loadFlow', function()
+	it('!loadFlow', function()
 	{
 		var linker = new ClientLinker;
 

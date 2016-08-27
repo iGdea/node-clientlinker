@@ -7,7 +7,7 @@ var runClientHandler	= require('./pkghandler/lib/run');
 
 describe('#flows', function()
 {
-	it('localfile', function()
+	it('!localfile', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -57,7 +57,7 @@ describe('#flows', function()
 
 
 
-	it('confighandler', function()
+	it('!confighandler', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -83,7 +83,7 @@ describe('#flows', function()
 	});
 
 
-	it('pkghandler', function()
+	it('!pkghandler', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -119,7 +119,7 @@ describe('#flows', function()
 		return Promise.all([promise1, promise2]);
 	});
 
-	it('logger', function(done)
+	it('!logger', function(done)
 	{
 		var logger = require('../flows/logger/logger');
 		var linker = ClientLinker(
@@ -167,7 +167,7 @@ describe('#flows', function()
 
 
 
-	it('debugger', function()
+	it('!debugger', function()
 	{
 		var linker = ClientLinker(
 			{

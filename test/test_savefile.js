@@ -16,7 +16,7 @@ describe('#savefile', function()
 		mkdirp(DIR, done);
 	});
 
-	it('savefile', function(done)
+	it('!savefile', function(done)
 	{
 		var filename = process.pid+Math.random();
 		var linker = new ClientLinker;

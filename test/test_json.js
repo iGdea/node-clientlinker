@@ -5,7 +5,7 @@ var json	= require('../lib/json');
 
 describe('#json', function()
 {
-	it('stringify', function()
+	it('!stringify', function()
 	{
 		var err = new Error('err message');
 		err.errCode = err.code = -499;
@@ -35,7 +35,7 @@ describe('#json', function()
 		expect(newData.data.number).to.be(123);
 	});
 
-	it('parse', function()
+	it('!parse', function()
 	{
 		var data = {
 			"result": {
@@ -84,7 +84,7 @@ describe('#json', function()
 	});
 
 
-	it('array like', function()
+	it('!array like', function()
 	{
 		var data = {length: 5};
 		expect(json.stringify(data)).to.be.eql(data);

@@ -6,7 +6,7 @@ var ClientLinker	= require('../');
 
 describe('#rlutils', function()
 {
-	it('parseParam', function()
+	it('!parseParam', function()
 	{
 		var linker = new ClientLinker;
 		expect(utils.parseParam(linker, '{"key": "value"}').key).to.be('value');
