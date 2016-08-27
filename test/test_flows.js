@@ -167,43 +167,85 @@ describe('#flows', function()
 
 
 
-	it('!debugger', function()
+	describe('#debugger', function()
 	{
 		var linker = ClientLinker(
 			{
-				flows: ['debugger'],
+				flows: ['debugger', 'confighandler'],
 				clients:
 				{
-					client1: null,
+					client1:
+					{
+						confighandler:
+						{
+							method1: function()
+							{
+								return Promise.resolve({string: 'string1'});
+							}
+						}
+					},
 					client2:
 					{
-						debuggerRuntime: true
+						debuggerRuntime: true,
+						confighandler:
+						{
+							method1: function()
+							{
+								return Promise.resolve({string: 'string1'});
+							}
+						}
 					}
 				}
 			});
 
-		var promise1 = linker.run('client1.method')
-			.then(function(){expect().fail()},
-				function(err)
+		it('!run', function()
+		{
+			var promise1 = linker.run('client1.method')
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = err.__runtime__;
+						expect(err).to.be.an(Error);
+						expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+						expect(runtime).to.be.an('object');
+						expect(runtime.navigationStart).to.be.a('number');
+					});
+
+			var promise2 = linker.run('client1.method1')
+				.then(function(data)
 				{
-					var runtime = err.__runtime__;
-					expect(err).to.be.an(Error);
-					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+					var runtime = data.__runtime__;
+					expect(data.string).to.be('string1');
 					expect(runtime).to.be.an('object');
 					expect(runtime.navigationStart).to.be.a('number');
 				});
 
-		var promise2 = linker.run('client2.method')
-			.then(function(){expect().fail()},
-				function(runtime)
+			return Promise.all([promise1, promise2]);
+		});
+
+		it('!runtime', function()
+		{
+			var promise1 = linker.run('client2.method')
+				.then(function(){expect().fail()},
+					function(runtime)
+					{
+						var err = runtime.originalReturn;
+						expect(err).to.be.an(Error);
+						expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+						expect(runtime).to.be.an('object');
+						expect(runtime.navigationStart).to.be.a('number');
+					});
+
+			var promise2 = linker.run('client2.method1')
+				.then(function(runtime)
 				{
-					var err = runtime.originalReturn;
-					expect(err).to.be.an(Error);
-					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+					var data = runtime.originalReturn;
+					expect(data.string).to.be('string1');
 					expect(runtime).to.be.an('object');
 					expect(runtime.navigationStart).to.be.a('number');
 				});
 
-		return Promise.all([promise1, promise2]);
+			return Promise.all([promise1, promise2]);
+		});
 	});
 });
