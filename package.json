@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/client_linker_cli.js ./test/client_linker.conf.js",
-    "test": "cross-env DEBUG=client_linker* mocha test/test_*"
+    "test": "cross-env DEBUG=client_linker* mocha test/test_*",
+	"test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
+	"test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "bin": {
     "clientlinker": "bin/client_linker_cli.js"
@@ -29,7 +31,8 @@
     "cross-env": "^2.0.0",
     "expect.js": "^0.3.1",
     "express": "^4.6.0",
-    "mocha": "^2.4.5"
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2"
   },
   "dependencies": {
     "bluebird": "^3.3.1",

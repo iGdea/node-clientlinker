@@ -27,3 +27,10 @@ before_install:
   - npm install -g npm@latest
   - npm install -g node-gyp
   - rm -rf ~/.node-gyp/
+
+script:
+  - npm run-script test-travis
+
+after_script:
+  - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
+

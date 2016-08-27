@@ -5,6 +5,7 @@ Client Linker
 [![NPM Downloads][downloads-image]][npm-url]
 [![Dependencies][dependencies-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
+[![Coveralls][coveralls-image]][npm-url]
 
 # Install
 ```
@@ -69,3 +70,4 @@ Run in Terminal
 [npm-url]: https://www.npmjs.org/package/clientlinker
 [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[coveralls-image]: https://img.shields.io/coveralls/bacra/node-clientlinker.svg
