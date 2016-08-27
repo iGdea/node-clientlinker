@@ -94,13 +94,8 @@ function HttpProxyRoute(linker, bodyParser)
 					if (body.CONST_VARS) body = linker.JSON.parse(body, body.CONST_VARS);
 
 					debug('[%s] catch proxy route', action);
-					linker.newRuntime(action, body.query, body.body, body.options)
-						.then(function(runtime)
-						{
-							_.extend(runtime.env, body.data);
-							runtime.env.source = 'httpproxy';
-							return linker.runByRuntime(runtime);
-						})
+					var args = [action, body.query, body.body, null, body.options];
+					linker.runIn(args, 'httpproxy', body.env)
 						.then(function(data)
 						{
 							var json = linker.JSON.stringify(

@@ -42,11 +42,13 @@ function httpproxy(runtime, callback)
 		query		: runtime.query,
 		body		: runtime.body,
 		options	    : runtime.options,
-		data		: runtime.env,
+		env			: runEnv,
 		CONST_VARS	: linker.JSON.CONST_VARS,
 	};
+
 	// check aes key
-	if (options.httpproxyKey) body.key = aes.cipher(runtime.action+','+Date.now(), options.httpproxyKey);
+	if (options.httpproxyKey)
+		body.key = aes.cipher(runtime.action+','+Date.now(), options.httpproxyKey);
 
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
