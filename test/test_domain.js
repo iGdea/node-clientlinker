@@ -4,7 +4,7 @@ var Promise			= require('bluebird');
 var ClientLinker	= require('../');
 var expect			= require('expect.js');
 
-describe('domain', function()
+describe('#domain', function()
 {
 	it('callback', function(done)
 	{

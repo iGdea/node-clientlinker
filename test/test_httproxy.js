@@ -11,7 +11,7 @@ var debug				= require('debug')('client_linker:test_httproxy');
 var PORT				= 3423;
 
 
-describe('httpproxy', function()
+describe('#httpproxy', function()
 {
 	function initLinker(options)
 	{
@@ -56,7 +56,7 @@ describe('httpproxy', function()
 	}
 
 
-	describe('base', function()
+	describe('#base', function()
 	{
 		var svrLinker = initSvrLinker({});
 
@@ -88,7 +88,7 @@ describe('httpproxy', function()
 	});
 
 
-	describe('httpproxyKey', function()
+	describe('#httpproxyKey', function()
 	{
 		var svrLinker = initSvrLinker(
 			{

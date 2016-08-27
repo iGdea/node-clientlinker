@@ -2,7 +2,7 @@
 
 var expect = require('expect.js');
 
-describe('promise', function()
+describe('#promise', function()
 {
 	it('global promise', function()
 	{

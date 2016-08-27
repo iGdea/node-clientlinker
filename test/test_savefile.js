@@ -9,7 +9,7 @@ var parseContent	= require('../flows/localfile/localfile').parseContent;
 var ClientLinker	= require('../');
 var DIR				= __dirname+'/tmp/';
 
-describe('savefile', function()
+describe('#savefile', function()
 {
 	before(function(done)
 	{

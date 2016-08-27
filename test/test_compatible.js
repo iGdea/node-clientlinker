@@ -4,7 +4,7 @@ var Promise			= require('bluebird');
 var ClientLinker	= require('../');
 var expect			= require('expect.js');
 
-describe('compatible', function()
+describe('#compatible', function()
 {
 	it('runOptions', function()
 	{

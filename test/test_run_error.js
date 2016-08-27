@@ -4,7 +4,7 @@ var Promise			= require('bluebird');
 var ClientLinker	= require('../');
 var expect			= require('expect.js');
 
-describe('run_error', function()
+describe('#run_error', function()
 {
 	it('flow run Error', function()
 	{

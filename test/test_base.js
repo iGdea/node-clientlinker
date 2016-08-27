@@ -5,7 +5,7 @@ var ClientLinker	= require('../');
 var expect			= require('expect.js');
 
 
-describe('base', function()
+describe('#base', function()
 {
 	it('ownlist', function()
 	{

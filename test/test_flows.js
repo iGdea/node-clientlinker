@@ -5,7 +5,7 @@ var expect				= require('expect.js');
 var ClientLinker		= require('../');
 var runClientHandler	= require('./pkghandler/lib/run');
 
-describe('flows', function()
+describe('#flows', function()
 {
 	it('localfile', function()
 	{

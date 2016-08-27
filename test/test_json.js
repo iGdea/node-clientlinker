@@ -3,7 +3,7 @@
 var expect	= require('expect.js');
 var json	= require('../lib/json');
 
-describe('json', function()
+describe('#json', function()
 {
 	it('stringify', function()
 	{

@@ -4,7 +4,7 @@ var utils			= require('../bin/utils');
 var expect			= require('expect.js');
 var ClientLinker	= require('../');
 
-describe('rlutils', function()
+describe('#rlutils', function()
 {
 	it('parseParam', function()
 	{
