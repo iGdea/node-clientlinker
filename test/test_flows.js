@@ -174,18 +174,36 @@ describe('flows', function()
 				flows: ['debugger'],
 				clients:
 				{
-					client: null
+					client1: null,
+					client2:
+					{
+						debuggerRuntime: true
+					}
 				}
 			});
 
-		return linker.run('client.method')
+		var promise1 = linker.run('client1.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
+					var runtime = err.__runtime__;
 					expect(err).to.be.an(Error);
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-					expect(err.__runtime__).to.be.an('object');
-					expect(err.__runtime__.navigationStart).to.be.a('number');
+					expect(runtime).to.be.an('object');
+					expect(runtime.navigationStart).to.be.a('number');
 				});
+
+		var promise2 = linker.run('client2.method')
+			.then(function(){expect().fail()},
+				function(runtime)
+				{
+					var err = runtime.originalReturn;
+					expect(err).to.be.an(Error);
+					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+					expect(runtime).to.be.an('object');
+					expect(runtime.navigationStart).to.be.a('number');
+				});
+
+		return Promise.all([promise1, promise2]);
 	});
 });
