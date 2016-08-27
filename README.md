@@ -3,9 +3,9 @@ Client Linker
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
-[![Dependencies][dependencies-image]][npm-url]
+[![Dependencies][dependencies-image]][dependencies-url]
 [![Build Status][travis-image]][travis-url]
-[![Coveralls][coveralls-image]][npm-url]
+[![Coveralls][coveralls-image]][coveralls-url]
 
 # Install
 ```
@@ -67,7 +67,9 @@ Run in Terminal
 [npm-image]: http://img.shields.io/npm/v/clientlinker.svg
 [downloads-image]: http://img.shields.io/npm/dm/clientlinker.svg
 [dependencies-image]: http://img.shields.io/david/Bacra/node-clientlinker.svg
+[dependencies-url]: https://www.versioneye.com/user/projects/57c141d0939fc600508e8bee
 [npm-url]: https://www.npmjs.org/package/clientlinker
 [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
-[coveralls-image]: https://img.shields.io/coveralls/bacra/node-clientlinker.svg
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
