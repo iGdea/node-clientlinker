@@ -182,6 +182,32 @@ describe('#run_error', function()
 	});
 
 
+	it('#from flow run', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['custom'],
+				customFlows: {
+					custom: function()
+					{
+						throw new Error('from flow run');
+					}
+				},
+				clients:
+				{
+					client: null
+				}
+			});
+
+		return linker.run('client.method')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err.message).to.be('from flow run');
+				});
+	});
+
+
 	it('#retry', function()
 	{
 		var runTimes = 0;
