@@ -34,7 +34,7 @@ function loggerHandler(runtime, err, data)
 	if (err)
 	{
 		debug('client action err <%s> %d/%d/%dms retry:%d query:%o, body:%o, err:%o, data:%o, options:%o',
-			runtime.methodKey,
+			runtime.action,
 			lastFlowTiming.end - lastFlowTiming.start,		// flow执行时间
 			timing.flowsEnd - runtime.navigationStart,		// 中共耗时
 			lastFlowTiming.start - runtime.navigationStart,		// 路由+重试时间
@@ -48,7 +48,7 @@ function loggerHandler(runtime, err, data)
 	else
 	{
 		debug('client action <%s> %d/%d/%dms retry:%d query:%o, body:%o, data:%o, options:%o',
-			runtime.methodKey,
+			runtime.action,
 			lastFlowTiming.end - lastFlowTiming.start,
 			timing.flowsEnd - runtime.navigationStart,
 			lastFlowTiming.start - runtime.navigationStart,

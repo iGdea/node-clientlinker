@@ -17,21 +17,21 @@ function HttpProxyRoute(linker, bodyParser)
 
 	return function HttpProxyRouteHandle(req, res, next)
 	{
-		var methodKey = req.query.action;
-		if (!methodKey) return next();
+		var action = req.query.action;
+		if (!action) return next();
 
 		bodyParser(req, res, function(err)
 		{
 			if (err)
 			{
-				debug('[%s] parse body err:%o', methodKey, err);
+				debug('[%s] parse body err:%o', action, err);
 				res.sendStatus(500);
 				return;
 			}
 
 			var body = req.body;
 
-			linker.parseMethodKey(methodKey)
+			linker.parseMethodKey(action)
 				.then(function(methodInfo)
 				{
 					var httpproxyKey = methodInfo.client
@@ -47,14 +47,14 @@ function HttpProxyRoute(linker, bodyParser)
 					{
 						if (!body.key)
 						{
-							debug('[%s] no httpproxy aes key', methodKey);
+							debug('[%s] no httpproxy aes key', action);
 							res.sendStatus(403);
 							return;
 						}
 
 						if (httpproxyKey == body.key)
 						{
-							debug('[%s] pass:use body key', methodKey);
+							debug('[%s] pass:use body key', action);
 						}
 						else
 						{
@@ -66,7 +66,7 @@ function HttpProxyRoute(linker, bodyParser)
 							catch(err)
 							{
 								debug('[%s] can not decipher key:%s, err:%o',
-									methodKey, body.key, err);
+									action, body.key, err);
 								res.sendStatus(403);
 								return;
 							}
@@ -76,15 +76,15 @@ function HttpProxyRoute(linker, bodyParser)
 
 							if (remain > httpproxyKeyRemain)
 							{
-								debug('[%s] key expired, remain:%sms', methodKey, remain);
+								debug('[%s] key expired, remain:%sms', action, remain);
 								res.sendStatus(403);
 								return;
 							}
 
-							if (realMethodKey != methodKey)
+							if (realMethodKey != action)
 							{
 								debug('[%s] inval aes key, query:%s, aes:%s',
-										methodKey, methodKey, realMethodKey);
+										action, action, realMethodKey);
 								res.sendStatus(403);
 								return;
 							}
@@ -93,8 +93,8 @@ function HttpProxyRoute(linker, bodyParser)
 
 					if (body.CONST_VARS) body = linker.JSON.parse(body, body.CONST_VARS);
 
-					debug('[%s] catch proxy route', methodKey);
-					linker.newRuntime(methodKey, body.query, body.body, body.options)
+					debug('[%s] catch proxy route', action);
+					linker.newRuntime(action, body.query, body.body, body.options)
 						.then(function(runtime)
 						{
 							_.extend(runtime.data, body.data);
@@ -118,7 +118,7 @@ function HttpProxyRoute(linker, bodyParser)
 									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
 									|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
 							{
-								debug('[%s] %s', methodKey, err);
+								debug('[%s] %s', action, err);
 								res.sendStatus(501);
 							}
 							else
@@ -135,7 +135,7 @@ function HttpProxyRoute(linker, bodyParser)
 				})
 				.catch(function(err)
 				{
-					debug('[%s] linker run err:%o', methodKey, err);
+					debug('[%s] linker run err:%o', action, err);
 					res.sendStatus(500);
 				});
 

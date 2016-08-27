@@ -16,7 +16,7 @@ function httpproxy(runtime, callback)
 
 	if (linker.__bind_httpproxy_route__ && options.httpproxyNotRunWhenBindRoute !== false)
 	{
-		debug('[%s] not request httpproxy when bind route', runtime.methodKey);
+		debug('[%s] not request httpproxy when bind route', runtime.action);
 		return callback.next();
 	}
 
@@ -31,7 +31,7 @@ function httpproxy(runtime, callback)
 	if (nextHttpproxyLevel > httpproxyLevel)
 	{
 		debug('[%s] not request httpproxy, level overflow:%d >= %d',
-			runtime.methodKey, nextHttpproxyLevel, httpproxyLevel);
+			runtime.action, nextHttpproxyLevel, httpproxyLevel);
 		return callback.next();
 	}
 
@@ -46,7 +46,7 @@ function httpproxy(runtime, callback)
 		CONST_VARS	: linker.JSON.CONST_VARS,
 	};
 	// check aes key
-	if (options.httpproxyKey) body.key = aes.cipher(runtime.methodKey+','+Date.now(), options.httpproxyKey);
+	if (options.httpproxyKey) body.key = aes.cipher(runtime.action+','+Date.now(), options.httpproxyKey);
 
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
@@ -58,7 +58,7 @@ function httpproxy(runtime, callback)
 			|| process.env.clientlinker_http_proxy
 			|| process.env.http_proxy;
 
-	var url = appendUrl(options.httpproxy, 'action='+runtime.methodKey);
+	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
 	debug('request url:%s', url);
 
 	request.post(
@@ -75,7 +75,7 @@ function httpproxy(runtime, callback)
 		{
 			if (respone.statusCode == 501)
 			{
-				debug('[%s] respone 501, go next flow', runtime.methodKey);
+				debug('[%s] respone 501, go next flow', runtime.action);
 				return callback.next();
 			}
 			else

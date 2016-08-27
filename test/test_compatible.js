@@ -170,4 +170,28 @@ describe('#compatible', function()
 				expect(data).to.be('flow_resolve');
 			});
 	});
+
+
+	it('#methodKey', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['debugger'],
+				clients:
+				{
+					client:
+					{
+						debuggerRuntime: true
+					}
+				}
+			});
+
+		return linker.run('client.method')
+			.then(function(){expect().fail()},
+				function(runtime)
+				{
+					expect(runtime.methodKey).to.be('client.method')
+						.be(runtime.action);
+				});
+	});
 });
