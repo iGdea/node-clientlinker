@@ -19,36 +19,50 @@ npm install clientlinker -g
 
 # Useage
 
+### Options
 Linker Options Exmaple, see [Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
 or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flows-Options)
 
 ```
 {
-	flows: ['logger', 'custom', 'hiproto', 'localfile', 'httpproxy'],
+	flows: ['logger', 'custom', 'pkghandler' 'localfile', 'httpproxy'],
+	// pkghandlerDir: __dirname+'/pkghandler',
 	defaults: {
 		anyToError: true,
 		timeout: 4000
 	},
-	customFlows:
-	{
-		custom: function(query, body, callback, options) {}
+	customFlows: {
+		custom: function(runtime, callback) {}
 	},
 	clients: {
 		mail: {
-			read: {flows: ['hiproto']},
-			send: {timeout: 10000}
-		}
+			// modify defaults flows
+			flows: ['confighandler'],
+			confighandler: {
+				read: function(query, body, callback, options) {
+					callback(null, {content: 'hi,'});
+				},
+				send: function(query, body, callback, options) {
+					return Promise.resolve({id: 'xxxx'});
+				}
+			}
+		},
+
+		// use defaults
+		profile: null
 	}
 }
 ```
 
-
-Init Linker
-
+### Initialize
 
 ```
+// `clientlinker.conf.js` file content
+
 var ClientLinker = require('clientlinker');
 var linker = ClientLinker(options);
+
+// Add flows and clients outsid of config step
 linker.loadFlow(path, module);
 linker.addClient(name, options);
 
@@ -57,14 +71,46 @@ module.exports = linker;
 
 You can custom flows [like this](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow)
 
+Width custom flows, you can link any rpc. And you can get all data anywhere through `httpproxy` flow.
 
-Run in Terminal
+
+### Run
+
+#### Run in Server
 
 ```
+var clientlinker = require('./clientlinker.conf.js');
+
+clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
+
+// or use promise
+clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, options)
+	.then(function(data){});
+```
+
+#### Run in Shell
+
+```
+// you can use `runInShell` instead of `run`.
+// Of course, you can continue to use `run`.
+// example
+
+var clientlinker = require('./clientlinker.conf.js');
+
+clientlinker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
+```
+
+#### Run in Terminal
+
+```
+#### List all Clients and Methods
 # clientlinker ./clientlinker.conf.js
+
+#### Run action directly in Terminal
 # clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
 # clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 ```
+
 
 
 
