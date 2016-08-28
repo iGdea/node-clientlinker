@@ -304,15 +304,25 @@ describe('#base', function()
 		var linker = ClientLinker();
 		linker.addClient('client');
 
-		var retPromise = linker.run('client.method');
-
-		return retPromise
+		var retPromise1 = linker.run('client.method');
+		var promise1 = retPromise1
 			.then(function(){expect().fail()},
 				function()
 				{
-					var runtime = retPromise.runtime;
+					var runtime = retPromise1.runtime;
 					expect(runtime.env.source).to.be('run');
 				});
+
+		var retPromise2 = linker.runInShell('client.method');
+		var promise2 = retPromise2
+			.then(function(){expect().fail()},
+				function()
+				{
+					var runtime = retPromise2.runtime;
+					expect(runtime.env.source).to.be('shell');
+				});
+
+		return Promise.all([promise1, promise2]);
 	});
 
 });
