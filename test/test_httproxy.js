@@ -87,17 +87,17 @@ describe('#httpproxy', function()
 
 			describe('#err403', function()
 			{
-				it('#normal', function()
+				function itKey(name, statusCode, key)
 				{
-					var linker = initLinker(
+					it('#'+name, function()
+					{
+						var linker = initLinker(
 						{
-							defaults: {
-								httpproxyKey: httpproxyKey
-							},
 							flows: [
 								function custom(runtime, callback)
 								{
 									var body = httpproxy.getRequestBody_(runtime);
+									body.key = key;
 									var opts = httpproxy.getRequestParams_(runtime, body);
 									request.post(opts, function(err, response, body)
 									{
@@ -111,169 +111,27 @@ describe('#httpproxy', function()
 								}]
 						});
 
-					return linker.run('client_its.method_promise_resolve')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(200);
-						});
-				});
+						return linker.run('client_its.method')
+							.then(function(data)
+							{
+								expect(data.err).to.be(null);
+								expect(data.response.statusCode).to.be(statusCode);
+							});
+					});
+				}
 
+				itKey('normal', 200,
+					aes.cipher('client_its.method,'+Date.now(), httpproxyKey));
 
-				it('#no key', function()
-				{
-					var linker = initLinker(
-						{
-							flows: [
-								function custom(runtime, callback)
-								{
-									var body = httpproxy.getRequestBody_(runtime);
-									var opts = httpproxy.getRequestParams_(runtime, body);
-									request.post(opts, function(err, response, body)
-									{
-										callback.resolve(
-											{
-												err: err,
-												response: response,
-												body: body
-											});
-									})
-								}]
-						});
+				itKey('no key', 403);
+				itKey('err key', 403,
+					aes.cipher('client_its.method,'+Date.now(), httpproxyKey+'22'));
+				itKey('err key', 403,
+					aes.cipher('client_its.method_other,'+Date.now(), httpproxyKey));
+				itKey('expired', 403,
+					aes.cipher('client_its.method,11', httpproxyKey));
 
-					return linker.run('client_its.method_promise_resolve')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(403);
-						});
-				});
-
-
-				it('#err key', function()
-				{
-					var linker = initLinker(
-						{
-							defaults: {
-								httpproxyKey: httpproxyKey+'xxx1'
-							},
-							flows: [
-								function custom(runtime, callback)
-								{
-									var body = httpproxy.getRequestBody_(runtime);
-									var opts = httpproxy.getRequestParams_(runtime, body);
-									request.post(opts, function(err, response, body)
-									{
-										callback.resolve(
-											{
-												err: err,
-												response: response,
-												body: body
-											});
-									})
-								}]
-						});
-
-					return linker.run('client_its.method_promise_resolve')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(403);
-						});
-				});
-
-
-				it('#err action', function()
-				{
-					var linker = initLinker(
-						{
-							flows: [
-								function custom(runtime, callback)
-								{
-									var body = httpproxy.getRequestBody_(runtime);
-									body.key = aes.cipher('client.method,'+Date.now(), httpproxyKey);
-									var opts = httpproxy.getRequestParams_(runtime, body);
-									request.post(opts, function(err, response, body)
-									{
-										callback.resolve(
-											{
-												err: err,
-												response: response,
-												body: body
-											});
-									})
-								}]
-						});
-
-					return linker.run('client_its.method_promise_resolve')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(403);
-						});
-				});
-
-
-				it('#err expired', function()
-				{
-					var linker = initLinker(
-						{
-							flows: [
-								function custom(runtime, callback)
-								{
-									var body = httpproxy.getRequestBody_(runtime);
-									body.key = aes.cipher('client_its.method_promise_resolve,11', httpproxyKey);
-									var opts = httpproxy.getRequestParams_(runtime, body);
-									request.post(opts, function(err, response, body)
-									{
-										callback.resolve(
-											{
-												err: err,
-												response: response,
-												body: body
-											});
-									})
-								}]
-						});
-
-					return linker.run('client_its.method_promise_resolve')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(403);
-						});
-				});
-
-
-				it('#direct', function()
-				{
-					var linker = initLinker(
-						{
-							flows: [
-								function custom(runtime, callback)
-								{
-									var body = httpproxy.getRequestBody_(runtime);
-									body.key = httpproxyKey;
-									var opts = httpproxy.getRequestParams_(runtime, body);
-									request.post(opts, function(err, response, body)
-									{
-										callback.resolve(
-											{
-												err: err,
-												response: response,
-												body: body
-											});
-									})
-								}]
-						});
-
-					return linker.run('client_its.method_promise_resolve')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(200);
-						});
-				});
+				itKey('direct', 200, httpproxyKey);
 			});
 
 			// it('#err403', function()

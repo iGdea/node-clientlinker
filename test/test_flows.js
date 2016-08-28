@@ -79,6 +79,7 @@ describe('#flows', function()
 					expect(map.client_its).to.be.an('object');
 					var methods = Object.keys(map.client_its.methods);
 					expect(methods).to.eql([
+						'method',
 						'method_params',
 						'method_promise_resolve',
 						'method_promise_reject_number',
@@ -126,6 +127,7 @@ describe('#flows', function()
 
 					var methods = Object.keys(map.client_its.methods);
 					expect(methods).to.eql([
+						'method',
 						'method_params',
 						'method_promise_resolve',
 						'method_promise_reject_number',

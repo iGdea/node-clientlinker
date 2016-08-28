@@ -4,6 +4,10 @@ var Promise	= require('bluebird');
 var expect	= require('expect.js');
 
 module.exports = {
+	method: function()
+	{
+		return Promise.resolve();
+	},
 	method_params: function(req, body, callback, options)
 	{
 		expect(req).to.be(123);
