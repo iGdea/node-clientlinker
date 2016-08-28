@@ -8,9 +8,11 @@ var ClientLinker		= require('../');
 var proxyRoute			= require('../flows/httpproxy/route');
 var httpproxy			= require('../flows/httpproxy/httpproxy');
 var runClientHandlerIts	= require('./pkghandler/lib/run');
+var aes					= require('../lib/aes_cipher');
 var debug				= require('debug')('client_linker:test_httproxy');
+var request				= require('request');
 var PORT				= 3423;
-
+var HTTP_PROXY_URL		= 'http://127.0.0.1:'+PORT+'/route_proxy';
 
 describe('#httpproxy', function()
 {
@@ -81,6 +83,197 @@ describe('#httpproxy', function()
 							httpproxyKey: httpproxyKey
 						}
 					}));
+			});
+
+			describe('#err403', function()
+			{
+				it('#normal', function()
+				{
+					var linker = initLinker(
+						{
+							defaults: {
+								httpproxyKey: httpproxyKey
+							},
+							flows: [
+								function custom(runtime, callback)
+								{
+									var body = httpproxy.getRequestBody_(runtime);
+									var opts = httpproxy.getRequestParams_(runtime, body);
+									request.post(opts, function(err, response, body)
+									{
+										callback.resolve(
+											{
+												err: err,
+												response: response,
+												body: body
+											});
+									})
+								}]
+						});
+
+					return linker.run('client_its.method_promise_resolve')
+						.then(function(data)
+						{
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(200);
+						});
+				});
+
+
+				it('#no key', function()
+				{
+					var linker = initLinker(
+						{
+							flows: [
+								function custom(runtime, callback)
+								{
+									var body = httpproxy.getRequestBody_(runtime);
+									var opts = httpproxy.getRequestParams_(runtime, body);
+									request.post(opts, function(err, response, body)
+									{
+										callback.resolve(
+											{
+												err: err,
+												response: response,
+												body: body
+											});
+									})
+								}]
+						});
+
+					return linker.run('client_its.method_promise_resolve')
+						.then(function(data)
+						{
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(403);
+						});
+				});
+
+
+				it('#err key', function()
+				{
+					var linker = initLinker(
+						{
+							defaults: {
+								httpproxyKey: httpproxyKey+'xxx1'
+							},
+							flows: [
+								function custom(runtime, callback)
+								{
+									var body = httpproxy.getRequestBody_(runtime);
+									var opts = httpproxy.getRequestParams_(runtime, body);
+									request.post(opts, function(err, response, body)
+									{
+										callback.resolve(
+											{
+												err: err,
+												response: response,
+												body: body
+											});
+									})
+								}]
+						});
+
+					return linker.run('client_its.method_promise_resolve')
+						.then(function(data)
+						{
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(403);
+						});
+				});
+
+
+				it('#err action', function()
+				{
+					var linker = initLinker(
+						{
+							flows: [
+								function custom(runtime, callback)
+								{
+									var body = httpproxy.getRequestBody_(runtime);
+									body.key = aes.cipher('client.method,'+Date.now(), httpproxyKey);
+									var opts = httpproxy.getRequestParams_(runtime, body);
+									request.post(opts, function(err, response, body)
+									{
+										callback.resolve(
+											{
+												err: err,
+												response: response,
+												body: body
+											});
+									})
+								}]
+						});
+
+					return linker.run('client_its.method_promise_resolve')
+						.then(function(data)
+						{
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(403);
+						});
+				});
+
+
+				it('#err expired', function()
+				{
+					var linker = initLinker(
+						{
+							flows: [
+								function custom(runtime, callback)
+								{
+									var body = httpproxy.getRequestBody_(runtime);
+									body.key = aes.cipher('client_its.method_promise_resolve,11', httpproxyKey);
+									var opts = httpproxy.getRequestParams_(runtime, body);
+									request.post(opts, function(err, response, body)
+									{
+										callback.resolve(
+											{
+												err: err,
+												response: response,
+												body: body
+											});
+									})
+								}]
+						});
+
+					return linker.run('client_its.method_promise_resolve')
+						.then(function(data)
+						{
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(403);
+						});
+				});
+
+
+				it('#direct', function()
+				{
+					var linker = initLinker(
+						{
+							flows: [
+								function custom(runtime, callback)
+								{
+									var body = httpproxy.getRequestBody_(runtime);
+									body.key = httpproxyKey;
+									var opts = httpproxy.getRequestParams_(runtime, body);
+									request.post(opts, function(err, response, body)
+									{
+										callback.resolve(
+											{
+												err: err,
+												response: response,
+												body: body
+											});
+									})
+								}]
+						});
+
+					return linker.run('client_its.method_promise_resolve')
+						.then(function(data)
+						{
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(200);
+						});
+				});
 			});
 
 			// it('#err403', function()
@@ -213,8 +406,7 @@ function initLinker(options)
 	options || (options = {});
 	options.flows || (options.flows = ['httpproxy']);
 
-	(options.defaults || (options.defaults = {})).httpproxy
-		= 'http://127.0.0.1:'+PORT+'/route_proxy';
+	(options.defaults || (options.defaults = {})).httpproxy = HTTP_PROXY_URL;
 	options.pkghandlerDir = __dirname+'/pkghandler';
 	(options.clients || (options.clients = {})).client_its = {};
 

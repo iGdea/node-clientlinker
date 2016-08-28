@@ -13,7 +13,7 @@ function httpproxy(runtime, callback)
 	var options = client.options;
 	var linker = client.linker;
 
-	var requestParams = getRequestParams(runtime);
+	var requestParams = getRequestParams(runtime, getRequestBody(runtime));
 	if (!requestParams) return callback.next();
 
 	request.post(requestParams, function(err, respone, body)
@@ -69,8 +69,8 @@ function appendUrl(url, query)
 }
 
 
-exports.getRequestParams_ = getRequestParams;
-function getRequestParams(runtime)
+exports.getRequestBody_ = getRequestBody;
+function getRequestBody(runtime)
 {
 	var client = runtime.client;
 	var options = client.options;
@@ -115,6 +115,16 @@ function getRequestParams(runtime)
 	// check aes key
 	if (options.httpproxyKey)
 		body.key = aes.cipher(runtime.action+','+Date.now(), options.httpproxyKey);
+
+	return body;
+}
+
+exports.getRequestParams_ = getRequestParams;
+function getRequestParams(runtime, body)
+{
+	var client = runtime.client;
+	var options = client.options;
+	var linker = client.linker;
 
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
