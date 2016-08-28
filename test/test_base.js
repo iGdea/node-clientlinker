@@ -204,7 +204,7 @@ describe('#base', function()
 	});
 
 
-	it('#getFlow from retry', function()
+	it('#getRunnedFlowByName', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -217,7 +217,7 @@ describe('#base', function()
 						{
 							method: function()
 							{
-								return Promise.resolve();
+								return Promise.resolve('heihei');
 							}
 						}
 					}
@@ -231,7 +231,14 @@ describe('#base', function()
 				var configCallback = runtime.retry[0].getRunnedFlowByName('confighandler');
 				var configCallback2 = runtime.retry[0].runnedFlows[1];
 
+				expect(configCallback.flow.name).to.be('confighandler');
 				expect(configCallback.flow).to.eql(configCallback2.flow);
+
+				return configCallback.promise.then(function(data2)
+					{
+						expect(data2).to.be(data);
+						expect(data2).to.be('heihei');
+					});
 			});
 	});
 
