@@ -63,6 +63,54 @@ describe('#httpproxy', function()
 		});
 	});
 
+
+	describe('#err statusCode', function()
+	{
+		describe('#5xx', function()
+		{
+			var svrLinker = initSvrLinker();
+			var linker = initLinker(
+				{
+					flows: [
+						function custom(runtime, callback)
+						{
+							var body = httpproxy.getRequestBody_(runtime);
+							var opts = httpproxy.getRequestParams_(runtime, body);
+							request.post(opts, function(err, response, body)
+							{
+								callback.resolve(
+									{
+										err: err,
+										response: response,
+										body: body
+									});
+							});
+						}]
+				});
+
+			describe('#501', function()
+			{
+				function itKey(name, action)
+				{
+					it('#'+name, function()
+					{
+						return linker.run(action)
+							.then(function(data)
+							{
+								expect(data.err).to.be(null);
+								expect(data.response.statusCode).to.be(501);
+							});
+					});
+				}
+
+				itKey('method not exists', 'client_its.method_no_exists');
+				itKey('no flows', 'client_svr_noflows.method');
+				itKey('no client', 'client_svr_not_exists.method');
+			});
+		});
+	});
+
+
 	describe('#options', function()
 	{
 		describe('#httpproxyKey', function()
@@ -107,7 +155,7 @@ describe('#httpproxy', function()
 												response: response,
 												body: body
 											});
-									})
+									});
 								}]
 						});
 
@@ -124,6 +172,7 @@ describe('#httpproxy', function()
 					aes.cipher('client_its.method,'+Date.now(), httpproxyKey));
 
 				itKey('no key', 403);
+				itKey('err key', 403, 'dddd');
 				itKey('err key', 403,
 					aes.cipher('client_its.method,'+Date.now(), httpproxyKey+'22'));
 				itKey('err key', 403,
@@ -266,7 +315,10 @@ function initLinker(options)
 
 	(options.defaults || (options.defaults = {})).httpproxy = HTTP_PROXY_URL;
 	options.pkghandlerDir = __dirname+'/pkghandler';
-	(options.clients || (options.clients = {})).client_its = {};
+	options.clients || (options.clients = {});
+	options.clients.client_its = {};
+	options.clients.client_svr_noflows = {};
+	options.clients.client_svr_not_exists = {};
 
 	return ClientLinker(options);
 }
@@ -274,6 +326,8 @@ function initSvrLinker(options)
 {
 	options || (options = {});
 	options.flows = ['custom', 'pkghandler', 'httpproxy'];
+	options.clients || (options.clients = {});
+	options.clients.client_svr_noflows = {flows: []};
 	options.customFlows = {
 		custom: function(runtime, callback)
 		{

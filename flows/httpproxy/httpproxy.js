@@ -9,14 +9,12 @@ exports = module.exports = httpproxy;
 
 function httpproxy(runtime, callback)
 {
-	var client = runtime.client;
-	var options = client.options;
-	var linker = client.linker;
+	var linker = runtime.client.linker;
+	var body = getRequestBody(runtime);
+	if (!body) return callback.next();
+	var params = getRequestParams(runtime, body);
 
-	var requestParams = getRequestParams(runtime, getRequestBody(runtime));
-	if (!requestParams) return callback.next();
-
-	request.post(requestParams, function(err, respone, body)
+	request.post(params, function(err, respone, body)
 	{
 		var data;
 		if (!err)
@@ -76,7 +74,7 @@ function getRequestBody(runtime)
 	var options = client.options;
 	var linker = client.linker;
 
-	if (!options.httpproxy) return callback.next();
+	if (!options.httpproxy) return false;
 
 	if (linker.__bind_httpproxy_route__
 		&& options.httpproxyNotRunWhenBindRoute !== false)
