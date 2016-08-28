@@ -204,6 +204,38 @@ describe('#base', function()
 	});
 
 
+	it('#getFlow from retry', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['pkghandler', 'confighandler'],
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function()
+							{
+								return Promise.resolve();
+							}
+						}
+					}
+				}
+			});
+
+		var retPromise = linker.run('client.method');
+		return retPromise.then(function(data)
+			{
+				var runtime = retPromise.runtime;
+				var configCallback = runtime.retry[0].getRunnedFlowByName('confighandler');
+				var configCallback2 = runtime.retry[0].runnedFlows[1];
+
+				expect(configCallback.flow).to.eql(configCallback2.flow);
+			});
+	});
+
+
 	it('#timing', function()
 	{
 		var linker = ClientLinker(

@@ -112,7 +112,7 @@ describe('#httpproxy', function()
 								function()
 								{
 									var runtime = retPromise.runtime;
-									var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+									var responeError = runtime.retry[0].getRunnedFlowByName('httpproxy').httpproxyResponeError;
 									expect(responeError.message).to.be('httpproxy,respone!200,501');
 								});
 					});
@@ -245,14 +245,14 @@ describe('#httpproxy', function()
 									if (level === 0)
 									{
 										expect(runtime.env.httpproxyLevel).to.be(undefined);
-										var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+										var responeError = runtime.retry[0].getRunnedFlowByName('httpproxy').httpproxyResponeError;
 										expect(responeError).to.be(undefined);
 									}
 									else
 									{
 										var targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
 										expect(runtime.env.httpproxyLevel).to.be(targetSvrLevel);
-										var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+										var responeError = runtime.retry[0].getRunnedFlowByName('httpproxy').httpproxyResponeError;
 										expect(responeError.message).to.be('httpproxy,respone!200,501');
 									}
 
@@ -325,7 +325,7 @@ describe('#httpproxy', function()
 							expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 							expect(runtime.env.source).to.be('run');
 							expect(runtime.env.httpproxyLevel).to.be(1);
-							var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+							var responeError = runtime.retry[0].getRunnedFlowByName('httpproxy').httpproxyResponeError;
 							expect(responeError.message).to.be('httpproxy,respone!200,501');
 						});
 			});
@@ -343,7 +343,7 @@ describe('#httpproxy', function()
 							expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 							expect(runtime.env.source).to.be('run');
 							expect(runtime.env.httpproxyLevel).to.be(1);
-							var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+							var responeError = runtime.retry[0].getRunnedFlowByName('httpproxy').httpproxyResponeError;
 							expect(responeError.message).to.be('httpproxy,respone!200,501');
 						});
 			});
