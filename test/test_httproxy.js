@@ -145,82 +145,40 @@ describe('#httpproxy', function()
 				}
 			});
 
-		it('#run 5', function()
+		describe('#run new client', function()
 		{
-			var linker = initLinker(
-				{
-					defaults:
-					{
-						httpproxyMaxLevel: 5
-					}
-				});
-			var retPromise = linker.run('client_its.method_no_exists');
-
-			return retPromise
-				.then(function(){expect().fail()},
-					function(err)
-					{
-						var runtime = retPromise.runtime;
-						expect(runtime.env.source).to.be('run');
-						expect(runtime.env.httpproxyLevel).to.be(5);
-					});
+			runClientHandlerIts(initLinker({}));
 		});
 
-		it('#run 1', function()
+		describe('#run', function()
 		{
-			var linker = initLinker(
+			function itKey(level)
+			{
+				it('#'+level, function()
 				{
-					defaults:
-					{
-						httpproxyMaxLevel: 1
-					}
+					var linker = initLinker(
+						{
+							defaults:
+							{
+								httpproxyMaxLevel: level
+							}
+						});
+					var retPromise = linker.run('client_its.method_no_exists');
+
+					return retPromise
+						.then(function(){expect().fail()},
+							function(err)
+							{
+								var runtime = retPromise.runtime;
+								expect(runtime.env.source).to.be('run');
+								expect(runtime.env.httpproxyLevel).to.be(5);
+							});
 				});
-			var retPromise = linker.run('client_its.method_no_exists');
+			}
 
-			return retPromise
-				.then(function(){expect().fail()},
-					function(err)
-					{
-						var runtime = retPromise.runtime;
-						expect(runtime.env.source).to.be('run');
-						expect(runtime.env.httpproxyLevel).to.be(5);
-					});
-		});
-
-		it('#run -1', function()
-		{
-			var linker = initLinker(
-				{
-					defaults:
-					{
-						httpproxyMaxLevel: -1
-					}
-				});
-			var retPromise = linker.run('client_its.method_no_exists');
-
-			return retPromise
-				.then(function(){expect().fail()},
-					function(err)
-					{
-						var runtime = retPromise.runtime;
-						expect(runtime.env.source).to.be('run');
-						expect(runtime.env.httpproxyLevel).to.be(5);
-					});
-		});
-
-		it('#run default', function()
-		{
-			var linker = initLinker();
-			var retPromise = linker.run('client_its.method_no_exists');
-
-			return retPromise
-				.then(function(){expect().fail()},
-					function(err)
-					{
-						var runtime = retPromise.runtime;
-						expect(runtime.env.source).to.be('run');
-						expect(runtime.env.httpproxyLevel).to.be(5);
-					});
+			itKey(1);
+			itKey(5);
+			itKey(-1);
 		});
 	});
 
