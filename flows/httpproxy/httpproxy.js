@@ -40,23 +40,14 @@ function httpproxy(runtime, callback)
 
 			if (respone.statusCode != 200)
 			{
-				if (respone.statusCode == 501)
-				{
-					debug('[%s] respone 501, go next flow', runtime.action);
-					return callback.next();
-				}
-				else
-				{
-					err = 'respone!200,'+respone.statusCode;
-				}
+				err = new Error('httpproxy,respone!200,'+respone.statusCode);
 			}
 		}
 
 		if (err)
 		{
 			debug('request err:%o', err);
-			// proxy请求出错，自动转到下一个中间件
-			return options.httpproxyErrorNext ? callback.next() : callback(err);
+			return callback.next();
 		}
 
 		if (data.result)
