@@ -16,11 +16,6 @@ function parseAction(str, allMethods)
 		return str;
 	else if (!isNaN(str))
 		return allMethods[Number(str)-1];
-	else
-	{
-		console.log('inval action :  %s', action);
-		throw new Error('inval action');
-	}
 }
 
 

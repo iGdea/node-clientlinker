@@ -44,8 +44,10 @@ describe('#flows', function()
 			{
 				expect(map.client).to.be.an('object');
 				expect(map.client.client.options.opt).to.be('myOpt');
-				expect(map.client.client.options.localfile).to.contain(__dirname);
-				expect(map.client2.client.options.localfile).to.contain('localfile/not_exsits');
+				expect(map.client.client.options.localfile)
+					.to.contain(__dirname);
+				expect(map.client2.client.options.localfile)
+					.to.contain('localfile/not_exsits');
 
 				var methods = Object.keys(map.client.methods);
 				expect(methods).to.eql(['js','json']);
@@ -88,7 +90,8 @@ describe('#flows', function()
 						'method_callback_error_number',
 						'method_callback_error_error'
 					]);
-					expect(map.client_its.methods.method_params[0].handler).to.be.an('function');
+					expect(map.client_its.methods.method_params[0].handler)
+						.to.be.an('function');
 				});
 		});
 	});
@@ -122,8 +125,10 @@ describe('#flows', function()
 				{
 					expect(map.client_its).to.be.an('object');
 					expect(map.client_its.client.options.opt).to.be('myOpt');
-					expect(map.client_its.client.options.pkghandler).to.contain(__dirname);
-					expect(map.client2.client.options.pkghandler).to.contain('pkghandler/not_exsits');
+					expect(map.client_its.client.options.pkghandler)
+						.to.contain(__dirname);
+					expect(map.client2.client.options.pkghandler)
+						.to.contain('pkghandler/not_exsits');
 
 					var methods = Object.keys(map.client_its.methods);
 					expect(methods).to.eql([
@@ -136,7 +141,8 @@ describe('#flows', function()
 						'method_callback_error_number',
 						'method_callback_error_error'
 					]);
-					expect(map.client_its.methods.method_params[0].handler).to.be.an('function');
+					expect(map.client_its.methods.method_params[0].handler)
+						.to.be.an('function');
 				});
 		});
 	});
