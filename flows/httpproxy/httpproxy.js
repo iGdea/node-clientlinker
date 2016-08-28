@@ -1,5 +1,6 @@
 "use strict";
 
+var _		= require('underscore');
 var debug	= require('debug')('client_linker:httpproxy');
 var request	= require('request');
 var aes		= require('../../lib/aes_cipher');
@@ -11,38 +12,110 @@ function httpproxy(runtime, callback)
 	var client = runtime.client;
 	var options = client.options;
 	var linker = client.linker;
-	var runEnv = runtime.env;
+
+	var requestParams = getRequestParams(runtime);
+	if (!requestParams) return callback.next();
+
+	request.post(requestParams, function(err, respone, body)
+	{
+		var data;
+		if (!err)
+		{
+			try {
+				data = JSON.parse(body);
+				if (data.CONST_VARS)
+				{
+					data = linker.JSON.parse(data, data.CONST_VARS);
+				}
+			}
+			catch(e)
+			{
+				err = e;
+			}
+
+			if (data && data.env)
+			{
+				_.extend(runtime.env, data.env, {source: runtime.env.source});
+			}
+
+			if (respone.statusCode != 200)
+			{
+				if (respone.statusCode == 501)
+				{
+					debug('[%s] respone 501, go next flow', runtime.action);
+					return callback.next();
+				}
+				else
+				{
+					err = 'respone!200,'+respone.statusCode;
+				}
+			}
+		}
+
+		if (err)
+		{
+			debug('request err:%o', err);
+			// proxy请求出错，自动转到下一个中间件
+			return options.httpproxyErrorNext ? callback.next() : callback(err);
+		}
+
+		if (data.result)
+			callback(data.result);
+		else
+			callback(null, data.data);
+	});
+}
+
+
+function appendUrl(url, query)
+{
+	var lastChar = url.charAt(url.length-1);
+	var splitChar = lastChar == '?' || lastChar == '&'
+			? '' : (url.indexOf('?') != -1 ? '&' : '?');
+
+	return url + splitChar + query;
+}
+
+
+function getRequestParams(runtime)
+{
+	var client = runtime.client;
+	var options = client.options;
+	var linker = client.linker;
+
 	if (!options.httpproxy) return callback.next();
 
-	if (linker.__bind_httpproxy_route__ && options.httpproxyNotRunWhenBindRoute !== false)
+	if (linker.__bind_httpproxy_route__
+		&& options.httpproxyNotRunWhenBindRoute !== false)
 	{
 		debug('[%s] not request httpproxy when bind route', runtime.action);
-		return callback.next();
+		return false;
 	}
 
-	var httpproxyLevel = options.httpproxyLevel;
-	var nextHttpproxyLevel = runEnv.httpproxyLevel || 0;
-	nextHttpproxyLevel++;
-	if ((!httpproxyLevel && httpproxyLevel !== 0)
-		|| httpproxyLevel < 0)
+	var httpproxyMaxLevel = options.httpproxyMaxLevel;
+	var httpproxyNextLevel = runtime.env.httpproxyLevel || 0;
+	httpproxyNextLevel++;
+	if ((!httpproxyMaxLevel && httpproxyMaxLevel !== 0)
+		|| httpproxyMaxLevel < 0)
 	{
-		httpproxyLevel = 1;
+		httpproxyMaxLevel = 1;
 	}
-	if (nextHttpproxyLevel > httpproxyLevel)
+
+	if (httpproxyNextLevel > httpproxyMaxLevel)
 	{
 		debug('[%s] not request httpproxy, level overflow:%d >= %d',
-			runtime.action, nextHttpproxyLevel, httpproxyLevel);
-		return callback.next();
+			runtime.action, httpproxyNextLevel, httpproxyMaxLevel);
+		return false;
 	}
 
-	runEnv.httpproxyLevel = nextHttpproxyLevel;
+	runtime.env.httpproxyLevel = httpproxyNextLevel;
 
 
 	var body = {
 		query		: runtime.query,
 		body		: runtime.body,
 		options	    : runtime.options,
-		env			: runEnv,
+		env			: runtime.env,
 		CONST_VARS	: linker.JSON.CONST_VARS,
 	};
 
@@ -63,58 +136,11 @@ function httpproxy(runtime, callback)
 	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
 	debug('request url:%s', url);
 
-	request.post(
-	{
+	return {
 		url		: url,
 		body	: JSON.stringify(linker.JSON.stringify(body), null, '\t'),
 		headers	: headers,
 		timeout	: timeout,
 		proxy	: proxy
-	},
-	function(err, respone, body)
-	{
-		if (!err && respone.statusCode != 200)
-		{
-			if (respone.statusCode == 501)
-			{
-				debug('[%s] respone 501, go next flow', runtime.action);
-				return callback.next();
-			}
-			else
-				err = 'respone!200,'+respone.statusCode;
-		}
-
-		if (err)
-		{
-			debug('request err:%o', err);
-			// proxy请求出错，自动转到下一个中间件
-			return options.httpproxyErrorNext ? callback.next() : callback(err);
-		}
-
-		var data;
-		try {
-			data = JSON.parse(body);
-		}
-		catch(e)
-		{
-			return options.httpproxyErrorNext ? callback.next() : callback(e);
-		}
-
-		if (data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
-
-		if (data.result)
-			callback(data.result);
-		else
-			callback(null, data.data);
-	});
-}
-
-
-function appendUrl(url, query)
-{
-	var lastChar = url.charAt(url.length-1);
-	var splitChar = lastChar == '?' || lastChar == '&'
-			? '' : (url.indexOf('?') != -1 ? '&' : '?');
-
-	return url + splitChar + query;
+	};
 }

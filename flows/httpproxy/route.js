@@ -5,15 +5,24 @@ var debug	= require('debug')('client_linker:httpproxy:route');
 var aes		= require('../../lib/aes_cipher');
 var defaultBodyParser	= require('body-parser').json({limit: '200mb'});
 
-module.exports = HttpProxyRoute;
+exports = module.exports = HttpProxyRoute;
 
 function HttpProxyRoute(linker, bodyParser)
 {
 	if (!linker) return function(req, res, next){next()};
 	bodyParser || (bodyParser = defaultBodyParser);
 
-
 	linker.__bind_httpproxy_route__ = true;
+
+	function sendStatus(res, code, env)
+	{
+		res.statusCode = code;
+		res.json(linker.JSON.stringify(
+			{
+				env: env,
+				CONST_VARS: linker.JSON.CONST_VARS
+			}));
+	}
 
 	return function HttpProxyRouteHandle(req, res, next)
 	{
@@ -22,84 +31,33 @@ function HttpProxyRoute(linker, bodyParser)
 
 		bodyParser(req, res, function(err)
 		{
+			var body = req.body;
 			if (err)
 			{
 				debug('[%s] parse body err:%o', action, err);
-				res.sendStatus(500);
-				return;
+				return sendStatus(res, 500, body && body.env);
 			}
-
-			var body = req.body;
 
 			linker.parseAction(action)
 				.then(function(methodInfo)
 				{
-					var httpproxyKey = methodInfo.client
-							&& methodInfo.client.options.httpproxyKey;
-					var httpproxyKeyRemain = (methodInfo.client
-							&& methodInfo.client.options.httpproxyKeyRemain)
-							|| 15*60*1000;
+					if (body.CONST_VARS)
+						body = linker.JSON.parse(body, body.CONST_VARS);
 
-					debug('httpproxyKey: %s, remain:%sms', httpproxyKey,
-							httpproxyKeyRemain);
+					var options = methodInfo.client && methodInfo.client.options;
 
-					if (httpproxyKey)
-					{
-						if (!body.key)
-						{
-							debug('[%s] no httpproxy aes key', action);
-							res.sendStatus(403);
-							return;
-						}
-
-						if (httpproxyKey == body.key)
-						{
-							debug('[%s] pass:use body key', action);
-						}
-						else
-						{
-							var realAction, remain;
-							try {
-								realAction = aes.decipher(body.key, httpproxyKey)
-													.split(',');
-							}
-							catch(err)
-							{
-								debug('[%s] can not decipher key:%s, err:%o',
-									action, body.key, err);
-								res.sendStatus(403);
-								return;
-							}
-
-							remain = Date.now() - realAction.pop();
-							realAction = realAction.join(',');
-
-							if (remain > httpproxyKeyRemain)
-							{
-								debug('[%s] key expired, remain:%sms', action, remain);
-								res.sendStatus(403);
-								return;
-							}
-
-							if (realAction != action)
-							{
-								debug('[%s] inval aes key, query:%s, aes:%s',
-										action, action, realAction);
-								res.sendStatus(403);
-								return;
-							}
-						}
-					}
-
-					if (body.CONST_VARS) body = linker.JSON.parse(body, body.CONST_VARS);
+					if (checkHttpproxyKey(action, body, options) ===  false)
+						return sendStatus(res, 403, body.env);
 
 					debug('[%s] catch proxy route', action);
 					var args = [action, body.query, body.body, null, body.options];
-					linker.runIn(args, 'httpproxy', body.env)
-						.then(function(data)
+					var retPromise = linker.runIn(args, 'httpproxy', body.env);
+					retPromise.then(function(data)
 						{
+							var runtime = retPromise.runtime;
 							var json = linker.JSON.stringify(
 								{
+									env: runtime.env,
 									data: data,
 									CONST_VARS: linker.JSON.CONST_VARS
 								});
@@ -108,18 +66,21 @@ function HttpProxyRoute(linker, bodyParser)
 						})
 						.catch(function(err)
 						{
+							var runtime = retPromise.runtime;
+							var env = runtime ? runtime.env : body.env;
 							if (err
 								&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
 									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
 									|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
 							{
 								debug('[%s] %s', action, err);
-								res.sendStatus(501);
+								return sendStatus(res, 501, env);
 							}
 							else
 							{
 								var json = linker.JSON.stringify(
 									{
+										env: env,
 										result: err,
 										CONST_VARS: linker.JSON.CONST_VARS
 									});
@@ -131,9 +92,59 @@ function HttpProxyRoute(linker, bodyParser)
 				.catch(function(err)
 				{
 					debug('[%s] linker run err:%o', action, err);
-					res.sendStatus(500);
+					sendStatus(res, 500, body && body.env);
 				});
 
 		});
 	};
+}
+
+
+
+exports.checkHttpproxyKey = checkHttpproxyKey;
+function checkHttpproxyKey(action, body, options)
+{
+	options || (options = {});
+	var httpproxyKey = options.httpproxyKey;
+	var httpproxyKeyRemain = options.httpproxyKeyRemain || 15*60*1000;
+
+	debug('httpproxyKey: %s, remain:%sms', httpproxyKey, httpproxyKeyRemain);
+
+	if (!httpproxyKey) return;
+	if (!body.key)
+	{
+		debug('[%s] no httpproxy aes key', action);
+		return false;
+	}
+
+	if (httpproxyKey == body.key)
+	{
+		debug('[%s] pass:use body key', action);
+		return;
+	}
+
+	var realAction, remain;
+	try {
+		realAction = aes.decipher(body.key, httpproxyKey).split(',');
+	}
+	catch(err)
+	{
+		debug('[%s] can not decipher key:%s, err:%o', action, body.key, err);
+		return false;
+	}
+
+	remain = Date.now() - realAction.pop();
+	realAction = realAction.join(',');
+
+	if (remain > httpproxyKeyRemain)
+	{
+		debug('[%s] key expired, remain:%sms', action, remain);
+		return false;
+	}
+
+	if (realAction != action)
+	{
+		debug('[%s] inval aes key, aes:%s', action, realAction);
+		return false;
+	}
 }

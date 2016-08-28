@@ -132,4 +132,145 @@ describe('#httpproxy', function()
 					});
 		});
 	});
+
+
+	describe('#httpproxyLevel', function()
+	{
+		var svrLinker = initSvrLinker(
+			{
+				defaults:
+				{
+					httpproxyNotRunWhenBindRoute: false,
+					httpproxyMaxLevel: 5
+				}
+			});
+
+		it('#run 5', function()
+		{
+			var linker = initLinker(
+				{
+					defaults:
+					{
+						httpproxyMaxLevel: 5
+					}
+				});
+			var retPromise = linker.run('client_its.method_no_exists');
+
+			return retPromise
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = retPromise.runtime;
+						expect(runtime.env.source).to.be('run');
+						expect(runtime.env.httpproxyLevel).to.be(5);
+					});
+		});
+
+		it('#run 1', function()
+		{
+			var linker = initLinker(
+				{
+					defaults:
+					{
+						httpproxyMaxLevel: 1
+					}
+				});
+			var retPromise = linker.run('client_its.method_no_exists');
+
+			return retPromise
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = retPromise.runtime;
+						expect(runtime.env.source).to.be('run');
+						expect(runtime.env.httpproxyLevel).to.be(5);
+					});
+		});
+
+		it('#run -1', function()
+		{
+			var linker = initLinker(
+				{
+					defaults:
+					{
+						httpproxyMaxLevel: -1
+					}
+				});
+			var retPromise = linker.run('client_its.method_no_exists');
+
+			return retPromise
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = retPromise.runtime;
+						expect(runtime.env.source).to.be('run');
+						expect(runtime.env.httpproxyLevel).to.be(5);
+					});
+		});
+
+		it('#run default', function()
+		{
+			var linker = initLinker();
+			var retPromise = linker.run('client_its.method_no_exists');
+
+			return retPromise
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = retPromise.runtime;
+						expect(runtime.env.source).to.be('run');
+						expect(runtime.env.httpproxyLevel).to.be(5);
+					});
+		});
+	});
+
+
+	describe('#httpproxyNotRunWhenBindRoute', function()
+	{
+		var svrLinker = initSvrLinker(
+			{
+				defaults:
+				{
+					httpproxyNotRunWhenBindRoute: true,
+					httpproxyMaxLevel: 5
+				}
+			});
+
+		it('#run 5', function()
+		{
+			var linker = initLinker(
+				{
+					defaults:
+					{
+						httpproxyMaxLevel: 5
+					}
+				});
+			var retPromise = linker.run('client_its.method_no_exists');
+
+			return retPromise
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = retPromise.runtime;
+						expect(runtime.env.source).to.be('run');
+						expect(runtime.env.httpproxyLevel).to.be(1);
+					});
+		});
+
+		it('#run default', function()
+		{
+			var linker = initLinker();
+			var retPromise = linker.run('client_its.method_no_exists');
+
+			return retPromise
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						var runtime = retPromise.runtime;
+						expect(runtime.env.source).to.be('run');
+						expect(runtime.env.httpproxyLevel).to.be(1);
+					});
+		});
+	});
+
 });
