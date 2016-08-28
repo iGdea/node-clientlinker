@@ -88,11 +88,13 @@ describe('#httpproxy', function()
 						}]
 				});
 
+			var linker2 = initLinker();
+
 			describe('#501', function()
 			{
 				function itKey(name, action)
 				{
-					it('#'+name, function()
+					it('#request:'+name, function()
 					{
 						return linker.run(action)
 							.then(function(data)
@@ -100,6 +102,19 @@ describe('#httpproxy', function()
 								expect(data.err).to.be(null);
 								expect(data.response.statusCode).to.be(501);
 							});
+					});
+
+					it('#run:'+name, function()
+					{
+						var retPromise = linker2.run(action);
+						return retPromise
+							.then(function(){expect().fail()},
+								function()
+								{
+									var runtime = retPromise.runtime;
+									var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+									expect(responeError.message).to.be('httpproxy,respone!200,501');
+								});
 					});
 				}
 
