@@ -49,7 +49,7 @@ Init Linker
 ```
 var ClientLinker = require('clientlinker');
 var linker = ClientLinker(options);
-linker.loadFlow(name, path, module);
+linker.loadFlow(path, module);
 linker.addClient(name, options);
 
 module.exports = linker;
