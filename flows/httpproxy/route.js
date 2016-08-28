@@ -55,6 +55,7 @@ function HttpProxyRoute(linker, bodyParser)
 					retPromise.then(function(data)
 						{
 							var runtime = retPromise.runtime;
+							// console.log('svr env for data', runtime.env);
 							var json = linker.JSON.stringify(
 								{
 									env: runtime.env,
@@ -68,6 +69,7 @@ function HttpProxyRoute(linker, bodyParser)
 						{
 							var runtime = retPromise.runtime;
 							var env = runtime ? runtime.env : body.env;
+							// console.log('svr env for err', env);
 							if (err
 								&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
 									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'

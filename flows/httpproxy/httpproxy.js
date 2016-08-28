@@ -45,6 +45,8 @@ function httpproxy(runtime, callback)
 		if (err)
 		{
 			debug('request err:%o', err);
+			// 把错误暴露给外层，可以通过`runtime.retry[0].runnedFlows[0].httpproxyResponeError`获取
+			callback.httpproxyResponeError = err;
 			return callback.next();
 		}
 

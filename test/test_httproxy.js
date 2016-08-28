@@ -204,21 +204,7 @@ describe('#httpproxy', function()
 
 		describe('#httpproxyMaxLevel', function()
 		{
-			var svrLinker = initSvrLinker(
-				{
-					defaults:
-					{
-						httpproxyNotRunWhenBindRoute: false,
-						httpproxyMaxLevel: 5
-					}
-				});
-
-			describe('#run new client', function()
-			{
-				runClientHandlerIts(initLinker({}));
-			});
-
-			describe('#run with deferent level', function()
+			function descKey(svrLevel)
 			{
 				function itKey(level)
 				{
@@ -240,15 +226,57 @@ describe('#httpproxy', function()
 									var runtime = retPromise.runtime;
 									expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 									expect(runtime.env.source).to.be('run');
-									expect(runtime.env.httpproxyLevel).to.be(5);
+
+									if (level === 0)
+									{
+										expect(runtime.env.httpproxyLevel).to.be(undefined);
+										var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+										expect(responeError).to.be(undefined);
+									}
+									else
+									{
+										var targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
+										expect(runtime.env.httpproxyLevel).to.be(targetSvrLevel);
+										var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+										expect(responeError.message).to.be('httpproxy,respone!200,501');
+									}
+
 								});
 					});
 				}
 
-				itKey(1);
-				itKey(5);
-				itKey(-1);
-			});
+				describe('#svrLevel:'+svrLevel, function()
+				{
+					var svrLinker = initSvrLinker(
+						{
+							defaults:
+							{
+								httpproxyNotRunWhenBindRoute: false,
+								httpproxyMaxLevel: svrLevel
+							}
+						});
+
+					describe('#run new client', function()
+					{
+						runClientHandlerIts(initLinker({}));
+					});
+
+					describe('#run level', function()
+					{
+						itKey(1);
+						itKey(5);
+						itKey();
+						itKey(0);
+						itKey(-1);
+					});
+				});
+			}
+
+			descKey(3);
+			descKey(1);
+			descKey();
+			descKey(0);
+			descKey(-1);
 		});
 
 
@@ -259,7 +287,7 @@ describe('#httpproxy', function()
 					defaults:
 					{
 						httpproxyNotRunWhenBindRoute: true,
-						httpproxyMaxLevel: 5
+						httpproxyMaxLevel: 3
 					}
 				});
 
@@ -269,7 +297,7 @@ describe('#httpproxy', function()
 					{
 						defaults:
 						{
-							httpproxyMaxLevel: 5
+							httpproxyMaxLevel: 3
 						}
 					});
 				var retPromise = linker.run('client_its.method_no_exists');
@@ -282,6 +310,8 @@ describe('#httpproxy', function()
 							expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 							expect(runtime.env.source).to.be('run');
 							expect(runtime.env.httpproxyLevel).to.be(1);
+							var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+							expect(responeError.message).to.be('httpproxy,respone!200,501');
 						});
 			});
 
@@ -298,6 +328,8 @@ describe('#httpproxy', function()
 							expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 							expect(runtime.env.source).to.be('run');
 							expect(runtime.env.httpproxyLevel).to.be(1);
+							var responeError = runtime.retry[0].runnedFlows[0].httpproxyResponeError;
+							expect(responeError.message).to.be('httpproxy,respone!200,501');
 						});
 			});
 		});
