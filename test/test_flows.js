@@ -191,7 +191,7 @@ describe('#flows', function()
 							{
 								method: function()
 								{
-									return Promise.reject('error');
+									return Promise.reject(new Error('error'));
 								}
 							}
 						}
@@ -218,7 +218,9 @@ describe('#flows', function()
 
 						if (type == 'error')
 						{
-							expect(err).to.be('error');
+							expect(err.message).to.be('error');
+							expect(err.fromClient).to.be('client_error');
+							expect(err.fromClientFlow).to.be('confighandler');
 							expect(data).to.be(null);
 							errorDeffer.resolve();
 						}

@@ -11,10 +11,6 @@ describe('#run_error', function()
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
-				defaults:
-				{
-					exportErrorInfo: true
-				},
 				clients:
 				{
 					client:
@@ -27,7 +23,7 @@ describe('#run_error', function()
 							},
 							method2: function()
 							{
-								throw new Error;
+								throw new Error('errmsg');
 							},
 						}
 					},
@@ -89,15 +85,63 @@ describe('#run_error', function()
 				{
 					expect(err).to.be.a(Error);
 					expect(err.fromClient).to.be('client');
-					expect(err.fromClientFlow).to.be('confighandler');
+					expect(err.fromClientFlow).to.be(undefined);
 					expect(err.fromClientMethod).to.be('method1');
 				});
 
+		var promise7 = linker.run('client.method2')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err).to.be.a(Error);
+					expect(err.message).to.be('errmsg');
+					expect(err.fromClient).to.be('client');
+					expect(err.fromClientFlow).to.be('confighandler');
+					expect(err.fromClientMethod).to.be('method2');
+				});
 
 		return Promise.all(
 			[
-				promise1, promise2, promise3, promise4, promise5, promise6
+				promise1, promise2, promise3, promise4,
+				promise5, promise6, promise7
 			]);
+	});
+
+
+	it('#not exportErrorInfo', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['confighandler'],
+				defaults:
+				{
+					exportErrorInfo: false,
+				},
+				clients:
+				{
+					client:
+					{
+						confighandler:
+						{
+							method: function()
+							{
+								throw new Error('errmsg');
+							}
+						}
+					}
+				}
+			});
+
+		return linker.run('client.method')
+			.then(function(){expect().fail()},
+				function(err)
+				{
+					expect(err).to.be.a(Error);
+					expect(err.message).to.be('errmsg');
+					expect(err.fromClient).to.be(undefined);
+					expect(err.fromClientFlow).to.be(undefined);
+					expect(err.fromClientMethod).to.be(undefined);
+				});
 	});
 
 	it('#anyToError', function()
