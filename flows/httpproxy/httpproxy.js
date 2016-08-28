@@ -58,6 +58,7 @@ function httpproxy(runtime, callback)
 }
 
 
+exports.appendUrl_ = appendUrl;
 function appendUrl(url, query)
 {
 	var lastChar = url.charAt(url.length-1);
@@ -68,6 +69,7 @@ function appendUrl(url, query)
 }
 
 
+exports.getRequestParams_ = getRequestParams;
 function getRequestParams(runtime)
 {
 	var client = runtime.client;

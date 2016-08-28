@@ -6,6 +6,7 @@ var expr				= require('express');
 var http				= require('http');
 var ClientLinker		= require('../');
 var proxyRoute			= require('../flows/httpproxy/route');
+var httpproxy			= require('../flows/httpproxy/httpproxy');
 var runClientHandlerIts	= require('./pkghandler/lib/run');
 var debug				= require('debug')('client_linker:test_httproxy');
 var PORT				= 3423;
@@ -13,56 +14,6 @@ var PORT				= 3423;
 
 describe('#httpproxy', function()
 {
-	function initLinker(options)
-	{
-		options || (options = {});
-		options.flows || (options.flows = ['httpproxy']);
-
-		(options.defaults || (options.defaults = {})).httpproxy
-			= 'http://127.0.0.1:'+PORT+'/route_proxy';
-		options.pkghandlerDir = __dirname+'/pkghandler';
-		(options.clients || (options.clients = {})).client_its = {};
-
-		return ClientLinker(options);
-	}
-	function initSvrLinker(options)
-	{
-		options || (options = {});
-		options.flows = ['custom', 'pkghandler', 'httpproxy'];
-		options.customFlows = {
-			custom: function(runtime, callback)
-			{
-				expect(runtime.env.source).to.be('httpproxy');
-				callback.next();
-			}
-		};
-
-		var svr;
-		var linker = initLinker(options);
-
-		before(function(done)
-		{
-			var app = expr();
-			app.use('/route_proxy', proxyRoute(linker));
-			svr = http.createServer();
-			svr.listen(PORT, function()
-				{
-					debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
-					done();
-				});
-
-			app.listen(svr);
-		});
-
-		after(function()
-		{
-			svr.close();
-		});
-
-		return linker;
-	}
-
-
 	describe('#base', function()
 	{
 		var svrLinker = initSvrLinker({});
@@ -91,6 +42,22 @@ describe('#httpproxy', function()
 						expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 						expect(err.CLIENTLINKER_METHODKEY).to.be('client_not_exists.method');
 					});
+		});
+	});
+
+
+	describe('#utils', function()
+	{
+		it('#appendUrl', function()
+		{
+			expect(httpproxy.appendUrl_('http://127.0.0.1/', 'a=1'))
+				.to.be('http://127.0.0.1/?a=1');
+			expect(httpproxy.appendUrl_('http://127.0.0.1/?', 'a=1'))
+				.to.be('http://127.0.0.1/?a=1');
+			expect(httpproxy.appendUrl_('http://127.0.0.1/?b=1', 'a=1'))
+				.to.be('http://127.0.0.1/?b=1&a=1');
+			expect(httpproxy.appendUrl_('http://127.0.0.1/?b=1&', 'a=1'))
+				.to.be('http://127.0.0.1/?b=1&a=1');
 		});
 	});
 
@@ -237,3 +204,55 @@ describe('#httpproxy', function()
 
 	});
 });
+
+
+
+
+function initLinker(options)
+{
+	options || (options = {});
+	options.flows || (options.flows = ['httpproxy']);
+
+	(options.defaults || (options.defaults = {})).httpproxy
+		= 'http://127.0.0.1:'+PORT+'/route_proxy';
+	options.pkghandlerDir = __dirname+'/pkghandler';
+	(options.clients || (options.clients = {})).client_its = {};
+
+	return ClientLinker(options);
+}
+function initSvrLinker(options)
+{
+	options || (options = {});
+	options.flows = ['custom', 'pkghandler', 'httpproxy'];
+	options.customFlows = {
+		custom: function(runtime, callback)
+		{
+			expect(runtime.env.source).to.be('httpproxy');
+			callback.next();
+		}
+	};
+
+	var svr;
+	var linker = initLinker(options);
+
+	before(function(done)
+	{
+		var app = expr();
+		app.use('/route_proxy', proxyRoute(linker));
+		svr = http.createServer();
+		svr.listen(PORT, function()
+			{
+				debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
+				done();
+			});
+
+		app.listen(svr);
+	});
+
+	after(function()
+	{
+		svr.close();
+	});
+
+	return linker;
+}
