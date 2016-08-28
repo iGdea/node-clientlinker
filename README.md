@@ -12,7 +12,8 @@ A solution to break out of network and OS.
 [![Coveralls][coveralls-image]][coveralls-url]
 
 # Install
-```
+
+```shell
 npm install clientlinker --save
 npm install clientlinker -g
 ```
@@ -23,7 +24,7 @@ npm install clientlinker -g
 Linker Options Exmaple, see [Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
 or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flows-Options)
 
-```
+```javascript
 {
 	flows: ['logger', 'custom', 'pkghandler' 'localfile', 'httpproxy'],
 	// pkghandlerDir: __dirname+'/pkghandler',
@@ -56,7 +57,7 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 
 ### Initialize
 
-```
+```javascript
 // `clientlinker.conf.js` file content
 
 var ClientLinker = require('clientlinker');
@@ -78,7 +79,7 @@ Width custom flows, you can link any rpc. And you can get all data anywhere thro
 
 #### Run in Server
 
-```
+```javascript
 var clientlinker = require('./clientlinker.conf.js');
 
 clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
@@ -90,7 +91,7 @@ clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, options)
 
 #### Run in Shell
 
-```
+```javascript
 // you can use `runInShell` instead of `run`.
 // Of course, you can continue to use `run`.
 // example
@@ -102,13 +103,13 @@ clientlinker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options
 
 #### Run in Terminal
 
-```
+```shell
 #### List all Clients and Methods
-# clientlinker ./clientlinker.conf.js
+clientlinker ./clientlinker.conf.js
 
 #### Run action directly in Terminal
-# clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
-# clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
+clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
+clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 ```
 
 
