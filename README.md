@@ -121,7 +121,7 @@ clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 [npm-image]: http://img.shields.io/npm/v/clientlinker.svg
 [downloads-image]: http://img.shields.io/npm/dm/clientlinker.svg
 [dependencies-image]: http://img.shields.io/david/Bacra/node-clientlinker.svg
-[dependencies-url]: https://www.versioneye.com/user/projects/57c141d0939fc600508e8bee
+[dependencies-url]: https://www.versioneye.com/nodejs/clientlinker
 [npm-url]: https://www.npmjs.org/package/clientlinker
 [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
