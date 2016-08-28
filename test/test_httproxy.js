@@ -170,6 +170,7 @@ describe('#httpproxy', function()
 							function(err)
 							{
 								var runtime = retPromise.runtime;
+								expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 								expect(runtime.env.source).to.be('run');
 								expect(runtime.env.httpproxyLevel).to.be(5);
 							});
