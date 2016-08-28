@@ -21,6 +21,7 @@ npm install clientlinker -g
 # Useage
 
 ### Options
+
 Linker Options Exmaple, see [Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
 or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flows-Options)
 
@@ -70,9 +71,11 @@ linker.addClient(name, options);
 module.exports = linker;
 ```
 
-You can custom flows [like this](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow)
+You can custom flows [Like This](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow).
 
-Width custom flows, you can link any rpc. And you can get all data anywhere through `httpproxy` flow.
+Width custom flows, you can link any rpc
+
+and get all data anywhere through `httpproxy` Flow.
 
 
 ### Run
