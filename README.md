@@ -10,6 +10,7 @@ A solution to break out of network and OS.
 [![Dependencies][dependencies-image]][dependencies-url]
 [![Build Status][travis-image]][travis-url]
 [![Coveralls][coveralls-image]][coveralls-url]
+[![NPM License][license-image]][npm-url]
 
 # Install
 
@@ -127,3 +128,4 @@ clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
+[license-image]: http://img.shields.io/npm/l/clientlinker.svg
