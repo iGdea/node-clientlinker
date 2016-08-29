@@ -40,7 +40,7 @@ describe('#httpproxy', function()
 					function(err)
 					{
 						// 注意：不是NO CLIENT
-						expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT,client_not_exists.method,len1');
+						expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT,client_not_exists.method');
 						expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 						expect(err.CLIENTLINKER_METHODKEY).to.be('client_not_exists.method');
 					});

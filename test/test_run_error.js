@@ -218,7 +218,7 @@ describe('#run_error', function()
 				function(err)
 				{
 					expect(err).to.be.an(Error);
-					expect(err.message).to.be('CLIENTLINKER:CLIENT FLOW OUT,client.method5,len1');
+					expect(err.message).to.be('CLIENTLINKER:CLIENT FLOW OUT,client.method5');
 					expect(err.isClientLinkerNewError).to.not.be.ok();
 				});
 
