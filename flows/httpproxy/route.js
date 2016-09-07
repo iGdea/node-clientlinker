@@ -18,16 +18,6 @@ function HttpProxyRoute(linker)
 		var action = req.query.action;
 		if (!action) return next();
 
-		function sendStatus(res, code, env)
-		{
-			res.statusCode = code;
-			res.json(linker.JSON.stringify(
-				{
-					env: env,
-					CONST_VARS: linker.JSON.CONST_VARS
-				}));
-		}
-
 		return new Promise(function(resolve, reject)
 			{
 				rawBody(req, function(err, buf)
