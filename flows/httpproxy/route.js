@@ -1,5 +1,6 @@
 "use strict";
 
+var Promise	= require('bluebird');
 var _		= require('underscore');
 var debug	= require('debug')('client_linker:httpproxy:route');
 var aes		= require('../../lib/aes_cipher');
@@ -27,7 +28,14 @@ function HttpProxyRoute(linker)
 				}));
 		}
 
-		rawBody(req).then(function(buf)
+		return new Promise(function(resolve, reject)
+			{
+				rawBody(req, function(err, buf)
+				{
+					err ? reject(err) : resolve(buf);
+				});
+			})
+			.then(function(buf)
 			{
 				var body = JSON.parse(buf.toString());
 				if (body.CONST_VARS)
