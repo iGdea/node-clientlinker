@@ -3,14 +3,13 @@
 var _		= require('underscore');
 var debug	= require('debug')('client_linker:httpproxy:route');
 var aes		= require('../../lib/aes_cipher');
-var defaultBodyParser	= require('body-parser').json({limit: '200mb'});
+var rawBody	= require('raw-body');
 
 exports = module.exports = HttpProxyRoute;
 
-function HttpProxyRoute(linker, bodyParser)
+function HttpProxyRoute(linker)
 {
 	if (!linker) return function(req, res, next){next()};
-	bodyParser || (bodyParser = defaultBodyParser);
 
 	linker.__bind_httpproxy_route__ = true;
 
@@ -29,74 +28,74 @@ function HttpProxyRoute(linker, bodyParser)
 		var action = req.query.action;
 		if (!action) return next();
 
-		bodyParser(req, res, function(err)
-		{
-			var body = req.body;
-			if (err)
+		rawBody(req).then(function(buf)
 			{
-				debug('[%s] parse body err:%o', action, err);
-				return sendStatus(res, 500, body && body.env);
-			}
+				var body = JSON.parse(buf.toString());
 
-			linker.parseAction(action)
-				.then(function(methodInfo)
-				{
-					if (body.CONST_VARS)
-						body = linker.JSON.parse(body, body.CONST_VARS);
+				return linker.parseAction(action)
+					.then(function(methodInfo)
+					{
+						if (body.CONST_VARS)
+							body = linker.JSON.parse(body, body.CONST_VARS);
 
-					var options = methodInfo.client && methodInfo.client.options;
+						var options = methodInfo.client && methodInfo.client.options;
 
-					if (checkHttpproxyKey(action, body, options) ===  false)
-						return sendStatus(res, 403, body.env);
+						if (checkHttpproxyKey(action, body, options) ===  false)
+							return sendStatus(res, 403, body.env);
 
-					debug('[%s] catch proxy route', action);
-					var args = [action, body.query, body.body, null, body.options];
-					var retPromise = linker.runIn(args, 'httpproxy', body.env);
-					retPromise.then(function(data)
-						{
-							var runtime = retPromise.runtime;
-							// console.log('svr env for data', runtime.env);
-							var json = linker.JSON.stringify(
-								{
-									env: runtime.env,
-									data: data,
-									CONST_VARS: linker.JSON.CONST_VARS
-								});
-
-							res.json(json);
-						})
-						.catch(function(err)
-						{
-							var runtime = retPromise.runtime;
-							var env = runtime ? runtime.env : body.env;
-							// console.log('svr env for err', env);
-							if (err
-								&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
-									|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
-									|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
+						debug('[%s] catch proxy route', action);
+						var args = [action, body.query, body.body, null, body.options];
+						var retPromise = linker.runIn(args, 'httpproxy', body.env);
+						retPromise.then(function(data)
 							{
-								debug('[%s] %s', action, err);
-								return sendStatus(res, 501, env);
-							}
-							else
-							{
+								var runtime = retPromise.runtime;
+								// console.log('svr env for data', runtime.env);
 								var json = linker.JSON.stringify(
 									{
-										env: env,
-										result: err,
+										env: runtime.env,
+										data: data,
 										CONST_VARS: linker.JSON.CONST_VARS
 									});
 
 								res.json(json);
-							}
-						});
-				})
-				.catch(function(err)
-				{
-					debug('[%s] linker run err:%o', action, err);
-					sendStatus(res, 500, body && body.env);
-				});
+							})
+							.catch(function(err)
+							{
+								var runtime = retPromise.runtime;
+								var env = runtime ? runtime.env : body.env;
+								// console.log('svr env for err', env);
+								if (err
+									&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
+										|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
+										|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
+								{
+									debug('[%s] %s', action, err);
+									return sendStatus(res, 501, env);
+								}
+								else
+								{
+									var json = linker.JSON.stringify(
+										{
+											env: env,
+											result: err,
+											CONST_VARS: linker.JSON.CONST_VARS
+										});
 
+									res.json(json);
+								}
+							});
+					})
+					.catch(function(err)
+					{
+						debug('[%s] linker run err:%o', action, err);
+						sendStatus(res, 500, body && body.env);
+					});
+
+		})
+		.catch(function()
+		{
+			debug('[%s] parse body err:%o', action, err);
+			sendStatus(res, 500);
 		});
 	};
 }

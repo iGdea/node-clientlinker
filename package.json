@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node ./bin/client_linker_cli.js ./test/client_linker.conf.js",
     "test": "cross-env DEBUG=client_linker* mocha test/test_*",
-	"test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
-	"test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
+    "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
+    "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "bin": {
     "clientlinker": "bin/client_linker_cli.js"
@@ -36,12 +36,12 @@
   },
   "dependencies": {
     "bluebird": "^3.3.1",
-    "body-parser": "^1.14.2",
     "debug": "^2.2.0",
     "depd": "^1.1.0",
     "is-promise": "^2.1.0",
     "mkdirp": "^0.5.1",
     "nopt": "^3.0.6",
+    "raw-body": "^2.1.7",
     "request": "^2.69.0",
     "table": "^3.7.8",
     "underscore": "^1.8.3"
