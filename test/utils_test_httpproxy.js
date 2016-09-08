@@ -1,3 +1,5 @@
+"use strict";
+
 var http				= require('http');
 var expr				= require('express');
 var debug				= require('debug')('client_linker:test_httproxy');

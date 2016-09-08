@@ -7,10 +7,10 @@ var httpproxy			= require('../flows/httpproxy/httpproxy');
 var runClientHandlerIts	= require('./pkghandler/lib/run');
 var aes					= require('../lib/aes_cipher');
 var request				= require('request');
-var testUtilsHttpproxy	= require('./utils_test_httpproxy');
+var utilsTestHttpproxy	= require('./utils_test_httpproxy');
 
-var initLinker			= testUtilsHttpproxy.initLinker;
-var initSvrLinker		= testUtilsHttpproxy.initSvrLinker;
+var initLinker			= utilsTestHttpproxy.initLinker;
+var initSvrLinker		= utilsTestHttpproxy.initSvrLinker;
 
 
 describe('#httpproxy', function()
