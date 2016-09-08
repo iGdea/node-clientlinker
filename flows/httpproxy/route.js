@@ -43,7 +43,7 @@ function HttpProxyRoute(linker)
 					})
 					.then(function(data)
 					{
-						res.statusCode = data.statusCode;
+						res.statusCode = data.statusCode || 200;
 						var output = {
 							env: data.env,
 							result: data.result,
