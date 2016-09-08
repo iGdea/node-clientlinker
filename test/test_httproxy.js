@@ -2,17 +2,16 @@
 
 var Promise				= require('bluebird');
 var expect				= require('expect.js');
-var expr				= require('express');
-var http				= require('http');
 var ClientLinker		= require('../');
-var proxyRoute			= require('../flows/httpproxy/route');
 var httpproxy			= require('../flows/httpproxy/httpproxy');
 var runClientHandlerIts	= require('./pkghandler/lib/run');
 var aes					= require('../lib/aes_cipher');
-var debug				= require('debug')('client_linker:test_httproxy');
 var request				= require('request');
-var PORT				= 3423;
-var HTTP_PROXY_URL		= 'http://127.0.0.1:'+PORT+'/route_proxy';
+var testUtilsHttpproxy	= require('./utils_test_httpproxy');
+
+var initLinker			= testUtilsHttpproxy.initLinker;
+var initSvrLinker		= testUtilsHttpproxy.initSvrLinker;
+
 
 describe('#httpproxy', function()
 {
@@ -351,59 +350,3 @@ describe('#httpproxy', function()
 
 	});
 });
-
-
-
-
-function initLinker(options)
-{
-	options || (options = {});
-	options.flows || (options.flows = ['httpproxy']);
-
-	(options.defaults || (options.defaults = {})).httpproxy = HTTP_PROXY_URL;
-	options.pkghandlerDir = __dirname+'/pkghandler';
-	options.clients || (options.clients = {});
-	options.clients.client_its = {};
-	options.clients.client_svr_noflows = {};
-	options.clients.client_svr_not_exists = {};
-
-	return ClientLinker(options);
-}
-function initSvrLinker(options)
-{
-	options || (options = {});
-	options.flows = ['custom', 'pkghandler', 'httpproxy'];
-	options.clients || (options.clients = {});
-	options.clients.client_svr_noflows = {flows: []};
-	options.customFlows = {
-		custom: function(runtime, callback)
-		{
-			expect(runtime.env.source).to.be('httpproxy');
-			callback.next();
-		}
-	};
-
-	var svr;
-	var linker = initLinker(options);
-
-	before(function(done)
-	{
-		var app = expr();
-		app.use('/route_proxy', proxyRoute(linker));
-		svr = http.createServer();
-		svr.listen(PORT, function()
-			{
-				debug('proxy ok:http://127.0.0.1:%d/route_proxy', PORT);
-				done();
-			});
-
-		app.listen(svr);
-	});
-
-	after(function()
-	{
-		svr.close();
-	});
-
-	return linker;
-}
