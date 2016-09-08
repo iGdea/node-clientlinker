@@ -1,6 +1,6 @@
 {
   "name": "clientlinker",
-  "version": "4.3.7",
+  "version": "5.0.0",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "url": "https://github.com/Bacra/node-clientlinker/issues"
   },
   "homepage": "https://github.com/Bacra/node-clientlinker#readme",
-  "author": "bacrawu <bacra.woo@gmail.com>",
+  "author": "Bacra <bacra.woo@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^2.0.0",
@@ -39,6 +39,7 @@
     "debug": "^2.2.0",
     "depd": "^1.1.0",
     "is-promise": "^2.1.0",
+    "jsonk": "^0.1.2",
     "mkdirp": "^0.5.1",
     "nopt": "^3.0.6",
     "raw-body": "^2.1.7",

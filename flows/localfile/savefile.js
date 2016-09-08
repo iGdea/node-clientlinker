@@ -22,9 +22,9 @@ function savefile(linker, localfile, method, err, data)
 		{
 			return new Promise(function(resolve, reject)
 				{
-					var file = localfile+'/'+method + '.json';
-					var content = {result: err, data: data, CONST_VARS: linker.JSON.CONST_VARS};
-					content = JSON.stringify(linker.JSON.stringify(content));
+					var file = localfile+'/'+method + '.jsonk';
+					var content = {result: err, data: data};
+					content = linker.JSON.stringifyToString(content);
 
 					fs.writeFile(file, content, {encoding: 'utf8'}, function(err)
 					{

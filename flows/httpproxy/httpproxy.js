@@ -20,11 +20,7 @@ function httpproxy(runtime, callback)
 		if (!err)
 		{
 			try {
-				data = JSON.parse(body);
-				if (data.CONST_VARS)
-				{
-					data = linker.JSON.parse(data, data.CONST_VARS);
-				}
+				data = linker.JSON.parseFromString(body);
 			}
 			catch(e)
 			{
@@ -108,8 +104,7 @@ function getRequestBody(runtime)
 		query		: runtime.query,
 		body		: runtime.body,
 		options	    : runtime.options,
-		env			: runtime.env,
-		CONST_VARS	: linker.JSON.CONST_VARS,
+		env			: runtime.env
 	};
 
 	// check aes key
@@ -127,7 +122,7 @@ function getRequestParams(runtime, body)
 	var linker = client.linker;
 
 	var headers = options.httpproxyHeaders || {};
-	headers['Content-Type'] = 'application/json';
+	headers['Content-Type'] = 'application/jsonk';
 
 	var runOptions	= runtime.options || {};
 	var timeout		= runOptions.timeout || options.httpproxyTimeout || 10000;
@@ -137,11 +132,13 @@ function getRequestParams(runtime, body)
 			|| process.env.http_proxy;
 
 	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
+	var bodystr = linker.JSON.stringifyToString(body);
 	debug('request url:%s', url);
+
 
 	return {
 		url		: url,
-		body	: JSON.stringify(linker.JSON.stringify(body), null, '\t'),
+		body	: bodystr,
 		headers	: headers,
 		timeout	: timeout,
 		proxy	: proxy

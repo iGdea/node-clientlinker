@@ -80,15 +80,16 @@ function parseContent(linker, content, extname)
 {
 	if (extname == 'js')
 	{
-		return vm.runInNewContext(content, {module:{exports:{}}});
+		var data = {module:{exports:{}}};
+		vm.runInNewContext(content, data);
+		return data.module.exports;
 	}
 	else if (extname == 'json')
 	{
-		var data = JSON.parse(content);
-
-		if (data && data.CONST_VARS)
-			data = linker.JSON.parse(data, data.CONST_VARS);
-
-		return data;
+		return JSON.parse(content);
+	}
+	else if (extname == 'jsonk')
+	{
+		return linker.JSON.parseFromString(content);
 	}
 }

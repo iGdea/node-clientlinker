@@ -117,6 +117,11 @@ clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 ```
 
 
+### Upgrade
+
+#### 4.x.x => 5.0.0
+
+* Please upgrade server first, if you are using `httpproxy` flow
 
 
 [npm-image]: http://img.shields.io/npm/v/clientlinker.svg

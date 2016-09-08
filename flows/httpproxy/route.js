@@ -1,10 +1,12 @@
 "use strict";
 
-var Promise	= require('bluebird');
-var _		= require('underscore');
-var debug	= require('debug')('client_linker:httpproxy:route');
-var aes		= require('../../lib/aes_cipher');
-var rawBody	= require('raw-body');
+var Promise		= require('bluebird');
+var _			= require('underscore');
+var debug		= require('debug')('client_linker:httpproxy:route');
+var aes			= require('../../lib/aes_cipher');
+var rawBody		= require('raw-body');
+var oldJSON		= require('../../lib/json');
+var deprecate	= require('depd')('clientlinker:httpproxy');
 
 exports = module.exports = HttpProxyRoute;
 
@@ -27,9 +29,19 @@ function HttpProxyRoute(linker)
 			})
 			.then(function(buf)
 			{
-				var body = JSON.parse(buf.toString());
-				if (body.CONST_VARS)
-					body = linker.JSON.parse(body, body.CONST_VARS);
+				var body = buf.toString();
+				var isOldJSONparse = false;
+				if (req.get('Content-Type') == 'application/jsonk')
+				{
+					body = linker.JSON.parseFromString(body);
+				}
+				else
+				{
+					deprecate('update clientklinker, CONST_VARS JSON')
+					body = JSON.parse(body);
+					body = oldJSON.parse(body, body.CONST_VARS);
+					isOldJSONparse = true;
+				}
 
 				return runAction(linker, action, body)
 					.catch(function(err)
@@ -50,9 +62,16 @@ function HttpProxyRoute(linker)
 							data: data.data
 						};
 
-						output.CONST_VARS = linker.JSON.CONST_VARS;
-						output = linker.JSON.stringify(output);
-						res.json(output);
+						if (isOldJSONparse)
+						{
+							output.CONST_VARS = oldJSON.CONST_VARS;
+							output = oldJSON.stringify(output);
+							res.json(output);
+						}
+						else
+						{
+							res.send(linker.JSON.stringifyToString(output));
+						}
 					});
 			})
 			.catch(function()

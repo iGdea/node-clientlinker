@@ -16,31 +16,33 @@ describe('#savefile', function()
 		mkdirp(DIR, done);
 	});
 
-	it('#savefile', function(done)
+	it('#savefile', function()
 	{
 		var filename = process.pid+Math.random();
 		var linker = ClientLinker()
-		savefile(linker, DIR, filename, new Error('errmsg123'), {data: 'data', buffer: new Buffer('buffer')})
+		return savefile(linker, DIR, filename,
+				new Error('errmsg123'),
+				{data: 'data', buffer: new Buffer('buffer')
+			})
 			.then(function()
 			{
 				return new Promise(function(resolve, reject)
 					{
-						fs.readFile(DIR+filename+'.json', {encoding: 'utf8'}, function(err, content)
-						{
-							err ? reject(err) : resolve(content);
-						});
+						fs.readFile(DIR+filename+'.jsonk', {encoding: 'utf8'},
+							function(err, content)
+							{
+								err ? reject(err) : resolve(content);
+							});
 					});
 			})
 			.then(function(content)
 			{
-				var data = parseContent(linker, content, 'json');
+				var data = parseContent(linker, content, 'jsonk');
 				expect(data.result).to.be.an(Error);
 				expect(data.result.message).to.be('errmsg123');
 				expect(data.data.data).to.be('data');
 				expect(data.data.buffer).to.be.a(Buffer);
 				expect(data.data.buffer.toString()).to.be('buffer');
-			})
-			.then(done, done);
-
+			});
 	});
 });
