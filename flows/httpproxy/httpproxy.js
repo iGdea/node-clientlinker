@@ -147,10 +147,17 @@ function getRequestParams(runtime, body)
 }
 
 
-var lineReg = /\n/g;
 // 使用JSON进行序列化，方便fiddler查看
-exports.stringify4Fiddler = stringify4Fiddler;
+var lineReg = /\n/g;
 function stringify4Fiddler(json)
 {
-	return JSON.stringify(json, null, '\t').replace(lineReg, '\r\n');
+	var data = JSON.stringify(json.data, null, '\t').replace(lineReg, '\r\n');
+
+	delete json.data;
+	var wrap = JSON.stringify(json);
+	return [
+		'{\r\n"data":',
+		data,
+		wrap.length > 2 ? ','+wrap.substr(1) : '}'
+	].join('\r\n\r\n\r\n\r\n\r\n\r\n');
 }
