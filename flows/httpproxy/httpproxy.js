@@ -134,8 +134,7 @@ function getRequestParams(runtime, body)
 
 	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
 
-	// 使用JSON进行序列化，方便fiddler查看
-	var bodystr = JSON.stringify(linker.JSON.stringify(body));
+	var bodystr = stringify4Fiddler(linker.JSON.stringify(body));
 	debug('request url:%s', url);
 
 	return {
@@ -145,4 +144,13 @@ function getRequestParams(runtime, body)
 		timeout	: timeout,
 		proxy	: proxy
 	};
+}
+
+
+var lineReg = /\n/g;
+// 使用JSON进行序列化，方便fiddler查看
+exports.stringify4Fiddler = stringify4Fiddler;
+function stringify4Fiddler(json)
+{
+	return JSON.stringify(json, null, '\t').replace(lineReg, '\r\n');
 }
