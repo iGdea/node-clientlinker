@@ -71,7 +71,8 @@ function HttpProxyRoute(linker)
 						}
 						else
 						{
-							res.send(linker.JSON.stringifyToString(output));
+							// 使用普通json，方便做Fiddler的兼容
+							res.json(linker.JSON.stringify(output));
 						}
 					});
 			})
