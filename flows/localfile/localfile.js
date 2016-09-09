@@ -1,7 +1,7 @@
 "use strict";
 
 var Promise	= require('bluebird');
-var debug	= require('debug')('client_linker:localfile');
+var debug	= require('debug')('clientlinker:localfile');
 var fs		= require('fs');
 var vm		= require('vm');
 

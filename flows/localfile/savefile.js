@@ -2,7 +2,7 @@
 
 var Promise	= require('bluebird');
 var fs		= require('fs');
-var debug	= require('debug')('client_linker:localfile:save');
+var debug	= require('debug')('clientlinker:localfile:save');
 var mkdirp	= require('mkdirp');
 
 module.exports = savefile;

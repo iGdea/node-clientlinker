@@ -1,6 +1,6 @@
 "use strict";
 
-var debug		= require('debug')('client_linker:pkghandler');
+var debug		= require('debug')('clientlinker:pkghandler');
 var runHandler	= require('../confighandler/confighandler').runHandler;
 
 exports = module.exports = pkghandler;

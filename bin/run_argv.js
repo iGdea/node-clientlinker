@@ -2,7 +2,7 @@
 
 var _		= require('underscore');
 var utils	= require('./utils');
-var debug	= require('debug')('client_linker:run_argv');
+var debug	= require('debug')('clientlinker:run_argv');
 
 
 

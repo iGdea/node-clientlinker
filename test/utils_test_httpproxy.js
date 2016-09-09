@@ -2,7 +2,7 @@
 
 var http				= require('http');
 var expr				= require('express');
-var debug				= require('debug')('client_linker:test_httproxy');
+var debug				= require('debug')('clientlinker:test_httproxy');
 var ClientLinker		= require('../');
 var proxyRoute			= require('../flows/httpproxy/route');
 var expect				= require('expect.js');

@@ -4,7 +4,7 @@ var path		= require('path');
 var printTable	= require('./print_table').printTable;
 var rl			= require('./rl');
 var runArgv		= require('./run_argv');
-var debug		= require('debug')('client_linker:bin');
+var debug		= require('debug')('clientlinker:bin');
 var parsed		= require('nopt')(
 	{
 		'linker'		: path,
@@ -63,7 +63,7 @@ if (parsed.linker)
 else
 {
 	console.log('Usage:');
-	console.log('[List] clientlinker ./config/client_linker.conf.js');
-	console.log('[List] clientlinker --linker=./config/client_linker.conf.js');
-	console.log('[Run]  clientlinker --linker=./config/client_linker.conf.js --action=xxx --query=xxx --body=xxxx --options=xxxxx');
+	console.log('[List] clientlinker ./config/clientlinker.conf.js');
+	console.log('[List] clientlinker --linker=./config/clientlinker.conf.js');
+	console.log('[Run]  clientlinker --linker=./config/clientlinker.conf.js --action=xxx --query=xxx --body=xxxx --options=xxxxx');
 }

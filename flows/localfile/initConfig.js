@@ -3,7 +3,7 @@
 var Promise	= require('bluebird');
 var _		= require('underscore');
 var fs		= require('fs');
-var debug	= require('debug')('client_linker:localfile');
+var debug	= require('debug')('clientlinker:localfile');
 
 module.exports = initConfig;
 function initConfig(options, linker)

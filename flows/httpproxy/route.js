@@ -2,7 +2,7 @@
 
 var Promise		= require('bluebird');
 var _			= require('underscore');
-var debug		= require('debug')('client_linker:httpproxy:route');
+var debug		= require('debug')('clientlinker:httpproxy:route');
 var aes			= require('../../lib/aes_cipher');
 var rawBody		= require('raw-body');
 var oldJSON		= require('../../lib/json');

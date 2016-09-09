@@ -1,6 +1,6 @@
 "use strict";
 
-var debug	= require('debug')('client_linker:bin_utils');
+var debug	= require('debug')('clientlinker:bin_utils');
 var util	= require('util');
 var vm		= require('vm');
 var path	= require('path');

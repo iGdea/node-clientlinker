@@ -3,7 +3,7 @@
 var Promise		= require('bluebird');
 var utils		= require('./utils');
 var readline	= require('readline');
-var debug		= require('debug')('client_linker:rl');
+var debug		= require('debug')('clientlinker:rl');
 var rl;
 
 exports.testStart = testStart;

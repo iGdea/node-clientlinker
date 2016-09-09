@@ -1,7 +1,7 @@
 "use strict";
 
 var _		= require('underscore');
-var debug	= require('debug')('client_linker:httpproxy');
+var debug	= require('debug')('clientlinker:httpproxy');
 var request	= require('request');
 var aes		= require('../../lib/aes_cipher');
 

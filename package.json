@@ -4,13 +4,13 @@
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/client_linker_cli.js ./test/client_linker.conf.js",
-    "test": "cross-env DEBUG=client_linker* mocha test/test_*",
+    "start": "node ./bin/clientlinker_cli.js ./test/clientlinker.conf.js",
+    "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "bin": {
-    "clientlinker": "bin/client_linker_cli.js"
+    "clientlinker": "bin/clientlinker_cli.js"
   },
   "keywords": [
     "client",

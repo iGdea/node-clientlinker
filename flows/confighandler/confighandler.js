@@ -1,6 +1,6 @@
 "use strict";
 
-var debug		= require('debug')('client_linker:confighandler');
+var debug		= require('debug')('clientlinker:confighandler');
 var isPromise	= require('is-promise');
 
 exports = module.exports = confighandler;
