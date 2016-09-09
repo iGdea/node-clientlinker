@@ -19,7 +19,7 @@ describe('#compatible_httpproxy', function()
 					var body = httpproxy.getRequestBody_(runtime);
 					var opts = httpproxy.getRequestParams_(runtime, body);
 
-					opts.headers['Content-Type'] = 'application/json';
+					delete opts.headers['Content-Parser'];
 					body.CONST_VARS = oldJSON.CONST_VARS;
 					opts.body = JSON.stringify(oldJSON.stringify(body));
 

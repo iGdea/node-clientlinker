@@ -31,9 +31,10 @@ function HttpProxyRoute(linker)
 			{
 				var body = buf.toString();
 				var isOldJSONparse = false;
-				if (req.get('Content-Type') == 'application/jsonk')
+				if (req.get('Content-Parser') == 'jsonk')
 				{
 					body = linker.JSON.parseFromString(body);
+					debug('parse body result:%o', body);
 				}
 				else
 				{

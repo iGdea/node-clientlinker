@@ -122,7 +122,8 @@ function getRequestParams(runtime, body)
 	var linker = client.linker;
 
 	var headers = options.httpproxyHeaders || {};
-	headers['Content-Type'] = 'application/jsonk';
+	headers['Content-Type'] = 'application/json';
+	headers['Content-Parser'] = 'jsonk';
 
 	var runOptions	= runtime.options || {};
 	var timeout		= runOptions.timeout || options.httpproxyTimeout || 10000;
@@ -132,9 +133,10 @@ function getRequestParams(runtime, body)
 			|| process.env.http_proxy;
 
 	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
-	var bodystr = linker.JSON.stringifyToString(body);
-	debug('request url:%s', url);
 
+	// 使用JSON进行序列化，方便fiddler查看
+	var bodystr = JSON.stringify(linker.JSON.stringify(body));
+	debug('request url:%s', url);
 
 	return {
 		url		: url,
