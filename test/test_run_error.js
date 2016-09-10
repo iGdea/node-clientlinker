@@ -254,57 +254,108 @@ describe('#run_error', function()
 	});
 
 
-	it('#retry', function()
+	describe('#retry', function()
 	{
-		var runTimes = 0;
-		var linker = ClientLinker(
-			{
-				flows: ['timingCheck', 'confighandler'],
-				customFlows:
+		it('#in defualts', function()
+		{
+			var runTimes = 0;
+			var linker = ClientLinker(
 				{
-					timingCheck: function(runtime, callback)
+					flows: ['timingCheck', 'confighandler'],
+					customFlows:
 					{
-						runTimes++;
-						if (runTimes == 2)
+						timingCheck: function(runtime, callback)
 						{
-							expect(runtime.retry[0].timing.flowsEnd)
-								.to.be.ok();
-						}
-
-						callback.next();
-					}
-				},
-				defaults:
-				{
-					retry: 5,
-					anyToError: true
-				},
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							method: function(query, body, callback)
+							runTimes++;
+							if (runTimes == 2)
 							{
-								if (runTimes == 1)
-									throw 333;
-								else
+								expect(runtime.retry[0].timing.flowsEnd)
+									.to.be.ok();
+							}
+
+							callback.next();
+						}
+					},
+					defaults:
+					{
+						retry: 5,
+						anyToError: true
+					},
+					clients:
+					{
+						client:
+						{
+							confighandler:
+							{
+								method: function(query, body, callback)
 								{
-									callback(null, 555);
+									if (runTimes == 1)
+										throw 333;
+									else
+									{
+										callback(null, 555);
+									}
 								}
 							}
 						}
 					}
-				}
-			});
-
-		return linker.run('client.method')
-				.then(function(data)
-				{
-					expect(data).to.be(555);
-					expect(runTimes).to.be(2);
 				});
+
+			return linker.run('client.method')
+					.then(function(data)
+					{
+						expect(data).to.be(555);
+						expect(runTimes).to.be(2);
+					});
+		});
+
+		it('#runOptions', function()
+		{
+			var runTimes = 0;
+			var linker = ClientLinker(
+				{
+					flows: ['timingCheck', 'confighandler'],
+					customFlows:
+					{
+						timingCheck: function(runtime, callback)
+						{
+							runTimes++;
+							if (runTimes == 2)
+							{
+								expect(runtime.retry[0].timing.flowsEnd)
+									.to.be.ok();
+							}
+
+							callback.next();
+						}
+					},
+					clients:
+					{
+						client:
+						{
+							confighandler:
+							{
+								method: function(query, body, callback)
+								{
+									if (runTimes == 1)
+										throw 333;
+									else
+									{
+										callback(null, 555);
+									}
+								}
+							}
+						}
+					}
+				});
+
+			return linker.run('client.method', null, null, {retry: 5})
+					.then(function(data)
+					{
+						expect(data).to.be(555);
+						expect(runTimes).to.be(2);
+					});
+		});
 	});
 
 	it('#throw null err', function()
