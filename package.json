@@ -4,6 +4,7 @@
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
+	"prepublish": "npm ls",
     "start": "node ./bin/clientlinker_cli.js ./test/clientlinker.conf.js",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
