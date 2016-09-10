@@ -6,7 +6,7 @@ var debug		= require('debug')('clientlinker:httpproxy:route');
 var aes			= require('../../lib/aes_cipher');
 var rawBody		= require('raw-body');
 var oldJSON		= require('../../lib/json');
-var deprecate	= require('depd')('clientlinker:httpproxy');
+var deprecate	= require('depd')('clientlinker:httpproxy:route');
 
 exports = module.exports = HttpProxyRoute;
 
@@ -19,6 +19,14 @@ function HttpProxyRoute(linker)
 	{
 		var action = req.query.action;
 		if (!action) return next();
+
+		var deprecate_msg = [];
+		var client_msg = [];
+		var startTime = new Date;
+
+		var logmsg = 'route catch:' + formatLogTime(startTime);
+		debug(logmsg);
+		client_msg.push(logmsg);
 
 		return new Promise(function(resolve, reject)
 			{
@@ -39,6 +47,8 @@ function HttpProxyRoute(linker)
 				else
 				{
 					deprecate('update clientklinker, CONST_VARS JSON')
+					deprecate_msg.push('update clientklinker, CONST_VARS JSON');
+
 					body = JSON.parse(body);
 					body = oldJSON.parse(body, body.CONST_VARS);
 					isOldJSONparse = true;
@@ -63,6 +73,18 @@ function HttpProxyRoute(linker)
 							data: data.data
 						};
 
+						var endTime = new Date;
+						var logmsg = 'clientlinker run end:'
+							+ formatLogTime(endTime)
+							+ ' ' + (endTime - startTime) + 'ms';
+						debug(logmsg);
+						client_msg.push(logmsg);
+
+						if (client_msg.length)
+							output.httpproxy_msg = client_msg;
+						if (deprecate_msg.length)
+							output.httpproxy_deprecate = deprecate_msg;
+
 						if (isOldJSONparse)
 						{
 							output.CONST_VARS = oldJSON.CONST_VARS;
@@ -78,9 +100,23 @@ function HttpProxyRoute(linker)
 			})
 			.catch(function()
 			{
-				debug('[%s] parse body err:%o', action, err);
+				var endTime = new Date;
+				var logmsg = 'clientlinker run err:'
+					+ ' action='+action
+					+ ' ' + formatLogTime(endTime)
+					+ ' ' + (endTime - startTime) + 'ms'
+					+ ' stack=' + ((err && err.stack) || err);
+				debug(logmsg);
+				client_msg.push(logmsg);
+
+				var output = {};
+				if (client_msg.length)
+					output.httpproxy_msg = client_msg;
+				if (deprecate_msg.length)
+					output.httpproxy_deprecate = deprecate_msg;
+
 				res.statusCode = 500;
-				res.json({});
+				res.json(output);
 			});
 	};
 }
@@ -135,6 +171,15 @@ function runAction(linker, action, body)
 					return output;
 				});
 		});
+}
+
+
+function formatLogTime(date)
+{
+	return date.getHours()
+		+':'+date.getMinutes()
+		+':'+date.getSeconds()
+		+'.'+date.getMilliseconds();
 }
 
 

@@ -45,6 +45,8 @@ describe('#compatible_httpproxy', function()
 
 				var body = JSON.parse(data.body);
 				expect(body.CONST_VARS).to.be.an('object');
+				expect(body.httpproxy_deprecate).to.be.an('array')
+					.eql(['update clientklinker, CONST_VARS JSON']);
 
 				body = oldJSON.parse(body, oldJSON.CONST_VARS);
 				expect(body.data).to.be(789);
@@ -63,6 +65,8 @@ describe('#compatible_httpproxy', function()
 
 				var body = JSON.parse(data.body);
 				expect(body.CONST_VARS).to.be.an('object');
+				expect(body.httpproxy_deprecate).to.be.an('array')
+					.eql(['update clientklinker, CONST_VARS JSON']);
 
 				body = oldJSON.parse(body, oldJSON.CONST_VARS);
 				expect(body.data).to.be(undefined);

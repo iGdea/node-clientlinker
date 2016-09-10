@@ -178,6 +178,7 @@ describe('#httpproxy', function()
 							{
 								expect(data.err).to.be(null);
 								expect(data.response.statusCode).to.be(statusCode);
+								expect(data.body).to.contain('route catch:');
 							});
 					});
 				}

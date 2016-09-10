@@ -1,9 +1,10 @@
 "use strict";
 
-var _		= require('underscore');
-var debug	= require('debug')('clientlinker:httpproxy');
-var request	= require('request');
-var aes		= require('../../lib/aes_cipher');
+var _			= require('underscore');
+var debug		= require('debug')('clientlinker:httpproxy');
+var deprecate	= require('depd')('clientlinker:httpproxy');
+var request		= require('request');
+var aes			= require('../../lib/aes_cipher');
 
 exports = module.exports = httpproxy;
 
@@ -44,6 +45,26 @@ function httpproxy(runtime, callback)
 			// 把错误暴露给外层，可以通过`runtime.retry[0].runnedFlows[0].httpproxyResponeError`获取
 			callback.httpproxyResponeError = err;
 			return callback.next();
+		}
+
+		// 预留接口，在客户端显示server端日志
+		if (data.httpproxy_msg
+			&& Array.isArray(data.httpproxy_msg))
+		{
+			data.httpproxy_msg.forEach(function(msg)
+			{
+				debug('[route respone] %s', msg);
+			});
+		}
+
+		// 预留接口，在客户端现实server端兼容日志
+		if (data.httpproxy_deprecate
+			&& Array.isArray(data.httpproxy_deprecate))
+		{
+			data.httpproxy_deprecate.forEach(function(msg)
+			{
+				deprecate('[route respone] '+msg);
+			});
 		}
 
 		if (data.result)
