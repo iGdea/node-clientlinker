@@ -9,6 +9,7 @@ A solution to break out of network and OS.
 [![NPM Downloads][downloads-image]][npm-url]
 [![Dependencies][dependencies-image]][dependencies-url]
 [![Build Status][travis-image]][travis-url]
+[![Appveyor Status][appveyor-image]][appveyor-url]
 [![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
 
@@ -129,8 +130,12 @@ clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 [dependencies-image]: http://img.shields.io/david/Bacra/node-clientlinker.svg
 [dependencies-url]: https://www.versioneye.com/nodejs/clientlinker
 [npm-url]: https://www.npmjs.org/package/clientlinker
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg
+[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
+[travis-url]: [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
+[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
 [license-image]: http://img.shields.io/npm/l/clientlinker.svg
