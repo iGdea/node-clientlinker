@@ -218,8 +218,10 @@ describe('#run_error', function()
 				function(err)
 				{
 					expect(err).to.be.an(Error);
-					expect(err.message).to.be('CLIENTLINKER:CLIENT FLOW OUT,client.method5');
-					expect(err.isClientLinkerNewError).to.not.be.ok();
+					expect(err.message)
+						.to.be('CLIENTLINKER:CLIENT FLOW OUT,client.method5');
+					expect(err.isClientLinkerNewError)
+						.to.not.be.ok();
 				});
 
 		return Promise.all([promise1, promise2, promise3, promise4, promise5]);
@@ -264,7 +266,10 @@ describe('#run_error', function()
 					{
 						runTimes++;
 						if (runTimes == 2)
-							expect(runtime.retry[0].timing.flowsEnd).to.be.ok();
+						{
+							expect(runtime.retry[0].timing.flowsEnd)
+								.to.be.ok();
+						}
 
 						callback.next();
 					}
@@ -302,7 +307,7 @@ describe('#run_error', function()
 				});
 	});
 
-	it('#throw null err', function(done)
+	it('#throw null err', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -322,15 +327,19 @@ describe('#run_error', function()
 				}
 			});
 
-		linker.run('client.method', null, null, function(err)
+		var resolve;
+		var callbackPromise = new Promise(function(resolve0){resolve = resolve0});
+		var runPromise = linker.run('client.method', null, null, function(err)
 			{
 				expect(err).to.be('CLIENT_LINKER_DEFERT_ERROR');
-				setTimeout(done, 10);
+				resolve();
 			})
 			.then(function(){expect().fail()},
 				function(err)
 				{
 					expect(err).to.be(undefined);
 				});
+
+		return Promise.all([callbackPromise, runPromise]);
 	});
 });
