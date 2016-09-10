@@ -68,7 +68,7 @@ function parseParam(linker, str)
 		if (!parseDataSuc) throw err;
 	}
 
-	if (data && data.CONST_VARS) data = linker.JSON.parse(data, data.CONST_VARS);
+	// data = linker.JSON.parse(data);
 
 	return data;
 }
