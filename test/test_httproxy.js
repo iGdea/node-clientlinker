@@ -128,6 +128,45 @@ describe('#httpproxy', function()
 				itKey('no client', 'client_svr_not_exists.method');
 			});
 		});
+
+
+		describe('#5xx_parse', function()
+		{
+			var svrLinker = initSvrLinker();
+			var linker = initLinker(
+				{
+					flows: [
+						function custom(runtime, callback)
+						{
+							var body = httpproxy.getRequestBody_(runtime);
+							var opts = httpproxy.getRequestParams_(runtime, body);
+							opts.body = '{dd';
+							request.post(opts, function(err, response, body)
+							{
+								callback.resolve(
+									{
+										err: err,
+										response: response,
+										body: body
+									});
+							});
+						}]
+				});
+
+			it('#err', function()
+			{
+				return linker.run('client_its.method_promise_resolve')
+					.then(function(data)
+					{
+						expect(data.err).to.be(null);
+						expect(data.response.statusCode).to.be(500);
+						var body = JSON.parse(data.body);
+						expect(body.httpproxy_msg).to.be.an('array')
+						expect(body.httpproxy_msg.join())
+							.to.contain('clientlinker run err:');
+					});
+			});
+		});
 	});
 
 

@@ -98,7 +98,7 @@ function HttpProxyRoute(linker)
 						}
 					});
 			})
-			.catch(function()
+			.catch(function(err)
 			{
 				var endTime = new Date;
 				var logmsg = 'clientlinker run err:'
