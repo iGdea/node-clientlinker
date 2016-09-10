@@ -172,12 +172,12 @@ function getRequestParams(runtime, body)
 var lineReg = /\n/g;
 function stringify4Fiddler(json)
 {
-	var data = JSON.stringify(json.data, null, '\t').replace(lineReg, '\r\n');
+	var data = JSON.stringify(json.jsonk_data, null, '\t').replace(lineReg, '\r\n');
 
-	delete json.data;
+	delete json.jsonk_data;
 	var wrap = JSON.stringify(json);
 	return [
-		'{\r\n"data":',
+		'{\r\n"jsonk_data":',
 		data,
 		wrap.length > 2 ? ','+wrap.substr(1) : '}'
 	].join('\r\n\r\n\r\n\r\n\r\n\r\n');
