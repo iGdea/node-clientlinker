@@ -6,6 +6,7 @@ node_modules
 .eslintrc
 .editorconfig
 .npmignore
+appveyor.yml
 
 test
 coverage
