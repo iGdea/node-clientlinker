@@ -3,6 +3,7 @@
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
 var expect			= require('expect.js');
+var debug			= require('debug')('clientlinker:test_domain');
 
 describe('#domain', function()
 {
@@ -111,7 +112,15 @@ describe('#domain', function()
 
 	it('#addon', function()
 	{
-		var addon = require('nan-async-example');
+		try {
+			var addon = require('nan-async-example');
+		}
+		catch(err)
+		{
+			debug('load addon err: %o', err);
+			return Promise.resolve();
+		}
+
 		var linker = ClientLinker(
 			{
 				flows: ['confighandler'],
