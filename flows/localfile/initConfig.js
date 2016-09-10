@@ -30,9 +30,9 @@ function initConfig(options, linker)
 							fs.stat(path, function(err, stat)
 							{
 								if (err)
-									conn.error('path stat err:%s, %o', path, err);
+									debug('path stat err:%s, %o', path, err);
 								else if (!stat.isDirectory())
-									conn.log('is not path:%s', path);
+									debug('is not path:%s', path);
 								else
 								{
 									debug('add localfile client:%s %s', pathname, path);

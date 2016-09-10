@@ -31,9 +31,9 @@ function initConfig(options, linker)
 							fs.stat(file, function(err, stat)
 							{
 								if (err)
-									conn.error('file stat err:%s, %o', file, err);
+									debug('file stat err:%s, %o', file, err);
 								else if (!stat.isFile())
-									conn.log('is not file:%s', file);
+									debug('is not file:%s', file);
 								else
 								{
 									var name = filename.substr(0, filename.length-3);
