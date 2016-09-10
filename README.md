@@ -7,10 +7,10 @@ A solution to break out of network and OS.
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
-[![Dependencies][dependencies-image]][dependencies-url]
 [![Build Status][travis-image]][travis-url]
 [![Appveyor Status][appveyor-image]][appveyor-url]
 [![Coveralls][coveralls-image]][coveralls-url]
+[![Dependencies][dependencies-image]][dependencies-url]
 [![NPM License][license-image]][npm-url]
 
 # Install
