@@ -95,13 +95,6 @@ function getRequestBody(runtime)
 
 	if (!options.httpproxy) return false;
 
-	if (linker.__bind_httpproxy_route__
-		&& options.httpproxyNotRunWhenBindRoute !== false)
-	{
-		debug('[%s] not request httpproxy when bind route', runtime.action);
-		return false;
-	}
-
 	var httpproxyMaxLevel = options.httpproxyMaxLevel;
 	var httpproxyNextLevel = runtime.env.httpproxyLevel || 0;
 	httpproxyNextLevel++;

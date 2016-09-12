@@ -318,7 +318,6 @@ describe('#httpproxy', function()
 						{
 							defaults:
 							{
-								httpproxyNotRunWhenBindRoute: false,
 								httpproxyMaxLevel: svrLevel
 							}
 						});
@@ -345,67 +344,6 @@ describe('#httpproxy', function()
 			descKey(0);
 			descKey(-1);
 		});
-
-
-		describe('#httpproxyNotRunWhenBindRoute', function()
-		{
-			var svrLinker = initSvrLinker(
-				{
-					defaults:
-					{
-						httpproxyNotRunWhenBindRoute: true,
-						httpproxyMaxLevel: 3
-					}
-				});
-
-			it('#run 5', function()
-			{
-				var linker = initLinker(
-					{
-						defaults:
-						{
-							httpproxyMaxLevel: 3
-						}
-					});
-				var retPromise = linker.run('client_its.method_no_exists');
-
-				return retPromise
-					.then(function(){expect().fail()},
-						function(err)
-						{
-							var runtime = retPromise.runtime;
-							expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-							expect(runtime.env.source).to.be('run');
-							expect(runtime.env.httpproxyLevel).to.be(1);
-							var responeError = runtime.retry[0]
-								.getRunnedFlowByName('httpproxy')
-								.httpproxyResponeError;
-							expect(responeError.message)
-								.to.be('httpproxy,respone!200,501');
-						});
-			});
-
-			it('#run default', function()
-			{
-				var linker = initLinker();
-				var retPromise = linker.run('client_its.method_no_exists');
-
-				return retPromise
-					.then(function(){expect().fail()},
-						function(err)
-						{
-							var runtime = retPromise.runtime;
-							expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-							expect(runtime.env.source).to.be('run');
-							expect(runtime.env.httpproxyLevel).to.be(1);
-							var responeError = runtime.retry[0]
-								.getRunnedFlowByName('httpproxy')
-								.httpproxyResponeError;
-							expect(responeError.message)
-								.to.be('httpproxy,respone!200,501');
-						});
-			});
-		});
-
 	});
+
 });

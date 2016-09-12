@@ -13,7 +13,6 @@ exports = module.exports = HttpProxyRoute;
 function HttpProxyRoute(linker)
 {
 	if (!linker) return function(req, res, next){next()};
-	linker.__bind_httpproxy_route__ = true;
 
 	return function HttpProxyRouteHandle(req, res, next)
 	{
