@@ -13,10 +13,16 @@ function runActionByArgv(linker, argvInfo, allMethods)
 	action && (action = utils.parseAction(action, allMethods));
 	if (!action) return false;
 
-	utils.run(linker, action,
-		utils.parseParam(linker, argvInfo['clk-query'] || argvInfo.query),
-		utils.parseParam(linker, argvInfo['clk-body'] || argvInfo.body),
-		utils.parseParam(linker, argvInfo['clk-options'] || argvInfo.options));
+	Prmise.all(
+		[
+			utils.parseParam(linker, argvInfo['clk-query'] || argvInfo.query),
+			utils.parseParam(linker, argvInfo['clk-body'] || argvInfo.body),
+			utils.parseParam(linker, argvInfo['clk-options'] || argvInfo.options)
+		])
+		.then(function(data)
+		{
+			return utils.run(linker, action, data[0], data[1], data[2]);
+		});
 
 	return true;
 }
