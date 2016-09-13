@@ -30,7 +30,7 @@ function parseParam(linker, str)
 
 	var data;
 	try {
-		data = vm.runInNewContext('('+str+')', {});
+		data = str2obj(str);
 	}
 	catch(err)
 	{
@@ -38,28 +38,10 @@ function parseParam(linker, str)
 
 		var parseDataSuc = false;
 		// 判断参数是不是文件
-		if (!/['"\{\}\n\r\t]/.test(str))
+		var file = maybeFilePath(str);
+		if (file)
 		{
-			if (/^(((~|\.|\.\.)[\/\\])|\/)/.test(str))
-			{
-				var file;
-				if (str[0] == '~')
-				{
-					if (process.env.HOME)
-						file = path.resolve(process.env.HOME, str.substr(2));
-				}
-				else
-					file = str;
-
-				if (file)
-				{
-					file = path.resolve(file);
-					debug('require pkg:%s', file);
-					data = require(file);
-					parseDataSuc = true;
-				}
-			}
-			else if (process.platform === 'win32' && /^\w:[\/\\]/.test(str))
+			if (isPKGFile(file))
 			{
 				data = require(file);
 				parseDataSuc = true;
@@ -72,6 +54,56 @@ function parseParam(linker, str)
 	// data = linker.JSON.parse(data);
 
 	return data;
+}
+
+
+exports.maybeFilePath = maybeFilePath;
+function maybeFilePath(str)
+{
+	var file;
+	if (!/['"\{\}\n\r\t]/.test(str))
+	{
+		if (/^(((~|\.|\.\.)[\/\\])|\/)/.test(str))
+		{
+			if (str[0] == '~')
+			{
+				if (process.env.HOME)
+					file = path.resolve(process.env.HOME, str.substr(2));
+			}
+			else
+				file = str;
+
+			if (file)
+				file = path.resolve(file);
+		}
+		else if (process.platform === 'win32' && /^\w:[\/\\]/.test(str))
+		{
+			file = str;
+		}
+	}
+
+	return file;
+}
+
+
+exports.isPKGFile = isPKGFile;
+function isPKGFile(file)
+{
+	try {
+		require(file);
+		return require.resolve(file);
+	}
+	catch(err)
+	{
+		debug('require file err: %o', err);
+	}
+}
+
+
+exports.str2obj = str2obj;
+function str2obj(str)
+{
+	return vm.runInNewContext('('+str+')', {});
 }
 
 
