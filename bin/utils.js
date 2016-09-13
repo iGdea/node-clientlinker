@@ -4,6 +4,7 @@ var debug	= require('debug')('clientlinker:bin_utils');
 var util	= require('util');
 var vm		= require('vm');
 var path	= require('path');
+var chalk	= require('chalk');
 
 
 exports.parseAction = parseAction;
@@ -79,6 +80,8 @@ function printObject(obj)
 {
 	if (obj instanceof Error)
 		return obj.stack;
+	else if (typeof obj != 'object')
+		return chalk.green(obj);
 	else
 		return util.inspect(obj, {depth: 8, colors: true});
 }
