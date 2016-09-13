@@ -20,7 +20,7 @@ function runClientHandlerIts(linker)
 
 	it('#return promise data', function()
 	{
-		return linker.run('client_its.method_promise_resolve')
+		return linker.run('client_its.method_promise_resolve', null, null, 3)
 			.then(function(data)
 			{
 				expect(data).to.be(789);
