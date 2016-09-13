@@ -132,8 +132,6 @@ clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
 [npm-url]: https://www.npmjs.org/package/clientlinker
 [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
 [appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
