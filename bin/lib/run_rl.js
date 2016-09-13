@@ -11,38 +11,9 @@ function start(allMethods, linker)
 	if (!rl) rl = require('./get_rl');
 
 	printStart();
-
-
 	var ActionParams = {};
-	new Promise(function(resolve, reject)
-		{
-			function question()
-			{
-				rl.question('Action :  ', function(str)
-					{
-						try {
-							var action = utils.parseAction(str, allMethods);
-							if (action)
-							{
-								ActionParams.action = action;
-								console.log(' ==> Action is <%s> <==', action);
-								resolve();
-							}
-							else
-							{
-								console.log(' ==> No Action <%s> <==', action);
-								question();
-							}
-						}
-						catch(err)
-						{
-							reject(err);
-						}
-					});
-			}
 
-			question();
-		})
+	rlaction(allMethods, ActionParams)
 		.then(function()
 		{
 			return rlparam(linker, rl, 'Query', ActionParams);
@@ -73,19 +44,31 @@ function start(allMethods, linker)
 }
 
 
-
+function rlaction(allMethods, ActionParams)
+{
+	return rl.question('Action :  ')
+		.then(function(str)
+		{
+			var action = utils.parseAction(str, allMethods);
+			if (action)
+			{
+				ActionParams.action = action;
+				console.log(' ==> Action is <%s> <==', action);
+			}
+			else
+			{
+				console.log(' ==> No Action <%s> <==', action);
+				return rlaction(allMethods, ActionParams);
+			}
+		});
+}
 
 function rlparam(linker, rl, key, ActionParams)
 {
-	return new Promise(function(resolve)
+	return rl.question(key+' :  ')
+		.then(function(str)
 		{
-			rl.question(key+' :  ', function(str)
-				{
-					resolve(str);
-				});
-		})
-		.then(function(data)
-		{
+			var data = utils.parseParam(linker, str);
 			ActionParams[key.toLowerCase()] = data;
 			console.log(' ==> %s <==\n%s', key, utils.printObject(data));
 		})
