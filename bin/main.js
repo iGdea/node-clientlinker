@@ -2,7 +2,7 @@
 
 var path		= require('path');
 var printTable	= require('./lib/print_table').printTable;
-var rl			= require('./lib/rl');
+var runRl		= require('./lib/run_rl');
 var runArgv		= require('./lib/run_argv');
 var debug		= require('debug')('clientlinker:bin');
 var parsed		= require('nopt')(
@@ -46,7 +46,7 @@ if (parsed.linker)
 						if (!runArgv.runActionByArgv(linker, parsed, allMethods))
 						{
 							printTable(allMethods.lines, allMethods.allFlowFrom);
-							rl.testStart(allMethods, linker);
+							runRl.start(allMethods, linker);
 						}
 					}
 					else

@@ -1,8 +1,8 @@
 "use strict";
 
 var Promise			= require('bluebird');
-var utils			= require('../bin/utils');
-var runArgv			= require('../bin/run_argv');
+var utils			= require('../bin/lib/utils');
+var runArgv			= require('../bin/lib/run_argv');
 var expect			= require('expect.js');
 var ClientLinker	= require('../');
 

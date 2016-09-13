@@ -5,8 +5,8 @@ var utils		= require('./utils');
 var debug		= require('debug')('clientlinker:rl');
 var rl;
 
-exports.testStart = testStart;
-function testStart(allMethods, linker)
+exports.start = start;
+function start(allMethods, linker)
 {
 	if (!rl) rl = require('./get_rl');
 
@@ -68,7 +68,7 @@ function testStart(allMethods, linker)
 		.then(function()
 		{
 			console.log('\n\n\n');
-			testStart(allMethods, linker);
+			start(allMethods, linker);
 		});
 }
 
