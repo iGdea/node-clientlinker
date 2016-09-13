@@ -1,9 +1,9 @@
 "use strict";
 
 var path		= require('path');
-var printTable	= require('./print_table').printTable;
-var rl			= require('./rl');
-var runArgv		= require('./run_argv');
+var printTable	= require('./lib/print_table').printTable;
+var rl			= require('./lib/rl');
+var runArgv		= require('./lib/run_argv');
 var debug		= require('debug')('clientlinker:bin');
 var parsed		= require('nopt')(
 	{
