@@ -57,7 +57,7 @@ function start(allMethods, linker)
 		})
 		.then(function()
 		{
-			return utils.run(linker, ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.runoptions);
+			return utils.run(linker, ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.options);
 		})
 		.catch(function(err)
 		{
@@ -77,23 +77,22 @@ function start(allMethods, linker)
 
 function rlparam(linker, rl, key, ActionParams)
 {
-	return new Promise(function(resolve, reject)
+	return new Promise(function(resolve)
 		{
 			rl.question(key+' :  ', function(str)
 				{
-					try {
-						var data = ActionParams[key.toLowerCase()] = utils.parseParam(linker, str);
-						console.log(' ==> %s <==\n%s', key,
-							utils.printObject(data));
-						resolve();
-					}
-					catch(err)
-					{
-						console.log(err);
-						rlparam(linker, rl, key, ActionParams)
-							.then(resolve, reject);
-					}
+					resolve(str);
 				});
+		})
+		.then(function(data)
+		{
+			ActionParams[key.toLowerCase()] = data;
+			console.log(' ==> %s <==\n%s', key, utils.printObject(data));
+		})
+		.catch(function(err)
+		{
+			console.log(err);
+			return rlparam(linker, rl, key, ActionParams);
 		});
 }
 
