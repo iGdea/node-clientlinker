@@ -82,7 +82,7 @@ function rlparam(linker, rl, key, ActionParams)
 			rl.question(key+' :  ', function(str)
 				{
 					try {
-						var data = ActionParams[key.toLowerCase()] = utils.parseParam(str);
+						var data = ActionParams[key.toLowerCase()] = utils.parseParam(linker, str);
 						console.log(' ==> %s <==\n%s', key,
 							utils.printObject(data));
 						resolve();
