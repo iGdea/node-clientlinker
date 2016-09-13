@@ -2,21 +2,13 @@
 
 var Promise		= require('bluebird');
 var utils		= require('./utils');
-var readline	= require('readline');
 var debug		= require('debug')('clientlinker:rl');
 var rl;
 
 exports.testStart = testStart;
 function testStart(allMethods, linker)
 {
-	if (!rl)
-	{
-		rl = readline.createInterface(
-		{
-			input: process.stdin,
-			output: process.stdout
-		});
-	}
+	if (!rl) rl = require('./get_rl');
 
 	printStart();
 
