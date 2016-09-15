@@ -64,25 +64,26 @@ function maybeFilePath(str)
 	if (!/['"\{\}\n\r\t]/.test(str))
 	{
 		if (/^(((~|\.|\.\.)[\/\\])|\/)/.test(str))
-		{
-			if (str[0] == '~')
-			{
-				if (process.env.HOME)
-					file = path.resolve(process.env.HOME, str.substr(2));
-			}
-			else
-				file = str;
-
-			if (file)
-				file = path.resolve(file);
-		}
+			file = resolve(str);
 		else if (process.platform === 'win32' && /^\w:[\/\\]/.test(str))
-		{
 			file = str;
-		}
 	}
 
 	return file;
+}
+
+
+exports.resolve = resolve;
+function resolve(str)
+{
+	if (str.substr(0, 2) == '~/' && process.env.HOME)
+	{
+		return path.resolve(process.env.HOME, str.substr(2));
+	}
+	else
+	{
+		return path.resolve(str);
+	}
 }
 
 

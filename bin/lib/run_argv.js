@@ -7,22 +7,16 @@ var debug	= require('debug')('clientlinker:run_argv');
 
 
 exports.runActionByArgv = runActionByArgv;
-function runActionByArgv(linker, argvInfo, allMethods)
+function runActionByArgv(linker, action, argvInfo, allMethods)
 {
-	var action = argvInfo['clk-action'] || argvInfo.action;
 	action && (action = utils.parseAction(action, allMethods));
 	if (!action) return false;
 
-	Prmise.all(
-		[
-			utils.parseParam(linker, argvInfo['clk-query'] || argvInfo.query),
-			utils.parseParam(linker, argvInfo['clk-body'] || argvInfo.body),
-			utils.parseParam(linker, argvInfo['clk-options'] || argvInfo.options)
-		])
-		.then(function(data)
-		{
-			return utils.run(linker, action, data[0], data[1], data[2]);
-		});
+	utils.run(linker, action,
+			utils.parseParam(linker, argvInfo.query),
+			utils.parseParam(linker, argvInfo.body),
+			utils.parseParam(linker, argvInfo.options)
+		);
 
 	return true;
 }

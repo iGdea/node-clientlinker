@@ -1,11 +1,11 @@
 {
   "name": "clientlinker",
-  "version": "5.3.1",
+  "version": "5.4.0",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
-    "start": "node ./bin/clientlinker_cli.js ./test/clientlinker.conf.js",
+    "start": "node ./bin/clientlinker_cli.js run ./test/clientlinker.conf.js",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
@@ -38,12 +38,12 @@
   "dependencies": {
     "bluebird": "^3.3.1",
     "chalk": "^1.1.3",
+    "commander": "^2.9.0",
     "debug": "^2.2.0",
     "depd": "^1.1.0",
     "is-promise": "^2.1.0",
     "jsonk": "^1.0.0",
     "mkdirp": "^0.5.1",
-    "nopt": "^3.0.6",
     "raw-body": "^2.1.7",
     "request": "^2.69.0",
     "table": "^3.7.8",

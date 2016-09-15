@@ -110,11 +110,11 @@ clientlinker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options
 
 ```shell
 #### List all Clients and Methods
-clientlinker ./clientlinker.conf.js
+clientlinker list ./clientlinker.conf.js
 
 #### Run action directly in Terminal
-clientlinker ./clientlinker.conf.js --action=method --query=query --body=body --options=options
-clientlinker --linker=./clientlinker.conf.js --clk-action=method --clk-body=body
+clientlinker run ./clientlinker.conf.js
+clientlinker exec ./clientlinker.conf.js mail.method --body=body
 ```
 
 
