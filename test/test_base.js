@@ -58,26 +58,6 @@ describe('#base', function()
 		expect(Object.keys(linker.flows).length).to.be(3);
 	});
 
-	it('#loadFlow', function()
-	{
-		var linker = ClientLinker()
-
-		expect(function(){linker.loadFlow('no_exists_flow')}).to.throwError();
-		expect(function(){linker.loadFlow('flow1')}).to.throwError();
-		expect(function(){linker.loadFlow('./flows/flow1')}).to.throwError();
-		expect(linker.loadFlow('./flows/flow_empty', module)).to.not.be.ok();
-		expect(linker.loadFlow('./flows/flow_resolve', module)).to.be.ok();
-		expect(linker.loadFlow('./flows/flow_next', module)).to.be.ok();
-
-		linker.addClient('client1', {flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']});
-
-		return linker.run('client1.xxxx')
-			.then(function(data)
-			{
-				expect(data).to.be('flow_resolve');
-			});
-	});
-
 
 	it('#custom', function()
 	{
@@ -178,32 +158,6 @@ describe('#base', function()
 	});
 
 
-	it('#runtime of retPromise', function()
-	{
-		var linker = ClientLinker();
-		linker.addClient('client');
-
-		var retPromise = linker.run('client.method');
-
-		return retPromise
-			.then(function(){expect().fail()},
-				function()
-				{
-					var runtime = retPromise.runtime;
-					expect(runtime).to.be.an('object');
-					expect(runtime.navigationStart).to.be.a('number');
-
-					return retPromise.runtimePromise
-						.then(function(runtime2)
-						{
-							expect(runtime2).to.be.an('object');
-							expect(runtime2.navigationStart).to.be.a('number');
-							expect(runtime2).to.be.eql(runtime);
-						});
-				});
-	});
-
-
 	it('#getRunnedFlowByName', function()
 	{
 		var linker = ClientLinker(
@@ -241,96 +195,6 @@ describe('#base', function()
 						expect(data2).to.be('heihei');
 					});
 			});
-	});
-
-
-	it('#timing', function()
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['assertHandler', 'custom1', 'custom2'],
-				customFlows:
-				{
-					custom1: function custom1(runtime, callback)
-					{
-						setTimeout(callback.next, 100);
-					},
-					custom2: function custom2(runtime, callback)
-					{
-						setTimeout(callback, 100);
-					},
-					assertHandler: function assertHandler(runtime, callback)
-					{
-						var lastFlowTiming = runtime.lastFlow().timing;
-						var timing = runtime.timing;
-
-						expect(lastFlowTiming.start)
-							.to.be.above(runtime.navigationStart-1);
-						expect(lastFlowTiming.start - runtime.navigationStart)
-							.to.be.below(10);
-
-						expect(lastFlowTiming.start)
-							.to.be.above(timing.flowsStart-1);
-						expect(lastFlowTiming.start - timing.flowsStart)
-							.to.below(10);
-
-						callback.next();
-					}
-				},
-				clients: {
-					client: {
-						method: null
-					}
-				}
-			});
-
-		var retPromise = linker.run('client.method');
-
-		return retPromise.then(function()
-			{
-				var runtime = retPromise.runtime;
-				var timing = runtime.timing;
-				var lastFlowTiming = runtime.lastFlow().timing;
-
-				expect(timing.flowsEnd).to.be.above(lastFlowTiming.end-1);
-				expect(timing.flowsEnd - lastFlowTiming.end)
-					.to.be.below(10);
-
-				expect(lastFlowTiming.start).to.be.above(timing.flowsStart);
-				expect(lastFlowTiming.start - timing.flowsStart)
-					.to.above(100-10);
-
-				expect(lastFlowTiming.end).to.be.above(lastFlowTiming.start);
-				expect(lastFlowTiming.end - lastFlowTiming.start)
-					.to.be.above(100-10);
-			});
-	});
-
-
-	it('#env of runtime', function()
-	{
-		var linker = ClientLinker();
-		linker.addClient('client');
-
-		var retPromise1 = linker.run('client.method');
-		var promise1 = retPromise1
-			.then(function(){expect().fail()},
-				function()
-				{
-					var runtime = retPromise1.runtime;
-					expect(runtime.env.source).to.be('run');
-				});
-
-		var retPromise2 = linker.runInShell('client.method');
-		var promise2 = retPromise2
-			.then(function(){expect().fail()},
-				function()
-				{
-					var runtime = retPromise2.runtime;
-					expect(runtime.env.source).to.be('shell');
-				});
-
-		return Promise.all([promise1, promise2]);
 	});
 
 });
