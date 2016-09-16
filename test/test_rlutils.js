@@ -2,7 +2,6 @@
 
 var Promise			= require('bluebird');
 var rlutils			= require('../bin/lib/rlutils');
-var runArgv			= require('../bin/lib/run_argv');
 var expect			= require('expect.js');
 var ClientLinker	= require('../');
 var path			= require('path');
@@ -173,7 +172,7 @@ describe('#rlutils', function()
 		return linker.methods()
 			.then(function(list)
 			{
-				return runArgv.getAllMethods(list);
+				return rlutils.getAllMethods(list);
 			})
 			.then(function(allMethods)
 			{

@@ -4,8 +4,8 @@ var path		= require('path');
 var rlutils		= require('./lib/rlutils');
 var printTable	= require('./lib/print_table').printTable;
 var runRl		= require('./lib/run_rl');
-var runArgv		= require('./lib/run_argv');
 var debug		= require('debug')('clientlinker:bin');
+var chalk		= require('chalk');
 var Command		= require('commander').Command;
 // 强制使用clientlinker作为name
 var program		= new Command('clientlinker');
@@ -39,16 +39,20 @@ program
 			{
 				if (allMethods.length)
 				{
-					runArgv.runActionByArgv(linker, action,
-						{
-							query: options.clkQuery,
-							body: options.clkBody,
-							options: options.clkOptions
-						},
-						allMethods);
+					var realaction = rlutils.parseAction(action, allMethods);
+					if (realaction)
+					{
+						rlutils.run(linker, realaction,
+								rlutils.parseParam(linker, options.clkQuery),
+								rlutils.parseParam(linker, options.clkBody),
+								rlutils.parseParam(linker, options.clkOptions)
+							);
+					}
+					else
+						console.error('   ** No Action %s **   ', chalk.red(action));
 				}
 				else
-					console.error('  ** No Client has Methods **   ');
+					console.error('   ** No Client has Methods **   ');
 			})
 			.catch(function(err)
 			{
@@ -113,7 +117,7 @@ program.parse(process.argv);
 
 
 
-/****** rlutils *******/
+/****** utils *******/
 function printAndRunMethos(conf_file, options, isRunRl)
 {
 	var linker = require(rlutils.resolve(conf_file));
@@ -153,6 +157,6 @@ function filterAllMehtods(linker, clients)
 				});
 			}
 
-			return runArgv.getAllMethods(reallist);
+			return rlutils.getAllMethods(reallist);
 		});
 }
