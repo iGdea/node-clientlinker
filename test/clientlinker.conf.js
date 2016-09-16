@@ -4,7 +4,7 @@ var ClientLinker = require('../');
 
 var linker = ClientLinker(
 	{
-		flows: ['localfile', 'confighandler', 'pkghandler'],
+		flows: ['nextFlow', 'localfile', 'confighandler', 'pkghandler'],
 		localfileDir: __dirname+'/localfile',
 		pkghandlerDir: __dirname+'/pkghandler',
 		clients: {
@@ -14,6 +14,10 @@ var linker = ClientLinker(
 		},
 		customFlows:
 		{
+			nextFlow: function nextFlow(runtime, callback)
+			{
+				callback.next();
+			},
 			custom: function custom(runtime, callback)
 			{
 				callback(null, {respone: 'respone'});

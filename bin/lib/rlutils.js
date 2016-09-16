@@ -179,17 +179,61 @@ function run(linker, action, query, body, options)
 		printObject(body),
 		printObject(options));
 
-	return linker.runIn([action, query, body, null, options], 'cli')
+	var retPromise = linker.runIn([action, query, body, null, options], 'cli');
+
+	return retPromise
 		.then(function(data)
 		{
-			console.log('\n ========= Action Result Success %s =========\n%s',
+			console.log('\n ========= Action Result Success %s =========\n%s\n\n%s',
 				chalk.green(action),
+				printRuntime(retPromise.runtime),
 				printObject(data));
 		},
 		function(err)
 		{
-			console.log('\n ========= Action Result Error %s =========\n%s',
+			console.log('\n ========= Action Result Error %s =========\n%s\n\n%s',
 				chalk.green(action),
+				printRuntime(retPromise.runtime),
 				printObject(err));
 		});
+}
+
+
+function printRuntime(runtime)
+{
+	var retryTimes = runtime.retry.length;
+	var alltime = runtime.timing.flowsEnd - runtime.navigationStart;
+	var lastRetry = runtime.retry[runtime.retry.length-1];
+	var flowStr = [];
+	for (var runnedFlows = lastRetry.runnedFlows, len = runnedFlows.length; len--;)
+	{
+		var flowItem = runnedFlows[len];
+		if (!flowItem || !flowItem.flow) continue;
+
+		if (!flowStr.length)
+		{
+			flowStr.push(chalk.green(flowItem.flow.name)
+				+ ' '
+				+ chalk.blue(flowItem.timing.end - flowItem.timing.start)
+				+ 'ms');
+		}
+		else
+		{
+			flowStr.push(chalk.gray(flowItem.flow.name));
+		}
+	}
+
+	var lines = [];
+	lines.push([
+		chalk.cyan.underline('[Runtime]'),
+		'use:',
+			alltime > 250 ? chalk.red(alltime) : chalk.green(alltime),
+			'ms,',
+		'retry:',
+			retryTimes != 1 ? chalk.red(retryTimes) : chalk.green(retryTimes)
+	].join(' '));
+
+	lines.push(chalk.cyan.underline('[FlowRun]') + ' ' +flowStr.join(' > '));
+
+	return lines.join('\n');
 }
