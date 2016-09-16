@@ -94,6 +94,9 @@ describe('#rlutils', function()
 				var data = rlutils.parseParam(linker, 'jsonk:{k:"Date", v:'+now+'}');
 				expect(data.getTime()).to.be(now);
 
+				data = rlutils.parseParam(linker, '{k:"Date", v:'+now+'}');
+				expect(data.getTime()).to.be(now);
+
 				data = rlutils.parseParam(linker, 'jsonk-:'
 						+'{jsonk_data:{k:"Date", v:'+now+'}, parsers:"Date"}');
 				expect(data.getTime()).to.be(now);
