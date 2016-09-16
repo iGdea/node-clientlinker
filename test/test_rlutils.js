@@ -83,6 +83,9 @@ describe('#rlutils', function()
 
 				data = utils.parseParam(linker, 'buffer:YmYxMjM=');
 				expect(data.toString()).to.be('bf123');
+
+				data = utils.parseParam(linker, ' buffer:YmYxMjM=');
+				expect(data.toString()).to.be('bf123');
 			});
 
 			it('#jsonk', function()
@@ -114,6 +117,9 @@ describe('#rlutils', function()
 			{
 				var data = utils.parseParam(linker, 'not_exists_parser:xxx');
 				expect(data).to.be('not_exists_parser:xxx');
+
+				data = utils.parseParam(linker, ' not_exists_parser:xxx');
+				expect(data).to.be(' not_exists_parser:xxx');
 			});
 		});
 	});
