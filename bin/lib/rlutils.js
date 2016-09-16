@@ -130,13 +130,9 @@ exports.resolve = resolve;
 function resolve(str)
 {
 	if (str.substr(0, 2) == '~/' && process.env.HOME)
-	{
 		return path.resolve(process.env.HOME, str.substr(2));
-	}
 	else
-	{
 		return path.resolve(str);
-	}
 }
 
 
@@ -166,8 +162,6 @@ function printObject(obj)
 {
 	if (obj instanceof Error)
 		return obj.stack;
-	else if (typeof obj != 'object')
-		return chalk.green(obj);
 	else
 		return util.inspect(obj, {depth: 8, colors: true});
 }
@@ -180,7 +174,7 @@ function run(linker, action, query, body, options)
 		+' >>> Query <<<\n%s\n\n'
 		+' >>> Body <<<\n%s\n\n'
 		+' >>> Options <<<\n%s',
-		printObject(action),
+		chalk.green(action),
 		printObject(query),
 		printObject(body),
 		printObject(options));
@@ -189,13 +183,13 @@ function run(linker, action, query, body, options)
 		.then(function(data)
 		{
 			console.log('\n ========= Action Result Success %s =========\n%s',
-				printObject(action),
+				chalk.green(action),
 				printObject(data));
 		},
 		function(err)
 		{
 			console.log('\n ========= Action Result Error %s =========\n%s',
-				printObject(action),
+				chalk.green(action),
 				printObject(err));
 		});
 }
