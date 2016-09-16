@@ -73,7 +73,7 @@ describe('#rlutils', function()
 
 		describe('#data type', function()
 		{
-			it('#base', function()
+			it('#selfType', function()
 			{
 				var data = rlutils.parseParam(linker, 'json:{"key": "value"}');
 				expect(data.key).to.be('value');
@@ -86,6 +86,26 @@ describe('#rlutils', function()
 
 				data = rlutils.parseParam(linker, ' buffer:YmYxMjM=');
 				expect(data.toString()).to.be('bf123');
+			});
+
+			it('#baseType', function()
+			{
+				expect(rlutils.parseParam(linker, 'string:111'))
+					.to.be.an('string').be('111');
+				expect(rlutils.parseParam(linker, 'String:111'))
+					.to.be.an('string').be('111');
+
+				expect(rlutils.parseParam(linker, 'number:111'))
+					.to.be.an('number').be(111);
+
+				expect(rlutils.parseParam(linker, 'boolean:111'))
+					.to.be.a('boolean').be(true);
+				expect(rlutils.parseParam(linker, 'boolean:'))
+					.to.be.a('boolean').be(false);
+				expect(rlutils.parseParam(linker, 'boolean:0'))
+					.to.be.a('boolean').be(false);
+				expect(rlutils.parseParam(linker, 'boolean:00'))
+					.to.be.a('boolean').be(true);
 			});
 
 			it('#jsonk', function()
@@ -112,7 +132,7 @@ describe('#rlutils', function()
 
 				// has no date parser
 				data = rlutils.parseParam(linker, 'jsonk-date:'+now+'');
-				expect(data).to.be.eql({k: 'date', v: ''+now});
+				expect(data).to.be.eql(now);
 			});
 
 
@@ -123,6 +143,9 @@ describe('#rlutils', function()
 
 				data = rlutils.parseParam(linker, ' not_exists_parser:xxx');
 				expect(data).to.be(' not_exists_parser:xxx');
+
+				data = rlutils.parseParam(linker, 'jsonk-not_exists_parser:xxx');
+				expect(data).to.be('xxx');
 			});
 		});
 	});

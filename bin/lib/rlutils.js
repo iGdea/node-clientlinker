@@ -83,17 +83,28 @@ function parseParam(linker, str)
 			else
 			{
 				var parserName;
-				if (jsonk.parsermap[type]) parserName = type;
-				if (!parserName)
-				{
-					var tmpParserName = type[0].toUpperCase() + type.substr(1);
-					if (jsonk.parsermap[tmpParserName]) parserName = tmpParserName;
-				}
+				var tmpParserName = type[0].toUpperCase() + type.substr(1);
 
-				if (parserName)
-					return jsonk.parseType(parserName, data);
-				else
-					return str;
+				switch(tmpParserName)
+				{
+					case 'String':
+						return ''+data;
+					case 'Number':
+						return +data;
+					case 'Boolean':
+						return data == '0' ? false : !!data;
+
+					default:
+						if (jsonk.parsermap[type])
+							parserName = type;
+						else if (jsonk.parsermap[tmpParserName])
+							parserName = tmpParserName;
+
+						if (parserName)
+							return jsonk.parseType(parserName, data);
+						else
+							return str;
+				}
 			}
 	}
 }
