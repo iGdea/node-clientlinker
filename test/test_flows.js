@@ -57,6 +57,16 @@ describe('#flows', function()
 		return Promise.all([promise1, promise2, promise3]);
 	});
 
+	it('#localfile2', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['localfile'],
+				localfileDir: __dirname+'/not_exsits_path',
+			});
+
+		return linker.methods();
+	});
 
 
 	describe('#confighandler', function()
