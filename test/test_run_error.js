@@ -56,7 +56,7 @@ describe('#run_error', function()
 				{
 					expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT');
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client.method1');
+					expect(err.CLIENTLINKER_ACTION).to.be('client.method1');
 					expect(err.CLIENTLINKER_CLIENT).to.be('client');
 				});
 
@@ -66,7 +66,7 @@ describe('#run_error', function()
 				{
 					expect(err.message).to.contain('CLIENTLINKER:NO CLIENT');
 					expect(err.CLIENTLINKER_TYPE).to.be('NO CLIENT');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client1.method');
+					expect(err.CLIENTLINKER_ACTION).to.be('client1.method');
 				});
 
 		var promise5 = linker.run('client2.method')
@@ -75,7 +75,7 @@ describe('#run_error', function()
 				{
 					expect(err.message).to.contain('CLIENTLINKER:CLIENT NO FLOWS');
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT NO FLOWS');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client2.method');
+					expect(err.CLIENTLINKER_ACTION).to.be('client2.method');
 					expect(err.CLIENTLINKER_CLIENT).to.be('client2');
 				});
 

@@ -43,7 +43,7 @@ describe('#httpproxy', function()
 							.to.contain('CLIENTLINKER:CLIENT FLOW OUT,client_not_exists.method');
 						expect(err.CLIENTLINKER_TYPE)
 							.to.be('CLIENT FLOW OUT');
-						expect(err.CLIENTLINKER_METHODKEY)
+						expect(err.CLIENTLINKER_ACTION)
 							.to.be('client_not_exists.method');
 					});
 		});

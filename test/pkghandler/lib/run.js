@@ -88,7 +88,7 @@ function runClientHandlerIts(linker)
 				{
 					expect(err.message).to.contain('CLIENTLINKER:CLIENT FLOW OUT');
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client_its.method_not_exists');
+					expect(err.CLIENTLINKER_ACTION).to.be('client_its.method_not_exists');
 					expect(err.CLIENTLINKER_CLIENT).to.be('client_its');
 				});
 	});
@@ -101,7 +101,7 @@ function runClientHandlerIts(linker)
 				{
 					expect(err.message).to.contain('CLIENTLINKER:NO CLIENT');
 					expect(err.CLIENTLINKER_TYPE).to.be('NO CLIENT');
-					expect(err.CLIENTLINKER_METHODKEY).to.be('client_not_exists.method');
+					expect(err.CLIENTLINKER_ACTION).to.be('client_not_exists.method');
 				});
 	});
 }
