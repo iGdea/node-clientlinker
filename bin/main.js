@@ -17,7 +17,7 @@ program
 program
 	.command('list <conf_file>')
 	.description('list methods of clients')
-	// .option('--client <name>', 'only those clients')
+	.option('--filter-client <name>', 'only those clients')
 	.action(function(conf_file, options)
 	{
 		printAndRunMethos(conf_file, options, false);
@@ -29,20 +29,14 @@ program
 	.option('--query, --clk-query <data>', 'run param [query]')
 	.option('--body, --clk-body <data>', 'run param [body]')
 	.option('--options, --clk-options <data>', 'run param [options]')
-	// .option('--query-file <path>', 'run param [query]')
-	// .option('--body-file <path>', 'run param [body]')
-	// .option('--options-file <path>', 'run param [options]')
-	// .option('--query-str <string>', 'run param [query]')
-	// .option('--body-str <string>', 'run param [body]')
-	// .option('--options-str <string>', 'run param [options]')
+	.option('--filter-client <name>', 'only those clients')
 	.action(function(conf_file, action, options)
 	{
 		var linker = require(rlutils.resolve(conf_file));
 
-		linker.methods()
-			.then(function(list)
+		filterAllMehtods(linker, options.filterClient)
+			.then(function(allMethods)
 			{
-				var allMethods = runArgv.getAllMethods(list);
 				if (allMethods.length)
 				{
 					runArgv.runActionByArgv(linker, action,
@@ -70,7 +64,7 @@ program
 program
 	.command('run <conf_file>')
 	.description('run [action] of clients with methods list')
-	// .option('--client <name>', 'only those clients')
+	.option('--filter-client <name>', 'only those clients')
 	.action(function(conf_file, options)
 	{
 		printAndRunMethos(conf_file, options, true);
@@ -123,10 +117,10 @@ program.parse(process.argv);
 function printAndRunMethos(conf_file, options, isRunRl)
 {
 	var linker = require(rlutils.resolve(conf_file));
-	linker.methods()
-		.then(function(list)
+
+	filterAllMehtods(linker, options.filterClient)
+		.then(function(allMethods)
 		{
-			var allMethods = runArgv.getAllMethods(list);
 			if (allMethods.length)
 			{
 				printTable(allMethods.lines, allMethods.allFlowFrom);
@@ -138,5 +132,27 @@ function printAndRunMethos(conf_file, options, isRunRl)
 		.catch(function(err)
 		{
 			console.log(err.stack);
+		});
+}
+
+function filterAllMehtods(linker, clients)
+{
+	return linker.methods()
+		.then(function(list)
+		{
+			var reallist;
+
+			if (!clients)
+				reallist = list;
+			else
+			{
+				reallist = {};
+				clients.split(/ *, */).forEach(function(name)
+				{
+					reallist[name] = list[name];
+				});
+			}
+
+			return runArgv.getAllMethods(reallist);
 		});
 }

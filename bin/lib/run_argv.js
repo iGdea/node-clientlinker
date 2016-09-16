@@ -39,7 +39,7 @@ function getAllMethods(list)
 			client: clientName
 		});
 
-		var methods = item.methods && Object.keys(item.methods).sort();
+		var methods = item && item.methods && Object.keys(item.methods).sort();
 		if (methods && methods.length)
 		{
 			methods.forEach(function(method)
