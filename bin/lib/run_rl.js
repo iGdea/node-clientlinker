@@ -1,7 +1,7 @@
 "use strict";
 
 var Promise		= require('bluebird');
-var utils		= require('./utils');
+var rlutils		= require('./rlutils');
 var debug		= require('debug')('clientlinker:rl');
 var rl;
 
@@ -28,13 +28,13 @@ function start(allMethods, linker)
 		})
 		.then(function()
 		{
-			return utils.run(linker, ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.options);
+			return rlutils.run(linker, ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.options);
 		})
 		.catch(function(err)
 		{
 			console.log('\n ========= Unexpected Error %s =========\n%s',
-				utils.printObject(ActionParams.action),
-				utils.printObject(err));
+				rlutils.printObject(ActionParams.action),
+				rlutils.printObject(err));
 		})
 		.then(function()
 		{
@@ -49,7 +49,7 @@ function rlaction(allMethods, ActionParams)
 	return rl.question('Action :  ')
 		.then(function(str)
 		{
-			var action = utils.parseAction(str, allMethods);
+			var action = rlutils.parseAction(str, allMethods);
 			if (action)
 			{
 				ActionParams.action = action;
@@ -68,9 +68,9 @@ function rlparam(linker, rl, key, ActionParams)
 	return rl.question(key+' :  ')
 		.then(function(str)
 		{
-			var data = utils.parseParam(linker, str);
+			var data = rlutils.parseParam(linker, str);
 			ActionParams[key.toLowerCase()] = data;
-			console.log(' ==> %s <==\n%s', key, utils.printObject(data));
+			console.log(' ==> %s <==\n%s', key, rlutils.printObject(data));
 		})
 		.catch(function(err)
 		{

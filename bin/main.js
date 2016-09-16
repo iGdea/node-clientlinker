@@ -1,7 +1,7 @@
 "use strict";
 
 var path		= require('path');
-var utils		= require('./lib/utils');
+var rlutils		= require('./lib/rlutils');
 var printTable	= require('./lib/print_table').printTable;
 var runRl		= require('./lib/run_rl');
 var runArgv		= require('./lib/run_argv');
@@ -37,7 +37,7 @@ program
 	// .option('--options-str <string>', 'run param [options]')
 	.action(function(conf_file, action, options)
 	{
-		var linker = require(utils.resolve(conf_file));
+		var linker = require(rlutils.resolve(conf_file));
 
 		linker.methods()
 			.then(function(list)
@@ -119,10 +119,10 @@ program.parse(process.argv);
 
 
 
-/****** Utils *******/
+/****** rlutils *******/
 function printAndRunMethos(conf_file, options, isRunRl)
 {
-	var linker = require(utils.resolve(conf_file));
+	var linker = require(rlutils.resolve(conf_file));
 	linker.methods()
 		.then(function(list)
 		{

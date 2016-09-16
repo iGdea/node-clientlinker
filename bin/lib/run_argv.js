@@ -1,7 +1,7 @@
 "use strict";
 
 var _		= require('underscore');
-var utils	= require('./utils');
+var rlutils	= require('./rlutils');
 var debug	= require('debug')('clientlinker:run_argv');
 
 
@@ -9,13 +9,13 @@ var debug	= require('debug')('clientlinker:run_argv');
 exports.runActionByArgv = runActionByArgv;
 function runActionByArgv(linker, action, argvInfo, allMethods)
 {
-	action && (action = utils.parseAction(action, allMethods));
+	action && (action = rlutils.parseAction(action, allMethods));
 	if (!action) return false;
 
-	utils.run(linker, action,
-			utils.parseParam(linker, argvInfo.query),
-			utils.parseParam(linker, argvInfo.body),
-			utils.parseParam(linker, argvInfo.options)
+	rlutils.run(linker, action,
+			rlutils.parseParam(linker, argvInfo.query),
+			rlutils.parseParam(linker, argvInfo.body),
+			rlutils.parseParam(linker, argvInfo.options)
 		);
 
 	return true;
