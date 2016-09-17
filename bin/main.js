@@ -5,34 +5,18 @@ var rlutils		= require('./lib/rlutils');
 var printTable	= require('./lib/print_table').printTable;
 var runRl		= require('./lib/run_rl');
 var debug		= require('debug')('clientlinker:bin');
-var Command		= require('commander').Command;
-// 强制使用clientlinker作为name
-var program		= new Command('clientlinker');
+var Command		= require('./lib/command').Command;
 
 // rlutils.colors.enabled = false;
+var command = new Command;
 
-program
-	.version(require('../package.json').version);
-
-
-program
-	.command('list <conf_file>')
-	.alias('ls')
-	.description('list methods of clients')
-	.option('--filter-client <name>', 'only those clients')
+command.list()
 	.action(function(conf_file, options)
 	{
 		printAndRunMethos(conf_file, options, false);
 	});
 
-program
-	.command('exec <conf_file> <action>')
-	.alias('ex')
-	.description('exec [action] of clients')
-	.option('--query, --clk-query <data>', 'run param [query]')
-	.option('--body, --clk-body <data>', 'run param [body]')
-	.option('--options, --clk-options <data>', 'run param [options]')
-	.option('--filter-client <name>', 'only those clients')
+command.exec()
 	.action(function(conf_file, action, options)
 	{
 		var linker = require(rlutils.resolve(conf_file));
@@ -68,44 +52,20 @@ program
 	// 	console.log('');
 	// });
 
-program
-	.command('run <conf_file>')
-	.description('run [action] of clients with methods list')
-	.option('--filter-client <name>', 'only those clients')
+command.run()
 	.action(function(conf_file, options)
 	{
 		printAndRunMethos(conf_file, options, true);
 	});
 
-program
-	.command('help <cmd>')
-	.description('display help for [cmd]')
-	.action(function(cmd)
+command.help()
+	.action(function()
 	{
-		var self = this;
-		var command;
-		self.parent.commands.some(function(item)
-		{
-			if (item.name() == cmd || item.alias() == cmd)
-			{
-				command = item;
-				return true;
-			}
-		});
-
-		// command.help();
-		// remove help info
-		command.outputHelp(function(info)
-		{
-			return info.replace(/ +-h, --help [^\n]+\n/, '')
-				.replace(/Usage: */, 'Usage: '+self.parent.name()+' ');
-		});
-
 		process.exit();
 	});
 
 // 默认输出帮助信息
-program
+command.program
 	.command('*', null, {noHelp: true})
 	.action(function()
 	{
@@ -116,7 +76,10 @@ program
 if (process.argv.length < 3)
 	process.argv.push('--help');
 
-program.parse(process.argv);
+command.program.parse(process.argv);
+
+
+
 
 
 
