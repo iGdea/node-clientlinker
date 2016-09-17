@@ -5,10 +5,8 @@ var ClientLinker	= require('../');
 var expect			= require('expect.js');
 
 
-
 describe('#runtime', function()
 {
-
 	it('#runtime of retPromise', function()
 	{
 		var linker = ClientLinker();

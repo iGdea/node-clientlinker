@@ -3,7 +3,7 @@
 var Command2	= require('commander').Command;
 var pkg			= require('../../package.json');
 // 强制使用clientlinker作为name
-var program	= new Command2('clientlinker');
+var program		= new Command2('clientlinker');
 
 
 exports.Command = Command;

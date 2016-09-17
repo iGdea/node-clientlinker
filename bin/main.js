@@ -5,7 +5,6 @@ var runRl			= require('./lib/run_rl');
 var Command			= require('./lib/command').Command;
 var commandActions	= require('./lib/command_actions');
 
-// rlutils.colors.enabled = false;
 var command = new Command;
 
 command.exec().action(commandActions.execAction);
