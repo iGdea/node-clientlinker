@@ -16,6 +16,7 @@ program
 
 program
 	.command('list <conf_file>')
+	.alias('ls')
 	.description('list methods of clients')
 	.option('--filter-client <name>', 'only those clients')
 	.action(function(conf_file, options)
@@ -25,6 +26,7 @@ program
 
 program
 	.command('exec <conf_file> <action>')
+	.alias('ex')
 	.description('exec [action] of clients')
 	.option('--query, --clk-query <data>', 'run param [query]')
 	.option('--body, --clk-body <data>', 'run param [body]')
