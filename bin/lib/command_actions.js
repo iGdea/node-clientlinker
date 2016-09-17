@@ -15,8 +15,8 @@ exports.execAction = function execAction(conf_file, action, options)
 		.then(function(allMethods)
 		{
 			return commandActions.exec(linker, action, allMethods, options);
-		})
-		.catch(function(err)
+		},
+		function(err)
 		{
 			console.error(printTpl.errorInfo(err));
 			throw err;

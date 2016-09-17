@@ -7,18 +7,31 @@ var commandActions	= require('./lib/command_actions');
 
 var command = new Command;
 
-command.exec().action(commandActions.execAction);
-command.list().action(commandActions.listAction);
 command.help().action(function(){process.exit()});
 
-command.run()
-	.action(function(conf_file, options)
+command.list()
+	.action(function()
 	{
-		commandActions.listAction(conf_file, options)
+		commandActions.listAction.apply(null, arguments)
+			.catch(function(){});
+	});
+
+command.exec()
+	.action(function()
+	{
+		commandActions.execAction.apply(null, arguments)
+			.catch(function(){});
+	});
+
+command.run()
+	.action(function()
+	{
+		commandActions.listAction.apply(null, arguments)
 			.then(function(data)
 			{
 				runRl.start(data.linker, data.methods);
-			});
+			},
+			function(){});
 	});
 
 
