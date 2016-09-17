@@ -14,7 +14,7 @@ var colors = exports.colors = new chalk.constructor();
 exports.parseAction = parseAction;
 function parseAction(str, allMethods)
 {
-	str = str && str.trim();
+	str = str && (''+str).trim();
 	if (!str)
 		return;
 	else if (allMethods.indexOf(str) != -1)

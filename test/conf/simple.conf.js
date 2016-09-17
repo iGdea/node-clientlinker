@@ -5,7 +5,7 @@ var ClientLinker	= require('../../');
 
 module.exports = ClientLinker(
 	{
-		flows: ['confighandler'],
+		flows: ['not_exists_flow', 'flowNext', 'confighandler'],
 		clients:
 		{
 			client:
@@ -13,7 +13,8 @@ module.exports = ClientLinker(
 				confighandler:
 				{
 					success: function(){return Promise.resolve()},
-					error: function(){return Promise.reject()}
+					error: function(){return Promise.reject()},
+					error2: function(){return Promise.reject('errmsg')}
 				}
 			},
 			client2:
@@ -30,6 +31,14 @@ module.exports = ClientLinker(
 							});
 					}
 				}
+			},
+			client3: null
+		},
+		customFlows:
+		{
+			flowNext: function(runtime, callback)
+			{
+				callback.next();
 			}
 		}
 	});
