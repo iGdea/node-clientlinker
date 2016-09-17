@@ -10,7 +10,7 @@ exports.Command = Command;
 function Command()
 {
 	var program = this.program = new Command2(pkg.name);
-	program.version(pkg.version);
+	program.version('v'+pkg.version);
 }
 
 var proto = Command.prototype;
