@@ -1,6 +1,7 @@
 "use strict";
 
-var ClientLinker = require('../../');
+var Promise			= require('bluebird');
+var ClientLinker	= require('../../');
 
 module.exports = ClientLinker(
 	{
