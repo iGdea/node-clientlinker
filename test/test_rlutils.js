@@ -6,6 +6,8 @@ var expect			= require('expect.js');
 var ClientLinker	= require('../');
 var path			= require('path');
 
+rlutils.colors.enabled = false;
+
 describe('#rlutils', function()
 {
 	describe('#parseParam', function()
@@ -157,7 +159,11 @@ describe('#rlutils', function()
 			.contain(__dirname)
 			.contain(__filename);
 
-		expect(rlutils.printObject('something')).to.contain('something');
+		expect(rlutils.printObject('something')).to.be("'something'");
+		expect(rlutils.printObject(undefined)).to.be('undefined');
+		expect(rlutils.printObject(1)).to.be('1');
+		expect(rlutils.printObject(null)).to.be('null');
+		expect(rlutils.printObject({a:1,b:"b"})).to.be("{ a: 1, b: 'b' }");
 	});
 
 
@@ -189,38 +195,6 @@ describe('#rlutils', function()
 				expect(rlutils.parseAction('client_not_exists.method', allMethods))
 					.to.be(undefined);
 			});
-	});
-
-
-	it('#run', function()
-	{
-		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients:
-				{
-					client:
-					{
-						confighandler:
-						{
-							success: function()
-							{
-								return Promise.resolve();
-							},
-							error: function()
-							{
-								return Promise.reject();
-							}
-						}
-					}
-				}
-			});
-
-		return Promise.all(
-			[
-				rlutils.run(linker, 'client.success'),
-				rlutils.run(linker, 'client.errror')
-			]);
 	});
 
 
