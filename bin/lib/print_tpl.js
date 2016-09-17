@@ -83,12 +83,31 @@ exports.runActionEnd = function printRunActionEnd(action, type, runtime, data)
 			'========= '
 		].join(' ');
 
+	if (type == 'error')
+		str = rlutils.colors.red(str);
+
 	str += '\n'
 		+ printTpl.runtime(runtime)
 		+ '\n\n'
 		+ rlutils.printObject(data);
 
 	return str;
+}
+
+
+exports.runActionUnexpectedError = function printRunActionUnexpectedError(action, err)
+{
+	var title = [
+			' =========',
+			'Unexpected Error',
+			rlutils.colors.green(action),
+			'========= '
+		].join(' ');
+
+	return '\n'
+		+ rlutils.colors.red(title)
+		+ '\n'
+		+ rlutils.printObject(err);
 }
 
 

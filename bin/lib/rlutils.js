@@ -139,20 +139,6 @@ function resolve(str)
 }
 
 
-// exports.isPKGFile = isPKGFile;
-// function isPKGFile(file)
-// {
-// 	try {
-// 		require(file);
-// 		return require.resolve(file);
-// 	}
-// 	catch(err)
-// 	{
-// 		debug('require file err: %o', err);
-// 	}
-// }
-
-
 exports.str2obj = str2obj;
 function str2obj(str)
 {

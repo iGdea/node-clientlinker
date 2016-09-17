@@ -1,7 +1,6 @@
 "use strict";
 
 var Promise		= require('bluebird');
-var debug		= require('debug')('clientlinker:rl');
 var rlutils		= require('./rlutils');
 var printTpl	= require('./print_tpl');
 var commandActions = require('./command_actions');
@@ -36,18 +35,20 @@ function start(linker, allMethods)
 					ActionParams.query,
 					ActionParams.body,
 					ActionParams.options
-				);
+				)
+				// 忽略允许时产生的错误
+				// runAction 会负责输出错误
+				.catch(function(){});
 		})
 		.catch(function(err)
 		{
-			console.log('\n ========= Unexpected Error %s =========\n%s',
-				rlutils.colors.green(ActionParams.action),
-				rlutils.printObject(err));
+			var str = printTpl.runActionUnexpectedError(ActionParams.action, err);
+			console.log(str);
 		})
 		.then(function()
 		{
 			console.log('\n\n\n');
-			start(allMethods, linker);
+			start(linker, allMethods);
 		});
 }
 
