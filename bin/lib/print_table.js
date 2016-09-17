@@ -56,5 +56,5 @@ function printTable(data, allFlowFrom)
 			}
 		});
 
-	console.log(output);
+	return output;
 }

@@ -1,7 +1,6 @@
 "use strict";
 
 var Promise		= require('bluebird');
-var chalk		= require('chalk');
 var debug		= require('debug')('clientlinker:rl');
 var rlutils		= require('./rlutils');
 var rl;
@@ -34,7 +33,7 @@ function start(allMethods, linker)
 		.catch(function(err)
 		{
 			console.log('\n ========= Unexpected Error %s =========\n%s',
-				chalk.green(ActionParams.action),
+				rlutils.colors.green(ActionParams.action),
 				rlutils.printObject(err));
 		})
 		.then(function()
@@ -54,11 +53,11 @@ function rlaction(allMethods, ActionParams)
 			if (action)
 			{
 				ActionParams.action = action;
-				console.log(' ==> Action is <%s> <==', chalk.green(action));
+				console.log(' ==> Action is <%s> <==', rlutils.colors.green(action));
 			}
 			else
 			{
-				console.log(' ==> No Action <%s> <==', chalk.red(str));
+				console.log(' ==> No Action <%s> <==', rlutils.colors.red(str));
 				return rlaction(allMethods, ActionParams);
 			}
 		});

@@ -5,10 +5,11 @@ var rlutils		= require('./lib/rlutils');
 var printTable	= require('./lib/print_table').printTable;
 var runRl		= require('./lib/run_rl');
 var debug		= require('debug')('clientlinker:bin');
-var chalk		= require('chalk');
 var Command		= require('commander').Command;
 // 强制使用clientlinker作为name
 var program		= new Command('clientlinker');
+
+// rlutils.colors.enabled = false;
 
 program
 	.version(require('../package.json').version);
@@ -51,7 +52,7 @@ program
 							);
 					}
 					else
-						console.error('   ** No Action %s **   ', chalk.red(action));
+						console.error('   ** No Action %s **   ', rlutils.colors.red(action));
 				}
 				else
 					console.error('   ** No Client has Methods **   ');
@@ -129,7 +130,8 @@ function printAndRunMethos(conf_file, options, isRunRl)
 		{
 			if (allMethods.length)
 			{
-				printTable(allMethods.lines, allMethods.allFlowFrom);
+				var output = printTable(allMethods.lines, allMethods.allFlowFrom);
+				console.log(output);
 				if (isRunRl) runRl.start(allMethods, linker);
 			}
 			else

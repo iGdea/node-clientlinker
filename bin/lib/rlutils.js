@@ -9,6 +9,7 @@ var chalk	= require('chalk');
 var fs		= require('fs');
 
 
+var colors = exports.colors = new chalk.constructor();
 
 exports.parseAction = parseAction;
 function parseAction(str, allMethods)
@@ -165,9 +166,8 @@ function printObject(obj)
 	if (obj instanceof Error)
 		return obj.stack;
 	else
-		return util.inspect(obj, {depth: 8, colors: true});
+		return util.inspect(obj, {depth: 8, colors: colors.enabled});
 }
-
 
 exports.run = run;
 function run(linker, action, query, body, options)
@@ -176,7 +176,7 @@ function run(linker, action, query, body, options)
 		+' >>> Query <<<\n%s\n\n'
 		+' >>> Body <<<\n%s\n\n'
 		+' >>> Options <<<\n%s',
-		chalk.green(action),
+		colors.green(action),
 		printObject(query),
 		printObject(body),
 		printObject(options));
@@ -187,14 +187,14 @@ function run(linker, action, query, body, options)
 		.then(function(data)
 		{
 			console.log('\n ========= Action Result Success %s =========\n%s\n\n%s',
-				chalk.green(action),
+				colors.green(action),
 				printRuntime(retPromise.runtime),
 				printObject(data));
 		},
 		function(err)
 		{
 			console.log('\n ========= Action Result Error %s =========\n%s\n\n%s',
-				chalk.green(action),
+				colors.green(action),
 				printRuntime(retPromise.runtime),
 				printObject(err));
 		});
@@ -214,28 +214,28 @@ function printRuntime(runtime)
 
 		if (!flowStr.length)
 		{
-			flowStr.push(chalk.green(flowItem.flow.name)
+			flowStr.push(colors.green(flowItem.flow.name)
 				+ ' '
-				+ chalk.blue(flowItem.timing.end - flowItem.timing.start)
+				+ colors.blue(flowItem.timing.end - flowItem.timing.start)
 				+ 'ms');
 		}
 		else
 		{
-			flowStr.push(chalk.gray(flowItem.flow.name));
+			flowStr.push(colors.gray(flowItem.flow.name));
 		}
 	}
 
 	var lines = [];
 	lines.push([
-		chalk.cyan.underline('[Runtime]'),
+		colors.cyan.underline('[Runtime]'),
 		'use:',
-			alltime > 250 ? chalk.red(alltime) : chalk.green(alltime),
+			alltime > 250 ? colors.red(alltime) : colors.green(alltime),
 			'ms,',
 		'retry:',
-			retryTimes != 1 ? chalk.red(retryTimes) : chalk.green(retryTimes)
+			retryTimes != 1 ? colors.red(retryTimes) : colors.green(retryTimes)
 	].join(' '));
 
-	lines.push(chalk.cyan.underline('[FlowRun]') + ' ' +flowStr.join(' > '));
+	lines.push(colors.cyan.underline('[FlowRun]') + ' ' +flowStr.join(' > '));
 
 	return lines.join('\n');
 }
