@@ -1,7 +1,7 @@
 "use strict";
 
 var table = require('table');
-var useSymbole = process.platform == 'win32' ? '\u221A' : '✓';
+var useSymbole = exports.useSymbole = process.platform == 'win32' ? '\u221A' : '✓';
 
 exports.printTable = printTable;
 function printTable(data, allFlowFrom)

@@ -3,14 +3,16 @@
 var Promise		= require('bluebird');
 var debug		= require('debug')('clientlinker:rl');
 var rlutils		= require('./rlutils');
+var printTpl	= require('./print_tpl');
+var commandActions = require('./command_actions');
 var rl;
 
 exports.start = start;
-function start(allMethods, linker)
+function start(linker, allMethods)
 {
 	if (!rl) rl = require('./get_rl');
 
-	printStart();
+	console.log(printTpl.rlRunHeader());
 	var ActionParams = {};
 
 	rlaction(allMethods, ActionParams)
@@ -28,7 +30,13 @@ function start(allMethods, linker)
 		})
 		.then(function()
 		{
-			return rlutils.run(linker, ActionParams.action, ActionParams.query, ActionParams.body, ActionParams.options);
+			return commandActions.runAction(
+					linker,
+					ActionParams.action,
+					ActionParams.query,
+					ActionParams.body,
+					ActionParams.options
+				);
 		})
 		.catch(function(err)
 		{
@@ -77,19 +85,4 @@ function rlparam(linker, rl, key, ActionParams)
 			console.log(err);
 			return rlparam(linker, rl, key, ActionParams);
 		});
-}
-
-
-function printStart()
-{
-	console.log(
-		[
-			'', '', '',
-
-			' ***********************',
-			' *                     *',
-			' *     Action Test     *',
-			' *                     *',
-			' ***********************'
-		].join('\n'));
 }

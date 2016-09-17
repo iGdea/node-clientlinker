@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
-    "start": "node ./bin/clientlinker_cli.js run ./test/clientlinker.conf.js",
+    "start": "node ./bin/clientlinker_cli.js run ./test/conf/clientlinker.conf.js",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"

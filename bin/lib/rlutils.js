@@ -7,7 +7,7 @@ var vm		= require('vm');
 var path	= require('path');
 var chalk	= require('chalk');
 var fs		= require('fs');
-
+var rlutils	= exports;
 
 var colors = exports.colors = new chalk.constructor();
 
@@ -167,77 +167,6 @@ function printObject(obj)
 		return obj.stack;
 	else
 		return util.inspect(obj, {depth: 8, colors: colors.enabled});
-}
-
-exports.run = run;
-function run(linker, action, query, body, options)
-{
-	console.log('\n ========= Action Run %s =========\n'
-		+' >>> Query <<<\n%s\n\n'
-		+' >>> Body <<<\n%s\n\n'
-		+' >>> Options <<<\n%s',
-		colors.green(action),
-		printObject(query),
-		printObject(body),
-		printObject(options));
-
-	var retPromise = linker.runIn([action, query, body, null, options], 'cli');
-
-	return retPromise
-		.then(function(data)
-		{
-			console.log('\n ========= Action Result Success %s =========\n%s\n\n%s',
-				colors.green(action),
-				printRuntime(retPromise.runtime),
-				printObject(data));
-		},
-		function(err)
-		{
-			console.log('\n ========= Action Result Error %s =========\n%s\n\n%s',
-				colors.green(action),
-				printRuntime(retPromise.runtime),
-				printObject(err));
-		});
-}
-
-
-function printRuntime(runtime)
-{
-	var retryTimes = runtime.retry.length;
-	var alltime = runtime.timing.flowsEnd - runtime.navigationStart;
-	var lastRetry = runtime.retry[runtime.retry.length-1];
-	var flowStr = [];
-	for (var runnedFlows = lastRetry.runnedFlows, len = runnedFlows.length; len--;)
-	{
-		var flowItem = runnedFlows[len];
-		if (!flowItem || !flowItem.flow) continue;
-
-		if (!flowStr.length)
-		{
-			flowStr.push(colors.green(flowItem.flow.name)
-				+ ' '
-				+ colors.blue(flowItem.timing.end - flowItem.timing.start)
-				+ 'ms');
-		}
-		else
-		{
-			flowStr.push(colors.gray(flowItem.flow.name));
-		}
-	}
-
-	var lines = [];
-	lines.push([
-		colors.cyan.underline('[Runtime]'),
-		'use:',
-			alltime > 250 ? colors.red(alltime) : colors.green(alltime),
-			'ms,',
-		'retry:',
-			retryTimes != 1 ? colors.red(retryTimes) : colors.green(retryTimes)
-	].join(' '));
-
-	lines.push(colors.cyan.underline('[FlowRun]') + ' ' +flowStr.join(' > '));
-
-	return lines.join('\n');
 }
 
 
