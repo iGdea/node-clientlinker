@@ -95,7 +95,7 @@ describe('#command', function()
 
 	describe('#anycmd', function()
 	{
-		it('#help', function(done)
+		it('#help1', function(done)
 		{
 			var command = new Command;
 			command.anycmd();
@@ -117,6 +117,18 @@ describe('#command', function()
 				};
 
 			testStrArgs(command, 'no_exists_cmd something');
+		});
+
+		it('#ignore help cmd', function(done)
+		{
+			var command = new Command;
+			command.anycmd();
+			command.program.help = function()
+				{
+					done();
+				};
+
+			testStrArgs(command, 'no_exists_cmd help');
 		});
 
 		it('#run command', function()

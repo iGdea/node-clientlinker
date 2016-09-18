@@ -52,8 +52,8 @@ proto.help = function help()
 		.action(function(cmd)
 		{
 			var self = this;
-			var command = findCommand(self.parent, cmd);
 
+			var command = findCommand(self.parent, cmd);
 			if (!command) throw new Error('No Defined Command, '+cmd);
 
 			// command.help();
@@ -73,7 +73,8 @@ proto.anycmd = function anycmd()
 		.allowUnknownOption(true)
 		.action(function(conf_file, cmd)
 		{
-			var command = cmd && findCommand(this.parent, cmd);
+			var command = cmd && cmd != 'help'
+					&& findCommand(this.parent, cmd);
 
 			// 默认输出帮助信息
 			if (!command)
