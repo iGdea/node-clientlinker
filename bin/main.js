@@ -39,4 +39,4 @@ command.run()
 var argv = process.argv.slice();
 if (argv.length < 3) argv.push('--help');
 
-command.program.parse(process.argv);
+command.program.parse(argv);
