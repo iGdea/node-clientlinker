@@ -5,3 +5,4 @@ process.title = 'clientlinker';
 process.env.CLIENTLINKER_CLI = true;
 
 require('./main');
+
