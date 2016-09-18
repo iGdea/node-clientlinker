@@ -3,7 +3,8 @@
 var table = require('table');
 var useSymbole
 	= exports.useSymbole
-	= process.platform == 'win32' ? '\u221A' : '✓';
+	// = process.platform == 'win32' ? '\u221A' : '✓';
+	= '*';
 
 exports.printTable = printTable;
 function printTable(data, allFlowFrom)
