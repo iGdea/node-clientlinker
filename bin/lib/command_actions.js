@@ -4,6 +4,7 @@ var Promise		= require('bluebird');
 var rlutils		= require('./rlutils');
 var printTable	= require('./print_table').printTable;
 var printTpl	= require('./print_tpl');
+var stdout		= require('./stdout');
 var commandActions = exports;
 
 
@@ -18,7 +19,7 @@ exports.execAction = function execAction(conf_file, action, options)
 		},
 		function(err)
 		{
-			console.error(printTpl.errorInfo(err));
+			stdout.error(printTpl.errorInfo(err));
 			throw err;
 		});
 }
@@ -32,7 +33,7 @@ exports.listAction = function listAction(conf_file, options)
 		.then(function(allMethods)
 		{
 			var output = printTable(allMethods.lines, allMethods.allFlowFrom);
-			console.log(output);
+			stdout.log(output);
 
 			return {
 				output: output,
@@ -42,7 +43,7 @@ exports.listAction = function listAction(conf_file, options)
 		})
 		.catch(function(err)
 		{
-			console.error(printTpl.errorInfo(err));
+			stdout.error(printTpl.errorInfo(err));
 			throw err;
 		});
 }
@@ -103,7 +104,7 @@ exports.runAction = runAction;
 function runAction(linker, action, query, body, options)
 {
 	var str = printTpl.runActionStart(action, query, body, options);
-	console.log(str);
+	stdout.log(str);
 
 	var retPromise = linker.runIn([action, query, body, null, options], 'cli');
 
@@ -111,14 +112,14 @@ function runAction(linker, action, query, body, options)
 		.then(function(data)
 		{
 			var str = printTpl.runActionEnd(action, 'data', retPromise.runtime, data);
-			console.log(str);
+			stdout.log(str);
 
 			return data;
 		},
 		function(err)
 		{
 			var str = printTpl.runActionEnd(action, 'error', retPromise.runtime, err);
-			console.error(str);
+			stdout.error(str);
 
 			throw err;
 		});

@@ -5,6 +5,7 @@ var pkg			= require('../../package.json');
 // 强制使用clientlinker作为name
 var program		= new Command2('clientlinker');
 var rlutils		= require('./rlutils');
+var stdout		= require('./stdout');
 
 
 exports.Command = Command;
@@ -13,11 +14,9 @@ function Command()
 	var program = this.program = new Command2(pkg.name);
 	program.version('v'+pkg.version)
 		.option('--no-color', 'Disable colored output.')
-		.on('color', function()
-		{
-			// rlutils.colors.enabled = !!this.color;
-			rlutils.colors.enabled = false;
-		});
+		.option('-v, --verbose', 'Verbose mode. A lot more information output.')
+		.on('color', function(){rlutils.colors.enabled = false})
+		.on('verbose', function(){stdout.is_verbose = true});
 }
 
 var proto = Command.prototype;

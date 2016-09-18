@@ -3,6 +3,7 @@
 var Promise		= require('bluebird');
 var rlutils		= require('./rlutils');
 var printTpl	= require('./print_tpl');
+var stdout		= require('./stdout');
 var commandActions = require('./command_actions');
 var rl;
 
@@ -11,7 +12,7 @@ function start(linker, allMethods)
 {
 	if (!rl) rl = require('./get_rl');
 
-	console.log(printTpl.rlRunHeader());
+	stdout.log(printTpl.rlRunHeader());
 	var ActionParams = {};
 
 	rlaction(allMethods, ActionParams)
@@ -43,11 +44,11 @@ function start(linker, allMethods)
 		.catch(function(err)
 		{
 			var str = printTpl.runActionUnexpectedError(ActionParams.action, err);
-			console.log(str);
+			stdout.log(str);
 		})
 		.then(function()
 		{
-			console.log('\n\n\n');
+			stdout.log('\n\n\n');
 			start(linker, allMethods);
 		});
 }
@@ -62,11 +63,11 @@ function rlaction(allMethods, ActionParams)
 			if (action)
 			{
 				ActionParams.action = action;
-				console.log(' ==> Action is <%s> <==', rlutils.colors.green(action));
+				stdout.log(' ==> Action is <%s> <==', rlutils.colors.green(action));
 			}
 			else
 			{
-				console.log(' ==> No Action <%s> <==', rlutils.colors.red(str));
+				stdout.log(' ==> No Action <%s> <==', rlutils.colors.red(str));
 				return rlaction(allMethods, ActionParams);
 			}
 		});
@@ -79,11 +80,11 @@ function rlparam(linker, rl, key, ActionParams)
 		{
 			var data = rlutils.parseParam(linker, str);
 			ActionParams[key.toLowerCase()] = data;
-			console.log(' ==> %s <==\n%s', key, rlutils.printObject(data));
+			stdout.log(' ==> %s <==\n%s', key, rlutils.printObject(data));
 		})
 		.catch(function(err)
 		{
-			console.log(err);
+			stdout.log(err);
 			return rlparam(linker, rl, key, ActionParams);
 		});
 }
