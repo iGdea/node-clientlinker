@@ -60,8 +60,13 @@ proto.help = function help()
 			// remove help info
 			command.outputHelp(function(info)
 			{
-				return info.replace(/ +-h, --help [^\n]+\n/, '')
-					.replace(/Usage: */, 'Usage: '+self.parent.name()+' ');
+				return info
+					// 删除Options下的help
+					.replace(/ +-h, --help [^\n]+\n/, '')
+					// 在命令行前加上父节点前缀
+					.replace(/Usage: */, 'Usage: '+self.parent.name()+' ')
+					// 如果没有多余的Options，就把这一项干掉
+					.replace(/ +Options:\s+$/, '');
 			});
 		});
 };
