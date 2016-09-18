@@ -22,14 +22,16 @@ command.list()
 	.action(function()
 	{
 		commandActions.listAction.apply(null, arguments)
-			.catch(function(){});
+			.catch(function(){})
+			.then(function(){process.exit()});
 	});
 
 command.exec()
 	.action(function()
 	{
 		commandActions.execAction.apply(null, arguments)
-			.catch(function(){});
+			.catch(function(){})
+			.then(function(){process.exit()});
 	});
 
 command.anycmd();
