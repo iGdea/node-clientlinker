@@ -3,6 +3,7 @@
 var expect		= require('expect.js');
 var Command		= require('../bin/lib/command').Command;
 var Command2	= require('commander').Command;
+var rlutils		= require('../bin/lib/rlutils');
 
 // 屏蔽错误
 'optionMissingArgument|missingArgument|unknownOption|variadicArgNotLast'
@@ -90,6 +91,21 @@ describe('#command', function()
 			+ '--query=q '
 			+ '--body=b '
 			+ '--options=o ');
+	});
+
+
+	describe('#options', function()
+	{
+		it('#--no-color', function()
+		{
+			var command = initCommand();
+			command.list().action(function(){});
+
+			rlutils.colors.enabled = true;
+			testStrArgs(command, 'list ./conf.js --no-color');
+			expect(rlutils.colors.enabled).to.be(false);
+			rlutils.colors.enabled = false;
+		});
 	});
 
 
