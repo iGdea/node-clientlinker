@@ -17,11 +17,13 @@ exports.execAction = function execAction(conf_file, action, options)
 		{
 			return commandActions.exec(linker, action, allMethods, options);
 		},
+		// 不使用catch，是为了防止exec出错导致错误输出两遍
 		function(err)
 		{
 			stdout.error(printTpl.errorInfo(err));
 			throw err;
-		});
+		})
+		// .catch(function(err){console.log(err)});
 }
 
 

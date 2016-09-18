@@ -1,5 +1,6 @@
 "use strict";
 
+var util = require('util');
 var rlutils = require('./rlutils');
 var printTpl = exports;
 
@@ -17,30 +18,29 @@ exports.runtime = function printRuntime(runtime)
 
 		if (!flowStr.length)
 		{
-			flowStr.push(rlutils.colors.green(flowItem.flow.name)
-				+ ' '
-				+ rlutils.colors.blue(flowItem.timing.end - flowItem.timing.start)
-				+ 'ms');
+			var str = util.format('%s %sms',
+				rlutils.colors.green(flowItem.flow.name),
+				rlutils.colors.blue(flowItem.timing.end - flowItem.timing.start));
+
+			flowStr.push(str);
 		}
 		else
 		{
-			flowStr.push(rlutils.colors.gray(flowItem.flow.name));
+			var str = rlutils.colors.gray(flowItem.flow.name);
+			flowStr.push(str);
 		}
 	}
 
-	var lines = [];
-	lines.push([
+	return util.format('%s use: %s ms, retry: %s\n%s %s',
 		rlutils.colors.cyan.underline('[Runtime]'),
-		'use:',
-			alltime > 250 ? rlutils.colors.red(alltime) : rlutils.colors.green(alltime),
-			'ms,',
-		'retry:',
-			retryTimes != 1 ? rlutils.colors.red(retryTimes) : rlutils.colors.green(retryTimes)
-	].join(' '));
-
-	lines.push(rlutils.colors.cyan.underline('[FlowRun]') + ' ' +flowStr.join(' > '));
-
-	return lines.join('\n');
+		alltime > 250
+			? rlutils.colors.red(alltime)
+			: rlutils.colors.green(alltime),
+		retryTimes != 1
+			? rlutils.colors.red(retryTimes)
+			: rlutils.colors.green(retryTimes),
+		rlutils.colors.cyan.underline('[FlowRun]'),
+		flowStr.join(' > '));
 }
 
 
@@ -58,52 +58,39 @@ exports.errorInfo = function printErrorInfo(err)
 
 exports.runActionStart = function printRunActionStart(action, query, body, options)
 {
-	return [
-		'',
-		' ========= Action Run '+rlutils.colors.green(action)+' =========',
-		' >>> Query <<< ',
-		rlutils.printObject(query),
-		'',
-		' >>> Body <<< ',
-		rlutils.printObject(body),
-		'',
-		' >>> Options <<<',
-		rlutils.printObject(options),
-		''
-	].join('\n');
+	return util.format(
+		'\n ========= Action Run %s =========\n'
+		+ ' >>> Query <<< \n%s\n\n'
+		+ ' >>> Body <<< \n%s\n\n'
+		+ ' >>> Options <<< \n%s\n\n',
+			rlutils.colors.green(action),
+			rlutils.printObject(query),
+			rlutils.printObject(body),
+			rlutils.printObject(options)
+		);
 }
 
 
 exports.runActionEnd = function printRunActionEnd(action, type, runtime, data)
 {
-	var str = [
-			' =========',
-			'Action Result',
-			type == 'error' ? 'Error' : 'Success',
-			rlutils.colors.green(action),
-			'========= '
-		].join(' ');
+	var title = util.format(
+		' ========= Action Result %s %s =========',
+		type == 'error' ? 'Error' : 'Success',
+		rlutils.colors.green(action));
 
-	if (type == 'error')
-		str = rlutils.colors.red(str);
+	if (type == 'error') title = rlutils.colors.red(title);
 
-	str += '\n'
-		+ printTpl.runtime(runtime)
-		+ '\n\n'
-		+ rlutils.printObject(data);
-
-	return str;
+	return util.format('%s\n%s\n\n%s', title,
+		printTpl.runtime(runtime),
+		rlutils.printObject(data));
 }
 
 
 exports.runActionUnexpectedError = function printRunActionUnexpectedError(action, err)
 {
-	var title = [
-			' =========',
-			'Unexpected Error',
-			rlutils.colors.green(action),
-			'========= '
-		].join(' ');
+	var title = util.format(
+		' ========= Unexpected Error %s ========= ',
+		rlutils.colors.green(action));
 
 	return '\n'
 		+ rlutils.colors.red(title)
