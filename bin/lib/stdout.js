@@ -1,8 +1,10 @@
+"use strict";
+
 var fs = require('fs');
 var util = require('util');
 var logStdout = process.stdout;
 
-exports.is_verbose = false;
+exports.is_verbose = process.env.LOG_VERBOSE == 'true';
 
 'log|warn|error|info|verbose'.split('|').forEach(function(name)
 	{
