@@ -4,7 +4,7 @@ var fs = require('fs');
 var util = require('util');
 var logStdout = process.stdout;
 
-exports.is_verbose = process.env.LOG_VERBOSE == 'true';
+exports.is_verbose = true;
 
 'log|warn|error|info|verbose'.split('|').forEach(function(name)
 	{
