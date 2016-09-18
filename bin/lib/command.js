@@ -22,7 +22,7 @@ proto.list = function list()
 		.alias('ls')
 		.description('list methods of clients')
 		.option('--filter-client <name>', 'only those clients');
-}
+};
 
 proto.exec = function exec()
 {
@@ -34,7 +34,7 @@ proto.exec = function exec()
 		.option('--body, --clk-body <data>', 'run param [body]')
 		.option('--options, --clk-options <data>', 'run param [options]')
 		.option('--filter-client <name>', 'only those clients');
-}
+};
 
 proto.run = function run()
 {
@@ -42,7 +42,7 @@ proto.run = function run()
 		.command('run <conf_file>')
 		.description('run [action] of clients with methods list')
 		.option('--filter-client <name>', 'only those clients');
-}
+};
 
 proto.help = function help()
 {
@@ -52,15 +52,7 @@ proto.help = function help()
 		.action(function(cmd)
 		{
 			var self = this;
-			var command;
-			self.parent.commands.some(function(item)
-			{
-				if (item.name() == cmd || item.alias() == cmd)
-				{
-					command = item;
-					return true;
-				}
-			});
+			var command = findCommand(self.parent, cmd);
 
 			if (!command) throw new Error('No Defined Command, '+cmd);
 
@@ -72,4 +64,41 @@ proto.help = function help()
 					.replace(/Usage: */, 'Usage: '+self.parent.name()+' ');
 			});
 		});
+};
+
+proto.anycmd = function anycmd()
+{
+	return this.program
+		.command('* [conf_file] [cmd]', null, {noHelp: true})
+		.allowUnknownOption(true)
+		.action(function(conf_file, cmd)
+		{
+			var command = cmd && findCommand(this.parent, cmd);
+
+			// 默认输出帮助信息
+			if (!command)
+				this.parent.help();
+			else
+			{
+				var avgs = this.parent.rawArgs.slice();
+				avgs.splice(2, 2, cmd, conf_file);
+				this.parent.parse(avgs);
+			}
+		});
+};
+
+function findCommand(program, cmd)
+{
+	var command;
+	program.commands.some(function(item)
+	{
+		if (item.name() == cmd || item.alias() == cmd)
+		{
+			command = item;
+			return true;
+		}
+	});
+
+	return command;
 }
+

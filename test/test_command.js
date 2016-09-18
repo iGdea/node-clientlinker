@@ -37,6 +37,7 @@ describe('#command', function()
 
 		command.list();
 		testStrArgs(command, 'help list');
+		testStrArgs(command, 'help ls');
 
 		expect(function(){testStrArgs(command, 'help list --options=xxx')})
 			.to.throwError(/^unknownOption$/);
@@ -89,6 +90,55 @@ describe('#command', function()
 			+ '--query=q '
 			+ '--body=b '
 			+ '--options=o ');
+	});
+
+
+	describe('#anycmd', function()
+	{
+		it('#help', function(done)
+		{
+			var command = new Command;
+			command.anycmd();
+			command.program.help = function()
+				{
+					done();
+				};
+
+			testStrArgs(command, 'no_exists_cmd');
+		});
+
+		it('#help2', function(done)
+		{
+			var command = new Command;
+			command.anycmd();
+			command.program.help = function()
+				{
+					done();
+				};
+
+			testStrArgs(command, 'no_exists_cmd something');
+		});
+
+		it('#run command', function()
+		{
+			var command = new Command;
+			command.anycmd();
+
+			command.program.help = function()
+				{
+					expect().fail();
+				};
+
+			command.exec()
+				.action(function(conf_file, action, options)
+				{
+					expect(conf_file).to.be('./conf.js');
+					expect(action).to.be('action');
+					expect(options.clkQuery).to.be('q');
+				});
+
+			testStrArgs(command, './conf.js exec action --query=q');
+		});
 	});
 });
 

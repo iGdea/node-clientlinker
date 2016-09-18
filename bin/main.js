@@ -7,6 +7,7 @@ var commandActions	= require('./lib/command_actions');
 
 var command = new Command;
 
+command.anycmd();
 command.help().action(function(){process.exit()});
 
 command.list()
@@ -35,16 +36,7 @@ command.run()
 	});
 
 
-// 默认输出帮助信息
-command.program
-	.command('*', null, {noHelp: true})
-	.action(function()
-	{
-		this.parent.help();
-	});
-
-
-if (process.argv.length < 3)
-	process.argv.push('--help');
+var argv = process.argv.slice();
+if (argv.length < 3) argv.push('--help');
 
 command.program.parse(process.argv);
