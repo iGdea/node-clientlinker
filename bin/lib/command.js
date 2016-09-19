@@ -3,7 +3,7 @@
 var Command2	= require('commander').Command;
 var pkg			= require('../../package.json');
 // 强制使用clientlinker作为name
-var program		= new Command2('clientlinker');
+var program		= new Command2(pkg.name);
 var rlutils		= require('./rlutils');
 var stdout		= require('./stdout');
 
@@ -16,7 +16,11 @@ function Command()
 		.option('--no-color', 'Disable colored output.')
 		.option('-v, --verbose', 'Verbose mode. A lot more information output.')
 		.on('color', function(){rlutils.colors.enabled = false})
-		.on('verbose', function(){stdout.is_verbose = true});
+		.on('verbose', function()
+		{
+			stdout.is_verbose = true;
+			require('debug').enable(pkg.name+':* '+pkg.name);
+		});
 }
 
 var proto = Command.prototype;
