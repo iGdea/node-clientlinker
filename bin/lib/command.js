@@ -63,7 +63,7 @@ proto.help = function help()
 		{
 			var self = this;
 
-			var command = findCommand(self.parent, cmd);
+			var command = findSubCommand(self.parent, cmd);
 			if (!command) throw new Error('No Defined Command, '+cmd);
 
 			// command.help();
@@ -89,7 +89,7 @@ proto.anycmd = function anycmd()
 		.action(function(conf_file, cmd)
 		{
 			var command = cmd && cmd != 'help'
-					&& findCommand(this.parent, cmd);
+					&& findSubCommand(this.parent, cmd);
 
 			// 默认输出帮助信息
 			if (!command)
@@ -104,8 +104,8 @@ proto.anycmd = function anycmd()
 };
 
 
-
-function findCommand(program, cmd)
+// find sub command
+function findSubCommand(program, cmd)
 {
 	var command;
 	program.commands.some(function(item)
@@ -121,6 +121,7 @@ function findCommand(program, cmd)
 }
 
 
+// Update Command Error Print Hanlder
 Command2.prototype.missingArgument = function(name)
 {
 	stdout.error();
