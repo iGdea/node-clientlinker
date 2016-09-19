@@ -4,6 +4,7 @@ var rlutils			= require('./lib/rlutils');
 var runRl			= require('./lib/run_rl');
 var Command			= require('./lib/command').Command;
 var commandActions	= require('./lib/command_actions');
+var stdout			= require('./lib/stdout');
 
 var command = new Command;
 
@@ -23,7 +24,7 @@ command.list()
 	{
 		commandActions.listAction.apply(null, arguments)
 			.catch(function(){})
-			.then(function(){process.exit()});
+			.then(exit);
 	});
 
 command.exec()
@@ -31,13 +32,22 @@ command.exec()
 	{
 		commandActions.execAction.apply(null, arguments)
 			.catch(function(){})
-			.then(function(){process.exit()});
+			.then(exit);
 	});
 
 command.anycmd();
-command.help().action(function(){process.exit()});
+command.help().action(function(){});
 
 var argv = process.argv.slice();
 if (argv.length < 3) argv.push('--help');
 
 command.program.parse(argv);
+
+
+function exit()
+{
+	stdout.promise.then(function()
+		{
+			process.exit();
+		});
+}
