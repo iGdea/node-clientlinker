@@ -99,6 +99,8 @@ proto.anycmd = function anycmd()
 		});
 };
 
+
+
 function findCommand(program, cmd)
 {
 	var command;
@@ -113,3 +115,39 @@ function findCommand(program, cmd)
 
 	return command;
 }
+
+
+Command2.prototype.missingArgument = function(name)
+{
+	stdout.error();
+	stdout.error("  error: missing required argument `%s'", name);
+	stdout.error();
+	process.exit(1);
+};
+Command2.prototype.optionMissingArgument = function(option, flag)
+{
+	stdout.error();
+
+	if (flag)
+		stdout.error("  error: option `%s' argument missing, got `%s'", option.flags, flag);
+	else
+		stdout.error("  error: option `%s' argument missing", option.flags);
+
+	stdout.error();
+	process.exit(1);
+};
+Command2.prototype.unknownOption = function(flag)
+{
+	if (this._allowUnknownOption) return;
+	stdout.error();
+	stdout.error("  error: unknown option `%s'", flag);
+	stdout.error();
+	process.exit(1);
+};
+Command2.prototype.variadicArgNotLast = function(name)
+{
+	stdout.error();
+	stdout.error("  error: variadic arguments must be last `%s'", name);
+	stdout.error();
+	process.exit(1);
+};
