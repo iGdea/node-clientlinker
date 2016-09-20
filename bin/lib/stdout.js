@@ -3,10 +3,10 @@
 var Promise		= require('bluebird');
 var fs			= require('fs');
 var util		= require('util');
-var logStdout	= process.stdout;
 
 exports.is_verbose = true;
 exports.promise = Promise.resolve();
+exports.stdout = process.stdout;
 
 var iswriting = false;
 
@@ -17,7 +17,7 @@ var iswriting = false;
 			if (name != 'verbose' || exports.is_verbose)
 			{
 				var str = util.format.apply(null, arguments) + '\n';
-				writelog(str);
+				exports.write(str);
 			}
 		}
 
@@ -26,25 +26,29 @@ var iswriting = false;
 			if (exports.is_verbose)
 			{
 				var str = util.format.apply(null, arguments) + '\n';
-				writelog(str);
+				exports.write(str);
 			}
 		}
 	});
 
 
-function writelog(str)
+exports.write = write;
+function write(str)
 {
-	var ok = logStdout.write(str);
+	var ok = exports.stdout.write(str);
+
 	if (!ok && !iswriting)
 	{
 		iswriting = true;
 		exports.promise = new Promise(function(resolve)
 		{
-			logStdout.once('drain', function()
+			exports.stdout.once('drain', function()
 				{
 					iswriting = false;
 					resolve();
 				});
 		});
 	}
+
+	return ok;
 }
