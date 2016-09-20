@@ -3,7 +3,7 @@
 var Command2	= require('commander').Command;
 var pkg			= require('../../package.json');
 // 强制使用clientlinker作为name
-var program		= new Command2('clientlinker');
+var program		= new Command2(pkg.name);
 var rlutils		= require('./rlutils');
 var stdout		= require('./stdout');
 
@@ -16,7 +16,11 @@ function Command()
 		.option('--no-color', 'Disable colored output.')
 		.option('-v, --verbose', 'Verbose mode. A lot more information output.')
 		.on('color', function(){rlutils.colors.enabled = false})
-		.on('verbose', function(){stdout.is_verbose = true});
+		.on('verbose', function()
+		{
+			stdout.is_verbose = true;
+			require('debug').enable(pkg.name+':* '+pkg.name);
+		});
 }
 
 var proto = Command.prototype;
@@ -59,7 +63,7 @@ proto.help = function help()
 		{
 			var self = this;
 
-			var command = findCommand(self.parent, cmd);
+			var command = findSubCommand(self.parent, cmd);
 			if (!command) throw new Error('No Defined Command, '+cmd);
 
 			// command.help();
@@ -85,7 +89,7 @@ proto.anycmd = function anycmd()
 		.action(function(conf_file, cmd)
 		{
 			var command = cmd && cmd != 'help'
-					&& findCommand(this.parent, cmd);
+					&& findSubCommand(this.parent, cmd);
 
 			// 默认输出帮助信息
 			if (!command)
@@ -99,7 +103,9 @@ proto.anycmd = function anycmd()
 		});
 };
 
-function findCommand(program, cmd)
+
+// find sub command
+function findSubCommand(program, cmd)
 {
 	var command;
 	program.commands.some(function(item)
@@ -113,3 +119,40 @@ function findCommand(program, cmd)
 
 	return command;
 }
+
+
+// Update Command Error Print Hanlder
+Command2.prototype.missingArgument = function(name)
+{
+	stdout.error();
+	stdout.error("  error: missing required argument `%s'", name);
+	stdout.error();
+	process.exit(1);
+};
+Command2.prototype.optionMissingArgument = function(option, flag)
+{
+	stdout.error();
+
+	if (flag)
+		stdout.error("  error: option `%s' argument missing, got `%s'", option.flags, flag);
+	else
+		stdout.error("  error: option `%s' argument missing", option.flags);
+
+	stdout.error();
+	process.exit(1);
+};
+Command2.prototype.unknownOption = function(flag)
+{
+	if (this._allowUnknownOption) return;
+	stdout.error();
+	stdout.error("  error: unknown option `%s'", flag);
+	stdout.error();
+	process.exit(1);
+};
+Command2.prototype.variadicArgNotLast = function(name)
+{
+	stdout.error();
+	stdout.error("  error: variadic arguments must be last `%s'", name);
+	stdout.error();
+	process.exit(1);
+};
