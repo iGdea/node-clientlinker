@@ -6,15 +6,15 @@ var Command2	= require('commander').Command;
 var rlutils		= require('../bin/lib/rlutils');
 
 // 屏蔽错误
-'optionMissingArgument|missingArgument|unknownOption|variadicArgNotLast'
-	.split('|')
-	.forEach(function(errType)
-	{
-		Command2.prototype[errType] = function()
-		{
-			throw new Error(errType);
-		};
-	});
+// 'optionMissingArgument|missingArgument|unknownOption|variadicArgNotLast'
+// 	.split('|')
+// 	.forEach(function(errType)
+// 	{
+// 		Command2.prototype[errType] = function()
+// 		{
+// 			throw new Error(errType);
+// 		};
+// 	});
 
 
 
@@ -31,17 +31,23 @@ describe('#command', function()
 
 		command.help();
 		expect(function(){testStrArgs(command, 'help')})
-			.to.throwError(/^missingArgument$/);
+			.to.throwError(/missing required argument/);
 
 		expect(function(){testStrArgs(command, 'help list')})
 			.to.throwError(/^No Defined Command, list$/);
 
-		command.list();
+		command.list().action(function(){});
 		testStrArgs(command, 'help list');
 		testStrArgs(command, 'help ls');
 
 		expect(function(){testStrArgs(command, 'help list --options=xxx')})
-			.to.throwError(/^unknownOption$/);
+			.to.throwError(/unknown option/);
+
+		expect(function(){testStrArgs(command, 'list ./conf.js --filter-client=')})
+			.to.throwError(/argument missing/);
+
+		expect(function(){testStrArgs(command, 'list ./conf.js --filter-client')})
+			.to.throwError(/argument missing/);
 	});
 
 
@@ -186,6 +192,10 @@ function initCommand()
 		.action(function()
 		{
 			throw new Error('otherCommandFire');
+		});
+	program.on('error', function(err)
+		{
+			throw err;
 		});
 
 	return command;

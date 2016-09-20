@@ -6,6 +6,7 @@ var pkg			= require('../../package.json');
 var program		= new Command2(pkg.name);
 var rlutils		= require('./rlutils');
 var stdout		= require('./stdout');
+var util		= require('util');
 
 
 exports.Command = Command;
@@ -122,37 +123,38 @@ function findSubCommand(program, cmd)
 
 
 // Update Command Error Print Hanlder
+Command2.prototype.emitError = function()
+{
+	var msg = util.format.apply(util, arguments);
+
+	var command = this;
+	while(command.parent) command = command.parent;
+
+	if (command.listenerCount('error'))
+		command.emit('error', msg);
+	else
+	{
+		stdout.error('\n  error: '+msg+'\n');
+		process.exit(1);
+	}
+};
 Command2.prototype.missingArgument = function(name)
 {
-	stdout.error();
-	stdout.error("  error: missing required argument `%s'", name);
-	stdout.error();
-	process.exit(1);
+	this.emitError("missing required argument `%s'", name);
 };
 Command2.prototype.optionMissingArgument = function(option, flag)
 {
-	stdout.error();
-
 	if (flag)
-		stdout.error("  error: option `%s' argument missing, got `%s'", option.flags, flag);
+		this.emitError("option `%s' argument missing, got `%s'", option.flags, flag);
 	else
-		stdout.error("  error: option `%s' argument missing", option.flags);
-
-	stdout.error();
-	process.exit(1);
+		this.emitError("option `%s' argument missing", option.flags);
 };
 Command2.prototype.unknownOption = function(flag)
 {
 	if (this._allowUnknownOption) return;
-	stdout.error();
-	stdout.error("  error: unknown option `%s'", flag);
-	stdout.error();
-	process.exit(1);
+	this.emitError("unknown option `%s'", flag);
 };
 Command2.prototype.variadicArgNotLast = function(name)
 {
-	stdout.error();
-	stdout.error("  error: variadic arguments must be last `%s'", name);
-	stdout.error();
-	process.exit(1);
+	this.emitError("variadic arguments must be last `%s'", name);
 };
