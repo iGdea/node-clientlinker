@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var Benchmark = require('benchmark');
 var suite = new Benchmark.Suite;
 var ClientLinker = require('../');
+var Runtime = require('../lib/runtime').Runtime;
 
 function methodHandler(query, body, callback)
 {
@@ -52,9 +53,10 @@ linker._newRuntime('client.method')
 
 			.add('#step runbyruntime', function(deferred)
 			{
-				runtime.query = function(){'2,3'.split(',')};
+				var runtime2 = new Runtime(runtime.client, runtime.action,
+					runtime.method, function(){'2,3'.split(',')}, {}, {});
 
-				linker._runByRuntime(runtime)
+				linker._runByRuntime(runtime2)
 					.then(function(data){deferred.resolve(data)},
 						function(err){deferred.reject(err)});
 			},
