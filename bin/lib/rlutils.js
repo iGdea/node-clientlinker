@@ -1,9 +1,9 @@
 "use strict";
 
 var _		= require('underscore');
+var vm		= require('vm');
 var debug	= require('debug')('clientlinker:rlutils');
 var util	= require('util');
-var vm		= require('vm');
 var path	= require('path');
 var chalk	= require('chalk');
 var fs		= require('fs');
@@ -38,14 +38,18 @@ function parseParam(linker, str)
 			return '';
 		});
 
-	if (!type) type = 'jsonk';
+	if (!type) type = 'object';
 
 	var jsonk = linker.JSON;
 
 	switch(type)
 	{
+		case 'object':
+		case 'obj':
+			return str2obj(linker, data);
+
 		case 'jsonk':
-			return jsonk.parseNoWrap(str2obj(data));
+			return jsonk.parseNoWrap(str2obj(linker, data));
 
 		case 'jsonk-':
 		case 'jsonk_':
@@ -140,9 +144,10 @@ function resolve(str)
 
 
 exports.str2obj = str2obj;
-function str2obj(str)
+function str2obj(linker, str)
 {
-	return vm.runInNewContext('('+str+')', {});
+	var data = vm.runInThisContext('('+str+')');
+	return data;
 }
 
 

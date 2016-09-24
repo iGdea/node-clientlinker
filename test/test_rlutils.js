@@ -115,7 +115,10 @@ describe('#rlutils', function()
 				var data = rlutils.parseParam(linker, 'jsonk:{k:"Date", v:'+now+'}');
 				expect(data.getTime()).to.be(now);
 
-				data = rlutils.parseParam(linker, '{k:"Date", v:'+now+'}');
+				data = rlutils.parseParam(linker, 'new Date('+now+')');
+				expect(data.getTime()).to.be(now);
+
+				data = rlutils.parseParam(linker, 'object:new Date('+now+')');
 				expect(data.getTime()).to.be(now);
 
 				data = rlutils.parseParam(linker, 'jsonk-:'
@@ -204,5 +207,14 @@ describe('#rlutils', function()
 			.to.be(path.normalize(process.env.HOME+'/xxx'));
 		expect(path.normalize(rlutils.resolve('./xxx')))
 			.to.be(path.normalize(process.cwd()+'/xxx'));
+	});
+
+	it('#str2obj', function()
+	{
+		var linker = ClientLinker();
+
+		expect(rlutils.str2obj(linker, '{}')).to.be.a(Object);
+		expect(rlutils.str2obj(linker, 'new Date')).to.be.a(Date);
+		expect(rlutils.str2obj(linker, 'new Error')).to.be.a(Error);
 	});
 });
