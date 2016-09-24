@@ -7,8 +7,8 @@ var util		= require('util');
 exports.is_verbose = true;
 exports.promise = Promise.resolve();
 exports.stdout = process.stdout;
+exports.stderr = process.stderr;
 
-var iswriting = false;
 
 'log|warn|error|info|verbose'.split('|').forEach(function(name)
 	{
@@ -17,7 +17,7 @@ var iswriting = false;
 			if (name != 'verbose' || exports.is_verbose)
 			{
 				var str = util.format.apply(null, arguments) + '\n';
-				exports.write(str);
+				exports.write(str, name);
 			}
 		}
 
@@ -26,28 +26,31 @@ var iswriting = false;
 			if (exports.is_verbose)
 			{
 				var str = util.format.apply(null, arguments) + '\n';
-				exports.write(str);
+				exports.write(str, name);
 			}
 		}
 	});
 
 
 exports.write = write;
-function write(str)
+function write(str, name)
 {
-	var ok = exports.stdout.write(str);
+	var stdout = name == 'error' ? exports.stderr : exports.stdout;
+	var ok = stdout.write(''+str);
 
-	if (!ok && !iswriting)
+	if (!ok && !stdout._clientlinker_writing)
 	{
-		iswriting = true;
-		exports.promise = new Promise(function(resolve)
-		{
-			exports.stdout.once('drain', function()
-				{
-					iswriting = false;
-					resolve();
-				});
-		});
+		stdout._clientlinker_writing = true;
+		var promise = new Promise(function(resolve)
+			{
+				exports.stdout.once('drain', function()
+					{
+						stdout._clientlinker_writing = false;
+						resolve();
+					});
+			});
+
+		exports.promise = Promise.all([exports.promise, promise]);
 	}
 
 	return ok;
