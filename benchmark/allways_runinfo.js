@@ -71,7 +71,7 @@ function printSuc(index, startTime)
 	var useTime = endTime - startTime;
 	runTimeTotal += useTime;
 
-	logHandler('[allways] run suc index[%d] use:%dms', index, useTime);
+	logHandler('run suc index[%d] use:%dms', index, useTime);
 
 	lastRunTimes = lastRunTimes.slice(0, MAX_LAST_RUNTIME_LENGTH-1);
 	lastRunTimes.unshift(useTime);
@@ -90,7 +90,7 @@ function printSuc(index, startTime)
 				}
 			});
 
-		logHandler('[allways] avg time:%sms last10 avg:%sms last10:%s',
+		logHandler('avg time:%sms last10 avg:%sms last10:%s',
 			(index-runErrorTimes) && (runTimeTotal/(index-runErrorTimes)).toFixed(2),
 			last10 && (total/last10).toFixed(2),
 			lastRunTimes.join(','));
@@ -101,7 +101,7 @@ function printFail(index, startTime, err)
 {
 	var endTime = Date.now();
 	runErrorTimes++;
-	logHandler('[allways] run err index[%d] use:%dms err:%s',
+	logHandler('run err index[%d] use:%dms err:%s',
 		index,
 		endTime - startTime,
 		err.stack);
@@ -109,11 +109,29 @@ function printFail(index, startTime, err)
 
 function logHandler()
 {
-	var msg = util.format.apply(null, arguments);
+	var now = new Date;
+	var msg = util.format('[allways] %d %d-%s-%s %s:%s:%s,%d %s',
+		process.pid,
+		now.getFullYear(),
+		zero(now.getMonth()+1),
+		zero(now.getDate()),
+		zero(now.getHours()),
+		zero(now.getMinutes()),
+		zero(now.getSeconds()),
+		now.getMilliseconds(),
+		util.format.apply(null, arguments));
+
 	console.log(msg);
 	ws.write(msg+'\n');
 }
 
+function zero(num)
+{
+	if (num > 0)
+		return num > 10 ? ''+num : '0'+num;
+	else
+		return '00';
+}
 
 
 
