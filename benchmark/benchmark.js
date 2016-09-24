@@ -7,7 +7,7 @@ var Runtime = require('../lib/runtime').Runtime;
 function methodHandler(query, body, callback)
 {
 	query();
-	callback(null);
+	callback && callback(null);
 }
 
 var linker = ClientLinker(
@@ -36,7 +36,7 @@ linker._newRuntime('client.method')
 			},
 			{'defer': true})
 
-			.add('#rundirectly', function(deferred)
+			.add('#only one promise run', function(deferred)
 			{
 				new Promise(function(resolve, reject)
 					{
@@ -50,6 +50,25 @@ linker._newRuntime('client.method')
 						function(err){deferred.reject(err)});
 			},
 			{'defer': true})
+
+			.add('#rundirectly', function(deferred)
+			{
+				methodHandler(function(){'2,3'.split(',')}, null,
+					function(err, data)
+					{
+						err ? deferred.reject(err) : deferred.resolve(data);
+					});
+			},
+			{'defer': true})
+
+			.add('#run sync', function()
+			{
+				var deferred = {};
+				methodHandler(function(){'2,3'.split(',')}, function(err, data)
+				{
+					err ? deferred.reject(err) : deferred.resolve(data);
+				}, null);
+			})
 
 			.add('#step runbyruntime', function(deferred)
 			{
