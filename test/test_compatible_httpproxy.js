@@ -10,7 +10,7 @@ var utilsTestHttpproxy = require('./utils_test_httpproxy');
 
 describe('#compatible_httpproxy', function()
 {
-	var svrLinker = utilsTestHttpproxy.initSvrLinker({});
+	var svrLinker = utilsTestHttpproxy.initTestSvrLinker({});
 	var linker = utilsTestHttpproxy.initLinker(
 		{
 			flows: [

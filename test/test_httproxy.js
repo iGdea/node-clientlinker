@@ -10,14 +10,14 @@ var request				= require('request');
 var utilsTestHttpproxy	= require('./utils_test_httpproxy');
 
 var initLinker			= utilsTestHttpproxy.initLinker;
-var initSvrLinker		= utilsTestHttpproxy.initSvrLinker;
+var initTestSvrLinker	= utilsTestHttpproxy.initTestSvrLinker;
 
 
 describe('#httpproxy', function()
 {
 	describe('#base', function()
 	{
-		var svrLinker = initSvrLinker({});
+		var svrLinker = initTestSvrLinker({});
 
 		// describe('#run client', function()
 		// {
@@ -70,7 +70,7 @@ describe('#httpproxy', function()
 	{
 		describe('#5xx', function()
 		{
-			var svrLinker = initSvrLinker();
+			var svrLinker = initTestSvrLinker();
 			var linker = initLinker(
 				{
 					flows: [
@@ -132,7 +132,7 @@ describe('#httpproxy', function()
 
 		describe('#5xx_parse', function()
 		{
-			var svrLinker = initSvrLinker();
+			var svrLinker = initTestSvrLinker();
 			var linker = initLinker(
 				{
 					flows: [
@@ -175,7 +175,7 @@ describe('#httpproxy', function()
 		describe('#httpproxyKey', function()
 		{
 			var httpproxyKey = 'xxfde&d023';
-			var svrLinker = initSvrLinker(
+			var svrLinker = initTestSvrLinker(
 				{
 					defaults: {
 						httpproxyKey: httpproxyKey
@@ -314,7 +314,7 @@ describe('#httpproxy', function()
 
 				describe('#svrLevel:'+svrLevel, function()
 				{
-					var svrLinker = initSvrLinker(
+					var svrLinker = initTestSvrLinker(
 						{
 							defaults:
 							{

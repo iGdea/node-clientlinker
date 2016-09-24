@@ -1,3 +1,5 @@
+"use strict";
+
 var Promise = require('bluebird');
 var Benchmark = require('benchmark');
 var suite = new Benchmark.Suite;
