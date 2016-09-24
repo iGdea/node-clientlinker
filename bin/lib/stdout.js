@@ -43,11 +43,11 @@ function write(str, name)
 		stdout._clientlinker_writing = true;
 		var promise = new Promise(function(resolve)
 			{
-				exports.stdout.once('drain', function()
-					{
-						stdout._clientlinker_writing = false;
-						resolve();
-					});
+				stdout.once('drain', function()
+				{
+					stdout._clientlinker_writing = false;
+					resolve();
+				});
 			});
 
 		exports.promise = Promise.all([exports.promise, promise]);

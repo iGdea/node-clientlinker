@@ -62,8 +62,10 @@ describe('#stdout', function()
 
 	it('#drain', function()
 	{
-		var times = 20;
-		var content = new Array(1000).join('123456789\n');
+		this.timeout(200*1000);
+
+		var times = 10000;
+		var content = new Array(100000).join('123456789\n');
 		while(stdout.write(content) && !--times);
 		return stdout.promise;
 	});
