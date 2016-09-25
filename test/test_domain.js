@@ -18,10 +18,7 @@ describe('#domain', function()
 					{
 						confighandler:
 						{
-							method: function()
-							{
-								return Promise.resolve();
-							}
+							method: function(){return Promise.resolve()}
 						}
 					}
 				}
@@ -56,18 +53,9 @@ describe('#domain', function()
 					{
 						confighandler:
 						{
-							method1: function()
-							{
-								return Promise.resolve(111);
-							},
-							method2: function()
-							{
-								return Promise.resolve(222);
-							},
-							method3: function()
-							{
-								return Promise.reject(333);
-							}
+							method1: function(){return Promise.resolve(111)},
+							method2: function(){return Promise.resolve(222)},
+							method3: function(){return Promise.reject(333)}
 						}
 					}
 				}
