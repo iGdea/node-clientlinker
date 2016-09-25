@@ -15,7 +15,7 @@ function Command()
 {
 	var program = this.program = new Command2(pkg.name);
 	program.version('v'+pkg.version)
-		.option('--no-color', 'Disable colored output.')
+		.option('-C, --no-color', 'Disable colored output.')
 		.option('-v, --verbose', 'Verbose mode. A lot more information output.')
 		.on('color', function(){rlutils.colors.enabled = false})
 		.on('verbose', function()
