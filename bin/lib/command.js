@@ -94,6 +94,11 @@ proto.run = function run()
 	return this.program
 		.command('run <conf_file>')
 		.description('run [action] of clients with methods list')
+		.option('-a', 'print action instead of method', function()
+		{
+			options.useAction = true;
+			return null;
+		})
 		.option('--clients <name>', 'only those clients', function(val)
 		{
 			options.clients = val;
