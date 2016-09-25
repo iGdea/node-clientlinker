@@ -43,10 +43,10 @@ describe('#command', function()
 		expect(function(){testStrArgs(command, 'help list --options=xxx')})
 			.to.throwError(/unknown option/);
 
-		expect(function(){testStrArgs(command, 'list ./conf.js --filter-client=')})
+		expect(function(){testStrArgs(command, 'list ./conf.js --clients=')})
 			.to.throwError(/argument missing/);
 
-		expect(function(){testStrArgs(command, 'list ./conf.js --filter-client')})
+		expect(function(){testStrArgs(command, 'list ./conf.js --clients')})
 			.to.throwError(/argument missing/);
 	});
 
@@ -55,13 +55,15 @@ describe('#command', function()
 	{
 		var command = initCommand();
 		command.list()
-			.action(function(conf_file, options)
+			.action(function(conf_file, command)
 			{
+				var options = command.__clk_options__;
 				expect(conf_file).to.be('./conf.js');
-				expect(options.filterClient).to.be('client');
+				expect(options.clients).to.be('client');
+				expect(options.useAction).to.be(true);
 			});
 
-		testStrArgs(command, 'list ./conf.js --filter-client=client');
+		testStrArgs(command, 'list ./conf.js --clients=client -a');
 	});
 
 
@@ -69,13 +71,14 @@ describe('#command', function()
 	{
 		var command = initCommand();
 		command.run()
-			.action(function(conf_file, options)
+			.action(function(conf_file, command)
 			{
+				var options = command.__clk_options__;
 				expect(conf_file).to.be('./conf.js');
-				expect(options.filterClient).to.be('client');
+				expect(options.clients).to.be('client');
 			});
 
-		testStrArgs(command, 'run ./conf.js --filter-client=client');
+		testStrArgs(command, 'run ./conf.js --clients=client');
 	});
 
 
@@ -83,17 +86,19 @@ describe('#command', function()
 	{
 		var command = initCommand();
 		command.exec()
-			.action(function(conf_file, action, options)
+			.action(function(conf_file, action, command)
 			{
+				var options = command.__clk_options__;
+
 				expect(conf_file).to.be('./conf.js');
 				expect(action).to.be('action');
-				expect(options.filterClient).to.be('client');
-				expect(options.clkQuery).to.be('q');
-				expect(options.clkBody).to.be('b');
-				expect(options.clkOptions).to.be('o');
+				expect(options.clients).to.be('client');
+				expect(options.query).to.be('q');
+				expect(options.body).to.be('b');
+				expect(options.options).to.be('o');
 			});
 
-		testStrArgs(command, 'exec ./conf.js action --filter-client=client '
+		testStrArgs(command, 'exec ./conf.js action --clients=client '
 			+ '--query=q '
 			+ '--body=b '
 			+ '--options=o ');
@@ -164,11 +169,12 @@ describe('#command', function()
 				};
 
 			command.exec()
-				.action(function(conf_file, action, options)
+				.action(function(conf_file, action, command)
 				{
+					var options = command.__clk_options__;
 					expect(conf_file).to.be('./conf.js');
 					expect(action).to.be('action');
-					expect(options.clkQuery).to.be('q');
+					expect(options.query).to.be('q');
 				});
 
 			testStrArgs(command, './conf.js exec action --query=q');

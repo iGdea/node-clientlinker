@@ -9,9 +9,9 @@ var stdout			= require('./lib/stdout');
 var command = new Command;
 
 command.run()
-	.action(function()
+	.action(function(conf_file, command)
 	{
-		commandActions.listAction.apply(null, arguments)
+		commandActions.listAction(conf_file, command.__clk_options__)
 			.then(function(data)
 			{
 				runRl.start(data.linker, data.methods);
@@ -20,17 +20,17 @@ command.run()
 	});
 
 command.list()
-	.action(function()
+	.action(function(conf_file, command)
 	{
-		commandActions.listAction.apply(null, arguments)
+		commandActions.listAction(conf_file, command.__clk_options__)
 			.catch(function(){})
 			.then(exit);
 	});
 
 command.exec()
-	.action(function()
+	.action(function(conf_file, action, command)
 	{
-		commandActions.execAction.apply(null, arguments)
+		commandActions.execAction(conf_file, action, command.__clk_options__)
 			.catch(function(){})
 			.then(exit);
 	});

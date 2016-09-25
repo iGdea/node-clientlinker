@@ -32,7 +32,7 @@ describe('#commandActions', function()
 
 	it('#listAction', function()
 	{
-		var output1 = [
+		var output1_1 = [
 			'    client               confighandler   ',
 			' 1  client.error         confighandler $ ',
 			' 2  client.error2        confighandler $ ',
@@ -46,28 +46,66 @@ describe('#commandActions', function()
 			'']
 			.join('\n');
 
-		var output2 = [
+		var output1_2 = [
+			'    client               confighandler   ',
+			' 1  error                confighandler $ ',
+			' 2  error2               confighandler $ ',
+			' 3  success              confighandler $ ',
+			'                                         ',
+			'    client2              confighandler   ',
+			' 4  method               confighandler $ ',
+			'                                         ',
+			'    client3              confighandler   ',
+			'    ** No Methods **                     ',
+			'']
+			.join('\n');
+
+		var output2_1 = [
 			'    client2            confighandler   ',
 			' 1  client2.method     confighandler $ ',
 			'']
 			.join('\n');
 
-		output1 = output1.replace(/\$/g, printTable.useSymbole);
-		output2 = output2.replace(/\$/g, printTable.useSymbole);
+		var output2_2 = [
+			'    client2     confighandler   ',
+			' 1  method      confighandler $ ',
+			'']
+			.join('\n');
 
-		var promise1 = commandActions.listAction(CONFIG_FILE, {})
+		output1_1 = output1_1.replace(/\$/g, printTable.useSymbole);
+		output1_2 = output1_2.replace(/\$/g, printTable.useSymbole);
+		output2_1 = output2_1.replace(/\$/g, printTable.useSymbole);
+		output2_2 = output2_2.replace(/\$/g, printTable.useSymbole);
+
+		var promise1_1 = commandActions.listAction(CONFIG_FILE, {useAction: true})
 			.then(function(data)
 			{
-				expect(data.output).to.be(output1);
+				expect(data.output).to.be(output1_1);
 			});
 
-		var promise2 = commandActions.listAction(CONFIG_FILE,
+		var promise1_2 = commandActions.listAction(CONFIG_FILE, {})
+			.then(function(data)
+			{
+				expect(data.output).to.be(output1_2);
+			});
+
+		var promise2_1 = commandActions.listAction(CONFIG_FILE,
 				{
-					filterClient: 'client2'
+					clients: 'client2',
+					useAction: true
 				})
 				.then(function(data)
 				{
-					expect(data.output).to.be(output2);
+					expect(data.output).to.be(output2_1);
+				});
+
+		var promise2_2 = commandActions.listAction(CONFIG_FILE,
+				{
+					clients: 'client2'
+				})
+				.then(function(data)
+				{
+					expect(data.output).to.be(output2_2);
 				});
 
 		var promise3 = commandActions.listAction(EMPTY_CONFIG_FILE, {})
@@ -77,7 +115,12 @@ describe('#commandActions', function()
 						expect(err.message).to.be('No Client Has Methods');
 					});
 
-		return Promise.all([promise1, promise2, promise3]);
+		return Promise.all(
+			[
+				promise1_1, promise1_2,
+				promise2_1, promise2_2,
+				promise3
+			]);
 	});
 
 
@@ -126,9 +169,9 @@ describe('#commandActions', function()
 		{
 			return commandActions.execAction(CONFIG_FILE, 'client2.method',
 				{
-					clkQuery: 'number:1',
-					clkBody: 'string:body',
-					clkOptions: '{a: 1}'
+					query: 'number:1',
+					body: 'string:body',
+					options: '{a: 1}'
 				})
 				.then(function(data)
 				{

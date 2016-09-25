@@ -10,9 +10,10 @@ var commandActions = exports;
 
 exports.execAction = function execAction(conf_file, action, options)
 {
+	options || (options = {});
 	var linker = require(rlutils.resolve(conf_file));
 
-	return commandActions.filterAllMehtods(linker, options.filterClient)
+	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
 			return commandActions.exec(linker, action, allMethods, options);
@@ -29,12 +30,13 @@ exports.execAction = function execAction(conf_file, action, options)
 
 exports.listAction = function listAction(conf_file, options)
 {
+	options || (options = {});
 	var linker = require(rlutils.resolve(conf_file));
 
-	return commandActions.filterAllMehtods(linker, options.filterClient)
+	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
-			var output = printTable(allMethods.lines, allMethods.allFlowFrom);
+			var output = printTable(allMethods.lines, allMethods.allFlowFrom, options);
 			stdout.log(output);
 
 			return {
@@ -63,9 +65,9 @@ function exec(linker, action, allMethods, options)
 	}
 
 	return commandActions.runAction(linker, realaction,
-			rlutils.parseParam(linker, options.clkQuery),
-			rlutils.parseParam(linker, options.clkBody),
-			rlutils.parseParam(linker, options.clkOptions)
+			rlutils.parseParam(linker, options.query),
+			rlutils.parseParam(linker, options.body),
+			rlutils.parseParam(linker, options.options)
 		);
 }
 
@@ -105,6 +107,7 @@ function filterAllMehtods(linker, clients)
 exports.runAction = runAction;
 function runAction(linker, action, query, body, options)
 {
+	options || (options = {});
 	var str = printTpl.runActionStart(action, query, body, options);
 	stdout.log(str);
 

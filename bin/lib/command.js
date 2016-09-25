@@ -29,31 +29,81 @@ var proto = Command.prototype;
 
 proto.list = function list()
 {
+	var options = {};
+
 	return this.program
 		.command('list <conf_file>')
 		.alias('ls')
 		.description('list methods of clients')
-		.option('--filter-client <name>', 'only those clients');
+		.option('-a', 'print action instead of method', function()
+		{
+			options.useAction = true;
+			return null;
+		})
+		.option('--clients <name>', 'only those clients', function(val)
+		{
+			options.clients = val;
+			return null;
+		})
+		.action(function()
+		{
+			this.__clk_options__ = options;
+			options = {};
+		});
 };
 
 proto.exec = function exec()
 {
+	var options = {};
+
 	return this.program
 		.command('exec <conf_file> <action>')
 		.alias('ex')
 		.description('exec [action] of clients')
-		.option('--query, --clk-query <data>', 'run param [query]')
-		.option('--body, --clk-body <data>', 'run param [body]')
-		.option('--options, --clk-options <data>', 'run param [options]')
-		.option('--filter-client <name>', 'only those clients');
+		.option('--query <data>', 'run param [query]', function(val)
+		{
+			options.query = val;
+			return null;
+		})
+		.option('--body <data>', 'run param [body]', function(val)
+		{
+			options.body = val;
+			return null;
+		})
+		.option('--options <data>', 'run param [options]', function(val)
+		{
+			options.options = val;
+			return null;
+		})
+		.option('--clients <name>', 'only those clients', function(val)
+		{
+			options.clients = val;
+			return null;
+		})
+		.action(function()
+		{
+			this.__clk_options__ = options;
+			options = {};
+		});
 };
 
 proto.run = function run()
 {
+	var options = {};
+
 	return this.program
 		.command('run <conf_file>')
 		.description('run [action] of clients with methods list')
-		.option('--filter-client <name>', 'only those clients');
+		.option('--clients <name>', 'only those clients', function(val)
+		{
+			options.clients = val;
+			return null;
+		})
+		.action(function()
+		{
+			this.__clk_options__ = options;
+			options = {};
+		});
 };
 
 proto.help = function help()

@@ -7,8 +7,9 @@ var useSymbole
 	= '*';
 
 exports.printTable = printTable;
-function printTable(data, allFlowFrom)
+function printTable(data, allFlowFrom, options)
 {
+	options || (options = {});
 	var defaultFlowFromArr = [];
 	var flowFromIndexMap = {};
 
@@ -26,13 +27,18 @@ function printTable(data, allFlowFrom)
 				case 'header':
 					// 空一行
 					if (tableData.length)
-						tableData.push([' ', '', ''].concat(defaultFlowFromArr));
+					{
+						var line = [' ', '', ''].concat(defaultFlowFromArr);
+						tableData.push(line);
+					}
 
 					tableData.push(['', item.client, ' '].concat(allFlowFrom));
 					break;
 
 				case 'nomethods':
-					tableData.push(['', '** No Methods **', ''].concat(defaultFlowFromArr));
+					var line = ['', '** No Methods **', '']
+							.concat(defaultFlowFromArr);
+					tableData.push(line);
 					break;
 
 				default:
@@ -43,7 +49,15 @@ function printTable(data, allFlowFrom)
 							realFlowList[flowFromIndexMap[name]] = name+' '+useSymbole;
 							return name;
 						});
-					tableData.push([item.index, item.method, '' && froms.join(',')].concat(realFlowList));
+
+					var line = [
+							item.index,
+							options.useAction ? item.action : item.method,
+							'' && froms.join(',')
+						]
+						.concat(realFlowList);
+
+					tableData.push(line);
 			}
 		});
 
