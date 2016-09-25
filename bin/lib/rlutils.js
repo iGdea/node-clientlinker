@@ -189,14 +189,16 @@ function getAllMethods(list)
 							return from && from.name;
 						});
 
-				var runKey = clientName+'.'+method;
+				var action = clientName+'.'+method;
 				allFlowFrom.push.apply(allFlowFrom, froms);
 
 				lines.push(
 					{
 						type	: 'line',
-						index	: allMethods.push(runKey),
-						method	: runKey,
+						index	: allMethods.push(action),
+						client	: clientName,
+						method	: method,
+						action	: action,
 						froms	: froms
 					});
 			});

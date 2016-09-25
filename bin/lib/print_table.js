@@ -30,9 +30,11 @@ function printTable(data, allFlowFrom)
 
 					tableData.push(['', item.client, ' '].concat(allFlowFrom));
 					break;
+
 				case 'nomethods':
 					tableData.push(['', '** No Methods **', ''].concat(defaultFlowFromArr));
 					break;
+
 				default:
 					var realFlowList = defaultFlowFromArr.slice();
 					var froms = item.froms.map(function(name)
