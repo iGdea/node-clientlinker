@@ -7,13 +7,13 @@ var useSymbole
 	= '*';
 
 exports.printTable = printTable;
-function printTable(data, allFlowFrom, options)
+function printTable(data, allFlows, options)
 {
 	options || (options = {});
 	var defaultFlowFromArr = [];
 	var flowFromIndexMap = {};
 
-	allFlowFrom.forEach(function(from, index)
+	allFlows.forEach(function(from, index)
 		{
 			defaultFlowFromArr.push('');
 			flowFromIndexMap[from] = index;
@@ -32,7 +32,7 @@ function printTable(data, allFlowFrom, options)
 						tableData.push(line);
 					}
 
-					tableData.push(['', item.client, ' '].concat(allFlowFrom));
+					tableData.push(['', item.client, ' '].concat(allFlows));
 					break;
 
 				case 'nomethods':
@@ -46,7 +46,13 @@ function printTable(data, allFlowFrom, options)
 					var froms = item.froms.map(function(name)
 						{
 							if (name === undefined) name = 'undefined';
-							realFlowList[flowFromIndexMap[name]] = name+' '+useSymbole;
+
+							var flowTabIndex = flowFromIndexMap[name];
+							if (flowTabIndex || flowTabIndex === 0)
+							{
+								realFlowList[flowTabIndex] = name+' '+useSymbole;
+							}
+
 							return name;
 						});
 

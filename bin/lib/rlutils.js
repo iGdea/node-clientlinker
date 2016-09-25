@@ -166,7 +166,7 @@ function getAllMethods(list)
 {
 	var allMethods	= [];
 	var lines		= [];
-	var allFlowFrom	= [];
+	var allFlows	= [];
 	var clientNames	= Object.keys(list).sort();
 
 	clientNames.forEach(function(clientName)
@@ -190,7 +190,7 @@ function getAllMethods(list)
 						});
 
 				var action = clientName+'.'+method;
-				allFlowFrom.push.apply(allFlowFrom, froms);
+				allFlows.push.apply(allFlows, froms);
 
 				lines.push(
 					{
@@ -211,7 +211,7 @@ function getAllMethods(list)
 
 
 	allMethods.lines = lines;
-	allMethods.allFlowFrom = _.uniq(allFlowFrom)
+	allMethods.allFlows = _.uniq(allFlows)
 		.sort()
 		.map(function(name)
 		{

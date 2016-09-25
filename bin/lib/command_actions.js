@@ -36,7 +36,8 @@ exports.listAction = function listAction(conf_file, options)
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
-			var output = printTable(allMethods.lines, allMethods.allFlowFrom, options);
+			var flows = options.flows && options.flows.split(/ *, */);
+			var output = printTable(allMethods.lines, flows || allMethods.allFlows, options);
 			stdout.log(output);
 
 			return {

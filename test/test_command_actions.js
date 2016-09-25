@@ -7,6 +7,7 @@ var printTable		= require('../bin/lib/print_table');
 var printTpl		= require('../bin/lib/print_tpl');
 
 var CONFIG_FILE			= __dirname+'/conf/simple.conf.js';
+var MULIT_CONFIG_FILE	= __dirname+'/conf/clientlinker.conf.js';
 var EMPTY_CONFIG_FILE	= __dirname+'/conf/empty.conf.js';
 
 require('../bin/lib/rlutils').colors.enabled = false;
@@ -103,6 +104,27 @@ describe('#commandActions', function()
 					{
 						expect(err.message).to.be('No Client Has Methods');
 					});
+		});
+
+		it('#flows options', function()
+		{
+			var output = [
+				'    client     confighandler  localfile   ',
+				' 1  js                        localfile $ ',
+				' 2  json                      localfile $ ',
+				'']
+				.join('\n')
+				.replace(/\$/g, printTable.useSymbole);
+
+			return commandActions.listAction(MULIT_CONFIG_FILE,
+				{
+					clients: 'client',
+					flows: 'confighandler,localfile'
+				})
+				.then(function(data)
+				{
+					expect(data.output).to.be(output);
+				});
 		});
 	});
 

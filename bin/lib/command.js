@@ -40,6 +40,11 @@ proto.list = function list()
 			options.useAction = true;
 			return null;
 		})
+		.option('--flows <name>', 'only those flows', function(val)
+		{
+			options.flows = val;
+			return null;
+		})
 		.option('--clients <name>', 'only those clients', function(val)
 		{
 			options.clients = val;
@@ -97,6 +102,11 @@ proto.run = function run()
 		.option('-a', 'print action instead of method', function()
 		{
 			options.useAction = true;
+			return null;
+		})
+		.option('--flows <name>', 'only those flows', function(val)
+		{
+			options.flows = val;
 			return null;
 		})
 		.option('--clients <name>', 'only those clients', function(val)
