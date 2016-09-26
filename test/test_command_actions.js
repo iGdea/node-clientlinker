@@ -36,16 +36,18 @@ describe('#commandActions', function()
 		it('#base', function()
 		{
 			var output = [
-				'    client               confighandler   ',
-				' 1  error                confighandler $ ',
-				' 2  error2               confighandler $ ',
-				' 3  success              confighandler $ ',
-				'                                         ',
-				'    client2              confighandler   ',
-				' 4  method               confighandler $ ',
-				'                                         ',
-				'    client3              confighandler   ',
-				'    ** No Methods **                     ',
+				'    client               confighandler    localfile   ',
+				' 1  error                confighandler $              ',
+				' 2  error2               confighandler $              ',
+				' 3  js                                    localfile $ ',
+				' 4  json                                  localfile $ ',
+				' 5  success              confighandler $              ',
+				'                                                      ',
+				'    client2              confighandler    localfile   ',
+				' 6  method               confighandler $              ',
+				'                                                      ',
+				'    client3              confighandler    localfile   ',
+				'    ** No Methods **                                  ',
 				'']
 				.join('\n')
 				.replace(/\$/g, printTable.useSymbole);
@@ -109,17 +111,20 @@ describe('#commandActions', function()
 		it('#flows options', function()
 		{
 			var output = [
-				'    client     confighandler  localfile   ',
-				' 1  js                        localfile $ ',
-				' 2  json                      localfile $ ',
+				'    client      localfile   ',
+				' 1  error                   ',
+				' 2  error2                  ',
+				' 3  js          localfile $ ',
+				' 4  json        localfile $ ',
+				' 5  success                 ',
 				'']
 				.join('\n')
 				.replace(/\$/g, printTable.useSymbole);
 
-			return commandActions.listAction(MULIT_CONFIG_FILE,
+			return commandActions.listAction(CONFIG_FILE,
 				{
 					clients: 'client',
-					flows: 'confighandler,localfile'
+					flows: 'not_exists_flow, localfile'
 				})
 				.then(function(data)
 				{
@@ -136,8 +141,8 @@ describe('#commandActions', function()
 			return Promise.all(
 				[
 					commandActions.execAction(CONFIG_FILE, 'client.success', {}),
-					commandActions.execAction(CONFIG_FILE, '3', {}),
-					commandActions.execAction(CONFIG_FILE, 3, {})
+					commandActions.execAction(CONFIG_FILE, '5', {}),
+					commandActions.execAction(CONFIG_FILE, 5, {})
 				]);
 		});
 
@@ -198,7 +203,23 @@ describe('#commandActions', function()
 						expect(err.message).to.be('Not Found Action');
 					});
 		});
+
 	});
+
+	it('#parseFilterFlows', function()
+	{
+		var allFlows = ['flow1', 'flow2', 'flow3'];
+
+		var iterms = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
+		expect(iterms).to.be.eql(['flow1', 'flow3']);
+
+		var iterms = commandActions.parseFilterFlows('flow1,', allFlows);
+		expect(iterms).to.be.eql(['flow1']);
+
+		var iterms = commandActions.parseFilterFlows('flow4,', allFlows);
+		expect(iterms).to.be.eql(allFlows);
+	});
+
 });
 
 

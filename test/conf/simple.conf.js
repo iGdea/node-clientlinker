@@ -5,11 +5,12 @@ var ClientLinker	= require('../../');
 
 module.exports = ClientLinker(
 	{
-		flows: ['not_exists_flow', 'flowNext', 'confighandler'],
+		flows: ['not_exists_flow', 'flowNext', 'confighandler', 'localfile'],
 		clients:
 		{
 			client:
 			{
+				localfile: __dirname+'/../localfile/client',
 				confighandler:
 				{
 					success: function(){return Promise.resolve()},

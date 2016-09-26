@@ -1,6 +1,8 @@
 "use strict";
 
 var Promise		= require('bluebird');
+
+var _			= require('underscore');
 var rlutils		= require('./rlutils');
 var printTable	= require('./print_table').printTable;
 var printTpl	= require('./print_tpl');
@@ -36,8 +38,8 @@ exports.listAction = function listAction(conf_file, options)
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
-			var flows = options.flows && options.flows.split(/ *, */);
-			var output = printTable(allMethods.lines, flows || allMethods.allFlows, options);
+			var flows = parseFilterFlows(options.flows, allMethods.allFlows);
+			var output = printTable(allMethods.lines, flows, options);
 			stdout.log(output);
 
 			return {
@@ -52,6 +54,26 @@ exports.listAction = function listAction(conf_file, options)
 			throw err;
 		});
 }
+
+
+/**
+ * 解析cli的flow字符串
+ *
+ * 只包含可用的flow，如果没有可用flow，则返回全部flows
+ *
+ * @param  {String} flowsStr
+ * @param  {Array}  allFlows
+ * @return {Array}
+ */
+function parseFilterFlows(flowsStr, allFlows)
+{
+	var flows = flowsStr && flowsStr.split(/ *, */);
+	if (flows) flows = _.intersection(flows, allFlows);
+	if (!flows || !flows.length) flows = allFlows;
+
+	return flows;
+}
+exports.parseFilterFlows = parseFilterFlows;
 
 
 exports.exec = exec;
