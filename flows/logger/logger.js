@@ -1,7 +1,7 @@
 "use strict";
 
 var debug = require('debug')('clientlinker:logger');
-var DEFAULT_ERRMSG = require('../../lib/linker').DEFAULT_ERRMSG;
+var STATIC = require('../../lib/static');
 exports = module.exports = logger;
 
 function logger(runtime, callback)
@@ -19,7 +19,7 @@ function logger(runtime, callback)
 		},
 		function(err)
 		{
-			logger(runtime, err || DEFAULT_ERRMSG, null);
+			logger(runtime, err || STATIC.DEFAULT_ERROR, null);
 		});
 }
 
