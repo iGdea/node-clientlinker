@@ -210,14 +210,14 @@ describe('#commandActions', function()
 	{
 		var allFlows = ['flow1', 'flow2', 'flow3'];
 
-		var iterms = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
-		expect(iterms).to.be.eql(['flow1', 'flow3']);
+		var items = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
+		expect(items).to.be.eql(['flow1', 'flow3']);
 
-		var iterms = commandActions.parseFilterFlows('flow1,', allFlows);
-		expect(iterms).to.be.eql(['flow1']);
+		var items = commandActions.parseFilterFlows('flow1,', allFlows);
+		expect(items).to.be.eql(['flow1']);
 
-		var iterms = commandActions.parseFilterFlows('flow4,', allFlows);
-		expect(iterms).to.be.eql(allFlows);
+		var items = commandActions.parseFilterFlows('flow4,', allFlows);
+		expect(items).to.be.eql(allFlows);
 	});
 
 });
