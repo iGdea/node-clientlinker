@@ -13,8 +13,10 @@ describe('#compatible_httpproxy', function()
 	var svrLinker = utilsTestHttpproxy.initTestSvrLinker({});
 	var linker = utilsTestHttpproxy.initLinker(
 		{
-			flows: [
-				function custom(runtime, callback)
+			flows: ['custom'],
+			customFlows:
+			{
+				custom: function custom(runtime, callback)
 				{
 					var body = httpproxy.getRequestBody_(runtime);
 					var opts = httpproxy.getRequestParams_(runtime, body);
@@ -32,7 +34,8 @@ describe('#compatible_httpproxy', function()
 								body: body
 							});
 					});
-				}]
+				}
+			}
 		});
 
 	it('#sucess', function()

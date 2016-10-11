@@ -10,7 +10,9 @@ describe('#compatible', function()
 	{
 		var linker = ClientLinker(
 			{
-				flows: [function flow(runtime, callback)
+				flows: ['custom'],
+				customFlows: {
+					custom: function flow(runtime, callback)
 					{
 						expect(runtime.runOptions.param).to.be('pp');
 						runtime.runOptions.param = 'p1';
@@ -19,7 +21,8 @@ describe('#compatible', function()
 						expect(runtime.options.param).to.be('p2');
 
 						callback();
-					}],
+					}
+				},
 				clients:
 				{
 					client: {}

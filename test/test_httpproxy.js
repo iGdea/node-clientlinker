@@ -73,8 +73,10 @@ describe('#httpproxy', function()
 			var svrLinker = initTestSvrLinker();
 			var linker = initLinker(
 				{
-					flows: [
-						function custom(runtime, callback)
+					flows: ['custom'],
+					customFlows:
+					{
+						custom: function custom(runtime, callback)
 						{
 							var body = httpproxy.getRequestBody_(runtime);
 							var opts = httpproxy.getRequestParams_(runtime, body);
@@ -87,7 +89,8 @@ describe('#httpproxy', function()
 										body: body
 									});
 							});
-						}]
+						}
+					}
 				});
 
 			var linker2 = initLinker();
@@ -135,8 +138,10 @@ describe('#httpproxy', function()
 			var svrLinker = initTestSvrLinker();
 			var linker = initLinker(
 				{
-					flows: [
-						function custom(runtime, callback)
+					flows: ['custom'],
+					customFlows:
+					{
+						custom: function custom(runtime, callback)
 						{
 							var body = httpproxy.getRequestBody_(runtime);
 							var opts = httpproxy.getRequestParams_(runtime, body);
@@ -150,7 +155,8 @@ describe('#httpproxy', function()
 										body: body
 									});
 							});
-						}]
+						}
+					}
 				});
 
 			it('#err', function()
@@ -200,8 +206,10 @@ describe('#httpproxy', function()
 					{
 						var linker = initLinker(
 						{
-							flows: [
-								function custom(runtime, callback)
+							flows: ['custom'],
+							customFlows:
+							{
+								custom: function custom(runtime, callback)
 								{
 									var body = httpproxy.getRequestBody_(runtime);
 									body.key = key;
@@ -215,7 +223,8 @@ describe('#httpproxy', function()
 												body: body
 											});
 									});
-								}]
+								}
+							}
 						});
 
 						return linker.run('client_its.method')
