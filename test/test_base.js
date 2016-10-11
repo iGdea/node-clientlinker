@@ -2,26 +2,22 @@
 
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
+var STATIC			= require('../lib/static');
 var expect			= require('expect.js');
 
 
 describe('#base', function()
 {
-	it('#ownlist', function()
-	{
-		expect(ClientLinker.supportMiddlewares.length).to.be.above(0);
-		expect(ClientLinker.supportMiddlewares).to.contain('httpproxy');
-	});
-
 	it('#own', function()
 	{
+		var sysflowsArr = Object.keys(STATIC.sysflows);
 		var linker = ClientLinker(
 			{
-				flows: ClientLinker.supportMiddlewares
+				flows: sysflowsArr
 			});
 
-		expect(Object.keys(linker.flows).length).to.be(ClientLinker.supportMiddlewares.length);
-		ClientLinker.supportMiddlewares.forEach(function(name)
+		expect(Object.keys(linker.flows).length).to.be(sysflowsArr.length);
+		sysflowsArr.forEach(function(name)
 		{
 			expect(linker.flows[name].handler).to.be.an('function');
 		});

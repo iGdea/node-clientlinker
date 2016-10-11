@@ -5,6 +5,7 @@ var _			= require('underscore');
 var fs			= require('fs');
 var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('clientlinker');
+var STATIC		= require('./lib/static');
 
 var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';
 
@@ -30,10 +31,7 @@ function ClientLinker(options)
 	{
 		options.flows.forEach(function(name)
 		{
-			if (exports.supportMiddlewares.indexOf(name) != -1)
-			{
-				linker.loadFlow(name);
-			}
+			if (STATIC.sysflows[name]) linker.loadFlow(name);
 		});
 	}
 
@@ -51,8 +49,3 @@ function ClientLinker(options)
 	return linker;
 };
 
-exports.supportMiddlewares = fs.readdirSync(DEFAULT_FLOWS_PATH)
-	.filter(function(b)
-	{
-		return b != '.' && b != '..' && b[0] != '.';
-	});
