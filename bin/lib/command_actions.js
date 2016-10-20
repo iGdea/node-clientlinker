@@ -7,13 +7,15 @@ var rlutils		= require('./rlutils');
 var printTable	= require('./print_table').printTable;
 var printTpl	= require('./print_tpl');
 var stdout		= require('./stdout');
+var pkg			= require('../../package.json');
+
 var commandActions = exports;
 
 
 exports.execAction = function execAction(conf_file, action, options)
 {
 	options || (options = {});
-	var linker = require(rlutils.resolve(conf_file));
+	var linker = requireLinker(conf_file);
 
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
@@ -33,7 +35,7 @@ exports.execAction = function execAction(conf_file, action, options)
 exports.listAction = function listAction(conf_file, options)
 {
 	options || (options = {});
-	var linker = require(rlutils.resolve(conf_file));
+	var linker = requireLinker(conf_file);
 
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
@@ -151,4 +153,18 @@ function runAction(linker, action, query, body, options)
 
 			throw err;
 		});
+}
+
+
+function requireLinker(conf_file)
+{
+	var linker = require(rlutils.resolve(conf_file));
+
+	if (linker.version != pkg.version)
+	{
+		stdout.warn('version not match, cli version:%s, config file version:%s',
+			pkg.version, linker.version);
+	}
+
+	return linker;
 }
