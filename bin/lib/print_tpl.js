@@ -5,7 +5,7 @@ var rlutils		= require('./rlutils');
 var printTpl	= exports;
 
 
-exports.runtime = function printRuntime(runtime)
+exports.runtime = function runtime(runtime)
 {
 	if (!runtime) return '';
 
@@ -46,7 +46,7 @@ exports.runtime = function printRuntime(runtime)
 }
 
 
-exports.errorInfo = function printErrorInfo(err)
+exports.errorInfo = function errorInfo(err)
 {
 	if (!err)
 		return 'Error: '+err;
@@ -58,7 +58,7 @@ exports.errorInfo = function printErrorInfo(err)
 		return err.stack || err.message || 'Error: '+err;
 }
 
-exports.runActionStart = function printRunActionStart(action, query, body, options)
+exports.runActionStart = function runActionStart(action, query, body, options)
 {
 	return util.format(
 		'\n ========= Action Run %s =========\n'
@@ -73,7 +73,7 @@ exports.runActionStart = function printRunActionStart(action, query, body, optio
 }
 
 
-exports.runActionEnd = function printRunActionEnd(action, type, runtime, data)
+exports.runActionEnd = function runActionEnd(action, type, runtime, data)
 {
 	var title = util.format(
 		' ========= Action Result %s %s =========',
@@ -88,7 +88,7 @@ exports.runActionEnd = function printRunActionEnd(action, type, runtime, data)
 }
 
 
-exports.runActionUnexpectedError = function printRunActionUnexpectedError(action, err)
+exports.runActionUnexpectedError = function runActionUnexpectedError(action, err)
 {
 	var title = util.format(
 		' ========= Unexpected Error %s ========= ',
@@ -101,7 +101,7 @@ exports.runActionUnexpectedError = function printRunActionUnexpectedError(action
 }
 
 
-exports.linkerVersionNotMatch = function printLinkerVersionNotMatch(pkgVersion, linkerVersion)
+exports.linkerVersionNotMatch = function linkerVersionNotMatch(pkgVersion, linkerVersion)
 {
 	var str = util.format('\n\n  version not match, cli version:%s, config file version:%s\n\n',
 		rlutils.colors.green(pkgVersion),
@@ -111,7 +111,7 @@ exports.linkerVersionNotMatch = function printLinkerVersionNotMatch(pkgVersion, 
 }
 
 
-exports.rlRunHeader = function printRlRunHeader()
+exports.rlRunHeader = function rlRunHeader()
 {
 	return [
 			'', '', '',
