@@ -133,10 +133,26 @@ exports.runAction = runAction;
 function runAction(linker, action, query, body, options)
 {
 	options || (options = {});
+	var retPromise;
+	var args = [action, query, body, null, options];
 	var str = printTpl.runActionStart(action, query, body, options);
 	stdout.log(str);
 
-	var retPromise = linker.runIn([action, query, body, null, options], 'cli');
+	try {
+		if (linker.runIn)
+		{
+			retPromise = linker.runIn(args, 'cli');
+		}
+		else
+		{
+			// 兼容老的run逻辑
+			retPromise = linker.run.apply(linker, args);
+		}
+	}
+	catch(err)
+	{
+		retPromise = Promise.reject(err);
+	}
 
 	return retPromise
 		.then(function(data)
@@ -162,8 +178,8 @@ function requireLinker(conf_file)
 
 	if (linker.version != pkg.version)
 	{
-		stdout.warn('version not match, cli version:%s, config file version:%s',
-			pkg.version, linker.version);
+		var str = printTpl.linkerVersionNotMatch(pkg.version, linker.version);
+		stdout.warn(str);
 	}
 
 	return linker;

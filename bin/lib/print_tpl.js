@@ -1,12 +1,14 @@
 "use strict";
 
-var util = require('util');
-var rlutils = require('./rlutils');
-var printTpl = exports;
+var util		= require('util');
+var rlutils		= require('./rlutils');
+var printTpl	= exports;
 
 
 exports.runtime = function printRuntime(runtime)
 {
+	if (!runtime) return '';
+
 	var retryTimes = runtime.retry.length;
 	var alltime = runtime.timing.flowsEnd - runtime.navigationStart;
 	var lastRetry = runtime.retry[runtime.retry.length-1];
@@ -96,6 +98,16 @@ exports.runActionUnexpectedError = function printRunActionUnexpectedError(action
 		+ rlutils.colors.red(title)
 		+ '\n'
 		+ rlutils.printObject(err);
+}
+
+
+exports.linkerVersionNotMatch = function printLinkerVersionNotMatch(pkgVersion, linkerVersion)
+{
+	var str = util.format('\n\n  version not match, cli version:%s, config file version:%s\n\n',
+		rlutils.colors.green(pkgVersion),
+		rlutils.colors.green(linkerVersion));
+
+	return rlutils.colors.red(str);
 }
 
 

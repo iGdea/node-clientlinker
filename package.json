@@ -1,6 +1,6 @@
 {
   "name": "clientlinker",
-  "version": "5.8.1",
+  "version": "5.8.2",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
