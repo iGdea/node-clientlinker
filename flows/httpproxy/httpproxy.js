@@ -7,6 +7,7 @@ var request		= require('request');
 var aes			= require('../../lib/aes_cipher');
 
 exports = module.exports = httpproxy;
+exports.methods = function(){return ['*']};
 
 function httpproxy(runtime, callback)
 {

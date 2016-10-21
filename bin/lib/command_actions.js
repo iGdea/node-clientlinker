@@ -78,8 +78,7 @@ function parseFilterFlows(flowsStr, allFlows)
 exports.parseFilterFlows = parseFilterFlows;
 
 
-exports.exec = exec;
-function exec(linker, action, allMethods, options)
+exports.exec = function exec(linker, action, allMethods, options)
 {
 	var realaction = rlutils.parseAction(action, allMethods);
 	if (!realaction)
@@ -97,8 +96,7 @@ function exec(linker, action, allMethods, options)
 }
 
 
-exports.filterAllMehtods = filterAllMehtods;
-function filterAllMehtods(linker, clients)
+exports.filterAllMehtods = function filterAllMehtods(linker, clients)
 {
 	return linker.methods()
 		.then(function(list)
@@ -129,8 +127,7 @@ function filterAllMehtods(linker, clients)
 
 
 
-exports.runAction = runAction;
-function runAction(linker, action, query, body, options)
+exports.runAction = function runAction(linker, action, query, body, options)
 {
 	options || (options = {});
 	var retPromise;

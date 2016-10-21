@@ -7,6 +7,7 @@ var util	= require('util');
 var path	= require('path');
 var chalk	= require('chalk');
 var fs		= require('fs');
+var STATIC	= require('../../lib/static');
 var rlutils	= exports;
 
 var colors = exports.colors = new chalk.constructor();
@@ -21,6 +22,12 @@ function parseAction(str, allMethods)
 		return str;
 	else if (!isNaN(str))
 		return allMethods[Number(str)-1];
+	else
+	{
+		var clientName = STATIC.parseAction(str).clientName;
+		if (allMethods.indexOf(clientName+'.*') != -1)
+			return str;
+	}
 }
 
 

@@ -193,10 +193,37 @@ describe('#rlutils', function()
 					.to.be('client_its.method_callback_data');
 				expect(rlutils.parseAction('client_its.method_callback_data', allMethods))
 					.to.be('client_its.method_callback_data');
+
 				expect(rlutils.parseAction('', allMethods)).to.be(undefined);
 				expect(rlutils.parseAction('1999', allMethods)).to.be(undefined);
 				expect(rlutils.parseAction('client_not_exists.method', allMethods))
 					.to.be(undefined);
+				expect(rlutils.parseAction('client_its.not_exists_method', allMethods))
+					.to.be(undefined);
+			});
+	});
+
+	it('#methods width *', function()
+	{
+		var linker = ClientLinker(
+			{
+				flows: ['pkghandler', 'httpproxy'],
+				pkghandlerDir: __dirname+'/pkghandler'
+			});
+
+		return linker.methods()
+			.then(function(list)
+			{
+				return rlutils.getAllMethods(list);
+			})
+			.then(function(allMethods)
+			{
+				expect(rlutils.parseAction('', allMethods)).to.be(undefined);
+				expect(rlutils.parseAction('1999', allMethods)).to.be(undefined);
+				expect(rlutils.parseAction('client_not_exists.method', allMethods))
+					.to.be(undefined);
+				expect(rlutils.parseAction('client_its.not_exists_method', allMethods))
+					.to.be('client_its.not_exists_method');
 			});
 	});
 
