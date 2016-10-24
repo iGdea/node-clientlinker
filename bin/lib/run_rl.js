@@ -35,11 +35,10 @@ function start(linker, allMethods)
 					ActionParams.action,
 					ActionParams.query,
 					ActionParams.body,
-					ActionParams.options
+					ActionParams.options,
+					true
 				)
-				// 忽略允许时产生的错误
-				// runAction 会负责输出错误
-				.catch(function(){});
+				.catch(function(err){stdout.verbose(err)});
 		})
 		.catch(function(err)
 		{

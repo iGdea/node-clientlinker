@@ -15,23 +15,23 @@ command.run()
 			.then(function(data)
 			{
 				runRl.start(data.linker, data.methods);
-			},
-			function(){});
+			})
+			.catch(function(err){stdout.verbose(err)});
 	});
 
 command.list()
 	.action(function(conf_file, command)
 	{
 		commandActions.listAction(conf_file, command.__clk_options__)
-			.catch(function(){})
+			.catch(function(err){stdout.verbose(err)})
 			.then(exit);
 	});
 
 command.exec()
 	.action(function(conf_file, action, command)
 	{
-		commandActions.execAction(conf_file, action, command.__clk_options__)
-			.catch(function(){})
+		commandActions.execAction(conf_file, action, command.__clk_options__, true)
+			.catch(function(err){stdout.verbose(err)})
 			.then(exit);
 	});
 

@@ -12,7 +12,7 @@ var pkg			= require('../../package.json');
 var commandActions = exports;
 
 
-exports.execAction = function execAction(conf_file, action, options)
+exports.execAction = function execAction(conf_file, action, options, ignoreRunError)
 {
 	options || (options = {});
 	var linker = requireLinker(conf_file);
@@ -20,15 +20,11 @@ exports.execAction = function execAction(conf_file, action, options)
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
-			return commandActions.exec(linker, action, allMethods, options);
+			return _execAction(linker, action, allMethods, options, ignoreRunError);
 		})
 		.catch(function(err)
 		{
-			if (!err.__print_cl_cli_run_error__)
-			{
-				stdout.error(printTpl.errorInfo(err));
-			}
-
+			stdout.error(printTpl.errorInfo(err));
 			throw err;
 		});
 }
@@ -80,44 +76,6 @@ function parseFilterFlows(flowsStr, allFlows)
 exports.parseFilterFlows = parseFilterFlows;
 
 
-exports.exec = function exec(linker, action, allMethods, options)
-{
-	var realaction = rlutils.parseAction(action, allMethods);
-	if (!realaction)
-	{
-		var err = new Error('Not Found Action');
-		err.action = action;
-		throw err;
-	}
-
-
-	// parseParam 出错需要捕获 
-	try {
-		var retPromise = commandActions.runAction(linker, realaction,
-				rlutils.parseParam(linker, options.query),
-				rlutils.parseParam(linker, options.body),
-				rlutils.parseParam(linker, options.options)
-			);
-
-		return retPromise.catch(function(err)
-			{
-				if (!err.__print_cl_cli_run_error__)
-				{
-					stdout.error(printTpl.errorInfo(err));
-				}
-				throw err;
-			});
-	}
-	catch(err)
-	{
-		var str = printTpl.runActionEnd(realaction, 'error', null, err);
-		stdout.error(str);
-
-		return Promise.reject(err);
-	}
-}
-
-
 exports.filterAllMehtods = function filterAllMehtods(linker, clients)
 {
 	return linker.methods()
@@ -149,7 +107,7 @@ exports.filterAllMehtods = function filterAllMehtods(linker, clients)
 
 
 
-exports.runAction = function runAction(linker, action, query, body, options)
+exports.runAction = function runAction(linker, action, query, body, options, ignoreRunError)
 {
 	options || (options = {});
 	var retPromise;
@@ -176,8 +134,7 @@ exports.runAction = function runAction(linker, action, query, body, options)
 			var str = printTpl.runActionEnd(action, 'error', retPromise.runtime, err);
 			stdout.error(str);
 
-			err.__print_cl_cli_run_error__ = true;
-			throw err;
+			if (!ignoreRunError) throw err;
 		});
 }
 
@@ -193,4 +150,39 @@ function requireLinker(conf_file)
 	}
 
 	return linker;
+}
+
+
+function _execAction(linker, action, allMethods, options, ignoreRunError)
+{
+	var realaction = rlutils.parseAction(action, allMethods);
+	if (!realaction)
+	{
+		var err = new Error('Not Found Action');
+		err.action = action;
+		throw err;
+	}
+
+
+	// parseParam 出错需要捕获 
+	try {
+		return commandActions.runAction(linker, realaction,
+				rlutils.parseParam(linker, options.query),
+				rlutils.parseParam(linker, options.body),
+				rlutils.parseParam(linker, options.options),
+				ignoreRunError
+			)
+			.catch(function(err)
+			{
+				stdout.error(printTpl.errorInfo(err));
+				throw err;
+			});
+	}
+	catch(err)
+	{
+		var str = printTpl.runActionEnd(realaction, 'error', null, err);
+		stdout.error(str);
+
+		return Promise.reject(err);
+	}
 }
