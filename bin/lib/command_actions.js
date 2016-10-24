@@ -21,14 +21,16 @@ exports.execAction = function execAction(conf_file, action, options)
 		.then(function(allMethods)
 		{
 			return commandActions.exec(linker, action, allMethods, options);
-		},
-		// 不使用catch，是为了防止exec出错导致错误输出两遍
-		function(err)
-		{
-			stdout.error(printTpl.errorInfo(err));
-			throw err;
 		})
-		// .catch(function(err){console.log(err)});
+		.catch(function(err)
+		{
+			if (!err.__print_cl_cli_run_error__)
+			{
+				stdout.error(printTpl.errorInfo(err));
+			}
+
+			throw err;
+		});
 }
 
 
@@ -91,11 +93,20 @@ exports.exec = function exec(linker, action, allMethods, options)
 
 	// parseParam 出错需要捕获 
 	try {
-		return commandActions.runAction(linker, realaction,
+		var retPromise = commandActions.runAction(linker, realaction,
 				rlutils.parseParam(linker, options.query),
 				rlutils.parseParam(linker, options.body),
 				rlutils.parseParam(linker, options.options)
 			);
+
+		return retPromise.catch(function(err)
+			{
+				if (!err.__print_cl_cli_run_error__)
+				{
+					stdout.error(printTpl.errorInfo(err));
+				}
+				throw err;
+			});
 	}
 	catch(err)
 	{
@@ -165,6 +176,7 @@ exports.runAction = function runAction(linker, action, query, body, options)
 			var str = printTpl.runActionEnd(action, 'error', retPromise.runtime, err);
 			stdout.error(str);
 
+			err.__print_cl_cli_run_error__ = true;
 			throw err;
 		});
 }
