@@ -17,6 +17,7 @@ exports.stderr = process.stderr;
 			if (name != 'verbose' || exports.is_verbose)
 			{
 				var str = util.format.apply(null, arguments) + '\n';
+				if (name == 'verbose') str = '[verbose] '+str;
 				exports.write(str, name);
 			}
 		}
