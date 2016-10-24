@@ -88,11 +88,22 @@ exports.exec = function exec(linker, action, allMethods, options)
 		throw err;
 	}
 
-	return commandActions.runAction(linker, realaction,
-			rlutils.parseParam(linker, options.query),
-			rlutils.parseParam(linker, options.body),
-			rlutils.parseParam(linker, options.options)
-		);
+
+	// parseParam 出错需要捕获 
+	try {
+		return commandActions.runAction(linker, realaction,
+				rlutils.parseParam(linker, options.query),
+				rlutils.parseParam(linker, options.body),
+				rlutils.parseParam(linker, options.options)
+			);
+	}
+	catch(err)
+	{
+		var str = printTpl.runActionEnd(realaction, 'error', null, err);
+		stdout.error(str);
+
+		return Promise.reject(err);
+	}
 }
 
 
@@ -135,21 +146,11 @@ exports.runAction = function runAction(linker, action, query, body, options)
 	var str = printTpl.runActionStart(action, query, body, options);
 	stdout.log(str);
 
-	try {
-		if (linker.runIn)
-		{
-			retPromise = linker.runIn(args, 'cli');
-		}
-		else
-		{
-			// 兼容老的run逻辑
-			retPromise = linker.run.apply(linker, args);
-		}
-	}
-	catch(err)
-	{
-		retPromise = Promise.reject(err);
-	}
+	// 兼容老的linker
+	if (linker.runIn)
+		retPromise = linker.runIn(args, 'cli');
+	else
+		retPromise = linker.run.apply(linker, args);
 
 	return retPromise
 		.then(function(data)
