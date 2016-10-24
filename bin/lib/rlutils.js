@@ -153,7 +153,7 @@ function resolve(str)
 exports.str2obj = str2obj;
 function str2obj(linker, str)
 {
-	var data = vm.runInThisContext('('+str+')');
+	var data = vm.runInThisContext('__str2obj__=\n'+str+'', {lineOffset: 1});
 	return data;
 }
 
