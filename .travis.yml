@@ -1,6 +1,5 @@
 os:
   - linux
-  - osx
 
 addons:
   apt:
@@ -9,7 +8,6 @@ addons:
     packages:
       - g++-4.8
 
-
 language: node_js
 node_js:
   - "0.10"
@@ -17,7 +15,6 @@ node_js:
   - "lts/*"
   - "stable"
   - "unstable"
-
 
 install:
   - export CXX=g++-4.8
