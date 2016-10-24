@@ -53,7 +53,9 @@ exports.errorInfo = function errorInfo(err)
 	if (err.message == 'No Client Has Methods')
 		return '\n    ** '+err.message+' **    \n';
 	else if (err.message == 'Not Found Action')
-		return err.message+', '+ rlutils.colors.red(err.action);
+		return err.message+', '+rlutils.colors.red(err.action);
+	else if (err.__parseParamError__)
+		return rlutils.colors.red('[Parse param error] ')+err.stack;
 	else
 		return err.stack || err.message || 'Error: '+err;
 }

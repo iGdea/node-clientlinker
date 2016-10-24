@@ -31,9 +31,21 @@ function parseAction(str, allMethods)
 }
 
 
-exports.parseParam = parseParam;
+exports.parseParam = function parseParam()
+{
+	try {
+		return _parseParam.apply(this, arguments);
+	}
+	catch(err)
+	{
+		err.__parseParamError__ = true;
+		throw err;
+	}
+};
+
+
 var dataTypeReg = /^ *([\w\-]+):/;
-function parseParam(linker, str)
+function _parseParam(linker, str)
 {
 	if (!str) return str;
 
@@ -88,7 +100,7 @@ function parseParam(linker, str)
 			{
 				var file = resolve(data);
 				var content = fs.readFileSync(file).toString();
-				return parseParam(linker, type.substr(5)+':'+content);
+				return _parseParam(linker, type.substr(5)+':'+content);
 			}
 			else if (type.substr(0, 6) == 'jsonk-')
 			{
