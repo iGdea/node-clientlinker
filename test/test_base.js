@@ -54,6 +54,32 @@ describe('#base', function()
 		expect(Object.keys(linker.flows).length).to.be(3);
 	});
 
+	it('#bindFlow width init', function()
+	{
+		var linker = ClientLinker();
+		function flowHanlder(){}
+		flowHanlder.init = function(linker2)
+		{
+			expect(linker2).to.be(linker);
+			return new Promise(function(resolve)
+			{
+				setTimeout(function()
+				{
+					linker._test_val = '111';
+					resolve();
+				}, 10);
+			});
+		}
+
+		linker.bindFlow('flowInit', flowHanlder);
+
+		return linker.clients()
+			.then(function()
+			{
+				expect(linker._test_val).to.be('111');
+			});
+	});
+
 
 	it('#custom', function()
 	{
