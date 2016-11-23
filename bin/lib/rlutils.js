@@ -153,10 +153,11 @@ function _parseParam(linker, str)
 
 
 exports.resolve = resolve;
+exports.USER_HOME = process.env.HOME || process.env.USERPROFILE;
 function resolve(str)
 {
-	if (str.substr(0, 2) == '~/' && process.env.HOME)
-		return path.resolve(process.env.HOME, str.substr(2));
+	if (str.substr(0, 2) == '~/' && exports.USER_HOME)
+		return path.resolve(exports.USER_HOME, str.substr(2));
 	else
 		return path.resolve(str);
 }

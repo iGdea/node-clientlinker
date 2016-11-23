@@ -231,7 +231,7 @@ describe('#rlutils', function()
 	it('#resolve', function()
 	{
 		expect(path.normalize(rlutils.resolve('~/xxx')))
-			.to.be(path.normalize(process.env.HOME+'/xxx'));
+			.to.be(path.normalize(rlutils.USER_HOME+'/xxx'));
 		expect(path.normalize(rlutils.resolve('./xxx')))
 			.to.be(path.normalize(process.cwd()+'/xxx'));
 	});
