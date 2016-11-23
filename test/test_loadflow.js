@@ -8,7 +8,7 @@ describe('#loadFlow', function()
 {
 	it('#module', function()
 	{
-		var linker = ClientLinker()
+		var linker = ClientLinker();
 		expect(linker.loadFlow('./flows/flow_empty', module)).to.not.be.ok();
 		expect(linker.loadFlow('./flows/flow_resolve', module)).to.be.ok();
 		expect(linker.loadFlow('./flows/flow_next', module)).to.be.ok();
@@ -24,7 +24,7 @@ describe('#loadFlow', function()
 
 	it('#handler', function()
 	{
-		var linker = ClientLinker()
+		var linker = ClientLinker();
 		var loadFlow = linker.loadFlow(module);
 		expect(loadFlow('./flows/flow_empty', module)).to.not.be.ok();
 		expect(loadFlow('./flows/flow_resolve', module)).to.be.ok();
@@ -41,7 +41,7 @@ describe('#loadFlow', function()
 
 	it('#error', function()
 	{
-		var linker = ClientLinker()
+		var linker = ClientLinker();
 		expect(function(){linker.loadFlow('no_exists_flow')}).to.throwError();
 		expect(function(){linker.loadFlow('flow1')}).to.throwError();
 		expect(function(){linker.loadFlow('./flows/flow1')}).to.throwError();
