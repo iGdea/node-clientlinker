@@ -7,7 +7,7 @@ function debug(runtime, callback)
 	var client = runtime.client;
 	var options = client.options;
 
-	callback.next(true)
+	return callback.next()
 		.then(function(data)
 		{
 			if (options.debuggerRuntime)

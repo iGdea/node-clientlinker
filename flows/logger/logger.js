@@ -12,7 +12,6 @@ function logger(runtime, callback)
 	if (!options.logger) return callback.next();
 	var logger = typeof options.logger == 'function' ? options.logger : loggerHandler;
 
-	callback.next();
 	runtime.promise.then(function(data)
 		{
 			logger(runtime, null, data);
@@ -21,6 +20,8 @@ function logger(runtime, callback)
 		{
 			logger(runtime, err || STATIC.DEFAULT_ERROR, null);
 		});
+
+	return callback.next();
 }
 
 

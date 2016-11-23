@@ -124,6 +124,15 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 * Please upgrade server first, if you are using `httpproxy` flow
 
 
+#### 5.x.x => 6.0.0
+
+* If flow handler return a Promise, it bind callback auto.
+* Running `callback.next` like `callback.next(true)`. Use `callback.nextAndResolve()` replace previous caller.
+
+If you do not modify custom flow and use `callback.next` in flow, the rpc will timeout.
+
+
+
 [npm-image]: http://img.shields.io/npm/v/clientlinker.svg
 [downloads-image]: http://img.shields.io/npm/dm/clientlinker.svg
 [dependencies-image]: http://img.shields.io/david/Bacra/node-clientlinker.svg

@@ -1,7 +1,6 @@
 "use strict";
 
 var debug		= require('debug')('clientlinker:pkghandler');
-var runHandler	= require('../confighandler/confighandler').runHandler;
 
 exports = module.exports = pkghandler;
 exports.initConfig	= require('./initConfig');
@@ -16,11 +15,13 @@ function pkghandler(runtime, callback)
 	var handler = mod[runtime.method];
 
 	if (handler)
-		runHandler(runtime, callback, handler);
+	{
+		return handler(runtime.query, runtime.body, callback, runtime.options);
+	}
 	else
 	{
 		debug('pkg no handler:%s', runtime.method);
-		callback.next();
+		return callback.next();
 	}
 }
 

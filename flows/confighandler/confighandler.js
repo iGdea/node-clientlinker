@@ -15,19 +15,12 @@ function confighandler(runtime, callback)
 	var handler = options.confighandler[runtime.method];
 
 	if (typeof handler == 'function')
-		runHandler(runtime, callback, handler);
+	{
+		return handler(runtime.query, runtime.body, callback, runtime.options);
+	}
 	else
 	{
 		debug('config no handler:%s', runtime.method);
-		callback.next();
+		return callback.next();
 	}
-}
-
-exports.runHandler = runHandler;
-function runHandler(runtime, callback, handler)
-{
-	var ret = handler(runtime.query, runtime.body, callback, runtime.options);
-
-	if (isPromise(ret))
-		ret.then(callback.resolve, callback.reject);
 }

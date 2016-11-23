@@ -40,7 +40,7 @@ function initSvrLinker(options)
 		custom: function(runtime, callback)
 		{
 			expect(runtime.env.source).to.be('httpproxy');
-			callback.next();
+			return callback.next();
 		}
 	};
 

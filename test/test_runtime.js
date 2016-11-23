@@ -69,7 +69,7 @@ describe('#runtime', function()
 				{
 					custom1: function custom1(runtime, callback)
 					{
-						setTimeout(callback.next, 100);
+						setTimeout(callback.nextAndResolve, 100);
 					},
 					custom2: function custom2(runtime, callback)
 					{
@@ -90,7 +90,7 @@ describe('#runtime', function()
 						expect(lastFlowTiming.start - timing.flowsStart)
 							.to.below(10);
 
-						callback.next();
+						return callback.next();
 					}
 				},
 				clients: {

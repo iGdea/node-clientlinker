@@ -16,7 +16,7 @@ var linker = ClientLinker(
 		{
 			nextFlow: function nextFlow(runtime, callback)
 			{
-				callback.next();
+				return callback.next();
 			},
 			custom: function custom(runtime, callback)
 			{

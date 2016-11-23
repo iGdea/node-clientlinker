@@ -273,7 +273,7 @@ describe('#run_error', function()
 									.to.be.ok();
 							}
 
-							callback.next();
+							return callback.next();
 						}
 					},
 					defaults:
@@ -326,7 +326,7 @@ describe('#run_error', function()
 									.to.be.ok();
 							}
 
-							callback.next();
+							return callback.next();
 						}
 					},
 					clients:

@@ -39,7 +39,7 @@ module.exports = ClientLinker(
 		{
 			flowNext: function(runtime, callback)
 			{
-				callback.next();
+				return callback.next();
 			}
 		}
 	});
