@@ -44,44 +44,97 @@ describe('#base', function()
 			});
 	});
 
-	it('#bindFlow', function()
+	describe('#bindFlow', function()
 	{
-		var linker = ClientLinker()
-
-		linker.bindFlow('flow1', function flow1(){});
-		expect(Object.keys(linker.flows).length).to.be(1);
-		linker.bindFlow({flow2: function flow2(){}, flow3: function flow3(){}});
-		expect(Object.keys(linker.flows).length).to.be(3);
-	});
-
-	it('#bindFlow width init', function()
-	{
-		var linker = ClientLinker();
-		function flowHanlder(){}
-		flowHanlder.init = function(linker2)
+		it('#function', function()
 		{
-			expect(linker2).to.be(linker);
-			return new Promise(function(resolve)
+			var linker = ClientLinker();
+			linker.bindFlow('flow1', function flow1(){});
+			expect(Object.keys(linker.flows).length).to.be(1);
+		});
+
+		it('#object', function()
+		{
+			var linker = ClientLinker();
+			linker.bindFlow({flow2: function flow2(){}, flow3: function flow3(){}});
+			expect(Object.keys(linker.flows).length).to.be(2);
+		});
+
+		it('#same', function()
+		{
+			var linker = ClientLinker();
+			linker.bindFlow('flow1', function flow1(){});
+			linker.bindFlow('flow1', function flow2(){});
+			expect(Object.keys(linker.flows).length).to.be(1);
+		});
+
+		describe('#width init', function()
+		{
+			it('#promise', function()
 			{
-				setTimeout(function()
+				var linker = ClientLinker();
+				function flowHanlder(){}
+				flowHanlder.init = function(linker2)
 				{
-					linker._test_val = '111';
-					resolve();
-				}, 10);
+					expect(linker2).to.be(linker);
+					return new Promise(function(resolve)
+					{
+						setTimeout(function()
+						{
+							linker._test_val = '111';
+							resolve();
+						}, 10);
+					});
+				}
+
+				linker.bindFlow('flowInit', flowHanlder);
+
+				return linker.clients()
+					.then(function()
+					{
+						expect(linker._test_val).to.be('111');
+					});
 			});
-		}
 
-		linker.bindFlow('flowInit', flowHanlder);
-
-		return linker.clients()
-			.then(function()
+			it('#ignore bind', function()
 			{
-				expect(linker._test_val).to.be('111');
+				var linker = ClientLinker();
+				function flowHanlder(){}
+				flowHanlder.init = function(linker2)
+				{
+					return false;
+				}
+
+				linker.bindFlow('flowInit', flowHanlder);
+
+				return linker.clients()
+					.then(function()
+					{
+						expect(Object.keys(linker.flows).length).to.be(0);
+					});
 			});
+
+			it('#throw err', function()
+			{
+				var linker = ClientLinker();
+				function flowHanlder(){}
+				flowHanlder.init = function(linker2)
+				{
+					throw new Error;
+				}
+
+				expect(function()
+					{
+						linker.bindFlow('flowInit', flowHanlder);
+					})
+					.to.throwError();
+			});
+		});
+
 	});
 
 
-	it('#custom', function()
+	it('#custom flow', function()
 	{
 		var linker = ClientLinker(
 			{
