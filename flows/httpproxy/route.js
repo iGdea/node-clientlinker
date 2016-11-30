@@ -154,7 +154,7 @@ function runAction(linker, action, body)
 					};
 
 					// console.log('svr env for err', env);
-					if (err && err.message && err.message.indexOf('CLIENTLINKER:NotFound') != -1)
+					if (err && err.message && err.message.substr(0, 21) == 'CLIENTLINKER:NotFound')
 					{
 						debug('[%s] %s', action, err);
 						output.statusCode = 501;
