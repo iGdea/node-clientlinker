@@ -154,10 +154,7 @@ function runAction(linker, action, body)
 					};
 
 					// console.log('svr env for err', env);
-					if (err
-						&& (err.CLIENTLINKER_TYPE == 'CLIENT FLOW OUT'
-							|| err.CLIENTLINKER_TYPE == 'CLIENT NO FLOWS'
-							|| err.CLIENTLINKER_TYPE == 'NO CLIENT'))
+					if (err && err.message && err.message.indexOf('CLIENTLINKER:NotFound') != -1)
 					{
 						debug('[%s] %s', action, err);
 						output.statusCode = 501;
