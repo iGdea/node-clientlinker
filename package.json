@@ -1,6 +1,6 @@
 {
   "name": "clientlinker",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "expect.js": "^0.3.1",
     "express": "^4.6.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.0.2"
+    "mocha": "^3.2.0"
   },
   "dependencies": {
     "bluebird": "^3.3.1",
