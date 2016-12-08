@@ -116,14 +116,7 @@ describe('#flows', function()
 				{
 					opt: 'myOpt'
 				},
-				pkghandlerDir: __dirname+'/pkghandler',
-				clients:
-				{
-					client2:
-					{
-						pkghandler: __dirname+'/pkghandler/not_exsits'
-					}
-				}
+				pkghandlerDir: __dirname+'/pkghandler'
 			});
 
 		runClientHandlerIts(linker);
@@ -137,8 +130,8 @@ describe('#flows', function()
 					expect(map.client_its.client.options.opt).to.be('myOpt');
 					expect(map.client_its.client.options.pkghandler)
 						.to.contain(__dirname);
-					expect(map.client2.client.options.pkghandler)
-						.to.contain('pkghandler/not_exsits');
+					// expect(map.client2.client.options.pkghandler)
+					//	.to.contain('pkghandler/not_exsits');
 
 					var methods = Object.keys(map.client_its.methods);
 					expect(methods).to.eql([
@@ -153,6 +146,42 @@ describe('#flows', function()
 					]);
 					expect(map.client_its.methods.method_params[0].handler)
 						.to.be.an('function');
+				});
+		});
+
+
+		it('#not_exsits', function()
+		{
+			linker.addClient('client2', {pkghandler: __dirname+'/pkghandler/not_exsits'});
+
+			var methodPromise = linker.methods()
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						expect(err.message).contain('Cannot find module');
+					});
+
+			var runPromise = linker.run('client2.someMethod')
+				.then(function(){expect().fail()},
+					function(err)
+					{
+						expect(err.message).contain('Cannot find module');
+					});
+
+			return Promise.all([methodPromise, runPromise])
+				.then(function()
+				{
+					// 加载三次，第四次就是固定的错误了
+					return linker.methods().catch(function(){});
+				})
+				.then(function()
+				{
+					return linker.methods()
+						.then(function(){expect().fail()},
+							function(err)
+							{
+								expect(err.message).contain('Cannot load pkg');
+							});
 				});
 		});
 	});
