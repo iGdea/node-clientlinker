@@ -1,6 +1,6 @@
 {
   "name": "clientlinker",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,9 @@
   "keywords": [
     "client",
     "linker",
-    "proxy"
+    "proxy",
+	"rpc",
+	"httpproxy"
   ],
   "repository": {
     "type": "git",
