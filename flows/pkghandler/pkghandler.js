@@ -1,6 +1,6 @@
 "use strict";
 
-var debug		= require('debug')('clientlinker:pkghandler');
+var debug	= require('debug')('clientlinker:pkghandler');
 
 exports = module.exports = pkghandler;
 exports.initConfig	= require('./initConfig');
@@ -51,16 +51,19 @@ function initClient(client)
 
 				debug('load pkg err:%o', e);
 
+				// 屏蔽这个逻辑
+				// 插件加载失败切换到httproxy，暂时依赖这个容错
+
 				// pkghandler如果有定义，那么就一定要能加载成功
 				// 如果加载失败，则返回错误，并将e输出给调用方
 				// 接口是否存在，以及client是否真的有，都在后面逻辑继续判断
-				throw e;
+				// throw e;
 			}
 		}
-		else
-		{
-			throw new Error('Cannot load pkg:'+options.pkghandler);
-		}
+		// else
+		// {
+		// 	throw new Error('Cannot load pkg:'+options.pkghandler);
+		// }
 	}
 
 	return client.pkghandlerModule;

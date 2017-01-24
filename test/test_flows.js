@@ -150,7 +150,7 @@ describe('#flows', function()
 		});
 
 
-		it('#not_exsits', function()
+		/*it('#not_exsits', function()
 		{
 			linker.addClient('client2', {pkghandler: __dirname+'/pkghandler/not_exsits'});
 
@@ -183,7 +183,7 @@ describe('#flows', function()
 								expect(err.message).contain('Cannot load pkg');
 							});
 				});
-		});
+		});*/
 	});
 
 	describe('#logger', function()
