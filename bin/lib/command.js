@@ -40,12 +40,12 @@ proto.list = function list()
 			options.useAction = true;
 			return null;
 		})
-		.option('--flows <name>', 'only those flows', function(val)
+		.option('--flows <name,name>', 'only those flows', function(val)
 		{
 			options.flows = val;
 			return null;
 		})
-		.option('--clients <name>', 'only those clients', function(val)
+		.option('--clients <name,name>', 'only those clients', function(val)
 		{
 			options.clients = val;
 			return null;
@@ -65,37 +65,37 @@ proto.exec = function exec()
 		.command('exec <conf_file> <action>')
 		.alias('ex')
 		.description('exec [action] of clients')
-		.option('--query <data>', 'run param [query]', function(val)
+		.option('-q, --query <string>', 'run param [query]', function(val)
 		{
 			options.query = val;
 			return null;
 		})
-		.option('--query-json <data>', 'run param [query]', function(val)
+		.option('    --query-json <json>', ' ', function(val)
 		{
 			options.query = JSON.parse(val);
 			return null;
 		})
-		.option('--body <data>', 'run param [body]', function(val)
+		.option('-b, --body <string>', 'run param [body]', function(val)
 		{
 			options.body = val;
 			return null;
 		})
-		.option('--body-json <data>', 'run param [body]', function(val)
+		.option('    --body-json <json>', ' ', function(val)
 		{
 			options.body = JSON.parse(val);
 			return null;
 		})
-		.option('--options <data>', 'run param [options]', function(val)
+		.option('-o, --options <string>', 'run param [options]', function(val)
 		{
 			options.options = val;
 			return null;
 		})
-		.option('--options-json <data>', 'run param [options]', function(val)
+		.option('    --options-json <json>', ' ', function(val)
 		{
 			options.options = JSON.parse(val);
 			return null;
 		})
-		.option('--clients <name>', 'only those clients', function(val)
+		.option('--clients <name,name>', 'only those clients', function(val)
 		{
 			options.clients = val;
 			return null;
