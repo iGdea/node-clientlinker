@@ -68,23 +68,6 @@ describe('#command', function()
 	});
 
 
-	it('#run', function()
-	{
-		var command = initCommand();
-		command.run()
-			.action(function(conf_file, command)
-			{
-				var options = command.__clk_options__;
-				expect(conf_file).to.be('./conf.js');
-				expect(options.clients).to.be('client');
-				expect(options.flows).to.be('handler');
-				expect(options.useAction).to.be(true);
-			});
-
-		testStrArgs(command, 'run ./conf.js --clients=client --flows=handler -a');
-	});
-
-
 	it('#exec', function()
 	{
 		var command = initCommand();

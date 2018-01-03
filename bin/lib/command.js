@@ -70,9 +70,19 @@ proto.exec = function exec()
 			options.query = val;
 			return null;
 		})
+		.option('--query-json <data>', 'run param [query]', function(val)
+		{
+			options.query = JSON.parse(val);
+			return null;
+		})
 		.option('--body <data>', 'run param [body]', function(val)
 		{
 			options.body = val;
+			return null;
+		})
+		.option('--body-json <data>', 'run param [body]', function(val)
+		{
+			options.body = JSON.parse(val);
 			return null;
 		})
 		.option('--options <data>', 'run param [options]', function(val)
@@ -80,33 +90,9 @@ proto.exec = function exec()
 			options.options = val;
 			return null;
 		})
-		.option('--clients <name>', 'only those clients', function(val)
+		.option('--options-json <data>', 'run param [options]', function(val)
 		{
-			options.clients = val;
-			return null;
-		})
-		.action(function()
-		{
-			this.__clk_options__ = options;
-			options = {};
-		});
-};
-
-proto.run = function run()
-{
-	var options = {};
-
-	return this.program
-		.command('run <conf_file>')
-		.description('run [action] of clients with methods list')
-		.option('-a', 'print action instead of method', function()
-		{
-			options.useAction = true;
-			return null;
-		})
-		.option('--flows <name>', 'only those flows', function(val)
-		{
-			options.flows = val;
+			options.options = JSON.parse(val);
 			return null;
 		})
 		.option('--clients <name>', 'only those clients', function(val)

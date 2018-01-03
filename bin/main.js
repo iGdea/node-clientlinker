@@ -1,23 +1,12 @@
 "use strict";
 
 var rlutils			= require('./lib/rlutils');
-var runRl			= require('./lib/run_rl');
 var Command			= require('./lib/command').Command;
 var commandActions	= require('./lib/command_actions');
 var stdout			= require('./lib/stdout');
 
 var command = new Command;
 
-command.run()
-	.action(function(conf_file, command)
-	{
-		commandActions.listAction(conf_file, command.__clk_options__)
-			.then(function(data)
-			{
-				runRl.start(data.linker, data.methods);
-			})
-			.catch(function(err){stdout.verbose(err)});
-	});
 
 command.list()
 	.action(function(conf_file, command)

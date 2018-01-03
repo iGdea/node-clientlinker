@@ -175,25 +175,6 @@ describe('#commandActions', function()
 					});
 		});
 
-		it('#parse params', function()
-		{
-			return commandActions.execAction(CONFIG_FILE, 'client2.method',
-				{
-					query: 'number:1',
-					body: 'string:body',
-					options: '{a: 1}'
-				})
-				.then(function(data)
-				{
-					expect(data).to.be.eql(
-						{
-							query: 1,
-							body: 'body',
-							options: {a: 1}
-						});
-				});
-		});
-
 		it('#no action err', function()
 		{
 			return commandActions.execAction(CONFIG_FILE, 9999, {})

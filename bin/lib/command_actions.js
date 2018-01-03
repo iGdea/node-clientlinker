@@ -29,9 +29,9 @@ exports.execAction = function execAction(conf_file, action, options, ignoreRunEr
 			}
 
 			return commandActions.runAction(linker, realaction,
-					rlutils.parseParam(linker, options.query),
-					rlutils.parseParam(linker, options.body),
-					rlutils.parseParam(linker, options.options),
+					options.query,
+					options.body,
+					options.options,
 					ignoreRunError
 				);
 		})
