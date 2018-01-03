@@ -7,6 +7,7 @@ node_modules
 .editorconfig
 .npmignore
 appveyor.yml
+.tag*
 
 test
 coverage
