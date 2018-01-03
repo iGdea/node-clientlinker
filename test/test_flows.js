@@ -154,35 +154,12 @@ describe('#flows', function()
 		{
 			linker.addClient('client2', {pkghandler: __dirname+'/pkghandler/not_exsits'});
 
-			var methodPromise = linker.methods()
+			return linker.methods()
 				.then(function(){expect().fail()},
 					function(err)
 					{
 						expect(err.message).contain('Cannot find module');
 					});
-
-			var runPromise = linker.run('client2.someMethod')
-				.then(function(){expect().fail()},
-					function(err)
-					{
-						expect(err.message).contain('Cannot find module');
-					});
-
-			return Promise.all([methodPromise, runPromise])
-				.then(function()
-				{
-					// 加载三次，第四次就是固定的错误了
-					return linker.methods().catch(function(){});
-				})
-				.then(function()
-				{
-					return linker.methods()
-						.then(function(){expect().fail()},
-							function(err)
-							{
-								expect(err.message).contain('Cannot load pkg');
-							});
-				});
 		});
 	});
 
