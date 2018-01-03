@@ -4,14 +4,14 @@ var _			= require('underscore');
 var debug		= require('debug')('clientlinker:httpproxy');
 var deprecate	= require('depd')('clientlinker:httpproxy');
 var request		= require('request');
-var aes			= require('../../lib/aes_cipher');
+var aes			= require('./aes_cipher');
+var json		= require('./json');
 
 exports = module.exports = httpproxy;
 exports.methods = function(){return ['*']};
 
 function httpproxy(runtime, callback)
 {
-	var linker = runtime.client.linker;
 	var body = getRequestBody(runtime);
 	if (!body) return callback.next();
 	var params = getRequestParams(runtime, body);
@@ -22,7 +22,8 @@ function httpproxy(runtime, callback)
 		if (!err)
 		{
 			try {
-				data = linker.JSON.parseFromString(body);
+				data = JSON.parse(body);
+				data = json.parse(data, data.CONST_VARS);
 			}
 			catch(e)
 			{
@@ -92,7 +93,6 @@ function getRequestBody(runtime)
 {
 	var client = runtime.client;
 	var options = client.options;
-	var linker = client.linker;
 
 	if (!options.httpproxy) return false;
 
@@ -134,11 +134,9 @@ function getRequestParams(runtime, body)
 {
 	var client = runtime.client;
 	var options = client.options;
-	var linker = client.linker;
 
 	var headers = options.httpproxyHeaders || {};
 	headers['Content-Type'] = 'application/json';
-	headers['Content-Parser'] = 'jsonk';
 
 	var runOptions	= runtime.options || {};
 	var timeout		= runOptions.timeout || options.httpproxyTimeout || 10000;
@@ -149,7 +147,7 @@ function getRequestParams(runtime, body)
 
 	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
 
-	var bodystr = stringify4Fiddler(linker.JSON.stringify(body));
+	var bodystr = JSON.stringify(body, null, '\t');
 	debug('request url:%s', url);
 
 	return {
@@ -159,20 +157,4 @@ function getRequestParams(runtime, body)
 		timeout	: timeout,
 		proxy	: proxy
 	};
-}
-
-
-// 使用JSON进行序列化，方便fiddler查看
-var lineReg = /\n/g;
-function stringify4Fiddler(json)
-{
-	var data = JSON.stringify(json.jsonk_data, null, '\t').replace(lineReg, '\r\n');
-
-	delete json.jsonk_data;
-	var wrap = JSON.stringify(json);
-	return [
-		'{\r\n"jsonk_data":',
-		data,
-		wrap.length > 2 ? ','+wrap.substr(1) : '}'
-	].join('\r\n\r\n\r\n\r\n\r\n\r\n');
 }

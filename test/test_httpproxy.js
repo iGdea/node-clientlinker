@@ -5,7 +5,7 @@ var expect				= require('expect.js');
 var ClientLinker		= require('../');
 var httpproxy			= require('../flows/httpproxy/httpproxy');
 var runClientHandlerIts	= require('./pkghandler/lib/run');
-var aes					= require('../lib/aes_cipher');
+var aes					= require('../flows/httpproxy/aes_cipher');
 var request				= require('request');
 var utilsTestHttpproxy	= require('./utils_test_httpproxy');
 

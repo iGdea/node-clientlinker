@@ -1,16 +1,14 @@
 "use strict";
 
 var expect	= require('expect.js');
-var json	= require('../lib/json');
+var json	= require('../flows/httpproxy/json');
 
 describe('#json', function()
 {
 	it('#stringify', function()
 	{
-		var err = new Error('err message');
-		err.errCode = err.code = -499;
 		var data = {
-			result: err,
+			result: new Error('err message'),
 			data: {
 				string: "string",
 				number: 123,
@@ -21,11 +19,7 @@ describe('#json', function()
 		var newData = json.stringify(data);
 		expect(newData.result).not.to.be.a(Error);
 		expect(newData.result.type).to.be( json.CONST_VARS.ERROR_KEY);
-		expect(newData.result.data).to.be.an('object');
-		expect(newData.result.data.message).to.be('err message');
-		expect(newData.result.data.stack).to.contain('Error: err message');
-		expect(newData.result.data.errCode).to.be(-499);
-		expect(newData.result.data.originalStack).to.be(undefined);
+		expect(newData.result.data).to.be('err message');
 
 		expect(newData.data.buffer).to.not.be.a(Buffer);
 		expect(newData.data.buffer.type).to.be(json.CONST_VARS.BUFFER_KEY);
@@ -40,12 +34,7 @@ describe('#json', function()
 		var data = {
 			"result": {
 				"type": "err_1454824224156",
-				"data": {
-					"code": -499,
-					"errCode": -499,
-					"stack": "Error: err message",
-					"message": "err message"
-				}
+				"data":  "err message"
 			},
 			"data": {
 				"string": "string",
@@ -69,10 +58,6 @@ describe('#json', function()
 		expect(newData.data).to.be.an('object');
 		expect(newData.result).to.be.an(Error);
 		expect(newData.result.message).to.be('err message');
-		expect(newData.result.errCode).to.be(-499);
-		expect(newData.result.stack).to.be('Error: err message');
-		expect(newData.result.originalStack).to.not.empty();
-		expect(newData.result.originalStack).to.not.be('Error: err message');
 
 		expect(newData.data.buffer).to.be.a(Buffer);
 		expect(newData.data.buffer.toString()).to.be('buffer');

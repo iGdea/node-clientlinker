@@ -1,6 +1,5 @@
 "use strict";
 
-var _          = require('underscore');
 var KEY        = Date.now() + process.pid + Math.floor(Math.random()*10000);
 var BUFFER_KEY = 'buf_'+KEY;
 var ERROR_KEY  = 'err_'+KEY;
@@ -23,19 +22,7 @@ function stringify(data)
 			tmpData[key] = {type: BUFFER_KEY, data: bufValues};
 		}
 		else if (item instanceof Error)
-		{
-			if (item.isClientLinkerNewError)
-			{
-				tmpData[key] = exports.stringify(item.originalError);
-			}
-			else
-			{
-				// 注意：这里会导致error继承关系丢失，即instanceof丢失
-				var errInfo = _.extend({}, item, {stack: item.stack, message: item.message});
-				delete errInfo.originalStack;
-				tmpData[key] = {type: ERROR_KEY, data: errInfo};
-			}
-		}
+			tmpData[key] = {type: ERROR_KEY, data: item.message};
 		else if (typeof item == 'object')
 			tmpData[key] = exports.stringify(item);
 		else
@@ -62,12 +49,7 @@ function parse(data, TYPES)
 				if (item.type == TYPES.BUFFER_KEY)
 					tmpData[key] = new Buffer(item.data || '');
 				else if (item.type == TYPES.ERROR_KEY)
-				{
-					var err = new Error;
-					var originalStack = err.stack;
-					tmpData[key] = _.extend(err, item.data);
-					err.originalStack = originalStack;
-				}
+					tmpData[key] = new Error(item.data);
 			}
 
 			if (!tmpData[key])

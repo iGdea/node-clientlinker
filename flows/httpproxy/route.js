@@ -3,10 +3,10 @@
 var Promise		= require('bluebird');
 var _			= require('underscore');
 var debug		= require('debug')('clientlinker:httpproxy:route');
-var aes			= require('../../lib/aes_cipher');
-var rawBody		= require('raw-body');
-var oldJSON		= require('../../lib/json');
 var deprecate	= require('depd')('clientlinker:httpproxy:route');
+var rawBody		= require('raw-body');
+var aes			= require('./aes_cipher');
+var json		= require('./json');
 
 exports = module.exports = HttpProxyRoute;
 
@@ -37,21 +37,9 @@ function HttpProxyRoute(linker)
 			.then(function(buf)
 			{
 				var body = buf.toString();
-				var isOldJSONparse = false;
-				if (req.get('Content-Parser') == 'jsonk')
-				{
-					body = linker.JSON.parseFromString(body);
-					debug('parse body result:%o', body);
-				}
-				else
-				{
-					deprecate('update clientklinker, CONST_VARS JSON')
-					deprecate_msg.push('update clientklinker, CONST_VARS JSON');
 
-					body = JSON.parse(body);
-					body = oldJSON.parse(body, body.CONST_VARS);
-					isOldJSONparse = true;
-				}
+				body = JSON.parse(body);
+				body = json.parse(body, body.CONST_VARS);
 
 				return runAction(linker, action, body)
 					.catch(function(err)
@@ -84,17 +72,9 @@ function HttpProxyRoute(linker)
 						if (deprecate_msg.length)
 							output.httpproxy_deprecate = deprecate_msg;
 
-						if (isOldJSONparse)
-						{
-							output.CONST_VARS = oldJSON.CONST_VARS;
-							output = oldJSON.stringify(output);
-							res.json(output);
-						}
-						else
-						{
-							// 使用普通json，方便做Fiddler的兼容
-							res.json(linker.JSON.stringify(output));
-						}
+						output.CONST_VARS = json.CONST_VARS;
+						output = json.stringify(output);
+						res.json(output);
 					});
 			})
 			.catch(function(err)

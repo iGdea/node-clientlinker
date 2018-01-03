@@ -78,18 +78,14 @@ function checkExists(file, extnames)
 exports.parseContent = parseContent;
 function parseContent(linker, content, extname)
 {
-	if (extname == 'js')
+	if (extname == 'json')
+	{
+		return JSON.parse(content);
+	}
+	else
 	{
 		var data = {module:{exports:{}}};
 		vm.runInNewContext(content, data);
 		return data.module.exports;
-	}
-	else if (extname == 'json')
-	{
-		return JSON.parse(content);
-	}
-	else if (extname == 'jsonk')
-	{
-		return linker.JSON.parseFromString(content);
 	}
 }
