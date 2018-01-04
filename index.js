@@ -15,8 +15,6 @@ var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';
  * 	httpproxy
  * 	clients
  * 	defaults
- * 	localfileDir
- * 	pkghandlerDir
  */
 exports = module.exports = ClientLinker;
 function ClientLinker(options)
@@ -38,7 +36,6 @@ function ClientLinker(options)
 	if (options.customFlows) linker.bindFlow(options.customFlows);
 	// client options
 	if (options.clients) linker.addClient(options.clients);
-	linker.initConfig(options);
 
 	linker.clients()
 		.then(function(clients)
@@ -48,4 +45,3 @@ function ClientLinker(options)
 
 	return linker;
 };
-

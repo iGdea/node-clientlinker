@@ -152,7 +152,8 @@ describe('#base', function()
 		var linker1 = ClientLinker(
 			{
 				flows: ['pkghandler'],
-				clients: {
+				clients:
+				{
 					client1: null
 				}
 			});
@@ -160,9 +161,13 @@ describe('#base', function()
 		var linker2 = ClientLinker(
 			{
 				flows: ['pkghandler'],
-				pkghandlerDir: __dirname+'/pkghandler',
-				clients: {
-					client1: null
+				clients:
+				{
+					client1: null,
+					client_its:
+					{
+						pkghandler: __dirname+'/pkghandler/client_its'
+					}
 				}
 			});
 
@@ -189,12 +194,15 @@ describe('#base', function()
 		var linker = ClientLinker(
 			{
 				flows: ['logger', 'pkghandler'],
-				pkghandlerDir: __dirname+'/pkghandler',
 				clients:
 				{
 					client:
 					{
 						flows: ['pkghandler']
+					},
+					client_its:
+					{
+						pkghandler: __dirname+'/pkghandler/client_its'
 					}
 				}
 			});

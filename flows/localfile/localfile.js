@@ -6,7 +6,6 @@ var fs		= require('fs');
 var vm		= require('vm');
 
 exports = module.exports = localfile;
-exports.initConfig = require('./initConfig');
 exports.methods = require('./methods');
 
 function localfile(runtime, callback)

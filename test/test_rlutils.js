@@ -30,7 +30,13 @@ describe('#rlutils', function()
 		var linker = ClientLinker(
 			{
 				flows: ['pkghandler'],
-				pkghandlerDir: __dirname+'/pkghandler'
+				clients:
+				{
+					client_its:
+					{
+						pkghandler: __dirname+'/pkghandler/client_its'
+					}
+				}
 			});
 
 		return linker.methods()
@@ -63,7 +69,13 @@ describe('#rlutils', function()
 		var linker = ClientLinker(
 			{
 				flows: ['pkghandler', 'httpproxy'],
-				pkghandlerDir: __dirname+'/pkghandler'
+				clients:
+				{
+					client_its:
+					{
+						pkghandler: __dirname+'/pkghandler/client_its'
+					}
+				}
 			});
 
 		return linker.methods()

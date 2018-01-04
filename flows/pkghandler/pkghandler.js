@@ -3,7 +3,6 @@
 var debug	= require('debug')('clientlinker:pkghandler');
 
 exports = module.exports = pkghandler;
-exports.initConfig	= require('./initConfig');
 exports.methods		= require('./methods');
 
 function pkghandler(runtime, callback)

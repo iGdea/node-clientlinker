@@ -19,9 +19,11 @@ function initLinker(options)
 	(options.defaults || (options.defaults = {})).httpproxy
 			= 'http://127.0.0.1:'+exports.PORT+'/route_proxy';
 
-	options.pkghandlerDir = __dirname+'/pkghandler';
 	options.clients || (options.clients = {});
-	options.clients.client_its = {};
+	options.clients.client_its =
+	{
+		pkghandler: __dirname+'/pkghandler/client_its'
+	};
 	options.clients.client_svr_noflows = {};
 	options.clients.client_svr_not_exists = {};
 

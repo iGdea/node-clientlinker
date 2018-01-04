@@ -16,13 +16,16 @@ describe('#flows', function()
 				{
 					opt: 'myOpt'
 				},
-				localfileDir: __dirname+'/localfile',
 				clients:
 				{
+					client:
+					{
+						localfile: __dirname+'/localfile/client'
+					},
 					client2:
 					{
 						localfile: __dirname+'/localfile/not_exsits'
-					}
+					},
 				}
 			});
 
@@ -62,7 +65,17 @@ describe('#flows', function()
 		var linker = ClientLinker(
 			{
 				flows: ['localfile'],
-				localfileDir: __dirname+'/not_exsits_path',
+				clients:
+				{
+					client:
+					{
+						localfile: __dirname+'/localfile/client'
+					},
+					client2:
+					{
+						localfile: __dirname+'/localfile/not_exsits'
+					},
+				}
 			});
 
 		return linker.methods();
@@ -116,7 +129,13 @@ describe('#flows', function()
 				{
 					opt: 'myOpt'
 				},
-				pkghandlerDir: __dirname+'/pkghandler'
+				clients:
+				{
+					client_its:
+					{
+						pkghandler: __dirname+'/pkghandler/client_its'
+					}
+				}
 			});
 
 		runClientHandlerIts(linker);
