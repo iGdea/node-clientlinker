@@ -119,17 +119,17 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 
 ### Upgrade
 
-#### 4.x.x => 5.0.0
-
-* Please upgrade server first, if you are using `httpproxy` flow
-
-
 #### 5.x.x => 6.0.0
 
 * If flow handler return a Promise, it bind callback auto.
-* Running `callback.next` like `callback.next(true)`. Use `callback.nextAndResolve()` replace previous caller.
+* Running `callback.next` like `callback.next(true)`. Use `callback.nextAndResolve()` instead of previous caller.
 
 If you do not modify custom flow and use `callback.next` in flow, the rpc will timeout.
+
+
+#### 4.x.x => 5.0.0
+
+* Please upgrade server first, if you are using `httpproxy` flow
 
 
 
