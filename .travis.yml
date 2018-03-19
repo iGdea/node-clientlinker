@@ -10,11 +10,8 @@ addons:
 
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
   - "lts/*"
   - "stable"
-  - "unstable"
 
 install:
   - export CXX=g++-4.8
