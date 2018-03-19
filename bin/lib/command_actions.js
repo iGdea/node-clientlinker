@@ -2,7 +2,7 @@
 
 var Promise		= require('bluebird');
 
-var _			= require('underscore');
+var _			= require('lodash');
 var rlutils		= require('./rlutils');
 var printTable	= require('./print_table').printTable;
 var printTpl	= require('./print_tpl');

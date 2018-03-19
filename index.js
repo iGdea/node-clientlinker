@@ -1,7 +1,7 @@
 "use strict";
 
 var Promise		= require('bluebird');
-var _			= require('underscore');
+var _			= require('lodash');
 var fs			= require('fs');
 var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('clientlinker');

@@ -1,6 +1,6 @@
 "use strict";
 
-var _		= require('underscore');
+var _		= require('lodash');
 var vm		= require('vm');
 var debug	= require('debug')('clientlinker:rlutils');
 var util	= require('util');

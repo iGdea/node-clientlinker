@@ -45,11 +45,11 @@
     "debug": "^2.2.0",
     "depd": "^1.1.0",
     "is-promise": "^2.1.0",
+    "lodash": "^4.17.5",
     "mkdirp": "^0.5.1",
     "raw-body": "^2.1.7",
     "request": "^2.69.0",
-    "table": "3.7.9",
-    "underscore": "^1.8.3"
+    "table": "3.7.9"
   },
   "optionalDependencies": {
     "nan-async-example": "^0.1.1"

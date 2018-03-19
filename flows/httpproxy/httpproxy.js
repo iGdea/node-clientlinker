@@ -1,6 +1,6 @@
 "use strict";
 
-var _			= require('underscore');
+var _			= require('lodash');
 var debug		= require('debug')('clientlinker:httpproxy');
 var deprecate	= require('depd')('clientlinker:httpproxy');
 var request		= require('request');
