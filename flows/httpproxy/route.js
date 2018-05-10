@@ -94,8 +94,10 @@ function HttpProxyRoute(linker)
 				if (deprecate_msg.length)
 					output.httpproxy_deprecate = deprecate_msg;
 
+				res.setHeader('Content-Type', 'application/json; charset=utf-8');
 				res.statusCode = 500;
-				res.json(output);
+				var sendContent = JSON.stringify(output, null, '\t')+'\n';
+				res.end(sendContent);
 			});
 	};
 }
