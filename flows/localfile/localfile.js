@@ -1,8 +1,7 @@
 "use strict";
 
 var Promise	= require('bluebird');
-var debug	= require('debug')('clientlinker:localfile');
-var fs		= require('fs');
+var fs		= Promise.promisifyAll(require('fs'));
 var vm		= require('vm');
 
 exports = module.exports = localfile;
@@ -23,14 +22,7 @@ function localfile(runtime, callback)
 			var fileInfo = exists[0];
 			if (!fileInfo) return callback.next();
 
-			new Promise(function(resolve, reject)
-				{
-					fs.readFile(fileInfo.file, {encoding: 'utf8'}, function(err, content)
-					{
-						err ? reject(err) : resolve(content);
-					});
-				})
-				// 数据处理
+			fs.readFileAsync(fileInfo.file, {encoding: 'utf8'})
 				.then(function(content)
 				{
 					return parseContent(client.linker, content, fileInfo.extname);
@@ -49,28 +41,26 @@ function localfile(runtime, callback)
 
 function checkExists(file, extnames)
 {
-	var tasks = extnames.map(function(extname)
+	return Promise.map(extnames, function(extname)
 		{
-			return new Promise(function(resolve)
-			{
-				var thisFile = file+'.'+extname;
-				fs.exists(thisFile, function(exists)
-				{
-					if (exists)
-						resolve({extname: extname, file: thisFile});
-					else
-						resolve();
-				});
-			});
-		});
+			var thisFile = file+'.'+extname;
 
-	return Promise.all(tasks)
+			return fs.statAsync(thisFile)
+				.then(function(stats)
+				{
+					if (stats.isFile()) return {extname: extname, file: thisFile};
+				},
+				function(){});
+		},
+		{
+			concurrency: 5
+		})
 		.then(function(exists)
 		{
 			return exists.filter(function(item)
-				{
-					return !!item;
-				});
+			{
+				return !!item;
+			});
 		});
 }
 

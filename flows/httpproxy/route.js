@@ -1,9 +1,7 @@
 "use strict";
 
 var Promise		= require('bluebird');
-var _			= require('lodash');
 var debug		= require('debug')('clientlinker:httpproxy:route');
-var deprecate	= require('depd')('clientlinker:httpproxy:route');
 var rawBody		= require('raw-body');
 var aes			= require('./aes_cipher');
 var json		= require('./json');

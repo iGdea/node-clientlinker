@@ -2,8 +2,6 @@
 
 var Command2		= require('commander').Command;
 var pkg				= require('../../package.json');
-// 强制使用clientlinker作为name
-var program			= new Command2(pkg.name);
 var rlutils			= require('./rlutils');
 var stdout			= require('./stdout');
 var util			= require('util');
@@ -13,6 +11,7 @@ var EventEmitter	= require('events').EventEmitter;
 exports.Command = Command;
 function Command()
 {
+	// 强制使用clientlinker作为name
 	var program = this.program = new Command2(pkg.name);
 	program.version('v'+pkg.version)
 		.option('-C, --no-color', 'Disable colored output.')

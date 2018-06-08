@@ -1,3 +1,5 @@
+/* global describe it */
+
 "use strict";
 
 var Promise			= require('bluebird');
@@ -144,7 +146,7 @@ describe('#domain', function()
 		var promise1 = dm.run(function()
 		{
 			var promise11;
-			var promise12 = new Promise(function(resolve, reject)
+			var promise12 = new Promise(function(resolve)
 				{
 					promise11 = linker.run('client.callback', null, null, function(err, data)
 					{

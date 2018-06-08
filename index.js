@@ -1,13 +1,9 @@
 "use strict";
 
-var Promise		= require('bluebird');
-var _			= require('lodash');
-var fs			= require('fs');
 var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('clientlinker');
 var STATIC		= require('./lib/static');
 
-var DEFAULT_FLOWS_PATH	= __dirname+'/flows/';
 
 /**
  * [options]
@@ -44,4 +40,4 @@ function ClientLinker(options)
 		});
 
 	return linker;
-};
+}

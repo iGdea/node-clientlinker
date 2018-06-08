@@ -1,7 +1,6 @@
 "use strict";
 
 var Promise		= require('bluebird');
-var fs			= require('fs');
 var util		= require('util');
 
 exports.is_verbose = true;

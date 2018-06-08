@@ -29,8 +29,8 @@ exports.initClient = initClient;
 function initClient(client)
 {
 	var options		= client.options;
-	var linker		= client.linker;
-	var retryTimes	= linker.pkghandlerRetryTimes || (linker.pkghandlerRetryTimes = {});
+	// var linker		= client.linker;
+	// var retryTimes	= linker.pkghandlerRetryTimes || (linker.pkghandlerRetryTimes = {});
 	if (!options.pkghandler) return;
 
 	if (!client.pkghandlerModuleLoaded)

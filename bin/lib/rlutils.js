@@ -1,12 +1,9 @@
 "use strict";
 
 var _		= require('lodash');
-var vm		= require('vm');
-var debug	= require('debug')('clientlinker:rlutils');
 var util	= require('util');
 var path	= require('path');
 var chalk	= require('chalk');
-var fs		= require('fs');
 var STATIC	= require('../../lib/static');
 var rlutils	= exports;
 
@@ -36,8 +33,8 @@ exports.resolve = resolve;
 exports.USER_HOME = process.env.HOME || process.env.USERPROFILE;
 function resolve(str)
 {
-	if (str.substr(0, 2) == '~/' && exports.USER_HOME)
-		return path.resolve(exports.USER_HOME, str.substr(2));
+	if (str.substr(0, 2) == '~/' && rlutils.USER_HOME)
+		return path.resolve(rlutils.USER_HOME, str.substr(2));
 	else
 		return path.resolve(str);
 }

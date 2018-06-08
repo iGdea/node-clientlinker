@@ -18,7 +18,7 @@ exports.decipher = decipher;
 function decipher(str, key)
 {
     var decipher = crypto.createDecipher('aes-256-cbc', key);
-    var str = decipher.update(str, 'base64', 'utf8');
-    str += decipher.final('utf8');
-    return str.split(',').slice(0, -2).join(',');
+    var str2 = decipher.update(str, 'base64', 'utf8');
+    str2 += decipher.final('utf8');
+    return str2.split(',').slice(0, -2).join(',');
 }

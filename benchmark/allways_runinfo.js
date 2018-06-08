@@ -1,11 +1,11 @@
 "use strict";
 
+var Promise = require('bluebird');
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var util = require('util');
 
-var ClientLinker = require('../');
 var utilsTestHttpproxy	= require('../test/utils_test_httpproxy');
 var runClientHandlerIts = require('../test/pkghandler/lib/run');
 
@@ -13,7 +13,6 @@ var LOG_FILE = __dirname + '/../test/tmp/allways_runinfo.log';
 var PORT = 3233;
 var EACH_REPEAT = 20;
 var MAX_LAST_RUNTIME_LENGTH = 10;
-var START_TIME = Date.now();
 
 mkdirp.sync(path.dirname(LOG_FILE));
 var ws = fs.createWriteStream(LOG_FILE);

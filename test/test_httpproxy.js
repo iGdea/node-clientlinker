@@ -1,8 +1,8 @@
+/* global describe it */
+
 "use strict";
 
-var Promise				= require('bluebird');
 var expect				= require('expect.js');
-var ClientLinker		= require('../');
 var httpproxy			= require('../flows/httpproxy/httpproxy');
 var runClientHandlerIts	= require('./pkghandler/lib/run');
 var aes					= require('../flows/httpproxy/aes_cipher');
@@ -17,7 +17,7 @@ describe('#httpproxy', function()
 {
 	describe('#base', function()
 	{
-		var svrLinker = initTestSvrLinker({});
+		initTestSvrLinker({});
 
 		// describe('#run client', function()
 		// {
@@ -70,7 +70,7 @@ describe('#httpproxy', function()
 	{
 		describe('#5xx', function()
 		{
-			var svrLinker = initTestSvrLinker();
+			initTestSvrLinker();
 			var linker = initLinker(
 				{
 					flows: ['custom'],
@@ -135,7 +135,7 @@ describe('#httpproxy', function()
 
 		describe('#5xx_parse', function()
 		{
-			var svrLinker = initTestSvrLinker();
+			initTestSvrLinker();
 			var linker = initLinker(
 				{
 					flows: ['custom'],
@@ -181,7 +181,7 @@ describe('#httpproxy', function()
 		describe('#httpproxyKey', function()
 		{
 			var httpproxyKey = 'xxfde&d023';
-			var svrLinker = initTestSvrLinker(
+			initTestSvrLinker(
 				{
 					defaults: {
 						httpproxyKey: httpproxyKey
@@ -310,10 +310,10 @@ describe('#httpproxy', function()
 										var targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
 										expect(runtime.env.httpproxyLevel)
 											.to.be(targetSvrLevel);
-										var responeError = runtime.retry[0]
+										var responeError2 = runtime.retry[0]
 											.getRunnedFlowByName('httpproxy')
 											.httpproxyResponeError;
-										expect(responeError.message)
+										expect(responeError2.message)
 											.to.be('httpproxy,respone!200,501');
 									}
 
@@ -323,7 +323,7 @@ describe('#httpproxy', function()
 
 				describe('#svrLevel:'+svrLevel, function()
 				{
-					var svrLinker = initTestSvrLinker(
+					initTestSvrLinker(
 						{
 							defaults:
 							{

@@ -1,3 +1,5 @@
+/* global describe it */
+
 "use strict";
 
 var Promise			= require('bluebird');
@@ -7,7 +9,6 @@ var printTable		= require('../bin/lib/print_table');
 var printTpl		= require('../bin/lib/print_tpl');
 
 var CONFIG_FILE			= __dirname+'/conf/simple.conf.js';
-var MULIT_CONFIG_FILE	= __dirname+'/conf/clientlinker.conf.js';
 var EMPTY_CONFIG_FILE	= __dirname+'/conf/empty.conf.js';
 
 require('../bin/lib/rlutils').colors.enabled = false;
@@ -194,11 +195,11 @@ describe('#commandActions', function()
 		var items = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
 		expect(items).to.be.eql(['flow1', 'flow3']);
 
-		var items = commandActions.parseFilterFlows('flow1,', allFlows);
-		expect(items).to.be.eql(['flow1']);
+		var items2 = commandActions.parseFilterFlows('flow1,', allFlows);
+		expect(items2).to.be.eql(['flow1']);
 
-		var items = commandActions.parseFilterFlows('flow4,', allFlows);
-		expect(items).to.be.eql(allFlows);
+		var items3 = commandActions.parseFilterFlows('flow4,', allFlows);
+		expect(items3).to.be.eql(allFlows);
 	});
 
 });

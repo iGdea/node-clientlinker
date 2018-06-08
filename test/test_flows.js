@@ -1,3 +1,5 @@
+/* global describe it */
+
 "use strict";
 
 var Promise				= require('bluebird');
@@ -10,24 +12,24 @@ describe('#flows', function()
 	it('#localfile', function()
 	{
 		var linker = ClientLinker(
+		{
+			flows: ['localfile'],
+			defaults:
 			{
-				flows: ['localfile'],
-				defaults:
+				opt: 'myOpt'
+			},
+			clients:
+			{
+				client:
 				{
-					opt: 'myOpt'
+					localfile: __dirname+'/localfile/client'
 				},
-				clients:
+				client2:
 				{
-					client:
-					{
-						localfile: __dirname+'/localfile/client'
-					},
-					client2:
-					{
-						localfile: __dirname+'/localfile/not_exsits'
-					},
-				}
-			});
+					localfile: __dirname+'/localfile/not_exsits'
+				},
+			}
+		});
 
 		var promise1 = linker.run('client.js')
 			.then(function(){expect().fail()},
@@ -63,20 +65,20 @@ describe('#flows', function()
 	it('#localfile2', function()
 	{
 		var linker = ClientLinker(
+		{
+			flows: ['localfile'],
+			clients:
 			{
-				flows: ['localfile'],
-				clients:
+				client:
 				{
-					client:
-					{
-						localfile: __dirname+'/localfile/client'
-					},
-					client2:
-					{
-						localfile: __dirname+'/localfile/not_exsits'
-					},
-				}
-			});
+					localfile: __dirname+'/localfile/client'
+				},
+				client2:
+				{
+					localfile: __dirname+'/localfile/not_exsits'
+				},
+			}
+		});
 
 		return linker.methods();
 	});
@@ -85,14 +87,14 @@ describe('#flows', function()
 	describe('#confighandler', function()
 	{
 		var linker = ClientLinker(
-			{
-				flows: ['confighandler'],
-				clients: {
-					client_its: {
-						confighandler: require('./pkghandler/client_its')
-					}
+		{
+			flows: ['confighandler'],
+			clients: {
+				client_its: {
+					confighandler: require('./pkghandler/client_its')
 				}
-			});
+			}
+		});
 
 		runClientHandlerIts(linker);
 
@@ -123,20 +125,20 @@ describe('#flows', function()
 	describe('#pkghandler', function()
 	{
 		var linker = ClientLinker(
+		{
+			flows: ['pkghandler'],
+			defaults:
 			{
-				flows: ['pkghandler'],
-				defaults:
+				opt: 'myOpt'
+			},
+			clients:
+			{
+				client_its:
 				{
-					opt: 'myOpt'
-				},
-				clients:
-				{
-					client_its:
-					{
-						pkghandler: __dirname+'/pkghandler/client_its'
-					}
+					pkghandler: __dirname+'/pkghandler/client_its'
 				}
-			});
+			}
+		});
 
 		runClientHandlerIts(linker);
 
@@ -326,33 +328,33 @@ describe('#flows', function()
 	describe('#debugger', function()
 	{
 		var linker = ClientLinker(
+		{
+			flows: ['debugger', 'confighandler'],
+			clients:
 			{
-				flows: ['debugger', 'confighandler'],
-				clients:
+				client1:
 				{
-					client1:
+					confighandler:
 					{
-						confighandler:
+						method1: function()
 						{
-							method1: function()
-							{
-								return Promise.resolve({string: 'string1'});
-							}
+							return Promise.resolve({string: 'string1'});
 						}
-					},
-					client2:
+					}
+				},
+				client2:
+				{
+					debuggerRuntime: true,
+					confighandler:
 					{
-						debuggerRuntime: true,
-						confighandler:
+						method1: function()
 						{
-							method1: function()
-							{
-								return Promise.resolve({string: 'string1'});
-							}
+							return Promise.resolve({string: 'string1'});
 						}
 					}
 				}
-			});
+			}
+		});
 
 		it('#run', function()
 		{

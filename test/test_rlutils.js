@@ -1,6 +1,7 @@
+/* global describe it */
+
 "use strict";
 
-var Promise			= require('bluebird');
 var rlutils			= require('../bin/lib/rlutils');
 var expect			= require('expect.js');
 var ClientLinker	= require('../');

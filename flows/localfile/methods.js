@@ -1,7 +1,7 @@
 "use strict";
 
 var Promise	= require('bluebird');
-var fs		= require('fs');
+var fs		= Promise.promisifyAll(require('fs'));
 
 module.exports = methods;
 function methods(client)
@@ -18,29 +18,24 @@ function methods(client)
 		})
 		.then(function(dirs)
 		{
-			var promises = dirs.map(function(filename)
+			return Promise.map(dirs, function(filename)
 				{
-					if (filename[0] != '.')
-					{
-						var arr = filename.split('.');
-						var extname = arr.pop();
-						if (extname == 'json' || extname == 'js')
-						{
-							return new Promise(function(resolve, reject)
-							{
-								fs.stat(pathdir+'/'+filename, function(err, stat)
-								{
-									if (err || !stat.isFile())
-										resolve();
-									else
-										resolve(arr.join('.'));
-								});
-							});
-						}
-					}
-				});
+					if (filename[0] == '.') return;
 
-			return Promise.all(promises)
+					var arr = filename.split('.');
+					var extname = arr.pop();
+					if (extname == 'json' || extname == 'js')
+					{
+						return fs.statAsync(pathdir+'/'+filename)
+							.then(function(stats)
+							{
+								if (stats.isFile()) return arr.join('.');
+							}, function(){});
+					}
+				},
+				{
+					concurrency: 5
+				})
 				.then(function(methods)
 				{
 					return methods.filter(function(method){return method});

@@ -1,7 +1,5 @@
 "use strict";
 
-var Promise		= require('bluebird');
-
 var _			= require('lodash');
 var rlutils		= require('./rlutils');
 var printTable	= require('./print_table').printTable;
@@ -164,4 +162,3 @@ function requireLinker(conf_file)
 
 	return linker;
 }
-

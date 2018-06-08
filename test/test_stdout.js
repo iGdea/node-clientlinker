@@ -1,10 +1,10 @@
+/* global describe it beforeEach afterEach after */
+
 "use strict";
 
-var Promise			= require('bluebird');
 var fs				= require('fs');
 var path			= require('path');
 var mkdirp			= require('mkdirp');
-var expect			= require('expect.js');
 var stdout			= require('../bin/lib/stdout');
 var TMP_LOG_FILE	= __dirname+'/tmp/stdout_log_file_'+process.pid;
 mkdirp.sync(path.dirname(TMP_LOG_FILE));

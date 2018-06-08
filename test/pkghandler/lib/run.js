@@ -1,3 +1,5 @@
+/* global it */
+
 "use strict";
 
 var Promise	= require('bluebird');

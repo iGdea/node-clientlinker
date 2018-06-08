@@ -1,6 +1,5 @@
 "use strict";
 
-var rlutils			= require('./lib/rlutils');
 var Command			= require('./lib/command').Command;
 var commandActions	= require('./lib/command_actions');
 var stdout			= require('./lib/stdout');

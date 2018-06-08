@@ -14,58 +14,59 @@ function printTable(data, allFlows, options)
 	var flowFromIndexMap = {};
 
 	allFlows.forEach(function(from, index)
-		{
-			defaultFlowFromArr.push('');
-			flowFromIndexMap[from] = index;
-		});
+	{
+		defaultFlowFromArr.push('');
+		flowFromIndexMap[from] = index;
+	});
 
 	var tableData = [];
 	data.forEach(function(item)
+	{
+		var line;
+		switch(item.type)
 		{
-			switch(item.type)
-			{
-				case 'header':
-					// 空一行
-					if (tableData.length)
+			case 'header':
+				// 空一行
+				if (tableData.length)
+				{
+					line = [' ', '', ''].concat(defaultFlowFromArr);
+					tableData.push(line);
+				}
+
+				tableData.push(['', item.client, ' '].concat(allFlows));
+				break;
+
+			case 'nomethods':
+				line = ['', '** No Methods **', ''].concat(defaultFlowFromArr);
+				tableData.push(line);
+				break;
+
+			default:
+				var realFlowList = defaultFlowFromArr.slice();
+				var froms = item.froms.map(function(name)
+				{
+					if (name === undefined) name = 'undefined';
+
+					var flowTabIndex = flowFromIndexMap[name];
+					if (flowTabIndex || flowTabIndex === 0)
 					{
-						var line = [' ', '', ''].concat(defaultFlowFromArr);
-						tableData.push(line);
+						realFlowList[flowTabIndex] = name+' '+useSymbole;
 					}
 
-					tableData.push(['', item.client, ' '].concat(allFlows));
-					break;
+					return name;
+				});
 
-				case 'nomethods':
-					var line = ['', '** No Methods **', '']
-							.concat(defaultFlowFromArr);
-					tableData.push(line);
-					break;
+				line =
+				[
+					item.index,
+					options.useAction ? item.action : item.method,
+					'' && froms.join(',')
+				]
+				.concat(realFlowList);
 
-				default:
-					var realFlowList = defaultFlowFromArr.slice();
-					var froms = item.froms.map(function(name)
-						{
-							if (name === undefined) name = 'undefined';
-
-							var flowTabIndex = flowFromIndexMap[name];
-							if (flowTabIndex || flowTabIndex === 0)
-							{
-								realFlowList[flowTabIndex] = name+' '+useSymbole;
-							}
-
-							return name;
-						});
-
-					var line = [
-							item.index,
-							options.useAction ? item.action : item.method,
-							'' && froms.join(',')
-						]
-						.concat(realFlowList);
-
-					tableData.push(line);
-			}
-		});
+				tableData.push(line);
+		}
+	});
 
 	var output = table.default(tableData,
 		{

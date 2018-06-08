@@ -1,9 +1,11 @@
+/* global describe it */
+
 "use strict";
 
 var expect		= require('expect.js');
-var Command		= require('../bin/lib/command').Command;
-var Command2	= require('commander').Command;
 var rlutils		= require('../bin/lib/rlutils');
+var Command		= require('../bin/lib/command').Command;
+// var Command2	= require('commander').Command;
 
 // 屏蔽错误
 // 'optionMissingArgument|missingArgument|unknownOption|variadicArgNotLast'
