@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var KEY        = Date.now() + process.pid + Math.floor(Math.random()*10000);
 var BUFFER_KEY = 'buf_'+KEY;

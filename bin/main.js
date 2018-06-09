@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var Command			= require('./lib/command').Command;
 var commandActions	= require('./lib/command_actions');

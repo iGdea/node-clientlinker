@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var Command2		= require('commander').Command;
 var pkg				= require('../../package.json');

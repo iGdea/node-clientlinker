@@ -1,6 +1,6 @@
 /* global Promise */
 
-"use strict";
+'use strict';
 
 var Benchmark = require('benchmark');
 var suite = new Benchmark.Suite;

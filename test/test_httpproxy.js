@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var expect				= require('expect.js');
 var httpproxy			= require('../flows/httpproxy/httpproxy');

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('clientlinker');

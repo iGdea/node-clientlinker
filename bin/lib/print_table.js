@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var table = require('table');
 var useSymbole

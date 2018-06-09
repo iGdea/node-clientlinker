@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var rlutils			= require('../bin/lib/rlutils');
 var expect			= require('expect.js');
