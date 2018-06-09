@@ -18,10 +18,9 @@ exports.runtime = function runtime(runtime)
 		var flowItem = runnedFlows[len];
 		if (!flowItem || !flowItem.flow) continue;
 
-		var str;
 		if (!flowStr.length)
 		{
-			str = util.format('%s %sms',
+			var str = util.format('%s %sms',
 				rlutils.colors.green(flowItem.flow.name),
 				rlutils.colors.blue(flowItem.timing.end - flowItem.timing.start));
 
@@ -29,7 +28,7 @@ exports.runtime = function runtime(runtime)
 		}
 		else
 		{
-			str = rlutils.colors.gray(flowItem.flow.name);
+			var str = rlutils.colors.gray(flowItem.flow.name);
 			flowStr.push(str);
 		}
 	}

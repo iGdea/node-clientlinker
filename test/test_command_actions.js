@@ -1,5 +1,3 @@
-/* global describe it */
-
 "use strict";
 
 var Promise			= require('bluebird');
@@ -195,11 +193,11 @@ describe('#commandActions', function()
 		var items = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
 		expect(items).to.be.eql(['flow1', 'flow3']);
 
-		var items2 = commandActions.parseFilterFlows('flow1,', allFlows);
-		expect(items2).to.be.eql(['flow1']);
+		var items = commandActions.parseFilterFlows('flow1,', allFlows);
+		expect(items).to.be.eql(['flow1']);
 
-		var items3 = commandActions.parseFilterFlows('flow4,', allFlows);
-		expect(items3).to.be.eql(allFlows);
+		var items = commandActions.parseFilterFlows('flow4,', allFlows);
+		expect(items).to.be.eql(allFlows);
 	});
 
 });

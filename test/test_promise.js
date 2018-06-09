@@ -1,4 +1,4 @@
-/* global describe it Promise */
+/* global Promise */
 
 "use strict";
 

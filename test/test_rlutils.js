@@ -1,5 +1,3 @@
-/* global describe it */
-
 "use strict";
 
 var rlutils			= require('../bin/lib/rlutils');
