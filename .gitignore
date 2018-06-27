@@ -2,4 +2,7 @@ node_modules
 test/tmp
 coverage
 npm-debug.log
-.tag*
+package-lock.json
+
+.tags*
+.DS_Store
