@@ -1,6 +1,4 @@
-/* global it */
-
-"use strict";
+'use strict';
 
 var Promise	= require('bluebird');
 var expect	= require('expect.js');

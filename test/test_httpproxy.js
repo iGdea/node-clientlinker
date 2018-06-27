@@ -1,6 +1,4 @@
-/* global describe it */
-
-"use strict";
+'use strict';
 
 var expect				= require('expect.js');
 var httpproxy			= require('../flows/httpproxy/httpproxy');
@@ -310,10 +308,10 @@ describe('#httpproxy', function()
 										var targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
 										expect(runtime.env.httpproxyLevel)
 											.to.be(targetSvrLevel);
-										var responeError2 = runtime.retry[0]
+										var responeError = runtime.retry[0]
 											.getRunnedFlowByName('httpproxy')
 											.httpproxyResponeError;
-										expect(responeError2.message)
+										expect(responeError.message)
 											.to.be('httpproxy,respone!200,501');
 									}
 

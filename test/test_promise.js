@@ -1,6 +1,6 @@
-/* global describe it Promise */
+/* global Promise */
 
-"use strict";
+'use strict';
 
 var expect = require('expect.js');
 

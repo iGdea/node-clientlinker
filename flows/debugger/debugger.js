@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports = module.exports = {handler: debug, name: 'debugger'};
 

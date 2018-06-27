@@ -1,6 +1,4 @@
-/* global before after */
-
-"use strict";
+'use strict';
 
 var http				= require('http');
 var expr				= require('express');

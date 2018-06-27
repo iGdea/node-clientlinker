@@ -1,6 +1,4 @@
-/* global describe it */
-
-"use strict";
+'use strict';
 
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
@@ -105,7 +103,7 @@ describe('#base', function()
 				flowHanlder.init = function()
 				{
 					return false;
-				};
+				}
 
 				linker.bindFlow('flowInit', flowHanlder);
 
@@ -123,7 +121,7 @@ describe('#base', function()
 				flowHanlder.init = function()
 				{
 					throw new Error;
-				};
+				}
 
 				expect(function()
 					{

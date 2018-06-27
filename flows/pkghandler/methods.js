@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = methods;
 var pkghandler = require('./pkghandler');

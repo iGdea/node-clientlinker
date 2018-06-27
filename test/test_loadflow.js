@@ -1,6 +1,4 @@
-/* global describe it */
-
-"use strict";
+'use strict';
 
 var ClientLinker	= require('../');
 var expect			= require('expect.js');

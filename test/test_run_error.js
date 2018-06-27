@@ -1,6 +1,4 @@
-/* global describe it */
-
-"use strict";
+'use strict';
 
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
