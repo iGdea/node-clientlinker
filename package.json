@@ -48,13 +48,13 @@
     "benchmark": "^2.1.4",
     "cross-env": "^2.0.0",
     "eslint": "^5.0.1",
-    "eslint-config-brcjs": "^0.1.0",
+    "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "express": "^4.16.3",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.3"
   },
   "optionalDependencies": {
-    "nan-async-example": "^0.1.1"
+    "nan-async-example": "^0.1.2"
   }
 }
