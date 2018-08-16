@@ -33,8 +33,7 @@ function addPromiseCases(name, Promise)
 					'1,2,3'.split(',')
 					resolve();
 				})
-				.then(function(data){deferred.resolve(data)},
-					function(err){deferred.reject(err)});
+				.then(deferred.resolve.bind(deferred));
 		},
 		{'defer': true})
 
@@ -45,8 +44,7 @@ function addPromiseCases(name, Promise)
 				{
 					'1,2,3'.split(',')
 				})
-				.then(function(data){deferred.resolve(data)},
-					function(err){deferred.reject(err)});
+				.then(deferred.resolve.bind(deferred));
 		},
 		{'defer': true})
 
@@ -58,8 +56,7 @@ function addPromiseCases(name, Promise)
 				{
 					'1,2,3'.split(',')
 				})
-				.then(function(data){deferred.resolve(data)},
-					function(err){deferred.reject(err)});
+				.then(deferred.resolve.bind(deferred));
 		},
 		{'defer': true})
 
@@ -72,8 +69,7 @@ function addPromiseCases(name, Promise)
 				{
 					'1,2,3'.split(',')
 				})
-				.then(function(data){deferred.resolve(data)},
-					function(err){deferred.reject(err)});
+				.then(deferred.resolve.bind(deferred));
 		},
 		{'defer': true});
 }

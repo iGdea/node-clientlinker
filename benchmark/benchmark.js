@@ -30,47 +30,22 @@ var linker = ClientLinker(
 linker._newRuntime('client.method')
 	.then(function(runtime)
 	{
-		suite.add('#clientlinker', function(deferred)
+		suite.add('#only one promise run', function(deferred)
+			{
+				new Promise(function(resolve)
+					{
+						methodHandler(function(){'2,3'.split(',')}, null, resolve);
+					})
+					.then(deferred.resolve.bind(deferred));
+			},
+			{defer: true})
+
+			.add('#clientlinker', function(deferred)
 			{
 				linker.run('client.method', function(){'2,3'.split(',')})
-					.then(function(data){deferred.resolve(data)},
-						function(err){deferred.reject(err)});
+					.then(deferred.resolve.bind(deferred));
 			},
-			{'defer': true})
-
-			.add('#only one promise run', function(deferred)
-			{
-				new Promise(function(resolve, reject)
-					{
-						methodHandler(function(){'2,3'.split(',')}, null,
-							function(err, data)
-							{
-								err ? reject(err) : resolve(data);
-							});
-					})
-					.then(function(data){deferred.resolve(data)},
-						function(err){deferred.reject(err)});
-			},
-			{'defer': true})
-
-			.add('#rundirectly', function(deferred)
-			{
-				methodHandler(function(){'2,3'.split(',')}, null,
-					function(err, data)
-					{
-						err ? deferred.reject(err) : deferred.resolve(data);
-					});
-			},
-			{'defer': true})
-
-			.add('#run sync', function()
-			{
-				var deferred = {};
-				methodHandler(function(){'2,3'.split(',')}, function(err, data)
-				{
-					err ? deferred.reject(err) : deferred.resolve(data);
-				}, null);
-			})
+			{defer: true})
 
 			.add('#step runbyruntime', function(deferred)
 			{
@@ -78,18 +53,16 @@ linker._newRuntime('client.method')
 					runtime.method, function(){'2,3'.split(',')}, {}, {});
 
 				linker._runByRuntime(runtime2)
-					.then(function(data){deferred.resolve(data)},
-						function(err){deferred.reject(err)});
+					.then(deferred.resolve.bind(deferred));
 			},
-			{'defer': true})
+			{defer: true})
 
 			.add('#step newruntime', function(deferred)
 			{
 				linker._newRuntime('client.method', function(){'2,3'.split(',')})
-					.then(function(data){deferred.resolve(data)},
-						function(err){deferred.reject(err)});
+					.then(deferred.resolve.bind(deferred));
 			},
-			{'defer': true})
+			{defer: true})
 
 			.on('cycle', function(event)
 			{
@@ -99,5 +72,5 @@ linker._newRuntime('client.method')
 			{
 				console.log('Fastest is ' + this.filter('fastest').map('name'));
 			})
-			.run({ 'async': true });
+			.run({async: true});
 	});
