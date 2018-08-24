@@ -35,9 +35,15 @@ function httpproxy(runtime, callback)
 				_.extend(runtime.env, data.env, {source: runtime.env.source});
 			}
 
+
 			if (respone.statusCode != 200)
 			{
 				err = new Error('httpproxy,respone!200,'+respone.statusCode);
+				if (respone.statusCode == 501)
+				{
+					callback.httpproxyResponeError = err;
+					return callback.nextAndResolve();
+				}
 			}
 		}
 
@@ -46,7 +52,7 @@ function httpproxy(runtime, callback)
 			debug('request err:%o', err);
 			// 把错误暴露给外层，可以通过`runtime.retry[0].runnedFlows[0].httpproxyResponeError`获取
 			callback.httpproxyResponeError = err;
-			return callback.nextAndResolve();
+			return callback(err);
 		}
 
 		// 预留接口，在客户端显示server端日志

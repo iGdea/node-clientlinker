@@ -112,7 +112,7 @@ describe('#httpproxy', function()
 						var retPromise = linker2.run(action);
 						return retPromise
 							.then(function(){expect().fail()},
-								function()
+								function(err)
 								{
 									var runtime = retPromise.runtime;
 									var responeError = runtime.retry[0]
@@ -120,6 +120,8 @@ describe('#httpproxy', function()
 										.httpproxyResponeError;
 									expect(responeError.message)
 										.to.be('httpproxy,respone!200,501');
+									expect(err.message.substr(0, 22))
+										.to.be('CLIENTLINKER:NotFound,');
 								});
 					});
 				}
@@ -313,6 +315,8 @@ describe('#httpproxy', function()
 											.httpproxyResponeError;
 										expect(responeError.message)
 											.to.be('httpproxy,respone!200,501');
+										expect(err.message.substr(0, 22))
+											.to.be('CLIENTLINKER:NotFound,');
 									}
 
 								});
