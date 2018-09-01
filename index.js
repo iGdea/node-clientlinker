@@ -20,15 +20,6 @@ function ClientLinker(options)
 	!defaults.flows && options.flows && (defaults.flows = options.flows.slice());
 
 	var linker = new Linker(options);
-
-	if (options.flows)
-	{
-		options.flows.forEach(function(name)
-		{
-			if (STATIC.sysflows[name]) linker.loadFlow(name);
-		});
-	}
-
 	if (options.customFlows) linker.bindFlow(options.customFlows);
 	// client options
 	if (options.clients) linker.addClient(options.clients);
