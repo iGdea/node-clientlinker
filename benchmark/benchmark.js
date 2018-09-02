@@ -27,6 +27,8 @@ var linker = ClientLinker(
 		}
 	});
 
+linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+
 linker._newRuntime('client.method')
 	.then(function(runtime)
 	{
