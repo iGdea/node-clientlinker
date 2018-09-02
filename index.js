@@ -1,8 +1,8 @@
 'use strict';
 
+var _			= require('lodash');
 var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('clientlinker');
-var STATIC		= require('./lib/static');
 
 
 /**
@@ -22,7 +22,13 @@ function ClientLinker(options)
 	var linker = new Linker(options);
 	if (options.customFlows) linker.bindFlow(options.customFlows);
 	// client options
-	if (options.clients) linker.addClient(options.clients);
+	if (options.clients)
+	{
+		_.each(options.clients, function(handler, name)
+		{
+			linker.client(name, handler);
+		});
+	}
 
 	linker.clients()
 		.then(function(clients)
