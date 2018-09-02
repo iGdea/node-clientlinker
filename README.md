@@ -22,7 +22,7 @@ npm install clientlinker -g
 
 # Useage
 
-### Options
+## Options
 
 Linker Options Exmaple, see [Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
 or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flows-Options)
@@ -58,7 +58,7 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 }
 ```
 
-### Initialize
+## Initialize
 
 ```javascript
 // `clientlinker.conf.js` file content
@@ -79,9 +79,9 @@ Width custom flows, you can link any rpc
 and get all data anywhere through `httpproxy` Flow.
 
 
-### Run
+## Run
 
-#### Run in Server
+### Run in Server
 
 ```javascript
 var clientlinker = require('./clientlinker.conf.js');
@@ -93,7 +93,7 @@ clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, options)
 	.then(function(data){});
 ```
 
-#### Run in Shell
+### Run in Shell
 
 ```javascript
 // you can use `runInShell` instead of `run`.
@@ -105,7 +105,7 @@ var clientlinker = require('./clientlinker.conf.js');
 clientlinker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 ```
 
-#### Run in Terminal
+### Run in Terminal
 
 ```shell
 #### List all Clients and Methods
@@ -117,19 +117,20 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 ```
 
 
-### Upgrade
+# Upgrade
 
-#### 5.x.x => 6.0.0
 
-* If flow handler return a Promise, it bind callback auto.
-* Running `callback.next` like `callback.next(true)`. Use `callback.nextAndResolve()` instead of previous caller.
+### 5.x.x => 6.0.0
+
+ * If flow handler return a Promise, it bind callback auto.
+ * Running `callback.next` like `callback.next(true)`. Use `callback.nextAndResolve()` instead of previous caller.
 
 If you do not modify custom flow and use `callback.next` in flow, the rpc will timeout.
 
 
-#### 4.x.x => 5.0.0
+### 4.x.x => 5.0.0
 
-* Please upgrade server first, if you are using `httpproxy` flow
+ * Please upgrade server first, if you are using `httpproxy` flow
 
 
 
