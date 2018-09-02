@@ -20,7 +20,6 @@ function ClientLinker(options)
 	!defaults.flows && options.flows && (defaults.flows = options.flows.slice());
 
 	var linker = new Linker(options);
-	if (options.customFlows) linker.bindFlow(options.customFlows);
 	// client options
 	if (options.clients)
 	{

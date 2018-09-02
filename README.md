@@ -119,6 +119,13 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 
 # Upgrade
 
+### 6.x.x => 7.0.0
+
+ * Remove all sys flow. Please install and loadFlow for
+	`httpproxy` `confighandler` `pkghandler` `debugger` `localfile` `logger`
+ * Move `proxyRoute` of `linker` to `clientlinker-flow-httpproxy` pkg.
+ * Remove `customFlows` options.
+
 
 ### 5.x.x => 6.0.0
 
