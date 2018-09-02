@@ -2,27 +2,11 @@
 
 var Promise			= require('bluebird');
 var ClientLinker	= require('../');
-var STATIC			= require('../lib/static');
 var expect			= require('expect.js');
 
 
 describe('#base', function()
 {
-	it('#own', function()
-	{
-		var sysflowsArr = Object.keys(STATIC.sysflows);
-		var linker = ClientLinker(
-			{
-				flows: sysflowsArr
-			});
-
-		expect(Object.keys(linker.flows).length).to.be(sysflowsArr.length);
-		sysflowsArr.forEach(function(name)
-		{
-			expect(linker.flows[name].handler).to.be.an('function');
-		});
-	});
-
 	it('#addClient', function()
 	{
 		var linker = ClientLinker()
