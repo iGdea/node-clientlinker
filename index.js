@@ -3,6 +3,7 @@
 var _			= require('lodash');
 var Linker		= require('./lib/linker').Linker;
 var debug		= require('debug')('clientlinker');
+var deprecate	= require('depd')('clientlinker');
 
 
 /**
@@ -26,6 +27,23 @@ function ClientLinker(options)
 		_.each(options.clients, function(handler, name)
 		{
 			linker.client(name, handler);
+		});
+	}
+
+	if (options.customFlows)
+	{
+		deprecate('`options.customFlows` will not be supported.');
+
+		_.each(options.customFlows, function(handler, name)
+		{
+			linker.flow(name, function(flow)
+			{
+				flow.register(handler);
+				if (handler.methods)
+				{
+					flow.register('methods', handler.methods);
+				}
+			});
 		});
 	}
 
