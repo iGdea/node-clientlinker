@@ -29,32 +29,32 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 
 ```javascript
 {
-	flows: ['logger', 'custom', 'pkghandler' 'localfile', 'httpproxy'],
-	// pkghandlerDir: __dirname+'/pkghandler',
-	defaults: {
-		anyToError: true,
-		timeout: 4000
-	},
-	customFlows: {
-		custom: function(runtime, callback) {}
-	},
-	clients: {
-		mail: {
-			// modify defaults flows
-			flows: ['confighandler'],
-			confighandler: {
-				read: function(query, body, callback, options) {
-					callback(null, {content: 'hi,'});
-				},
-				send: function(query, body, callback, options) {
-					return Promise.resolve({id: 'xxxx'});
-				}
-			}
-		},
+  flows: ['logger', 'custom', 'pkghandler' 'localfile', 'httpproxy'],
+  // pkghandlerDir: __dirname+'/pkghandler',
+  defaults: {
+    anyToError: true,
+    timeout: 4000
+  },
+  customFlows: {
+    custom: function(runtime, callback) {}
+  },
+  clients: {
+    mail: {
+      // modify defaults flows
+      flows: ['confighandler'],
+      confighandler: {
+        read: function(query, body, callback, options) {
+          callback(null, {content: 'hi,'});
+        },
+        send: function(query, body, callback, options) {
+          return Promise.resolve({id: 'xxxx'});
+        }
+      }
+    },
 
-		// use defaults
-		profile: null
-	}
+    // use defaults
+    profile: null
+  }
 }
 ```
 
@@ -90,7 +90,7 @@ clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 
 // or use promise
 clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, options)
-	.then(function(data){});
+  .then(function(data){});
 ```
 
 ### Run in Shell
@@ -122,7 +122,7 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 ### 6.x.x => 7.0.0
 
  * Remove all sys flow. Please install and loadFlow for
-	`httpproxy` `confighandler` `pkghandler` `debugger` `localfile` `logger`
+  `httpproxy` `confighandler` `pkghandler` `debugger` `localfile` `logger`
  * Move `proxyRoute` of `linker` to `clientlinker-flow-httpproxy` pkg.
 
 
