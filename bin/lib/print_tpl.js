@@ -13,9 +13,9 @@ exports.runtime = function runtime(runtime)
 	var alltime = runtime.timing.flowsEnd - runtime.navigationStart;
 	var lastRetry = runtime.retry[runtime.retry.length-1];
 	var flowStr = [];
-	for (var runnedFlows = lastRetry.runnedFlows, len = runnedFlows.length; len--;)
+	for (var runned = lastRetry.runned, len = runned.length; len--;)
 	{
-		var flowItem = runnedFlows[len];
+		var flowItem = runned[len];
 		if (!flowItem || !flowItem.flow) continue;
 
 		if (!flowStr.length)

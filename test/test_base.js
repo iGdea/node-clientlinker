@@ -251,7 +251,7 @@ describe('#base', function()
 				var runtime = retPromise.runtime;
 				var flowsRun = runtime.retry[0];
 				var configCallback = flowsRun.getRunnedFlowByName('confighandler');
-				var configCallback2 = flowsRun.runnedFlows[1];
+				var configCallback2 = flowsRun.runned[1];
 
 				expect(configCallback.flow.name).to.be('confighandler');
 				expect(configCallback.flow).to.eql(configCallback2.flow);
