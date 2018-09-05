@@ -60,7 +60,7 @@ describe('#runtime', function()
 	});
 
 
-	it('#timing', function()
+	it('#timline', function()
 	{
 		var linker = ClientLinker(
 			{
@@ -77,17 +77,17 @@ describe('#runtime', function()
 					},
 					assertHandler: function assertHandler(runtime, callback)
 					{
-						var lastFlowTiming = runtime.lastFlow().timing;
-						var timing = runtime.timing;
+						var lastFlowTimline = runtime.lastFlow().timline;
+						var timline = runtime.timline;
 
-						expect(lastFlowTiming.start)
+						expect(lastFlowTimline.start)
 							.to.be.above(runtime.navigationStart-1);
-						expect(lastFlowTiming.start - runtime.navigationStart)
+						expect(lastFlowTimline.start - runtime.navigationStart)
 							.to.be.below(10);
 
-						expect(lastFlowTiming.start)
-							.to.be.above(timing.flowsStart-1);
-						expect(lastFlowTiming.start - timing.flowsStart)
+						expect(lastFlowTimline.start)
+							.to.be.above(timline.flowsStart-1);
+						expect(lastFlowTimline.start - timline.flowsStart)
 							.to.below(10);
 
 						return callback.next();
@@ -105,19 +105,19 @@ describe('#runtime', function()
 		return retPromise.then(function()
 			{
 				var runtime = retPromise.runtime;
-				var timing = runtime.timing;
-				var lastFlowTiming = runtime.lastFlow().timing;
+				var timline = runtime.timline;
+				var lastFlowTimline = runtime.lastFlow().timline;
 
-				expect(timing.flowsEnd).to.be.above(lastFlowTiming.end-1);
-				expect(timing.flowsEnd - lastFlowTiming.end)
+				expect(timline.flowsEnd).to.be.above(lastFlowTimline.end-1);
+				expect(timline.flowsEnd - lastFlowTimline.end)
 					.to.be.below(10);
 
-				expect(lastFlowTiming.start).to.be.above(timing.flowsStart);
-				expect(lastFlowTiming.start - timing.flowsStart)
+				expect(lastFlowTimline.start).to.be.above(timline.flowsStart);
+				expect(lastFlowTimline.start - timline.flowsStart)
 					.to.above(100-10);
 
-				expect(lastFlowTiming.end).to.be.above(lastFlowTiming.start);
-				expect(lastFlowTiming.end - lastFlowTiming.start)
+				expect(lastFlowTimline.end).to.be.above(lastFlowTimline.start);
+				expect(lastFlowTimline.end - lastFlowTimline.start)
 					.to.be.above(100-10);
 			});
 	});

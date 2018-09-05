@@ -261,15 +261,15 @@ describe('#run_error', function()
 			var runTimes = 0;
 			var linker = ClientLinker(
 				{
-					flows: ['timingCheck', 'confighandler'],
+					flows: ['timlineCheck', 'confighandler'],
 					customFlows:
 					{
-						timingCheck: function(runtime, callback)
+						timlineCheck: function(runtime, callback)
 						{
 							runTimes++;
 							if (runTimes == 2)
 							{
-								expect(runtime.retry[0].timing.flowsEnd)
+								expect(runtime.retry[0].timline.flowsEnd)
 									.to.be.ok();
 							}
 
@@ -314,15 +314,15 @@ describe('#run_error', function()
 			var runTimes = 0;
 			var linker = ClientLinker(
 				{
-					flows: ['timingCheck', 'confighandler'],
+					flows: ['timlineCheck', 'confighandler'],
 					customFlows:
 					{
-						timingCheck: function(runtime, callback)
+						timlineCheck: function(runtime, callback)
 						{
 							runTimes++;
 							if (runTimes == 2)
 							{
-								expect(runtime.retry[0].timing.flowsEnd)
+								expect(runtime.retry[0].timline.flowsEnd)
 									.to.be.ok();
 							}
 

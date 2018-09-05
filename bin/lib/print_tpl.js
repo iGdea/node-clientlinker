@@ -10,25 +10,25 @@ exports.runtime = function runtime(runtime)
 	if (!runtime) return '';
 
 	var retryTimes = runtime.retry.length;
-	var alltime = runtime.timing.flowsEnd - runtime.navigationStart;
+	var alltime = runtime.timline.getEndTime() - runtime.navigationStart;
 	var lastRetry = runtime.retry[runtime.retry.length-1];
 	var flowStr = [];
 	for (var runned = lastRetry.runned, len = runned.length; len--;)
 	{
-		var flowItem = runned[len];
-		if (!flowItem || !flowItem.flow) continue;
+		var runner = runned[len];
+		if (!runner || !runner.flow) continue;
 
 		if (!flowStr.length)
 		{
 			var str = util.format('%s %sms',
-				rlutils.colors.green(flowItem.flow.name),
-				rlutils.colors.blue(flowItem.timing.end - flowItem.timing.start));
+				rlutils.colors.green(runner.flow.name),
+				rlutils.colors.blue(runner.endTime - runner.startTime));
 
 			flowStr.push(str);
 		}
 		else
 		{
-			var str = rlutils.colors.gray(flowItem.flow.name);
+			var str = rlutils.colors.gray(runner.flow.name);
 			flowStr.push(str);
 		}
 	}

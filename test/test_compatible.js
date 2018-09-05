@@ -48,7 +48,7 @@ describe('#compatible', function()
 			.then(function(){expect().fail()},
 				function(err)
 				{
-					var navigationStart = err.__runtime__.timing.navigationStart;
+					var navigationStart = err.__runtime__.timline.navigationStart;
 					expect(navigationStart).to.be.a('number');
 					expect(navigationStart).to.be(err.__runtime__.navigationStart);
 				});
