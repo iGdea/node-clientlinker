@@ -128,7 +128,7 @@ describe('#base', function()
 				}
 			});
 
-		expect(Object.keys(linker.flows).length).to.be(1);
+		expect(Object.keys(linker._flows).length).to.be(1);
 	});
 
 	it('#pkg clients', function()
@@ -150,10 +150,13 @@ describe('#base', function()
 					client1: null,
 					client_its:
 					{
-						pkghandler: __dirname+'/pkghandler/client_its'
+						pkghandler: 'clientlinker-flow-pkghandler/lib/methods'
 					}
 				}
 			});
+
+		linker1.flow('pkghandler', require('clientlinker-flow-pkghandler'));
+		linker2.flow('pkghandler', require('clientlinker-flow-pkghandler'));
 
 		var promise1 = linker1.clients()
 				.then(function(clients)
@@ -177,7 +180,7 @@ describe('#base', function()
 	{
 		var linker = clientlinker(
 			{
-				flows: ['logger', 'pkghandler'],
+				flows: ['confighandler', 'pkghandler'],
 				clients:
 				{
 					client:

@@ -10,89 +10,93 @@ describe('#domain', function()
 	it('#callback', function(done)
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['confighandler'],
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
-						{
-							method: function(){return Promise.resolve()}
-						}
+						method: function(){return Promise.resolve()}
 					}
 				}
-			});
+			}
+		});
+
+		// linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var domain = require('domain');
 		var dm = domain.create();
 
 		dm.on('error', function(err)
-			{
-				expect(err).to.be(333);
-				done();
-			});
+		{
+			expect(err).to.be(333);
+			done();
+		});
 		dm.run(function()
+		{
+			linker.run('client.method', null, null, function(err)
 			{
-				linker.run('client.method', null, null, function(err)
-				{
-					expect(err).to.be(null);
-					throw 333;
-				});
+				expect(err).to.be(null);
+				throw 333;
 			});
+		});
 	});
 
 	it('#promise', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['confighandler'],
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
-						{
-							method1: function(){return Promise.resolve(111)},
-							method2: function(){return Promise.resolve(222)},
-							method3: function(){return Promise.reject(333)}
-						}
+						method1: function(){return Promise.resolve(111)},
+						method2: function(){return Promise.resolve(222)},
+						method3: function(){return Promise.reject(333)}
 					}
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var domain = require('domain');
 		var dm = domain.create();
 		dm._mark_assert = 234;
 
 		return new Promise(function(resolve, reject)
+		{
+			dm.on('error', reject);
+			dm.run(function()
 			{
-				dm.on('error', reject);
-				dm.run(function()
+				linker.run('client.method1')
+					.then(function(data)
 					{
-						linker.run('client.method1')
-							.then(function(data)
+						expect(domain.active).to.be.ok();
+						expect(domain.active._mark_assert).to.be(234);
+						expect(data).to.be(111);
+						return linker.run('client.method2');
+					})
+					.then(function(data)
+					{
+						expect(domain.active).to.be.ok();
+						expect(domain.active._mark_assert).to.be(234);
+						expect(data).to.be(222);
+						var promise = linker.run('client.method3');
+						promise.catch(function(err)
 							{
-								expect(domain.active).to.be.ok();
-								expect(domain.active._mark_assert).to.be(234);
-								expect(data).to.be(111);
-								return linker.run('client.method2');
-							})
-							.then(function(data)
-							{
-								expect(domain.active).to.be.ok();
-								expect(domain.active._mark_assert).to.be(234);
-								expect(data).to.be(222);
-								var promise = linker.run('client.method3');
-								promise.catch(function(err)
-									{
-										expect(err).to.be(333);
-										resolve();
-									});
-								return promise;
+								expect(err).to.be(333);
+								resolve();
 							});
+						return promise;
 					});
 			});
+		});
 
 	});
 
@@ -110,32 +114,34 @@ describe('#domain', function()
 		}
 
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['confighandler'],
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
+						callback: function(query, body, callback)
 						{
-							callback: function(query, body, callback)
+							addon(callback);
+						},
+						resolve: function()
+						{
+							return new Promise(function(resolve)
 							{
-								addon(callback);
-							},
-							resolve: function()
-							{
-								return new Promise(function(resolve)
+								addon(function(err, data)
 								{
-									addon(function(err, data)
-									{
-										resolve(data);
-									});
+									resolve(data);
 								});
-							}
+							});
 						}
 					}
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var domain = require('domain');
 		var dm = domain.create();

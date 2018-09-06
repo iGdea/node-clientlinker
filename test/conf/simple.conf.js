@@ -3,43 +3,46 @@
 var Promise			= require('bluebird');
 var clientlinker	= require('../../');
 
-module.exports = clientlinker(
+var linker = clientlinker(
+{
+	flows: ['not_exists_flow', 'flowNext', 'confighandler'],
+	clients:
 	{
-		flows: ['not_exists_flow', 'flowNext', 'confighandler', 'localfile'],
-		clients:
+		client:
 		{
-			client:
+			confighandler:
 			{
-				localfile: __dirname+'/../localfile/client',
-				confighandler:
-				{
-					success: function(){return Promise.resolve()},
-					error: function(){return Promise.reject()},
-					error2: function(){return Promise.reject('errmsg')}
-				}
-			},
-			client2:
-			{
-				confighandler:
-				{
-					method: function(query, body, callback, options)
-					{
-						return Promise.resolve(
-							{
-								query: query,
-								body: body,
-								options: options
-							});
-					}
-				}
-			},
-			client3: null
-		},
-		customFlows:
-		{
-			flowNext: function(runtime, callback)
-			{
-				return callback.next();
+				success: function(){return Promise.resolve()},
+				error: function(){return Promise.reject()},
+				error2: function(){return Promise.reject('errmsg')}
 			}
+		},
+		client2:
+		{
+			confighandler:
+			{
+				method: function(query, body, callback, options)
+				{
+					return Promise.resolve(
+						{
+							query: query,
+							body: body,
+							options: options
+						});
+				}
+			}
+		},
+		client3: null
+	},
+	customFlows:
+	{
+		flowNext: function(runtime, callback)
+		{
+			return callback.next();
 		}
-	});
+	}
+});
+
+linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+
+module.exports = linker;

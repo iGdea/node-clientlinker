@@ -4,15 +4,14 @@ var clientlinker = require('../../');
 
 var linker = clientlinker(
 	{
-		flows: ['nextFlow', 'localfile', 'confighandler', 'pkghandler'],
-		localfileDir: __dirname+'/../localfile',
+		flows: ['nextFlow', 'confighandler', 'pkghandler'],
 		clients: {
 			client_conf: {
-				confighandler: require('../pkghandler/client_its')
+				confighandler: require('clientlinker-flow-confighandler-test').methods
 			},
 			client_its:
 			{
-				pkghandler: __dirname+'/../pkghandler/client_its'
+				pkghandler: 'clientlinker-flow-confighandler-test/lib/methods'
 			}
 		},
 		customFlows:
@@ -27,5 +26,8 @@ var linker = clientlinker(
 			}
 		}
 	});
+
+linker.flow('pkghandler', require('clientlinker-flow-pkghandler'));
+linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 exports = module.exports = linker;
