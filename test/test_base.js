@@ -1,7 +1,7 @@
 'use strict';
 
 var Promise			= require('bluebird');
-var ClientLinker	= require('../');
+var clientlinker	= require('../');
 var expect			= require('expect.js');
 
 
@@ -9,7 +9,7 @@ describe('#base', function()
 {
 	it('#addClient', function()
 	{
-		var linker = ClientLinker()
+		var linker = clientlinker()
 
 		linker.addClient('client1');
 		return linker.clients()
@@ -32,21 +32,21 @@ describe('#base', function()
 	{
 		it('#function', function()
 		{
-			var linker = ClientLinker();
+			var linker = clientlinker();
 			linker.bindFlow('flow1', function flow1(){});
 			expect(Object.keys(linker.flows).length).to.be(1);
 		});
 
 		it('#object', function()
 		{
-			var linker = ClientLinker();
+			var linker = clientlinker();
 			linker.bindFlow({flow2: function flow2(){}, flow3: function flow3(){}});
 			expect(Object.keys(linker.flows).length).to.be(2);
 		});
 
 		it('#same', function()
 		{
-			var linker = ClientLinker();
+			var linker = clientlinker();
 			linker.bindFlow('flow1', function flow1(){});
 			linker.bindFlow('flow1', function flow2(){});
 			expect(Object.keys(linker.flows).length).to.be(1);
@@ -56,7 +56,7 @@ describe('#base', function()
 		{
 			it('#promise', function()
 			{
-				var linker = ClientLinker();
+				var linker = clientlinker();
 				function flowHanlder(){}
 				flowHanlder.init = function(linker2)
 				{
@@ -82,7 +82,7 @@ describe('#base', function()
 
 			it('#ignore bind', function()
 			{
-				var linker = ClientLinker();
+				var linker = clientlinker();
 				function flowHanlder(){}
 				flowHanlder.init = function()
 				{
@@ -100,7 +100,7 @@ describe('#base', function()
 
 			it('#throw err', function()
 			{
-				var linker = ClientLinker();
+				var linker = clientlinker();
 				function flowHanlder(){}
 				flowHanlder.init = function()
 				{
@@ -120,7 +120,7 @@ describe('#base', function()
 
 	it('#custom flow', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['custom', 'custom2'],
 				customFlows: {
@@ -133,7 +133,7 @@ describe('#base', function()
 
 	it('#pkg clients', function()
 	{
-		var linker1 = ClientLinker(
+		var linker1 = clientlinker(
 			{
 				flows: ['pkghandler'],
 				clients:
@@ -142,7 +142,7 @@ describe('#base', function()
 				}
 			});
 
-		var linker2 = ClientLinker(
+		var linker2 = clientlinker(
 			{
 				flows: ['pkghandler'],
 				clients:
@@ -175,7 +175,7 @@ describe('#base', function()
 
 	it('#client options override', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['logger', 'pkghandler'],
 				clients:
@@ -202,7 +202,7 @@ describe('#base', function()
 	{
 		// this.timeout(60*1000);
 		var runned = false;
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['custom'],
 				customFlows:
@@ -227,7 +227,7 @@ describe('#base', function()
 
 	it('#getRunnedFlowByName', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['pkghandler', 'confighandler'],
 				clients:

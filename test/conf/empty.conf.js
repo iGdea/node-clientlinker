@@ -1,5 +1,5 @@
 'use strict';
 
-var ClientLinker = require('../../');
+var clientlinker = require('../../');
 
-module.exports = ClientLinker();
+module.exports = clientlinker();

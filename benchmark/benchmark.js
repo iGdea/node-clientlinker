@@ -3,7 +3,7 @@
 var Promise = require('bluebird');
 var Benchmark = require('benchmark');
 var suite = new Benchmark.Suite;
-var ClientLinker = require('../');
+var clientlinker = require('../');
 var Runtime = require('../lib/runtime').Runtime;
 
 function methodHandler(query, body, callback)
@@ -12,7 +12,7 @@ function methodHandler(query, body, callback)
 	callback && callback(null);
 }
 
-var linker = ClientLinker(
+var linker = clientlinker(
 	{
 		flows: ['confighandler'],
 		clients:

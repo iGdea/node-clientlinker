@@ -1,8 +1,8 @@
 'use strict';
 
-var ClientLinker = require('../../');
+var clientlinker = require('../../');
 
-var linker = ClientLinker(
+var linker = clientlinker(
 	{
 		flows: ['nextFlow', 'localfile', 'confighandler', 'pkghandler'],
 		localfileDir: __dirname+'/../localfile',

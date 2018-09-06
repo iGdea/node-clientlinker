@@ -1,14 +1,14 @@
 'use strict';
 
 var Promise			= require('bluebird');
-var ClientLinker	= require('../');
+var clientlinker	= require('../');
 var expect			= require('expect.js');
 
 describe('#run_error', function()
 {
 	it('#flow run Error', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				clients:
@@ -110,7 +110,7 @@ describe('#run_error', function()
 
 	it('#not exportErrorInfo', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				defaults:
@@ -146,7 +146,7 @@ describe('#run_error', function()
 
 	it('#anyToError', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				defaults: {anyToError: true},
@@ -230,7 +230,7 @@ describe('#run_error', function()
 
 	it('#from flow run', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['custom'],
 				customFlows: {
@@ -259,7 +259,7 @@ describe('#run_error', function()
 		it('#in defualts', function()
 		{
 			var runTimes = 0;
-			var linker = ClientLinker(
+			var linker = clientlinker(
 				{
 					flows: ['timlineCheck', 'confighandler'],
 					customFlows:
@@ -312,7 +312,7 @@ describe('#run_error', function()
 		it('#runOptions', function()
 		{
 			var runTimes = 0;
-			var linker = ClientLinker(
+			var linker = clientlinker(
 				{
 					flows: ['timlineCheck', 'confighandler'],
 					customFlows:
@@ -360,7 +360,7 @@ describe('#run_error', function()
 
 	it('#throw null err', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				clients:

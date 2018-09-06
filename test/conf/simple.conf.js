@@ -1,9 +1,9 @@
 'use strict';
 
 var Promise			= require('bluebird');
-var ClientLinker	= require('../../');
+var clientlinker	= require('../../');
 
-module.exports = ClientLinker(
+module.exports = clientlinker(
 	{
 		flows: ['not_exists_flow', 'flowNext', 'confighandler', 'localfile'],
 		clients:

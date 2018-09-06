@@ -2,7 +2,7 @@
 
 var rlutils			= require('../bin/lib/rlutils');
 var expect			= require('expect.js');
-var ClientLinker	= require('../');
+var clientlinker	= require('../');
 var path			= require('path');
 
 rlutils.colors.enabled = false;
@@ -26,7 +26,7 @@ describe('#rlutils', function()
 
 	it('#methods', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['pkghandler'],
 				clients:
@@ -65,7 +65,7 @@ describe('#rlutils', function()
 
 	it('#methods width *', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['pkghandler', 'httpproxy'],
 				clients:

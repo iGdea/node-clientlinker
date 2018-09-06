@@ -13,8 +13,8 @@ var deprecate	= require('depd')('clientlinker');
  * 	clients
  * 	defaults
  */
-exports = module.exports = ClientLinker;
-function ClientLinker(options)
+exports = module.exports = clientlinker;
+function clientlinker(options)
 {
 	options || (options = {});
 	var defaults = options.defaults || options.clientDefaultOptions || (options.defaults = {});

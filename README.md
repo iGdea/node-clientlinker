@@ -63,8 +63,8 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 ```javascript
 // `clientlinker.conf.js` file content
 
-var ClientLinker = require('clientlinker');
-var linker = ClientLinker(options);
+var clientlinker = require('clientlinker');
+var linker = clientlinker(options);
 
 // Add flows and clients outsid of config step
 linker.loadFlow(path, module);

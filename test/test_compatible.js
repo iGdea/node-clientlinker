@@ -1,14 +1,14 @@
 'use strict';
 
 var Promise			= require('bluebird');
-var ClientLinker	= require('../');
+var clientlinker	= require('../');
 var expect			= require('expect.js');
 
 describe('#compatible', function()
 {
 	it('#runOptions', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['custom'],
 				customFlows: {
@@ -35,7 +35,7 @@ describe('#compatible', function()
 
 	it('#navigationStart', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['debugger'],
 				clients:
@@ -57,7 +57,7 @@ describe('#compatible', function()
 
 	it('#runByKey', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				clients:
@@ -85,7 +85,7 @@ describe('#compatible', function()
 
 	it('#proxyRoute', function()
 	{
-		var linker = ClientLinker()
+		var linker = clientlinker()
 
 		expect(linker.proxyRoute().name).to.be('HttpProxyRouteHandle');
 	});
@@ -93,7 +93,7 @@ describe('#compatible', function()
 
 	it('#add', function()
 	{
-		var linker = ClientLinker()
+		var linker = clientlinker()
 		linker.add('clientName1', {opt: 'myOpt'});
 
 		return linker.clients()
@@ -108,7 +108,7 @@ describe('#compatible', function()
 
 	it('#clientDefaultOptions', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				clientDefaultOptions:
 				{
@@ -160,7 +160,7 @@ describe('#compatible', function()
 
 	it('#loadFlow', function()
 	{
-		var linker = ClientLinker()
+		var linker = clientlinker()
 		var flow = linker.loadFlow('flow_empty', './flows/flow_empty', module);
 		expect(flow).to.not.be.ok();
 		flow = linker.loadFlow('flow_resolve', './flows/flow_resolve', module);
@@ -183,7 +183,7 @@ describe('#compatible', function()
 
 	it('#methodKey', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['debugger'],
 				clients:
@@ -207,7 +207,7 @@ describe('#compatible', function()
 
 	it('#parseMethodKey', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				clients:
 				{

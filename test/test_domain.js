@@ -1,7 +1,7 @@
 'use strict';
 
 var Promise			= require('bluebird');
-var ClientLinker	= require('../');
+var clientlinker	= require('../');
 var expect			= require('expect.js');
 var debug			= require('debug')('clientlinker:test_domain');
 
@@ -9,7 +9,7 @@ describe('#domain', function()
 {
 	it('#callback', function(done)
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				clients:
@@ -44,7 +44,7 @@ describe('#domain', function()
 
 	it('#promise', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				clients:
@@ -109,7 +109,7 @@ describe('#domain', function()
 			return Promise.resolve();
 		}
 
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['confighandler'],
 				clients:

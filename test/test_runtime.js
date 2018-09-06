@@ -1,7 +1,7 @@
 'use strict';
 
 var Promise			= require('bluebird');
-var ClientLinker	= require('../');
+var clientlinker	= require('../');
 var expect			= require('expect.js');
 
 
@@ -9,7 +9,7 @@ describe('#runtime', function()
 {
 	it('#runtime of retPromise', function()
 	{
-		var linker = ClientLinker();
+		var linker = clientlinker();
 		linker.addClient('client');
 
 		var retPromise = linker.run('client.method');
@@ -35,7 +35,7 @@ describe('#runtime', function()
 
 	it('#env of runtime', function()
 	{
-		var linker = ClientLinker();
+		var linker = clientlinker();
 		linker.addClient('client');
 
 		var retPromise1 = linker.run('client.method');
@@ -62,7 +62,7 @@ describe('#runtime', function()
 
 	it('#timline', function()
 	{
-		var linker = ClientLinker(
+		var linker = clientlinker(
 			{
 				flows: ['assertHandler', 'custom1', 'custom2'],
 				customFlows:
