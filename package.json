@@ -1,6 +1,6 @@
 {
   "name": "clientlinker",
-  "version": "7.1.0",
+  "version": "7.1.1",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -43,9 +43,9 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "clientlinker-flow-confighandler": "^1.0.1",
-    "clientlinker-flow-confighandler-test": "^1.0.1",
-    "clientlinker-flow-pkghandler": "^1.0.0",
+    "clientlinker-flow-confighandler": "^1.1.0",
+    "clientlinker-flow-confighandler-test": "^1.1.0",
+    "clientlinker-flow-pkghandler": "^1.1.0",
     "cross-env": "^2.0.0",
     "eslint": "^5.0.1",
     "eslint-config-brcjs": "^0.2.0",
