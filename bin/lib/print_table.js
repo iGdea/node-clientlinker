@@ -67,7 +67,7 @@ function printTable(data, allFlows, options)
 			}
 		});
 
-	var output = table.default(tableData,
+	var output = table.table(tableData,
 		{
 			border: table.getBorderCharacters('void'),
 			columnDefault:
