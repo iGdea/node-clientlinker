@@ -3,6 +3,7 @@
 var expect		= require('expect.js');
 var rlutils		= require('../bin/lib/rlutils');
 var Command		= require('../bin/lib/command').Command;
+var debug		= require('debug')('clientlinker:test_command');
 // var Command2	= require('commander').Command;
 
 // 屏蔽错误
@@ -172,7 +173,9 @@ describe('#command', function()
 
 function testStrArgs(command, str)
 {
-	command.program.parse(('node ./main '+str).split(/ +/));
+	var args = ('node '+__dirname+'/../bin/clientlinker_cli.js '+str).split(/ +/);
+	debug('args: %o', args);
+	command.program.parse(args);
 }
 
 function initCommand()
