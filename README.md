@@ -124,6 +124,8 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
  * Remove all sys flow. Please install and loadFlow for
   `httpproxy` `confighandler` `pkghandler` `debugger` `localfile` `logger`
  * Move `proxyRoute` of `linker` to `clientlinker-flow-httpproxy` pkg.
+ * `anyToError(err, runner)` instead of `anyToError(err, runtime)`. You can get `runtime` with `runner.runtime`.
+ * `err.fromClient` instead of `err.CLIENTLINKER_CLIENT`. `err.fromClientMethod` install of `err.CLIENTLINKER_ACTION`.
 
 
 ### 5.x.x => 6.0.0
