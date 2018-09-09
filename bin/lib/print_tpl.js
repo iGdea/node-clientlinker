@@ -10,7 +10,7 @@ exports.runtime = function runtime(runtime)
 	if (!runtime) return '';
 
 	var retryTimes = runtime.retry.length;
-	var alltime = runtime.timline.getEndTime() - runtime.navigationStart;
+	var alltime = runtime.timing.getEndTime() - runtime.navigationStart;
 	var lastRetry = runtime.retry[runtime.retry.length-1];
 	var flowStr = [];
 	for (var runned = lastRetry.runned, len = runned.length; len--;)
