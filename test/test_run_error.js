@@ -170,7 +170,7 @@ describe('#run_error', function()
 					{
 						method1: function(query, body, callback)
 						{
-							callback.callback('errmsg');
+							callback('errmsg');
 						},
 						method2: function(query, body, callback)
 						{
@@ -178,11 +178,11 @@ describe('#run_error', function()
 						},
 						method3: function(query, body, callback)
 						{
-							callback.callback(-1);
+							callback(-1);
 						},
 						method4: function(query, body, callback)
 						{
-							callback.callback(new Error('errmsg'));
+							callback(new Error('errmsg'));
 						}
 					}
 				}
@@ -307,7 +307,7 @@ describe('#run_error', function()
 									throw 333;
 								else
 								{
-									callback.callback(null, 555);
+									callback(null, 555);
 								}
 							}
 						}
@@ -356,7 +356,7 @@ describe('#run_error', function()
 									throw 333;
 								else
 								{
-									callback.callback(null, 555);
+									callback(null, 555);
 								}
 							}
 						}

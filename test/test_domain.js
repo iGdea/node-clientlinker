@@ -135,7 +135,7 @@ describe('#domain', function()
 					{
 						callback: function(query, body, callback)
 						{
-							addon(callback.callback.bind(callback));
+							addon(callback);
 						},
 						resolve: function()
 						{
