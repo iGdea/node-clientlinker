@@ -3,45 +3,48 @@
 var Promise			= require('bluebird');
 var clientlinker	= require('../');
 var expect			= require('expect.js');
+var debug			= require('debug')('clientlinker:test_run_error');
 
 describe('#run_error', function()
 {
 	it('#flow run Error', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['confighandler'],
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
+						method: function()
 						{
-							method: function()
-							{
-								throw 333;
-							},
-							method2: function()
-							{
-								throw new Error('errmsg');
-							},
-						}
-					},
-					client2:
-					{
-						flows: []
+							throw 333;
+						},
+						method2: function()
+						{
+							throw new Error('errmsg');
+						},
 					}
+				},
+				client2:
+				{
+					flows: []
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var promise1 = new Promise(function(resolve)
-			{
-				linker.run('client.method', null, null, function(err)
-					{
-						expect(err).to.be(333);
-						resolve();
-					});
-			});
+		{
+			linker.run('client.method', null, null, function(err)
+				{
+					expect(err).to.be(333);
+					resolve();
+				});
+		});
 
 		var promise2 = linker.run('client.method')
 			.then(function(){expect().fail()},
@@ -50,50 +53,57 @@ describe('#run_error', function()
 					expect(err).to.be(333);
 				});
 
-		var promise3 = linker.run('client.method1')
+		var promise3 = linker.run('client.not_exit_method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
+					debug('err: %s', err.stack);
 					expect(err.message).to.contain('CLIENTLINKER:NotFound');
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-					expect(err.CLIENTLINKER_ACTION).to.be('client.method1');
-					expect(err.CLIENTLINKER_CLIENT).to.be('client');
+					// expect(err.CLIENTLINKER_ACTION).to.be('client.not_exit_method');
+					// expect(err.CLIENTLINKER_CLIENT).to.be('client');
 				});
 
 		var promise4 = linker.run('client1.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
+					debug('err: %s', err.stack);
 					expect(err.message).to.contain('CLIENTLINKER:NotFound');
 					expect(err.CLIENTLINKER_TYPE).to.be('NO CLIENT');
-					expect(err.CLIENTLINKER_ACTION).to.be('client1.method');
+					// expect(err.CLIENTLINKER_ACTION).to.be('client1.method');
 				});
 
 		var promise5 = linker.run('client2.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
+					debug('err: %s', err.stack);
 					expect(err.message).to.contain('CLIENTLINKER:NotFound');
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT NO FLOWS');
-					expect(err.CLIENTLINKER_ACTION).to.be('client2.method');
-					expect(err.CLIENTLINKER_CLIENT).to.be('client2');
+					// expect(err.CLIENTLINKER_ACTION).to.be('client2.method');
+					// expect(err.CLIENTLINKER_CLIENT).to.be('client2');
 				});
 
-		var promise6 = linker.run('client.method1')
+		var promise6 = linker.run('client.not_exit_method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
-					expect(err).to.be.a(Error);
+					debug('err: %s', err.stack);
+					expect(err).to.be.an(Error);
+					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
+					// expect(err.CLIENTLINKER_ACTION).to.be('client.not_exit_method');
+					// expect(err.CLIENTLINKER_CLIENT).to.be('client');
 					expect(err.fromClient).to.be('client');
 					expect(err.fromClientFlow).to.be(undefined);
-					expect(err.fromClientMethod).to.be('method1');
+					expect(err.fromClientMethod).to.be('not_exit_method');
 				});
 
 		var promise7 = linker.run('client.method2')
 			.then(function(){expect().fail()},
 				function(err)
 				{
-					expect(err).to.be.a(Error);
+					expect(err).to.be.an(Error);
 					expect(err.message).to.be('errmsg');
 					expect(err.fromClient).to.be('client');
 					expect(err.fromClientFlow).to.be('confighandler');
@@ -111,32 +121,34 @@ describe('#run_error', function()
 	it('#not exportErrorInfo', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			defaults:
 			{
-				flows: ['confighandler'],
-				defaults:
+				exportErrorInfo: false,
+			},
+			clients:
+			{
+				client:
 				{
-					exportErrorInfo: false,
-				},
-				clients:
-				{
-					client:
+					confighandler:
 					{
-						confighandler:
+						method: function()
 						{
-							method: function()
-							{
-								throw new Error('errmsg');
-							}
+							throw new Error('errmsg');
 						}
 					}
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		return linker.run('client.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
-					expect(err).to.be.a(Error);
+					expect(err).to.be.an(Error);
 					expect(err.message).to.be('errmsg');
 					expect(err.fromClient).to.be(undefined);
 					expect(err.fromClientFlow).to.be(undefined);
@@ -147,35 +159,36 @@ describe('#run_error', function()
 	it('#anyToError', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			defaults: {anyToError: true},
+			clients:
 			{
-				flows: ['confighandler'],
-				defaults: {anyToError: true},
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
+						method1: function(query, body, callback)
 						{
-							method1: function(query, body, callback)
-							{
-								callback('errmsg');
-							},
-							method2: function(query, body, callback)
-							{
-								callback.reject();
-							},
-							method3: function(query, body, callback)
-							{
-								callback(-1);
-							},
-							method4: function(query, body, callback)
-							{
-								callback(new Error('errmsg'));
-							}
+							callback.callback('errmsg');
+						},
+						method2: function(query, body, callback)
+						{
+							callback.reject();
+						},
+						method3: function(query, body, callback)
+						{
+							callback.callback(-1);
+						},
+						method4: function(query, body, callback)
+						{
+							callback.callback(new Error('errmsg'));
 						}
 					}
 				}
-			});
+			}
+		});
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var promise1 = linker.run('client.method1')
 			.then(function(){expect().fail()},
@@ -231,19 +244,20 @@ describe('#run_error', function()
 	it('#from flow run', function()
 	{
 		var linker = clientlinker(
-			{
-				flows: ['custom'],
-				customFlows: {
-					custom: function()
-					{
-						throw new Error('from flow run');
-					}
-				},
-				clients:
+		{
+			flows: ['custom'],
+			customFlows: {
+				custom: function()
 				{
-					client: null
+					throw new Error('from flow run');
 				}
-			});
+			},
+			clients:
+			{
+				client: null
+			}
+		});
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		return linker.run('client.method')
 			.then(function(){expect().fail()},
@@ -260,46 +274,47 @@ describe('#run_error', function()
 		{
 			var runTimes = 0;
 			var linker = clientlinker(
+			{
+				flows: ['timingCheck', 'confighandler'],
+				customFlows:
 				{
-					flows: ['timlineCheck', 'confighandler'],
-					customFlows:
+					timingCheck: function(runtime, callback)
 					{
-						timlineCheck: function(runtime, callback)
+						runTimes++;
+						if (runTimes == 2)
 						{
-							runTimes++;
-							if (runTimes == 2)
-							{
-								expect(runtime.retry[0].timline.flowsEnd)
-									.to.be.ok();
-							}
-
-							return callback.next();
+							expect(runtime.retry[0].timing.flowsEnd)
+								.to.be.ok();
 						}
-					},
-					defaults:
+
+						return callback.next();
+					}
+				},
+				defaults:
+				{
+					retry: 5,
+					anyToError: true
+				},
+				clients:
+				{
+					client:
 					{
-						retry: 5,
-						anyToError: true
-					},
-					clients:
-					{
-						client:
+						confighandler:
 						{
-							confighandler:
+							method: function(query, body, callback)
 							{
-								method: function(query, body, callback)
+								if (runTimes == 1)
+									throw 333;
+								else
 								{
-									if (runTimes == 1)
-										throw 333;
-									else
-									{
-										callback(null, 555);
-									}
+									callback.callback(null, 555);
 								}
 							}
 						}
 					}
-				});
+				}
+			});
+			linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 			return linker.run('client.method')
 					.then(function(data)
@@ -313,41 +328,42 @@ describe('#run_error', function()
 		{
 			var runTimes = 0;
 			var linker = clientlinker(
+			{
+				flows: ['timingCheck', 'confighandler'],
+				customFlows:
 				{
-					flows: ['timlineCheck', 'confighandler'],
-					customFlows:
+					timingCheck: function(runtime, callback)
 					{
-						timlineCheck: function(runtime, callback)
+						runTimes++;
+						if (runTimes == 2)
 						{
-							runTimes++;
-							if (runTimes == 2)
-							{
-								expect(runtime.retry[0].timline.flowsEnd)
-									.to.be.ok();
-							}
-
-							return callback.next();
+							expect(runtime.retry[0].timing.flowsEnd)
+								.to.be.ok();
 						}
-					},
-					clients:
+
+						return callback.next();
+					}
+				},
+				clients:
+				{
+					client:
 					{
-						client:
+						confighandler:
 						{
-							confighandler:
+							method: function(query, body, callback)
 							{
-								method: function(query, body, callback)
+								if (runTimes == 1)
+									throw 333;
+								else
 								{
-									if (runTimes == 1)
-										throw 333;
-									else
-									{
-										callback(null, 555);
-									}
+									callback.callback(null, 555);
 								}
 							}
 						}
 					}
-				});
+				}
+			});
+			linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 			return linker.run('client.method', null, null, {retry: 5})
 					.then(function(data)
@@ -361,22 +377,23 @@ describe('#run_error', function()
 	it('#throw null err', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['confighandler'],
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
+						method: function()
 						{
-							method: function()
-							{
-								return Promise.reject();
-							}
+							return Promise.reject();
 						}
 					}
 				}
-			});
+			}
+		});
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var resolve;
 		var callbackPromise = new Promise(function(resolve0){resolve = resolve0});

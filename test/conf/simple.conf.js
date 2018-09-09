@@ -5,7 +5,7 @@ var clientlinker	= require('../../');
 
 var linker = clientlinker(
 {
-	flows: ['not_exists_flow', 'flowNext', 'confighandler'],
+	flows: ['not_exists_flow', 'flowNext', 'confighandler', 'pkghandler'],
 	clients:
 	{
 		client:
@@ -15,7 +15,7 @@ var linker = clientlinker(
 				success: function(){return Promise.resolve()},
 				error: function(){return Promise.reject()},
 				error2: function(){return Promise.reject('errmsg')}
-			}
+			},
 		},
 		client2:
 		{
@@ -24,13 +24,18 @@ var linker = clientlinker(
 				method: function(query, body, callback, options)
 				{
 					return Promise.resolve(
-						{
-							query: query,
-							body: body,
-							options: options
-						});
+					{
+						query: query,
+						body: body,
+						options: options
+					});
+				},
+				method2: function()
+				{
+					return Promise.resolve();
 				}
-			}
+			},
+			pkghandler: __dirname+'/pkghandler/client2.js'
 		},
 		client3: null
 	},
@@ -44,5 +49,6 @@ var linker = clientlinker(
 });
 
 linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+linker.flow('pkghandler', require('clientlinker-flow-pkghandler'));
 
 module.exports = linker;

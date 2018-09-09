@@ -35,18 +35,18 @@ describe('#commandActions', function()
 		it('#base', function()
 		{
 			var output = [
-				'    client               confighandler    localfile   ',
-				' 1  error                confighandler $              ',
-				' 2  error2               confighandler $              ',
-				' 3  js                                    localfile $ ',
-				' 4  json                                  localfile $ ',
-				' 5  success              confighandler $              ',
-				'                                                      ',
-				'    client2              confighandler    localfile   ',
-				' 6  method               confighandler $              ',
-				'                                                      ',
-				'    client3              confighandler    localfile   ',
-				'    ** No Methods **                                  ',
+				'    client               confighandler    pkghandler   ',
+				' 1  error                confighandler $               ',
+				' 2  error2               confighandler $               ',
+				' 3  success              confighandler $               ',
+				'                                                       ',
+				'    client2              confighandler    pkghandler   ',
+				' 4  method               confighandler $               ',
+				' 5  method1                               pkghandler $ ',
+				' 6  method2              confighandler $  pkghandler $ ',
+				'                                                       ',
+				'    client3              confighandler    pkghandler   ',
+				'    ** No Methods **                                   ',
 				'']
 				.join('\n')
 				.replace(/\$/g, printTable.useSymbole);
@@ -54,15 +54,17 @@ describe('#commandActions', function()
 			return commandActions.listAction(CONFIG_FILE, {})
 				.then(function(data)
 				{
-					expect(data.output).to.be(output);
+					expect(data.output.split('\n')).to.eql(output.split('\n'));
 				});
 		});
 
 		it('#clients options', function()
 		{
 			var output = [
-				'    client2     confighandler   ',
-				' 1  method      confighandler $ ',
+				'    client2     confighandler    pkghandler   ',
+				' 1  method      confighandler $               ',
+				' 2  method1                      pkghandler $ ',
+				' 3  method2     confighandler $  pkghandler $ ',
 				'']
 				.join('\n')
 				.replace(/\$/g, printTable.useSymbole);
@@ -73,15 +75,17 @@ describe('#commandActions', function()
 				})
 				.then(function(data)
 				{
-					expect(data.output).to.be(output);
+					expect(data.output.split('\n')).to.eql(output.split('\n'));
 				});
 		});
 
-		it('#clients options', function()
+		it('#clients width useAction', function()
 		{
 			var output = [
-				'    client2            confighandler   ',
-				' 1  client2.method     confighandler $ ',
+				'    client2             confighandler    pkghandler   ',
+				' 1  client2.method      confighandler $               ',
+				' 2  client2.method1                      pkghandler $ ',
+				' 3  client2.method2     confighandler $  pkghandler $ ',
 				'']
 				.join('\n')
 				.replace(/\$/g, printTable.useSymbole);
@@ -93,7 +97,7 @@ describe('#commandActions', function()
 				})
 				.then(function(data)
 				{
-					expect(data.output).to.be(output);
+					expect(data.output.split('\n')).to.eql(output.split('\n'));
 				});
 		});
 
@@ -109,13 +113,10 @@ describe('#commandActions', function()
 
 		it('#flows options', function()
 		{
-			var output = [
-				'    client      localfile   ',
-				' 1  error                   ',
-				' 2  error2                  ',
-				' 3  js          localfile $ ',
-				' 4  json        localfile $ ',
-				' 5  success                 ',
+			var output = ['    client      confighandler   ',
+				' 1  error       confighandler $ ',
+				' 2  error2      confighandler $ ',
+				' 3  success     confighandler $ ',
 				'']
 				.join('\n')
 				.replace(/\$/g, printTable.useSymbole);
@@ -123,11 +124,11 @@ describe('#commandActions', function()
 			return commandActions.listAction(CONFIG_FILE,
 				{
 					clients: 'client',
-					flows: 'not_exists_flow, localfile'
+					flows: 'not_exists_flow, confighandler'
 				})
 				.then(function(data)
 				{
-					expect(data.output).to.be(output);
+					expect(data.output.split('\n')).to.eql(output.split('\n'));
 				});
 		});
 	});

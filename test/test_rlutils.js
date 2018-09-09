@@ -27,16 +27,18 @@ describe('#rlutils', function()
 	it('#methods', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['pkghandler'],
-				clients:
+				client_its:
 				{
-					client_its:
-					{
-						pkghandler: __dirname+'/pkghandler/client_its'
-					}
+					confighandler: require('clientlinker-flow-confighandler-test').methods
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		return linker.methods()
 			.then(function(list)
@@ -66,16 +68,22 @@ describe('#rlutils', function()
 	it('#methods width *', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler', 'custom'],
+			clients:
 			{
-				flows: ['pkghandler', 'httpproxy'],
-				clients:
+				client_its:
 				{
-					client_its:
-					{
-						pkghandler: __dirname+'/pkghandler/client_its'
-					}
+					pkghandler: __dirname+'/pkghandler/client_its'
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('custom', function(flow)
+		{
+			flow.register('methods', function(){return ['*'];});
+		});
 
 		return linker.methods()
 			.then(function(list)

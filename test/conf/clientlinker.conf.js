@@ -5,8 +5,10 @@ var clientlinker = require('../../');
 var linker = clientlinker(
 	{
 		flows: ['nextFlow', 'confighandler', 'pkghandler'],
-		clients: {
-			client_conf: {
+		clients:
+		{
+			client_conf:
+			{
 				confighandler: require('clientlinker-flow-confighandler-test').methods
 			},
 			client_its:

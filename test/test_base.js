@@ -128,7 +128,7 @@ describe('#base', function()
 				}
 			});
 
-		expect(Object.keys(linker._flows).length).to.be(1);
+		expect(Object.keys(linker.flows).length).to.be(1);
 	});
 
 	it('#pkg clients', function()
@@ -213,7 +213,7 @@ describe('#base', function()
 					custom: function custom(runtime, callback)
 					{
 						runned = true;
-						callback();
+						callback.callback();
 					}
 				}
 			});
@@ -248,10 +248,13 @@ describe('#base', function()
 				}
 			});
 
+		linker.flow('pkghandler', require('clientlinker-flow-pkghandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+
 		var retPromise = linker.run('client.method');
+		var runtime = linker.lastRuntime;
 		return retPromise.then(function(data)
 			{
-				var runtime = retPromise.runtime;
 				var flowsRun = runtime.retry[0];
 				var configCallback = flowsRun.getRunnedFlowByName('confighandler');
 				var configCallback2 = flowsRun.runned[1];

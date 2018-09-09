@@ -24,15 +24,26 @@ describe('#domain', function()
 			}
 		});
 
-		// linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		var domain = require('domain');
 		var dm = domain.create();
 
 		dm.on('error', function(err)
 		{
-			expect(err).to.be(333);
-			done();
+			debug('domain err:%s', err.stack);
+			var mainErr;
+			try {
+				expect(err).to.be(333);
+			}
+			catch(err)
+			{
+				mainErr = err;
+			}
+
+			// domian onerror之后还会保留 process.domain
+			dm.exit();
+			done(mainErr);
 		});
 		dm.run(function()
 		{
@@ -109,7 +120,7 @@ describe('#domain', function()
 		}
 		catch(err)
 		{
-			debug('load addon err: %o', err);
+			debug('load addon err: %s', err.stack);
 			return Promise.resolve();
 		}
 
@@ -124,7 +135,7 @@ describe('#domain', function()
 					{
 						callback: function(query, body, callback)
 						{
-							addon(callback);
+							addon(callback.callback.bind(callback));
 						},
 						resolve: function()
 						{
@@ -151,19 +162,19 @@ describe('#domain', function()
 		{
 			var promise11;
 			var promise12 = new Promise(function(resolve)
+			{
+				promise11 = linker.run('client.callback', null, null, function(err, data)
 				{
-					promise11 = linker.run('client.callback', null, null, function(err, data)
-					{
-						expect(data).to.be('hello world');
-						expect(domain.active._mark_assert).to.be(222);
-						resolve();
-					})
-					.then(function(data)
-					{
-						expect(data).to.be('hello world');
-						expect(domain.active._mark_assert).to.be(222);
-					});
+					expect(data).to.be('hello world');
+					expect(domain.active._mark_assert).to.be(222);
+					resolve();
+				})
+				.then(function(data)
+				{
+					expect(data).to.be('hello world');
+					expect(domain.active._mark_assert).to.be(222);
 				});
+			});
 
 			return Promise.all([promise11, promise12]);
 		});

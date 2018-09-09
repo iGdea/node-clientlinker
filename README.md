@@ -126,6 +126,7 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
  * Move `proxyRoute` of `linker` to `clientlinker-flow-httpproxy` pkg.
  * `anyToError(err, runner)` instead of `anyToError(err, runtime)`. You can get `runtime` with `runner.runtime`.
  * `err.fromClient` instead of `err.CLIENTLINKER_CLIENT`. `err.fromClientMethod` install of `err.CLIENTLINKER_ACTION`.
+ * Remove `linker.run().runtime` & `linker.run().runtimePromise`. You can get `runtime` width `linker.lastRuntime` after `linker.run`.
 
 
 ### 5.x.x => 6.0.0
