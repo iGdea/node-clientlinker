@@ -1,4 +1,4 @@
-Client Linker
+ClientLinker
 ==================
 
 Linker all clients whether rpc, addon, http request, mock data, local file ...
@@ -10,8 +10,8 @@ A solution to break out of network and OS.
 [![Build Status][travis-image]][travis-url]
 [![Appveyor Status][appveyor-image]][appveyor-url]
 [![Coveralls][coveralls-image]][coveralls-url]
-[![Dependencies][dependencies-image]][dependencies-url]
 [![NPM License][license-image]][npm-url]
+[![Install Size][install-size-image]][install-size-url]
 
 # Install
 
@@ -145,8 +145,6 @@ If you do not modify custom flow and use `callback.next` in flow, the rpc will t
 
 [npm-image]: http://img.shields.io/npm/v/clientlinker.svg
 [downloads-image]: http://img.shields.io/npm/dm/clientlinker.svg
-[dependencies-image]: http://img.shields.io/david/Bacra/node-clientlinker.svg
-[dependencies-url]: https://www.versioneye.com/nodejs/clientlinker
 [npm-url]: https://www.npmjs.org/package/clientlinker
 [travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/node-clientlinker
@@ -155,3 +153,5 @@ If you do not modify custom flow and use `callback.next` in flow, the rpc will t
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
 [license-image]: http://img.shields.io/npm/l/clientlinker.svg
+[install-size-url]: https://packagephobia.now.sh/result?p=clientlinker
+[install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker
