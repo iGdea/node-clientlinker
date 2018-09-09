@@ -4,30 +4,30 @@ var Promise			= require('bluebird');
 var clientlinker	= require('../');
 var expect			= require('expect.js');
 
-describe('#compatible', function()
+describe('#deps', function()
 {
 	it('#runOptions', function()
 	{
 		var linker = clientlinker(
-			{
-				flows: ['custom'],
-				customFlows: {
-					custom: function flow(runtime, callback)
-					{
-						expect(runtime.runOptions.param).to.be('pp');
-						runtime.runOptions.param = 'p1';
-						expect(runtime.options.param).to.be('p1');
-						runtime.runOptions = {param: 'p2'}
-						expect(runtime.options.param).to.be('p2');
-
-						callback();
-					}
-				},
-				clients:
+		{
+			flows: ['custom'],
+			customFlows: {
+				custom: function flow(runtime, callback)
 				{
-					client: {}
+					expect(runtime.runOptions.param).to.be('pp');
+					runtime.runOptions.param = 'p1';
+					expect(runtime.options.param).to.be('p1');
+					runtime.runOptions = {param: 'p2'}
+					expect(runtime.options.param).to.be('p2');
+
+					callback.callback();
 				}
-			});
+			},
+			clients:
+			{
+				client: {}
+			}
+		});
 
 		return linker.run('client.method', null, null, null, {param: 'pp'});
 	});
@@ -35,45 +35,41 @@ describe('#compatible', function()
 
 	it('#navigationStart', function()
 	{
-		var linker = clientlinker(
-			{
-				flows: ['debugger'],
-				clients:
-				{
-					client: null
-				}
-			});
+		var linker = clientlinker();
+		var promise = linker.run('client.method');
+		var runtime = linker.lastRuntime;
 
-		return linker.run('client.method')
-			.then(function(){expect().fail()},
-				function(err)
-				{
-					var navigationStart = err.__runtime__.timline.navigationStart;
-					expect(navigationStart).to.be.a('number');
-					expect(navigationStart).to.be(err.__runtime__.navigationStart);
-				});
+		return promise.then(function(){expect().fail()},
+			function()
+			{
+				var navigationStart = runtime.timing.navigationStart;
+				expect(navigationStart).to.be.a('number');
+				expect(navigationStart).to.be(runtime.navigationStart);
+			});
 	});
 
 
 	it('#runByKey', function()
 	{
 		var linker = clientlinker(
+		{
+			flows: ['confighandler'],
+			clients:
 			{
-				flows: ['confighandler'],
-				clients:
+				client:
 				{
-					client:
+					confighandler:
 					{
-						confighandler:
+						method: function(query, body, callback)
 						{
-							method: function(query, body, callback)
-							{
-								callback();
-							}
+							callback.callback();
 						}
 					}
 				}
-			});
+			}
+		});
+
+		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 
 		return Promise.all(
 			[
@@ -83,12 +79,12 @@ describe('#compatible', function()
 	});
 
 
-	it('#proxyRoute', function()
-	{
-		var linker = clientlinker()
-
-		expect(linker.proxyRoute().name).to.be('HttpProxyRouteHandle');
-	});
+	// it('#proxyRoute', function()
+	// {
+	// 	var linker = clientlinker()
+	//
+	// 	expect(linker.proxyRoute().name).to.be('HttpProxyRouteHandle');
+	// });
 
 
 	it('#add', function()
@@ -109,21 +105,21 @@ describe('#compatible', function()
 	it('#clientDefaultOptions', function()
 	{
 		var linker = clientlinker(
+		{
+			clientDefaultOptions:
 			{
-				clientDefaultOptions:
+				opt: 'default',
+				some: 'hihi'
+			},
+			clients:
+			{
+				client1: null,
+				client2:
 				{
-					opt: 'default',
-					some: 'hihi'
-				},
-				clients:
-				{
-					client1: null,
-					client2:
-					{
-						opt: 'myOpt'
-					}
+					opt: 'myOpt'
 				}
-			});
+			}
+		});
 
 		linker.options.clientDefaultOptions = {opt: 'newOpt'};
 		linker.addClient('client3');
@@ -161,11 +157,11 @@ describe('#compatible', function()
 	it('#loadFlow', function()
 	{
 		var linker = clientlinker()
-		var flow = linker.loadFlow('flow_empty', './flows/flow_empty', module);
+		var flow = linker.loadFlow('flow_empty', './deps/flows/flow_empty', module);
 		expect(flow).to.not.be.ok();
-		flow = linker.loadFlow('flow_resolve', './flows/flow_resolve', module);
+		flow = linker.loadFlow('flow_resolve', './deps/flows/flow_resolve', module);
 		expect(flow).to.be.ok();
-		flow = linker.loadFlow('flow_next', './flows/flow_next', module);
+		flow = linker.loadFlow('flow_next', './deps/flows/flow_next', module);
 		expect(flow).to.be.ok();
 
 		linker.addClient('client1',
@@ -183,25 +179,12 @@ describe('#compatible', function()
 
 	it('#methodKey', function()
 	{
-		var linker = clientlinker(
-			{
-				flows: ['debugger'],
-				clients:
-				{
-					client:
-					{
-						debuggerRuntime: true
-					}
-				}
-			});
+		var linker = clientlinker();
+		linker.run('client.method').catch(function(){});
+		var runtime = linker.lastRuntime;
 
-		return linker.run('client.method')
-			.then(function(){expect().fail()},
-				function(runtime)
-				{
-					expect(runtime.methodKey).to.be('client.method')
-						.be(runtime.action);
-				});
+		expect(runtime.methodKey).to.be('client.method')
+			.be(runtime.action);
 	});
 
 
