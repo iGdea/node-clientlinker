@@ -29,19 +29,15 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 
 ```javascript
 {
-  flows: ['logger', 'custom', 'pkghandler' 'localfile', 'httpproxy'],
-  // pkghandlerDir: __dirname+'/pkghandler',
+  flows: ['logger', 'pkghandler', 'httpproxy'],
   defaults: {
     anyToError: true,
     timeout: 4000
   },
-  customFlows: {
-    custom: function(runtime, callback) {}
-  },
   clients: {
     mail: {
       // modify defaults flows
-      flows: ['confighandler'],
+      flows: ['confighandler', 'httpproxy'],
       confighandler: {
         read: function(query, body, callback, options) {
           callback(null, {content: 'hi,'});
@@ -53,7 +49,9 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
     },
 
     // use defaults
-    profile: null
+    profile: {
+      pkghandler: __dirname+'/clients/profile.js'
+    }
   }
 }
 ```
@@ -68,6 +66,10 @@ var linker = clientlinker(options);
 
 // Register flows
 linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+linker.flow('logger', require('clientlinker-flow-logger'));
+linker.flow('httpproxy', require('clientlinker-flow-httpproxy'));
+linker.flow('pkghandler', require('clientlinker-flow-pkghandler'));
+
 // Add clients outsid of config step
 linker.client(name, clientOptions);
 
