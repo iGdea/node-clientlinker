@@ -66,15 +66,13 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 var clientlinker = require('clientlinker');
 var linker = clientlinker(options);
 
-// Add flows and clients outsid of config step
-linker.loadFlow(path, module);
-linker.addClient(name, options);
+// Register flows
+linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+// Add clients outsid of config step
+linker.client(name, clientOptions);
 
 module.exports = linker;
 ```
-
-Width custom flows, you can link any rpc
-and get all data anywhere through `httpproxy` Flow.
 
 
 ## Run
