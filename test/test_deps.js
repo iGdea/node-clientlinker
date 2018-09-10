@@ -165,9 +165,9 @@ describe('#deps', function()
 		expect(flow).to.be.ok();
 
 		linker.addClient('client1',
-			{
-				flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']
-			});
+		{
+			flows: ['flow1', 'flow_empty', 'flow_next', 'flow_resolve']
+		});
 
 		return linker.run('client1.xxxx')
 			.then(function(data)
