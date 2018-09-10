@@ -73,8 +73,6 @@ linker.addClient(name, options);
 module.exports = linker;
 ```
 
-You can custom flows [Like This](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow).
-
 Width custom flows, you can link any rpc
 and get all data anywhere through `httpproxy` Flow.
 
@@ -115,6 +113,21 @@ clientlinker list ./clientlinker.conf.js
 clientlinker run ./clientlinker.conf.js
 clientlinker exec ./clientlinker.conf.js mail.method --body=body
 ```
+
+
+# Some Flows
+
+| Name                             | Npm                       |
+|----------------------------------|---------------------------|
+| clientlinker-flow-httpproxy      | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-httpproxy.svg)](https://www.npmjs.org/package/clientlinker-flow-httpproxy)  |
+| clientlinker-flow-confighandler  | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-confighandler.svg)](https://www.npmjs.org/package/clientlinker-flow-cconfighandler)  |
+| clientlinker-flow-logger         | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-logger.svg)](https://www.npmjs.org/package/clientlinker-flow-logger)  |
+| clientlinker-flow-pkghandler     | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-pkghandler.svg)](https://www.npmjs.org/package/clientlinker-flow-pkghandler)  |
+| clientlinker-flow-debugger       | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-debugger.svg)](https://www.npmjs.org/package/clientlinker-flow-debugger)  |
+| clientlinker-flow-localfile      | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-localfile.svg)](https://www.npmjs.org/package/clientlinker-flow-localfile)  |
+| clientlinker-flow-mysql          | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-mysql.svg)](https://www.npmjs.org/package/clientlinker-flow-mysql)  |
+
+You can custom flows [Like This](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow).
 
 
 # Upgrade
