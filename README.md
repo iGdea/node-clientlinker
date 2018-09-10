@@ -118,7 +118,7 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 | Name                             | Npm                       |
 |----------------------------------|---------------------------|
 | clientlinker-flow-httpproxy      | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-httpproxy.svg)](https://www.npmjs.org/package/clientlinker-flow-httpproxy)  |
-| clientlinker-flow-confighandler  | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-confighandler.svg)](https://www.npmjs.org/package/clientlinker-flow-cconfighandler)  |
+| clientlinker-flow-confighandler  | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-confighandler.svg)](https://www.npmjs.org/package/clientlinker-flow-confighandler)  |
 | clientlinker-flow-logger         | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-logger.svg)](https://www.npmjs.org/package/clientlinker-flow-logger)  |
 | clientlinker-flow-pkghandler     | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-pkghandler.svg)](https://www.npmjs.org/package/clientlinker-flow-pkghandler)  |
 | clientlinker-flow-debugger       | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-debugger.svg)](https://www.npmjs.org/package/clientlinker-flow-debugger)  |
