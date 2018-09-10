@@ -84,12 +84,12 @@ and get all data anywhere through `httpproxy` Flow.
 ### Run in Server
 
 ```javascript
-var clientlinker = require('./clientlinker.conf.js');
+var linker = require('./clientlinker.conf.js');
 
-clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
+linker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 
 // or use promise
-clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, options)
+linker.run('mail.read', userid, {mailid: 'xxxx'}, options)
   .then(function(data){});
 ```
 
@@ -100,9 +100,9 @@ clientlinker.run('mail.read', userid, {mailid: 'xxxx'}, options)
 // Of course, you can continue to use `run`.
 // example
 
-var clientlinker = require('./clientlinker.conf.js');
+var linker = require('./clientlinker.conf.js');
 
-clientlinker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
+linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 ```
 
 ### Run in Terminal
