@@ -1,5 +1,5 @@
 {
-  "name": "clientlinker",
+  "name": "clientlinker-core",
   "version": "7.2.0",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
@@ -11,9 +11,6 @@
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
   },
-  "bin": {
-    "clientlinker": "bin/clientlinker_cli.js"
-  },
   "keywords": [
     "client",
     "linker",
@@ -23,23 +20,21 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Bacra/node-clientlinker.git"
+    "url": "git+ssh://git@github.com/Bacra/node-clientlinker-core.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-clientlinker/issues"
+    "url": "https://github.com/Bacra/node-clientlinker-core/issues"
   },
-  "homepage": "https://github.com/Bacra/node-clientlinker#readme",
+  "homepage": "https://github.com/Bacra/node-clientlinker-core#readme",
   "author": "Bacra <bacra.woo@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.2",
-    "commander": "2.9.0",
     "chalk": "^2.4.1",
     "debug": "^3.1.0",
     "depd": "^1.1.2",
     "is-promise": "^2.1.0",
-    "lodash": "^4.17.10",
-    "table": "5.0.2"
+    "lodash": "^4.17.10"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",

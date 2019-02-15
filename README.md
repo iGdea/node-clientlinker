@@ -1,4 +1,4 @@
-ClientLinker
+ClientLinker-Core
 ==================
 
 Linker all clients whether rpc, addon, http request, mock data, local file ...
@@ -16,8 +16,7 @@ A solution to break out of network and OS.
 # Install
 
 ```shell
-npm install clientlinker --save
-npm install clientlinker -g
+npm install clientlinker-core --save
 ```
 
 # Useage
@@ -61,7 +60,7 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 ```javascript
 // `clientlinker.conf.js` file content
 
-var clientlinker = require('clientlinker');
+var clientlinker = require('clientlinker-core');
 var linker = clientlinker(options);
 
 // Register flows
@@ -103,68 +102,17 @@ var linker = require('./clientlinker.conf.js');
 linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 ```
 
-### Run in Terminal
-
-```shell
-#### List all Clients and Methods
-clientlinker list ./clientlinker.conf.js
-
-#### Run action directly in Terminal
-clientlinker run ./clientlinker.conf.js
-clientlinker exec ./clientlinker.conf.js mail.method --body=body
-```
 
 
-# Some Flows
-
-| Name                             | Npm                       |
-|----------------------------------|---------------------------|
-| clientlinker-flow-httpproxy      | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-httpproxy.svg)](https://www.npmjs.org/package/clientlinker-flow-httpproxy)  |
-| clientlinker-flow-confighandler  | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-confighandler.svg)](https://www.npmjs.org/package/clientlinker-flow-confighandler)  |
-| clientlinker-flow-logger         | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-logger.svg)](https://www.npmjs.org/package/clientlinker-flow-logger)  |
-| clientlinker-flow-pkghandler     | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-pkghandler.svg)](https://www.npmjs.org/package/clientlinker-flow-pkghandler)  |
-| clientlinker-flow-debugger       | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-debugger.svg)](https://www.npmjs.org/package/clientlinker-flow-debugger)  |
-| clientlinker-flow-localfile      | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-localfile.svg)](https://www.npmjs.org/package/clientlinker-flow-localfile)  |
-| clientlinker-flow-mysql          | [![NPM Version](http://img.shields.io/npm/v/clientlinker-flow-mysql.svg)](https://www.npmjs.org/package/clientlinker-flow-mysql)  |
-
-You can custom flows [Like This](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow).
-
-
-# Upgrade
-
-### 6.x.x => 7.0.0
-
- * Remove all sys flow. Please install and loadFlow for
-  `httpproxy` `confighandler` `pkghandler` `debugger` `localfile` `logger`
- * Move `proxyRoute` of `linker` to `clientlinker-flow-httpproxy` pkg.
- * `anyToError(err, runner)` instead of `anyToError(err, runtime)`. You can get `runtime` with `runner.runtime`.
- * `err.fromClient` instead of `err.CLIENTLINKER_CLIENT`. `err.fromClientMethod` install of `err.CLIENTLINKER_ACTION`.
- * Remove `linker.run().runtime` & `linker.run().runtimePromise`. You can get `runtime` width `linker.lastRuntime` after `linker.run`.
-
-
-### 5.x.x => 6.0.0
-
- * If flow handler return a Promise, it bind callback auto.
- * Running `callback.next` like `callback.next(true)`. Use `callback.nextAndResolve()` instead of previous caller.
-
-If you do not modify custom flow and use `callback.next` in flow, the rpc will timeout.
-
-
-### 4.x.x => 5.0.0
-
- * Please upgrade server first, if you are using `httpproxy` flow
-
-
-
-[npm-image]: http://img.shields.io/npm/v/clientlinker.svg
-[downloads-image]: http://img.shields.io/npm/dm/clientlinker.svg
-[npm-url]: https://www.npmjs.org/package/clientlinker
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
-[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
-[license-image]: http://img.shields.io/npm/l/clientlinker.svg
-[install-size-url]: https://packagephobia.now.sh/result?p=clientlinker
-[install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker
+[npm-image]: http://img.shields.io/npm/v/clientlinker-core.svg
+[downloads-image]: http://img.shields.io/npm/dm/clientlinker-core.svg
+[npm-url]: https://www.npmjs.org/package/clientlinker-core
+[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker-core/master.svg?label=linux
+[travis-url]: https://travis-ci.org/Bacra/node-clientlinker-core
+[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker-core/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker-core
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker-core.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker-core
+[license-image]: http://img.shields.io/npm/l/clientlinker-core.svg
+[install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-core
+[install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-core
