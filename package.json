@@ -1,11 +1,10 @@
 {
   "name": "clientlinker-core",
-  "version": "7.2.0",
+  "version": "1.0.0",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
-    "start": "node ./bin/clientlinker_cli.js ./test/conf/clientlinker.conf.js ls",
     "lint": "eslint .",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
