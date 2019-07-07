@@ -102,13 +102,11 @@ var linker = require('./clientlinker.conf.js');
 linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 ```
 
-
-
 [npm-image]: http://img.shields.io/npm/v/clientlinker-core.svg
 [downloads-image]: http://img.shields.io/npm/dm/clientlinker-core.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-core
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker-core/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker-core
+[travis-image]: https://travis-ci.com/Bacra/node-clientlinker-core.svg?branch=master
+[travis-url]: https://travis-ci.com/Bacra/node-clientlinker-core
 [appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker-core/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker-core
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker-core.svg
