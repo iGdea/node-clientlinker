@@ -6,3 +6,4 @@ package-lock.json
 
 .tags*
 .DS_Store
+.vscode
