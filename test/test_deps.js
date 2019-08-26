@@ -97,7 +97,7 @@ describe('#deps', function()
 			{
 				expect(map).to.be.an('object');
 				expect(map.clientName1.name).to.be('clientName1');
-				expect(map.clientName1.options).to.be.eql({opt: 'myOpt'});
+				expect(map.clientName1.options).to.be.eql({opt: 'myOpt', flows: []});
 			});
 	});
 
@@ -130,23 +130,27 @@ describe('#deps', function()
 			{
 				expect(map.client1.options).to.be.eql(
 					{
+						flows: [],
 						opt: 'default',
 						some: 'hihi'
 					});
 
 				expect(map.client2.options).to.be.eql(
 					{
+						flows: [],
 						opt: 'myOpt',
 						some: 'hihi'
 					});
 
 				expect(map.client3.options).to.be.eql(
 					{
+						flows: [],
 						opt: 'newOpt'
 					});
 
 				expect(map.client4.options).to.be.eql(
 					{
+						flows: [],
 						opt: 'newOpt',
 						some: 'ctd'
 					});
