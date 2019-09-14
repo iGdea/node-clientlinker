@@ -4,9 +4,7 @@
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm ls",
     "start": "node ./bin/clientlinker_cli.js ./test/conf/clientlinker.conf.js ls",
-    "lint": "eslint .",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
@@ -46,6 +44,11 @@
     "clientlinker-flow-confighandler": "^1.1.0",
     "clientlinker-flow-confighandler-test": "^1.1.0",
     "clientlinker-flow-pkghandler": "^1.1.0",
+    "benchmark": "^2.1.4",
+    "cross-env": "^5.2.0",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0",
     "mkdirp": "^0.5.1"
   }
 }

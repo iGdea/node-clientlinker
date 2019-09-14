@@ -4,8 +4,6 @@
   "description": "Pkghandler flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
-    "prepublish": "npm ls",
-    "lint": "eslint .",
     "test": "cross-env DEBUG=clientlinker-flow-pkghandler* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"

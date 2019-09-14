@@ -2,21 +2,16 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "lint": "lerna run lint",
+    "lint": "eslint .",
+    "bootstrap": "lerna bootstrap",
     "test": "lerna run test",
     "test-travis": "lerna run test-travis",
     "test-cov": "lerna run test-cov"
   },
   "devDependencies": {
     "lerna": "^3.16.4",
-    "benchmark": "^2.1.4",
-    "cross-env": "^5.2.0",
     "eslint": "^5.5.0",
-    "eslint-config-brcjs": "^0.2.0",
-    "expect.js": "^0.3.1",
-    "istanbul": "^0.4.5",
-    "mkdirp": "^0.5.1",
-    "mocha": "^5.2.0"
+    "eslint-config-brcjs": "^0.2.0"
   },
   "optionalDependencies": {
     "nan-async-example": "^0.1.2"

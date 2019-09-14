@@ -16,7 +16,8 @@ node_js:
 install:
   - export CXX=g++-4.8
   - $CXX --version
-  - npm i
+  - npm install
+  - npm run bootstrap
 
 before_install:
   - npm install -g node-gyp
