@@ -12,7 +12,7 @@
   "devDependencies": {
     "lerna": "^3.16.4",
     "eslint": "^5.5.0",
-    "eslint-config-brcjs": "^0.2.0"
+    "eslint-config-brcjs": "^1.0.0"
   },
   "optionalDependencies": {
     "nan-async-example": "^0.1.2"
