@@ -1,0 +1,43 @@
+{
+  "name": "clientlinker-flow-logger",
+  "version": "1.0.1",
+  "description": "Logger flow for clientlinker",
+  "main": "flow/index.js",
+  "scripts": {
+    "prepublish": "npm ls",
+    "lint": "eslint .",
+    "test": "cross-env DEBUG=clientlinker-flow-logger* mocha test/test_*",
+    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
+    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+  },
+  "keywords": [
+    "clientlinker",
+    "flow",
+    "logger"
+  ],
+  "author": "Bacra Woo<bacra.woo@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^3.1.0"
+  },
+  "devDependencies": {
+    "bluebird": "^3.5.2",
+    "clientlinker": "^7.1.2",
+    "clientlinker-flow-confighandler": "^1.1.0",
+    "clientlinker-flow-confighandler-test": "^1.1.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.5.0",
+    "eslint-config-brcjs": "^0.2.0",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Bacra/node-clientlinker-flow-logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bacra/node-clientlinker-flow-logger/issues"
+  },
+  "homepage": "https://github.com/Bacra/node-clientlinker-flow-logger"
+}

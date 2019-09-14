@@ -1,0 +1,51 @@
+{
+  "name": "clientlinker",
+  "version": "7.4.0",
+  "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "npm ls",
+    "start": "node ./bin/clientlinker_cli.js ./test/conf/clientlinker.conf.js ls",
+    "lint": "eslint .",
+    "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
+    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
+    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+  },
+  "bin": {
+    "clientlinker": "bin/clientlinker_cli.js"
+  },
+  "keywords": [
+    "client",
+    "linker",
+    "proxy",
+    "rpc",
+    "httpproxy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Bacra/node-clientlinker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bacra/node-clientlinker/issues"
+  },
+  "homepage": "https://github.com/Bacra/node-clientlinker#readme",
+  "author": "Bacra <bacra.woo@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.2",
+    "chalk": "^2.4.1",
+    "clientlinker-core": "^7.4.0",
+    "commander": "2.9.0",
+    "debug": "^3.1.0",
+    "depd": "^1.1.2",
+    "is-promise": "^2.1.0",
+    "lodash": "^4.17.10",
+    "table": "5.0.2"
+  },
+  "devDependencies": {
+    "clientlinker-flow-confighandler": "^1.1.0",
+    "clientlinker-flow-confighandler-test": "^1.1.0",
+    "clientlinker-flow-pkghandler": "^1.1.0",
+    "mkdirp": "^0.5.1"
+  }
+}

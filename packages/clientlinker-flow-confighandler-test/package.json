@@ -1,0 +1,44 @@
+{
+  "name": "clientlinker-flow-confighandler-test",
+  "version": "1.1.0",
+  "description": "Test for clientlinker confighandler",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "npm ls",
+    "lint": "eslint .",
+    "test": "cross-env DEBUG=clientlinker-flow-confighandler-test* mocha test/test_*",
+    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
+    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+  },
+  "keywords": [
+    "clientlinker",
+    "flow",
+    "confighandler",
+    "test"
+  ],
+  "author": "Bacra Woo<bacra.woo@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "expect.js": "^0.3.1",
+    "lodash": "^4.17.10",
+    "bluebird": "^3.5.2",
+    "debug": "^3.1.0"
+  },
+  "devDependencies": {
+    "clientlinker": "^7.1.2",
+    "clientlinker-flow-confighandler": "^1.1.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.5.0",
+    "eslint-config-brcjs": "^0.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Bacra/node-clientlinker-flow-confighandler-test.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bacra/node-clientlinker-flow-confighandler-test/issues"
+  },
+  "homepage": "https://github.com/Bacra/node-clientlinker-flow-confighandler-test"
+}
