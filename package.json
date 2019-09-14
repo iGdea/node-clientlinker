@@ -1,45 +1,15 @@
 {
-  "name": "clientlinker-core",
-  "version": "7.5.0",
-  "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
-  "main": "index.js",
+  "name": "root",
+  "private": true,
   "scripts": {
-    "prepublish": "npm ls",
-    "lint": "eslint .",
-    "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
-  },
-  "keywords": [
-    "client",
-    "linker",
-    "proxy",
-    "rpc",
-    "httpproxy"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/Bacra/node-clientlinker-core.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Bacra/node-clientlinker-core/issues"
-  },
-  "homepage": "https://github.com/Bacra/node-clientlinker-core#readme",
-  "author": "Bacra <bacra.woo@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "bluebird": "^3.5.2",
-    "chalk": "^2.4.1",
-    "debug": "^3.1.0",
-    "depd": "^1.1.2",
-    "is-promise": "^2.1.0",
-    "lodash": "^4.17.10"
+    "lint": "lerna run lint",
+    "test": "lerna run test",
+    "test-travis": "lerna run test-travis",
+    "test-cov": "lerna run test-cov"
   },
   "devDependencies": {
+    "lerna": "^3.16.4",
     "benchmark": "^2.1.4",
-    "clientlinker-flow-confighandler": "^1.1.0",
-    "clientlinker-flow-confighandler-test": "^1.1.0",
-    "clientlinker-flow-pkghandler": "^1.1.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.5.0",
     "eslint-config-brcjs": "^0.2.0",
