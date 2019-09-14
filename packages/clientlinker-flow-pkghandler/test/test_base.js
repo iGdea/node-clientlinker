@@ -1,7 +1,7 @@
 'use strict';
 
 var expect				= require('expect.js');
-var clientlinker		= require('clientlinker');
+var clientlinker		= require('clientlinker-core');
 var confighandlerTest	= require('clientlinker-flow-confighandler-test');
 
 describe('#pkghandler', function()

@@ -1,6 +1,6 @@
 'use strict';
 
-var clientlinker		= require('clientlinker');
+var clientlinker		= require('clientlinker-core');
 var confighandlerTest	= require('../');
 
 describe('#base', function()

@@ -4,6 +4,7 @@
   "scripts": {
     "lint": "eslint .",
     "bootstrap": "lerna bootstrap",
+    "ls": "lerna ls",
     "test": "lerna run test",
     "test-travis": "lerna run test-travis",
     "test-cov": "lerna run test-cov"

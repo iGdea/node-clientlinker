@@ -2,7 +2,7 @@
 
 var Promise			= require('bluebird');
 var expect			= require('expect.js');
-var clientlinker	= require('clientlinker');
+var clientlinker	= require('clientlinker-core');
 
 describe('#localfile', function()
 {

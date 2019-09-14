@@ -23,7 +23,7 @@
     "debug": "^3.1.0"
   },
   "devDependencies": {
-    "clientlinker": "^7.1.2",
+    "clientlinker-core": "^7.5.0",
     "clientlinker-flow-confighandler": "^1.1.0",
     "cross-env": "^5.2.0",
     "istanbul": "^0.4.5",
