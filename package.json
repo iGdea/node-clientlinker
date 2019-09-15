@@ -5,6 +5,7 @@
     "lint": "eslint .",
     "bootstrap": "lerna bootstrap",
     "ls": "lerna ls",
+    "pub": "lerna publish",
     "test": "lerna run test",
     "test-travis": "lerna run test-travis",
     "test-cov": "lerna run test-cov"
