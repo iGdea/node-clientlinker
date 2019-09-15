@@ -4,7 +4,6 @@
   "description": "Httpproxy flow for clientlinker",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm ls && npm run lint && npm run test",
     "test": "cross-env DEBUG=clientlinker-flow-httpproxy* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
