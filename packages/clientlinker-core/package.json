@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-core",
-  "version": "7.5.0",
+  "version": "7.5.1",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "clientlinker-flow-confighandler-test": "^1.1.0",
+    "clientlinker-flow-confighandler-test": "^1.2.0",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",

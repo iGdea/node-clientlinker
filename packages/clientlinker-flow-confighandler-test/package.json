@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-confighandler-test",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Test for clientlinker confighandler",
   "main": "index.js",
   "keywords": [
@@ -12,10 +12,10 @@
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "expect.js": "^0.3.1",
-    "lodash": "^4.17.10",
     "bluebird": "^3.5.2",
-    "debug": "^3.1.0"
+    "debug": "^3.1.0",
+    "expect.js": "^0.3.1",
+    "lodash": "^4.17.10"
   },
   "repository": {
     "type": "git",
