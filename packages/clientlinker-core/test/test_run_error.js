@@ -35,7 +35,7 @@ describe('#run_error', function()
 			}
 		});
 
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var promise1 = new Promise(function(resolve)
 		{
@@ -142,7 +142,7 @@ describe('#run_error', function()
 			}
 		});
 
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		return linker.run('client.method')
 			.then(function(){expect().fail()},
@@ -188,7 +188,7 @@ describe('#run_error', function()
 				}
 			}
 		});
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var promise1 = linker.run('client.method1')
 			.then(function(){expect().fail()},
@@ -257,7 +257,7 @@ describe('#run_error', function()
 				client: null
 			}
 		});
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		return linker.run('client.method')
 			.then(function(){expect().fail()},
@@ -314,7 +314,7 @@ describe('#run_error', function()
 					}
 				}
 			});
-			linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+			linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 			return linker.run('client.method')
 					.then(function(data)
@@ -363,7 +363,7 @@ describe('#run_error', function()
 					}
 				}
 			});
-			linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+			linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 			return linker.run('client.method', null, null, {retry: 5})
 					.then(function(data)
@@ -393,7 +393,7 @@ describe('#run_error', function()
 				}
 			}
 		});
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var resolve;
 		var callbackPromise = new Promise(function(resolve0){resolve = resolve0});

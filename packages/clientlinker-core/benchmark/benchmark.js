@@ -26,7 +26,7 @@ var linker = clientlinker(
 		}
 	});
 
-linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 
 suite.add('#only one promise run', function(deferred)

@@ -69,7 +69,7 @@ describe('#deps', function()
 			}
 		});
 
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		return Promise.all(
 			[

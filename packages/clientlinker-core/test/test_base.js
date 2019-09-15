@@ -155,8 +155,8 @@ describe('#base', function()
 				}
 			});
 
-		linker1.flow('pkghandler', require('clientlinker-flow-pkghandler'));
-		linker2.flow('pkghandler', require('clientlinker-flow-pkghandler'));
+		linker1.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
+		linker2.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
 
 		var promise1 = linker1.clients()
 				.then(function(clients)
@@ -248,8 +248,8 @@ describe('#base', function()
 				}
 			});
 
-		linker.flow('pkghandler', require('clientlinker-flow-pkghandler'));
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var retPromise = linker.run('client.method');
 		var runtime = linker.lastRuntime;

@@ -24,7 +24,7 @@ describe('#domain', function()
 			}
 		});
 
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var domain = require('domain');
 		var dm = domain.create();
@@ -74,7 +74,7 @@ describe('#domain', function()
 			}
 		});
 
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var domain = require('domain');
 		var dm = domain.create();
@@ -152,7 +152,7 @@ describe('#domain', function()
 			}
 		});
 
-		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 		var domain = require('domain');
 		var dm = domain.create();

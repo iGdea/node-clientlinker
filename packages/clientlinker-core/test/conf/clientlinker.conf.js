@@ -29,7 +29,7 @@ var linker = clientlinker(
 		}
 	});
 
-linker.flow('pkghandler', require('clientlinker-flow-pkghandler'));
-linker.flow('confighandler', require('clientlinker-flow-confighandler'));
+linker.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
+linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
 exports = module.exports = linker;
