@@ -3,11 +3,6 @@
   "version": "1.1.0",
   "description": "Test for clientlinker confighandler",
   "main": "index.js",
-  "scripts": {
-    "test": "cross-env DEBUG=clientlinker-flow-confighandler-test* mocha test/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
-  },
   "keywords": [
     "clientlinker",
     "flow",
@@ -21,12 +16,6 @@
     "lodash": "^4.17.10",
     "bluebird": "^3.5.2",
     "debug": "^3.1.0"
-  },
-  "devDependencies": {
-    "clientlinker-core": "^7.5.0",
-    "cross-env": "^5.2.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
   },
   "repository": {
     "type": "git",
