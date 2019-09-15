@@ -7,3 +7,5 @@ package-lock.json
 .tags*
 .DS_Store
 .vscode
+
+stdout_log_file_*
