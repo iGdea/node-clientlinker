@@ -5,6 +5,6 @@ var methods = require('./methods');
 
 module.exports = function(flow)
 {
-	flow.register(confighandler);
-	flow.register('methods', methods);
+	flow.run = confighandler;
+	flow.methods = methods;
 };

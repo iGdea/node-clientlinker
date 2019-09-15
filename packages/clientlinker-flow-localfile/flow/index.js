@@ -5,6 +5,6 @@ var methods = require('./methods');
 
 module.exports = function(flow)
 {
-	flow.register(localfile);
-	flow.register('methods', methods);
+	flow.run = localfile;
+	flow.methods = methods;
 };

@@ -82,7 +82,9 @@ describe('#rlutils', function()
 		linker.flow('confighandler', require('clientlinker-flow-confighandler'));
 		linker.flow('custom', function(flow)
 		{
-			flow.register('methods', function(){return ['*'];});
+			flow.methods = function(){
+				return ['*'];
+			};
 		});
 
 		return linker.methods()

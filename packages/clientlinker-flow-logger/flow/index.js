@@ -4,5 +4,5 @@ var logger = require('./logger');
 
 module.exports = function(flow)
 {
-	flow.register(logger);
+	flow.run = logger;
 };
