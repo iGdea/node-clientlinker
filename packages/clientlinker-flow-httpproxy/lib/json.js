@@ -1,9 +1,9 @@
 'use strict';
 
-var KEY        = Date.now() + process.pid + Math.floor(Math.random()*10000);
+var KEY = Date.now() + process.pid + Math.floor(Math.random()*10000);
 var BUFFER_KEY = KEY+'_buf';
-var ERROR_KEY  = KEY+'_err';
-
+var ERROR_KEY = KEY+'_err';
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function stringify(data)
 {
@@ -75,7 +75,7 @@ function originalMap(list, handler, tmpData)
 
 		for(var i in list)
 		{
-			if (list.hasOwnProperty(i))
+			if (hasOwnProperty.call(list, i))
 			{
 				tmpData[i] = handler(list[i], i);
 			}
