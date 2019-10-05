@@ -22,7 +22,7 @@
     "url": "git@github.com:Bacra/node-clientlinker-flow-confighandler-test.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-clientlinker-flow-confighandler-test/issues"
+    "url": "https://github.com/Bacra/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/Bacra/node-clientlinker-flow-confighandler-test"
+  "homepage": "https://github.com/Bacra/node-clientlinker"
 }

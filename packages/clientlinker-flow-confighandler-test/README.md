@@ -51,13 +51,13 @@ describe('#test', function()
 ```
 
 
-[npm-image]: http://img.shields.io/npm/v/clientlinker-flow-confighandler-test.svg
-[downloads-image]: http://img.shields.io/npm/dm/clientlinker-flow-confighandler-test.svg
+[npm-image]: https://img.shields.io/npm/v/clientlinker-flow-confighandler-test.svg
+[downloads-image]: https://img.shields.io/npm/dm/clientlinker-flow-confighandler-test.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-flow-confighandler-test
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker-flow-confighandler-test/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker-flow-confighandler-test
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker-flow-confighandler-test.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker-flow-confighandler-test
-[license-image]: http://img.shields.io/npm/l/clientlinker-flow-confighandler-test.svg
+[travis-image]: https://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
+[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
+[license-image]: https://img.shields.io/npm/l/clientlinker-flow-confighandler-test.svg
 [install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-flow-confighandler-test
 [install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-flow-confighandler-test

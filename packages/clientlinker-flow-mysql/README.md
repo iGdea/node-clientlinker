@@ -63,11 +63,11 @@ linker.run('mysqlCustomClient.subKeys', null, {
 ```
 
 
-[npm-image]: http://img.shields.io/npm/v/clientlinker-flow-mysql.svg
-[downloads-image]: http://img.shields.io/npm/dm/clientlinker-flow-mysql.svg
+[npm-image]: https://img.shields.io/npm/v/clientlinker-flow-mysql.svg
+[downloads-image]: https://img.shields.io/npm/dm/clientlinker-flow-mysql.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-flow-mysql
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker-flow-mysql/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker-flow-mysql
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker-flow-mysql.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker-flow-mysql
-[license-image]: http://img.shields.io/npm/l/clientlinker-flow-mysql.svg
+[travis-image]: https://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
+[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
+[license-image]: https://img.shields.io/npm/l/clientlinker-flow-mysql.svg

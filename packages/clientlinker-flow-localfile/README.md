@@ -45,13 +45,13 @@ linker.run('client.js', null, {id: 13})
 ```
 
 
-[npm-image]: http://img.shields.io/npm/v/clientlinker-flow-localfile.svg
-[downloads-image]: http://img.shields.io/npm/dm/clientlinker-flow-localfile.svg
+[npm-image]: https://img.shields.io/npm/v/clientlinker-flow-localfile.svg
+[downloads-image]: https://img.shields.io/npm/dm/clientlinker-flow-localfile.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-flow-localfile
-[travis-image]: http://img.shields.io/travis/Bacra/node-clientlinker-flow-localfile/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker-flow-localfile
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker-flow-localfile.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker-flow-localfile
-[license-image]: http://img.shields.io/npm/l/clientlinker-flow-localfile.svg
+[travis-image]: https://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
+[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
+[license-image]: https://img.shields.io/npm/l/clientlinker-flow-localfile.svg
 [install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-flow-localfile
 [install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-flow-localfile

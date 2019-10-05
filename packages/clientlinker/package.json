@@ -7,7 +7,7 @@
     "start": "node ./bin/clientlinker_cli.js ./test/conf/clientlinker.conf.js ls",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "bin": {
     "clientlinker": "bin/clientlinker_cli.js"

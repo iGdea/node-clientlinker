@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cross-env DEBUG=clientlinker-flow-httpproxy* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "keywords": [
     "clientlinker",
@@ -41,7 +41,7 @@
     "url": "git@github.com:Bacra/node-clientlinker-flow-httpproxy.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-clientlinker-flow-httpproxy/issues"
+    "url": "https://github.com/Bacra/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/Bacra/node-clientlinker-flow-httpproxy"
+  "homepage": "https://github.com/Bacra/node-clientlinker"
 }

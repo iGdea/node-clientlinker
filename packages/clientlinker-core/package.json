@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "keywords": [
     "client",
@@ -17,12 +17,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Bacra/node-clientlinker-core.git"
+    "url": "git+ssh://git@github.com/Bacra/node-clientlinker.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-clientlinker-core/issues"
+    "url": "https://github.com/Bacra/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/Bacra/node-clientlinker-core#readme",
+  "homepage": "https://github.com/Bacra/node-clientlinker#readme",
   "author": "Bacra <bacra.woo@gmail.com>",
   "license": "MIT",
   "dependencies": {

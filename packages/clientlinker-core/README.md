@@ -75,7 +75,6 @@ linker.client(name, clientOptions);
 module.exports = linker;
 ```
 
-
 ## Run
 
 ### Run in Server
@@ -102,15 +101,15 @@ var linker = require('./clientlinker.conf.js');
 linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 ```
 
-[npm-image]: http://img.shields.io/npm/v/clientlinker-core.svg
-[downloads-image]: http://img.shields.io/npm/dm/clientlinker-core.svg
+[npm-image]: https://img.shields.io/npm/v/clientlinker-core.svg
+[downloads-image]: https://img.shields.io/npm/dm/clientlinker-core.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-core
-[travis-image]: https://travis-ci.com/Bacra/node-clientlinker-core.svg?branch=master
-[travis-url]: https://travis-ci.com/Bacra/node-clientlinker-core
-[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker-core/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker-core
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker-core.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker-core
-[license-image]: http://img.shields.io/npm/l/clientlinker-core.svg
+[travis-image]: https://travis-ci.com/Bacra/node-clientlinker.svg?branch=master
+[travis-url]: https://travis-ci.com/Bacra/node-clientlinker
+[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
+[license-image]: https://img.shields.io/npm/l/clientlinker-core.svg
 [install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-core
 [install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-core
