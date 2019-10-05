@@ -3,8 +3,6 @@ Clientlinker-flow-confighandler-test
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
 [![Install Size][install-size-image]][install-size-url]
 
@@ -54,10 +52,6 @@ describe('#test', function()
 [npm-image]: https://img.shields.io/npm/v/clientlinker-flow-confighandler-test.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker-flow-confighandler-test.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-flow-confighandler-test
-[travis-image]: https://img.shields.io/travis/com/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: https://travis-ci.com/Bacra/node-clientlinker
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
 [license-image]: https://img.shields.io/npm/l/clientlinker-flow-confighandler-test.svg
 [install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-flow-confighandler-test
 [install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-flow-confighandler-test

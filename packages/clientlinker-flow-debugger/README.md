@@ -3,8 +3,6 @@ Clientlinker-flow-debugger
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
 [![Install Size][install-size-image]][install-size-url]
 
@@ -56,10 +54,6 @@ linker.run('client.clientHanlder', null, {id: 13})
 [npm-image]: https://img.shields.io/npm/v/clientlinker-flow-debugger.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker-flow-debugger.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-flow-debugger
-[travis-image]: https://img.shields.io/travis/com/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: https://travis-ci.com/Bacra/node-clientlinker
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
 [license-image]: https://img.shields.io/npm/l/clientlinker-flow-debugger.svg
 [install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-flow-debugger
 [install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-flow-debugger

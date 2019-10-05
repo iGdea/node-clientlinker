@@ -7,9 +7,6 @@ A solution to break out of network and OS.
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Appveyor Status][appveyor-image]][appveyor-url]
-[![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
 [![Install Size][install-size-image]][install-size-url]
 
@@ -104,12 +101,6 @@ linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 [npm-image]: https://img.shields.io/npm/v/clientlinker-core.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker-core.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-core
-[travis-image]: https://img.shields.io/travis/com/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: https://travis-ci.com/Bacra/node-clientlinker
-[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
 [license-image]: https://img.shields.io/npm/l/clientlinker-core.svg
 [install-size-url]: https://packagephobia.now.sh/result?p=clientlinker-core
 [install-size-image]: https://packagephobia.now.sh/badge?p=clientlinker-core
