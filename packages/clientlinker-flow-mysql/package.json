@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-mysql",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Mysql flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
