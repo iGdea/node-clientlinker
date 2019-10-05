@@ -159,8 +159,8 @@ If you do not modify custom flow and use `callback.next` in flow, the rpc will t
 [npm-image]: https://img.shields.io/npm/v/clientlinker.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker
-[travis-image]: https://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[travis-image]: https://img.shields.io/travis/com/Bacra/node-clientlinker/master.svg?label=linux
+[travis-url]: https://travis-ci.com/Bacra/node-clientlinker
 [appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg

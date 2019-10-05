@@ -104,7 +104,7 @@ linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 [npm-image]: https://img.shields.io/npm/v/clientlinker-core.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker-core.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-core
-[travis-image]: https://travis-ci.com/Bacra/node-clientlinker.svg?branch=master
+[travis-image]: https://img.shields.io/travis/com/Bacra/node-clientlinker/master.svg?label=linux
 [travis-url]: https://travis-ci.com/Bacra/node-clientlinker
 [appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-clientlinker/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/Bacra/node-clientlinker

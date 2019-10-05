@@ -54,8 +54,8 @@ linker.run('client.clientHanlder', null, {id: 13})
 [npm-image]: https://img.shields.io/npm/v/clientlinker-flow-logger.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker-flow-logger.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-flow-logger
-[travis-image]: https://img.shields.io/travis/Bacra/node-clientlinker/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-clientlinker
+[travis-image]: https://img.shields.io/travis/com/Bacra/node-clientlinker/master.svg?label=linux
+[travis-url]: https://travis-ci.com/Bacra/node-clientlinker
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
 [license-image]: https://img.shields.io/npm/l/clientlinker-flow-logger.svg
