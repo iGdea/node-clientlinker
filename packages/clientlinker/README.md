@@ -115,21 +115,6 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 ```
 
 
-# Some Flows
-
-| Name                             | Npm                       |
-|----------------------------------|---------------------------|
-| clientlinker-flow-httpproxy      | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-httpproxy.svg)](https://www.npmjs.org/package/clientlinker-flow-httpproxy)  |
-| clientlinker-flow-confighandler  | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-confighandler.svg)](https://www.npmjs.org/package/clientlinker-flow-confighandler)  |
-| clientlinker-flow-logger         | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-logger.svg)](https://www.npmjs.org/package/clientlinker-flow-logger)  |
-| clientlinker-flow-pkghandler     | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-pkghandler.svg)](https://www.npmjs.org/package/clientlinker-flow-pkghandler)  |
-| clientlinker-flow-debugger       | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-debugger.svg)](https://www.npmjs.org/package/clientlinker-flow-debugger)  |
-| clientlinker-flow-localfile      | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-localfile.svg)](https://www.npmjs.org/package/clientlinker-flow-localfile)  |
-| clientlinker-flow-mysql          | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-mysql.svg)](https://www.npmjs.org/package/clientlinker-flow-mysql)  |
-
-You can custom flows [Like This](https://github.com/Bacra/node-clientlinker/wiki/Custom-Flow).
-
-
 # Upgrade
 
 ### 6.x.x => 7.0.0
