@@ -6,9 +6,9 @@
     "bootstrap": "lerna bootstrap --no-ci",
     "ls": "lerna ls",
     "pub": "lerna publish",
-    "test": "lerna run test",
-    "test-ci": "lerna run test-ci",
-    "test-cov": "lerna run test-cov"
+    "test": "lerna run test --",
+    "test-ci": "lerna run test-ci --",
+    "test-cov": "lerna run test-cov --"
   },
   "devDependencies": {
     "lerna": "^3.16.4",
