@@ -17,7 +17,7 @@ npm install clientlinker --save
 npm install clientlinker -g
 ```
 
-# Useage
+# Usage
 
 ## Options
 

@@ -22,7 +22,7 @@ npm i clientlinker-flow-httpproxy --save
 ```
 
 
-# Useage
+# Usage
 
 ```javascript
 var clientlinker = require('clientlinker');

@@ -25,7 +25,7 @@ npm i clientlinker-flow-confighandler-test --save-dev
 
 
 
-# Useage
+# Usage
 
 ```javascript
 var clientlinker = require('clientlinker');

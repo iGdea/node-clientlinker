@@ -22,7 +22,7 @@ npm i clientlinker-flow-debugger --save
 ```
 
 
-# Useage
+# Usage
 
 ```javascript
 var clientlinker = require('clientlinker');

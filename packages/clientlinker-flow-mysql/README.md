@@ -21,7 +21,7 @@ npm i clientlinker-flow-mysql --save
 ```
 
 
-# Useage
+# Usage
 
 ```javascript
 var clientlinker = require('clientlinker');

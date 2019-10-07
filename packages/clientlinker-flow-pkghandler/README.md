@@ -21,7 +21,7 @@ npm i clientlinker-flow-pkghandler --save
 ```
 
 
-# Useage
+# Usage
 
 ```javascript
 var clientlinker = require('clientlinker');

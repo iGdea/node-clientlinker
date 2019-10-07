@@ -16,7 +16,7 @@ A solution to break out of network and OS.
 npm install clientlinker-core --save
 ```
 
-# Useage
+# Usage
 
 ## Options
 
