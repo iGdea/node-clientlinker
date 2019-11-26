@@ -56,7 +56,7 @@ exports.proto = function(Linker)
 				arguments[0] = action;
 			}
 
-			this.run.apply(this, arguments);
+			return this.run.apply(this, arguments);
 		},
 		'use `linker.run` instead of `linker.runByKey`');
 
