@@ -11,6 +11,8 @@ function Client(name, linker, options)
 	this.name = name;
 	this.linker = linker;
 	this.options = options || {};
+	// flow 会放一些cache在这里
+	this.cache = {};
 }
 
 _.extend(Client.prototype,

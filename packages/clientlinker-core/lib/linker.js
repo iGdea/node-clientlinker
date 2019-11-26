@@ -21,6 +21,9 @@ function Linker(options)
 	// 用来暴露最近一次执行runIn时，返回的runtime对象
 	this.lastRuntime = null;
 
+	// flow 可能会放一些缓存变量在这里
+	this.cache = {};
+
 	depLinker.init.call(this);
 }
 
@@ -244,7 +247,23 @@ _.extend(proto,
 				else
 					return self.clients();
 			});
-	}
+	},
+	clearCache: function(clientName) {
+		var self = this;
+		if (!clientName) self.cache = {};
+
+		self.clients()
+			.then(function(list) {
+				if (clientName) {
+					var client = list[clientName];
+					if (client) client.cache = {};
+				} else {
+					_.each(list, function(item) {
+						item.cache = {};
+					});
+				}
+			});
+	},
 });
 
 
