@@ -68,7 +68,7 @@ function methods(client)
 
 function initPool(client)
 {
-	if (client.mysqlPool) return Promise.resolve(client.mysqlPool);
+	if (client.cache.mysqlPool) return Promise.resolve(client.cache.mysqlPool);
 
 	var options = client.options;
 	var getConfigPromise;
@@ -121,21 +121,8 @@ function initPool(client)
 			return;
 		}
 
-		var linker = client.linker;
-		var pools = linker.mysqlPools || (linker.mysqlPools = {});
-
-		if (linker.mysqlPools)
-		{
-			client.mysqlPool = pools[client.name];
-		}
-
-		if (!client.mysqlPool)
-		{
-			client.mysqlPool = mysql.createPool(config);
-		}
-
-
-		return client.mysqlPool;
+		return client.cache.mysqlPool
+			|| (client.cache.mysqlPool = mysql.createPool(config));
 	});
 }
 
