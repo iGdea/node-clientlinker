@@ -98,7 +98,6 @@ describe('#runtime', function()
 			var lastRunnerTiming = runtime.lastFlow().timing;
 
 			expect(timing.flowsEnd).to.be(lastRunnerTiming.end);
-			expect(lastRunnerTiming.start).to.be(timing.flowsStart);
 		});
 	});
 

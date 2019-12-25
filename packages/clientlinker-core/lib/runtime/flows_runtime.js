@@ -64,8 +64,6 @@ _.extend(FlowsRuntime.prototype,
 			return Promise.reject(utils.newNotFoundError('CLIENT NO FLOWS', runtime));
 		}
 
-		self.lastRunner = runner;
-
 		debug('run %s.%s flow:%s(%d/%d)',
 			client.name,
 			runtime.method,
@@ -96,6 +94,8 @@ _.extend(FlowsRuntime.prototype,
 
 		var runner = new FlowRuntime(flow, this);
 		this.runned.push(runner);
+		this.lastRunner = runner;
+
 		return runner;
 	},
 
