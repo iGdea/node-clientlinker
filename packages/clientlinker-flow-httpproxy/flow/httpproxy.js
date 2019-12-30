@@ -42,7 +42,7 @@ function httpproxy(runtime, callback)
 			}
 			catch(err)
 			{
-				debug('request parse json err:%o', err);
+				debug('request parse json err:%o params:%o body:%s', err, params, result.body);
 				runtime.debug && runtime.debug('httpproxyResponseError', err);
 				return callback.next();
 			}
