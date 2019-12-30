@@ -30,7 +30,7 @@ describe('#json', function()
 
 		expect(newData.data.buffer).to.not.be.a(Buffer);
 		expect(newData.data.buffer.type).to.be(json.CONST_VARS.BUFFER_KEY);
-		expect(newData.data.buffer.data).to.be.an(Array);
+		expect(newData.data.buffer.data).to.be.a('string');
 
 		expect(newData.data.string).to.be('string');
 		expect(newData.data.number).to.be(123);

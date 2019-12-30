@@ -13,11 +13,7 @@ function stringify(data)
 	{
 		if (Buffer.isBuffer(item))
 		{
-			var bufValues = item.toJSON();
-			// 兼容node版本
-			bufValues.data && (bufValues = bufValues.data);
-
-			return {type: BUFFER_KEY, data: bufValues};
+			return {type: BUFFER_KEY, data: item.toString('base64')};
 		}
 		else if (item instanceof Error)
 		{
@@ -48,7 +44,7 @@ function parse(data, KEY)
 			if (item.type)
 			{
 				if (item.type == BUFFER_KEY)
-					return new Buffer(item.data || '');
+					return Buffer.from(item.data || '', 'base64');
 				else if (item.type == ERROR_KEY)
 					return originalMap(item.data, exports.parse, new Error(item.data.message));
 			}
