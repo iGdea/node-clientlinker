@@ -16,6 +16,7 @@ function httpproxy(runtime, callback)
 	if (!body) return callback.next();
 
 	var params = getRequestParams(runtime, body);
+	debug('request params: %o', params);
 
 	return new Promise(function(resolve, reject)
 		{
