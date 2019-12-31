@@ -148,9 +148,15 @@ _.extend(proto,
 		// runtime保存着运行时的所有数据，方便进行调试
 		self.lastRuntime = runtime;
 
-		return self.parseAction(action)
-			.then(function(data)
+		return Promise.all([
+			self.parseAction(action),
+			// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
+			// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
+			new Promise(process.nextTick),
+		])
+			.then(function(arr)
 			{
+				var data = arr[0];
 				runtime.method = data.method;
 				runtime.client = data.client;
 				if (env) _.extend(runtime.env, env);
