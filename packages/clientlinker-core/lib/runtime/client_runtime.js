@@ -1,53 +1,51 @@
 'use strict';
 
-var _ = require('lodash');
-var Promise = require('bluebird');
-var FlowsRuntime = require('./flows_runtime').FlowsRuntime;
-var Timing = require('./timing/client_runtime_timing').Timing;
-var utils = require('../utils');
+const _ = require('lodash');
+const Promise = require('bluebird');
+const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
+const Timing = require('./timing/client_runtime_timing').Timing;
+const utils = require('../utils');
 
-exports.ClientRuntime = ClientRuntime;
+class ClientRuntime {
 
-function ClientRuntime(linker, action, query, body, options) {
-	this.linker = linker;
-	this.action = action;
-	this.client = null;
-	this.method = null;
+	constructor(linker, action, query, body, options) {
+		this.linker = linker;
+		this.action = action;
+		this.client = null;
+		this.method = null;
 
-	// 如果使用httpproxy，必须是可以被序列化的
-	this.query = query;
-	// 如果使用httpproxy，必须是可以被序列化的
-	this.body = body;
-	// 如果使用httpproxy，必须是可以被序列化的
-	this.options = options;
-	// 保存框架运行过程中的数据
-	// 如果使用httpproxy，必须是可以被序列化的
-	this.env = {};
-	// 保存运行过程中的数据，和env区别：会在重试的时候清理
-	// 比如httproxy运行次数
-	// 如果使用httpproxy，必须是可以被序列化的
-	this.tmp = {};
+		// 如果使用httpproxy，必须是可以被序列化的
+		this.query = query;
+		// 如果使用httpproxy，必须是可以被序列化的
+		this.body = body;
+		// 如果使用httpproxy，必须是可以被序列化的
+		this.options = options;
+		// 保存框架运行过程中的数据
+		// 如果使用httpproxy，必须是可以被序列化的
+		this.env = {};
+		// 保存运行过程中的数据，和env区别：会在重试的时候清理
+		// 比如httproxy运行次数
+		// 如果使用httpproxy，必须是可以被序列化的
+		this.tmp = {};
 
-	// 执行过程中额外生成的一些数据
-	this._debugData = {};
+		// 执行过程中额外生成的一些数据
+		this._debugData = {};
 
-	// 运行中的状态
-	this.retry = [];
-	this.lastTry = null;
-	this.promise = null;
+		// 运行中的状态
+		this.retry = [];
+		this.lastTry = null;
+		this.promise = null;
 
-	this.timing = new Timing(this);
-	this.navigationStart = Date.now();
-}
+		this.timing = new Timing(this);
+		this.navigationStart = Date.now();
+	}
 
-var proto = ClientRuntime.prototype;
-_.extend(proto, {
-	run: function () {
-		var self = this;
+	run() {
+		const self = this;
 		if (!self.client) throw utils.newNotFoundError('NO CLIENT',
 			self);
 
-		var retry;
+		let retry;
 		if (self.options && self.options.retry)
 			retry = self.options.retry;
 		else
@@ -65,7 +63,7 @@ _.extend(proto, {
 
 		self.promise.catch(_.noop);
 
-		var mainPromise = self._run()
+		const mainPromise = self._run()
 			.catch(function (err) {
 				if (self.retry.length < retry)
 					return self._run();
@@ -74,16 +72,18 @@ _.extend(proto, {
 			});
 
 		return mainPromise;
-	},
-	_run: function () {
-		var onetry = new FlowsRuntime(this);
+	}
+
+	_run() {
+		const onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
 		this.tmp = {};
 		this.retry.push(onetry);
 		return onetry.run();
-	},
-	debug: function (key, val) {
-		var data = this._debugData;
+	}
+
+	debug(key, val) {
+		const data = this._debugData;
 		switch (arguments.length) {
 			case 0:
 				return data;
@@ -97,25 +97,28 @@ _.extend(proto, {
 				var arr = data[key] || (data[key] = []);
 				arr.push(new DebugData(val, this));
 		}
-	},
+	}
 
-	getLastRunner: function () {
+	getLastRunner() {
 		return this.lastTry && this.lastTry.lastRunner;
-	},
-	getFirstRunner: function () {
-		var firstTry = this.retry[0];
-		return firstTry && firstTry.runned[0];
-	},
-	isStarted: function () {
-		var firstTry = this.retry[0];
-		return firstTry && firstTry.started;
-	},
-	isFinished: function () {
-		return this.lastTry && this.lastTry.finished;
-	},
+	}
 
-	toJSON: function () {
-		var debugData = {};
+	getFirstRunner() {
+		const firstTry = this.retry[0];
+		return firstTry && firstTry.runned[0];
+	}
+
+	isStarted() {
+		const firstTry = this.retry[0];
+		return firstTry && firstTry.started;
+	}
+
+	isFinished() {
+		return this.lastTry && this.lastTry.finished;
+	}
+
+	toJSON() {
+		const debugData = {};
 		_.each(this._debugData, function (vals, key) {
 			debugData[key] = vals.map(function (item) {
 				return item.toJSON();
@@ -142,23 +145,29 @@ _.extend(proto, {
 			started: this.isStarted(),
 			finished: this.isFinished(),
 		};
-	},
-});
-
-
-
-function DebugData(value, runtime) {
-	this.value = value;
-	this.retry = runtime.retry.length;
-	this.runner = runtime.getLastRunner();
+	}
 }
 
-DebugData.prototype.toJSON = function () {
-	return {
-		value: this.value,
-		retry: this.retry,
-		flow: this.runner.flow.name
-	};
-};
+
+exports.ClientRuntime = ClientRuntime;
+
+
+
+class DebugData {
+
+	constructor(value, runtime) {
+		this.value = value;
+		this.retry = runtime.retry.length;
+		this.runner = runtime.getLastRunner();
+	}
+
+	toJSON() {
+		return {
+			value: this.value,
+			retry: this.retry,
+			flow: this.runner.flow.name
+		};
+	}
+}
 
 require('../deps/dep_client_runtime').proto(ClientRuntime);
