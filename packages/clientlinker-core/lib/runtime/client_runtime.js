@@ -22,9 +22,12 @@ function ClientRuntime(linker, action, query, body, options)
 	// 如果使用httpproxy，必须是可以被序列化的
 	this.options	= options;
 	// 保存框架运行过程中的数据
-	// 比如httproxy运行次数
 	// 如果使用httpproxy，必须是可以被序列化的
 	this.env		= {};
+	// 保存运行过程中的数据，和env区别：会在重试的时候清理
+	// 比如httproxy运行次数
+	// 如果使用httpproxy，必须是可以被序列化的
+	this.tmp		= {};
 
 	// 执行过程中额外生成的一些数据
 	this._debugData	= {};
@@ -81,6 +84,7 @@ _.extend(proto,
 	{
 		var onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
+		this.tmp = {};
 		this.retry.push(onetry);
 		return onetry.run();
 	},
