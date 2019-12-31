@@ -1,53 +1,51 @@
 'use strict';
 
-var _				= require('lodash');
-var Promise			= require('bluebird');
-var FlowsRuntime	= require('./flows_runtime').FlowsRuntime;
-var Timing			= require('./timing/client_runtime_timing').Timing;
-var utils			= require('../utils');
+var _ = require('lodash');
+var Promise = require('bluebird');
+var FlowsRuntime = require('./flows_runtime').FlowsRuntime;
+var Timing = require('./timing/client_runtime_timing').Timing;
+var utils = require('../utils');
 
 exports.ClientRuntime = ClientRuntime;
 
-function ClientRuntime(linker, action, query, body, options)
-{
-	this.linker		= linker;
-	this.action		= action;
-	this.client		= null;
-	this.method		= null;
+function ClientRuntime(linker, action, query, body, options) {
+	this.linker = linker;
+	this.action = action;
+	this.client = null;
+	this.method = null;
 
 	// 如果使用httpproxy，必须是可以被序列化的
-	this.query		= query;
+	this.query = query;
 	// 如果使用httpproxy，必须是可以被序列化的
-	this.body		= body;
+	this.body = body;
 	// 如果使用httpproxy，必须是可以被序列化的
-	this.options	= options;
+	this.options = options;
 	// 保存框架运行过程中的数据
 	// 如果使用httpproxy，必须是可以被序列化的
-	this.env		= {};
+	this.env = {};
 	// 保存运行过程中的数据，和env区别：会在重试的时候清理
 	// 比如httproxy运行次数
 	// 如果使用httpproxy，必须是可以被序列化的
-	this.tmp		= {};
+	this.tmp = {};
 
 	// 执行过程中额外生成的一些数据
-	this._debugData	= {};
+	this._debugData = {};
 
 	// 运行中的状态
-	this.retry		= [];
-	this.lastTry	= null;
-	this.promise	= null;
+	this.retry = [];
+	this.lastTry = null;
+	this.promise = null;
 
-	this.timing	= new Timing(this);
+	this.timing = new Timing(this);
 	this.navigationStart = Date.now();
 }
 
 var proto = ClientRuntime.prototype;
-_.extend(proto,
-{
-	run: function()
-	{
+_.extend(proto, {
+	run: function () {
 		var self = this;
-		if (!self.client) throw utils.newNotFoundError('NO CLIENT', self);
+		if (!self.client) throw utils.newNotFoundError('NO CLIENT',
+			self);
 
 		var retry;
 		if (self.options && self.options.retry)
@@ -58,10 +56,8 @@ _.extend(proto,
 		// 需要先给self赋值，在运行run
 		// 避免flow运行的时候，self.promise = null
 		// 例如：clientlinker-flow-logger
-		self.promise = new Promise(function(resolve, reject)
-		{
-			process.nextTick(function()
-			{
+		self.promise = new Promise(function (resolve, reject) {
+			process.nextTick(function () {
 				self.promise = mainPromise;
 				mainPromise.then(resolve, reject);
 			});
@@ -70,8 +66,7 @@ _.extend(proto,
 		self.promise.catch(_.noop);
 
 		var mainPromise = self._run()
-			.catch(function(err)
-			{
+			.catch(function (err) {
 				if (self.retry.length < retry)
 					return self._run();
 				else
@@ -80,25 +75,22 @@ _.extend(proto,
 
 		return mainPromise;
 	},
-	_run: function()
-	{
+	_run: function () {
 		var onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
 		this.tmp = {};
 		this.retry.push(onetry);
 		return onetry.run();
 	},
-	debug: function(key, val)
-	{
+	debug: function (key, val) {
 		var data = this._debugData;
-		switch(arguments.length)
-		{
+		switch (arguments.length) {
 			case 0:
 				return data;
 
 			case 1:
 				var arr = data[key];
-				return arr && arr[arr.length-1].value;
+				return arr && arr[arr.length - 1].value;
 
 			case 2:
 			default:
@@ -107,32 +99,25 @@ _.extend(proto,
 		}
 	},
 
-	getLastRunner: function()
-	{
+	getLastRunner: function () {
 		return this.lastTry && this.lastTry.lastRunner;
 	},
-	getFirstRunner: function()
-	{
+	getFirstRunner: function () {
 		var firstTry = this.retry[0];
 		return firstTry && firstTry.runned[0];
 	},
-	isStarted: function()
-	{
+	isStarted: function () {
 		var firstTry = this.retry[0];
 		return firstTry && firstTry.started;
 	},
-	isFinished: function()
-	{
+	isFinished: function () {
 		return this.lastTry && this.lastTry.finished;
 	},
 
-	toJSON: function()
-	{
+	toJSON: function () {
 		var debugData = {};
-		_.each(this._debugData, function(vals, key)
-		{
-			debugData[key] = vals.map(function(item)
-			{
+		_.each(this._debugData, function (vals, key) {
+			debugData[key] = vals.map(function (item) {
 				return item.toJSON();
 			});
 		});
@@ -150,10 +135,9 @@ _.extend(proto,
 			timing: this.timing.toJSON(),
 			navigationStart: this.navigationStart,
 
-			retry: this.retry.map(function(item)
-				{
-					return item.toJSON();
-				}),
+			retry: this.retry.map(function (item) {
+				return item.toJSON();
+			}),
 
 			started: this.isStarted(),
 			finished: this.isFinished(),
@@ -163,15 +147,13 @@ _.extend(proto,
 
 
 
-function DebugData(value, runtime)
-{
+function DebugData(value, runtime) {
 	this.value = value;
 	this.retry = runtime.retry.length;
 	this.runner = runtime.getLastRunner();
 }
 
-DebugData.prototype.toJSON = function()
-{
+DebugData.prototype.toJSON = function () {
 	return {
 		value: this.value,
 		retry: this.retry,
