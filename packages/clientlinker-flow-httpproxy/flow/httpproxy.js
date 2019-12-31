@@ -39,7 +39,7 @@ function httpproxy(runtime, callback)
 
 			try {
 				var data = JSON.parse(result.body);
-				data = json.parse(data, data.CONST_KEY);
+				data = json.parse(data, data.CONST_KEY) || {};
 			}
 			catch(err)
 			{
@@ -48,13 +48,13 @@ function httpproxy(runtime, callback)
 				return callback.next();
 			}
 
-			if (data && data.env)
+			if (data.env)
 			{
-				var keepEnv = {
-					source: runtime.env.source,
-				};
+				var keepEnv = { source: runtime.env.source };
 				_.extend(runtime.env, data.env, keepEnv);
 			}
+
+			_.extend(runtime.tmp, data.tmp);
 
 			// 预留接口，在客户端显示server端日志
 			if (data.httpproxy_msg
@@ -127,7 +127,8 @@ function getRequestBody(runtime)
 		query	: runtime.query,
 		body	: runtime.body,
 		options	: runtime.options,
-		env		: runtime.env
+		env		: runtime.env,
+		tmp		: runtime.tmp,
 	};
 
 	return body;

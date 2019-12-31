@@ -94,6 +94,7 @@ function httpAction(linker, serverRouterTime, req)
 						data:
 						{
 							env: body && body.env,
+							tmp: body && body.tmp,
 							result: err
 						}
 					};
@@ -172,6 +173,7 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 						data:
 						{
 							env		: runtime ? runtime.env : body.env,
+							tmp		: runtime ? runtime.tmp : body.tmp,
 							data	: data
 						}
 					};
@@ -183,6 +185,7 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 						data:
 						{
 							env		: runtime ? runtime.env : body.env,
+							tmp		: runtime ? runtime.tmp : body.tmp,
 							result	: err
 						}
 					};
