@@ -273,6 +273,7 @@ describe('#run_error', function()
 		it('#in defualts', function()
 		{
 			var runTimes = 0;
+			var triggerTimes = 0;
 			var linker = clientlinker(
 			{
 				flows: ['timingCheck', 'confighandler'],
@@ -316,12 +317,19 @@ describe('#run_error', function()
 			});
 			linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
-			return linker.run('client.method')
-					.then(function(data)
-					{
-						expect(data).to.be(555);
-						expect(runTimes).to.be(2);
-					});
+			var retPromise = linker.run('client.method')
+				.then(function(data)
+				{
+					expect(data).to.be(555);
+					expect(runTimes).to.be(2);
+					expect(triggerTimes).to.be(2);
+				});
+
+			linker.lastRuntime.on('retry', function() {
+				triggerTimes++;
+			});
+
+			return retPromise;
 		});
 
 		it('#runOptions', function()

@@ -5,10 +5,13 @@ const Promise = require('bluebird');
 const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
 const Timing = require('./timing/client_runtime_timing').Timing;
 const utils = require('../utils');
+const { EventEmitter } = require('events');
 
-class ClientRuntime {
+class ClientRuntime extends EventEmitter {
 
 	constructor(linker, action, query, body, options) {
+		super();
+
 		this.linker = linker;
 		this.action = action;
 		this.client = null;
@@ -71,6 +74,11 @@ class ClientRuntime {
 					throw err;
 			});
 
+		// 清理绑定事件
+		mainPromise.catch(_.noop).then(function() {
+			self.removeAllListeners();
+		});
+
 		return mainPromise;
 	}
 
@@ -79,6 +87,8 @@ class ClientRuntime {
 		this.lastTry = onetry;
 		this.tmp = {};
 		this.retry.push(onetry);
+		this.emit('retry');
+
 		return onetry.run();
 	}
 
