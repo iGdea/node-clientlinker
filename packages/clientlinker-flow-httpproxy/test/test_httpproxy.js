@@ -337,7 +337,9 @@ describe('#httpproxy', function()
 
 									if (clientLevel === 0)
 									{
-										expect(runtime.env.httpproxyLevel)
+										expect(runtime.tmp.httpproxyLevelTotal)
+											.to.be(undefined);
+										expect(runtime.tmp.httpproxyLevel)
 											.to.be(undefined);
 										var responseError = runtime.retry[0]
 											.getRunnedFlowByName('httpproxy')
@@ -347,8 +349,10 @@ describe('#httpproxy', function()
 									else
 									{
 										var targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
-										expect(runtime.env.httpproxyLevel)
+										expect(runtime.tmp.httpproxyLevelTotal)
 											.to.be(targetSvrLevel);
+										expect(runtime.tmp.httpproxyLevel)
+											.to.be(1);
 										var responseError = runtime.debug('httpproxyResponseError');
 										expect(responseError.message)
 											.to.be('httpproxy,response!200,501');

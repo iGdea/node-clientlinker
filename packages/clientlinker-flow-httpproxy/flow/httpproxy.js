@@ -54,7 +54,10 @@ function httpproxy(runtime, callback)
 				_.extend(runtime.env, data.env, keepEnv);
 			}
 
-			_.extend(runtime.tmp, data.tmp);
+			if (data.tmp) {
+				var keepTmp = { httpproxyLevel: runtime.tmp.httpproxyLevel };
+				_.extend(runtime.tmp, data.tmp, keepTmp);
+			}
 
 			// 预留接口，在客户端显示server端日志
 			if (data.httpproxy_msg
@@ -105,8 +108,11 @@ function getRequestBody(runtime)
 	if (!options.httpproxy) return false;
 
 	var httpproxyMaxLevel = options.httpproxyMaxLevel;
-	var httpproxyNextLevel = runtime.env.httpproxyLevel || 0;
+	var httpproxyNextLevel = runtime.tmp.httpproxyLevel || 0;
+	var httpproxyLevelTotal = runtime.tmp.httpproxyLevelTotal || httpproxyNextLevel;
 	httpproxyNextLevel++;
+	httpproxyLevelTotal++;
+
 	if ((!httpproxyMaxLevel && httpproxyMaxLevel !== 0)
 		|| httpproxyMaxLevel < 0)
 	{
@@ -120,8 +126,8 @@ function getRequestBody(runtime)
 		return false;
 	}
 
-	runtime.env.httpproxyLevel = httpproxyNextLevel;
-
+	runtime.tmp.httpproxyLevel = httpproxyNextLevel;
+	runtime.tmp.httpproxyLevelTotal = httpproxyLevelTotal;
 
 	var body = {
 		query	: runtime.query,
