@@ -164,6 +164,10 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 			var env = _.extend({}, body.env, { httpproxyHeaders: headers, httpproxyQuery: query });
 			var retPromise = linker.runIn(args, 'httpproxy', env);
 			var runtime = linker.lastRuntime;
+			// 重试的时候，需要将tmp传回去
+			runtime.on('retry', function() {
+				_.extend(this.tmp, body.tmp);
+			});
 
 			return retPromise.then(function(data)
 				{
