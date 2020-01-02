@@ -48,15 +48,21 @@ function httpproxy(runtime, callback)
 				return callback.next();
 			}
 
-			if (data.env)
-			{
-				var keepEnv = { source: runtime.env.source };
-				_.extend(runtime.env, data.env, keepEnv);
-			}
+			// httpproxy运行后的变化，不需要同步过来
+			// if (data.env)
+			// {
+			// 	var keepEnv = { source: runtime.env.source };
+			// 	_.extend(runtime.env, data.env, keepEnv);
+			// }
+			// if (data.tmp)
+			// {
+			// 	var keepTmp = { httpproxyLevel: runtime.tmp.httpproxyLevel };
+			// 	_.extend(runtime.tmp, data.tmp, keepTmp);
+			// }
 
-			if (data.tmp) {
-				var keepTmp = { httpproxyLevel: runtime.tmp.httpproxyLevel };
-				_.extend(runtime.tmp, data.tmp, keepTmp);
+			if (data.tmp && data.tmp.httpproxyLevelTotal)
+			{
+				runtime.tmp.httpproxyLevelTotal = data.tmp.httpproxyLevelTotal;
 			}
 
 			// 预留接口，在客户端显示server端日志
