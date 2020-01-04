@@ -240,7 +240,8 @@ function checkHttpproxyTime(checkOptions)
 			max: 100 * 1000,
 		}));
 
-	var requestKey = checkOptions.headers['xh-httpproxy-key'];
+	var requestKey = checkOptions.headers['xh-httpproxy-key2']
+		|| checkOptions.headers['xh-httpproxy-key'];
 
 	if (requestKey)
 	{
@@ -260,16 +261,19 @@ function checkHttpproxyTime(checkOptions)
 function checkHttpproxyKey(checkOptions)
 {
 	var httpproxyKey = checkOptions.client.options.httpproxyKey;
-	var requestKey = checkOptions.headers['xh-httpproxy-key'];
-	debug('[%s] httpproxyKey: %s', checkOptions.action, httpproxyKey);
-
-	// version1特性：
+	// version2特性：
 	// 所有请求都会带上来
 	// 加密参数增加随机数
 	// @todo 老版本兼容2个大版本
-	var keyVersion = requestKey && requestKey.substr(0, 1) == 'A' ? 1 : 0;
+	var keyVersion = 2;
+	var requestKey = checkOptions.headers['xh-httpproxy-key2'];
+	if (!requestKey) {
+		keyVersion = 1;
+		requestKey = checkOptions.headers['xh-httpproxy-key'];
+	}
+	debug('[%s] httpproxyKey: %s keyversion: %s', checkOptions.action, httpproxyKey, keyVersion);
 
-	if (!keyVersion && !httpproxyKey) return;
+	if (keyVersion == 1 && !httpproxyKey) return;
 	if (!requestKey)
 	{
 		debug('[%s] no httpproxy aes key', checkOptions.action);
@@ -284,9 +288,8 @@ function checkHttpproxyKey(checkOptions)
 
 	var hashContent = signature.get_sha_content(checkOptions.originalRaw);
 	var random = checkOptions.headers['xh-httpproxy-contenttime'];
-	if (keyVersion == 1) random += checkOptions.query.random;
+	if (keyVersion == 2) random += checkOptions.query.random;
 	var targetKey = signature.sha_content(hashContent, random, httpproxyKey);
-	if (keyVersion == 1) targetKey = 'A' + targetKey;
 
 	if (targetKey != requestKey)
 	{

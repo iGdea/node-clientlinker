@@ -203,8 +203,11 @@ function getRequestParams(runtime, body)
 	headers['XH-Httpproxy-DebugMd5'] = signature.md5(hashContent);
 
 	var requestStartTime = Date.now();
-	var key = signature.sha_content(hashContent, '' + requestStartTime + random, options.httpproxyKey);
-	headers['XH-Httpproxy-Key'] = 'A' + key;
+	// @todo key1 保留2个大版本
+	if (options.httpproxyKey) {
+		headers['XH-Httpproxy-Key'] = signature.sha_content(hashContent, requestStartTime, options.httpproxyKey);
+	}
+	headers['XH-Httpproxy-Key2'] = signature.sha_content(hashContent, '' + requestStartTime + random, options.httpproxyKey);
 	headers['XH-Httpproxy-ContentTime'] = requestStartTime;
 
 	// URL 上的action只是为了方便查看抓包请求

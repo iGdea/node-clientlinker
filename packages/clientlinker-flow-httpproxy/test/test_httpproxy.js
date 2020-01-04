@@ -182,10 +182,12 @@ describe('#httpproxy', function()
 									var body = httpproxy.getRequestBody_(runtime);
 									var opts = httpproxy.getRequestParams_(runtime, body);
 
-									if (key)
-										opts.headers['XH-Httpproxy-Key'] = key;
-									else if (key === null)
+									if (key) {
+										opts.headers['XH-Httpproxy-Key2'] = key;
+									} else if (key === null) {
 										delete opts.headers['XH-Httpproxy-Key'];
+										delete opts.headers['XH-Httpproxy-Key2'];
+									}
 
 									request.post(opts, function(err, response, body)
 									{
