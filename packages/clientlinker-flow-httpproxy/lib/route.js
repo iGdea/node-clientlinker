@@ -150,6 +150,7 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 				serverRouterTime: serverRouterTime,
 				headers: headers,
 				body: body,
+				query: query,
 				originalRaw: originalRaw,
 			};
 
@@ -262,7 +263,13 @@ function checkHttpproxyKey(checkOptions)
 	var requestKey = checkOptions.headers['xh-httpproxy-key'];
 	debug('[%s] httpproxyKey: %s', checkOptions.action, httpproxyKey);
 
-	if (!httpproxyKey) return;
+	// version1特性：
+	// 所有请求都会带上来
+	// 加密参数增加随机数
+	// @todo 老版本兼容2个大版本
+	var keyVersion = requestKey && requestKey.substr(0, 1) == 'A' ? 1 : 0;
+
+	if (!keyVersion && !httpproxyKey) return;
 	if (!requestKey)
 	{
 		debug('[%s] no httpproxy aes key', checkOptions.action);
@@ -277,7 +284,10 @@ function checkHttpproxyKey(checkOptions)
 
 	var hashContent = signature.get_sha_content(checkOptions.originalRaw);
 	var random = checkOptions.headers['xh-httpproxy-contenttime'];
+	if (keyVersion == 1) random += checkOptions.query.random;
 	var targetKey = signature.sha_content(hashContent, random, httpproxyKey);
+	if (keyVersion == 1) targetKey = 'A' + targetKey;
+
 	if (targetKey != requestKey)
 	{
 		debug('[%s] not match, time:%s cntMd5:%s %s retKey:%s %s',

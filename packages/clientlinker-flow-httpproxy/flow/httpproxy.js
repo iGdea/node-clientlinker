@@ -182,36 +182,31 @@ function getRequestParams(runtime, body)
 
 	var headers = _.extend({}, options.httpproxyHeaders, runOptions.httpproxyHeaders);
 	headers['Content-Type'] = 'application/json';
+	var random = Math.random() * 10000000000 | 0;
 
 	var postBody = {
 		action: runtime.action,
 		data: json.stringify(body),
 		CONST_KEY: json.CONST_KEY,
-		// post 是没有缓存的，但还是加一个随机数，更安全一些
-		random: Math.random() * 100000 | 0,
 	};
 
 	var bodystr = JSON.stringify(postBody, null, '\t')
 		.replace(/\n/g, '\r\n');
 
-	var requestStartTime = Date.now();
 	// 增加对内容的签名
 	// 内容可能会超级大，所以分批计算签名
 	// 并且requestStartTime要尽量精确
-	if (options.httpproxyKey)
-	{
-		var hashContent = signature.get_sha_content(bodystr);
-		headers['XH-Httpproxy-DebugMd5'] = signature.md5(hashContent);
+	var hashContent = signature.get_sha_content(bodystr);
+	headers['XH-Httpproxy-DebugMd5'] = signature.md5(hashContent);
 
-		requestStartTime = Date.now();
-		var key = signature.sha_content(hashContent, requestStartTime, options.httpproxyKey);
-		headers['XH-Httpproxy-Key'] = key;
-	}
+	var requestStartTime = Date.now();
+	var key = signature.sha_content(hashContent, '' + requestStartTime + random, options.httpproxyKey);
+	headers['XH-Httpproxy-Key'] = 'A' + key;
 	headers['XH-Httpproxy-ContentTime'] = requestStartTime;
 
 	// URL 上的action只是为了方便查看抓包请求
 	// 实际以body.action为准
-	var url = appendUrl(options.httpproxy, 'action='+runtime.action);
+	var url = appendUrl(options.httpproxy, 'action=' + runtime.action + '&random=' + random);
 
 	return {
 		url		: url,
