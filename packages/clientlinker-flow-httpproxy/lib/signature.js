@@ -3,9 +3,9 @@
 var crypto	= require('crypto');
 
 exports.sha_content = sha_content;
-function sha_content(content, time, key)
+function sha_content(content, random, key)
 {
-	var newkey = sha256(time + ',' + key);
+	var newkey = sha256(random + ',' + key);
 
 	return crypto.createHmac('sha256', newkey)
 		.update(content)
