@@ -20,7 +20,10 @@ function httpproxy(runtime, callback)
 
 	return new Promise(function(resolve, reject)
 		{
-			runtime.httpproxyRunParams = params;
+			runtime.debug && runtime.debug('httpproxyRunParams', params);
+			// headers 头部信息往往比其他部分更新神奇
+			debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, body.env, body.tmp);
+
 			request.post(params, function(err, response, body)
 			{
 				if (err)
