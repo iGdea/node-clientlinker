@@ -149,14 +149,22 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 	return linker.parseAction(action)
 		.then(function(methodInfo)
 		{
-			var options = methodInfo.client && methodInfo.client.options;
-			var clientRequestTime = headers['xh-httpproxy-contenttime'];
-			var requestKey = headers['xh-httpproxy-key'];
+			if (!methodInfo.client) return { statusCode: 501 };
 
-			if (checkHttpproxyTime(linker, action, serverRouterTime, clientRequestTime, requestKey, options) === false
-				|| checkHttpproxyKey(action, clientRequestTime, requestKey, originalRaw, headers, options) ===  false)
+			var checkOptions = {
+				linker: linker,
+				client: methodInfo.client,
+				action: action,
+				serverRouterTime: serverRouterTime,
+				headers: headers,
+				body: body,
+				originalRaw: originalRaw,
+			};
+
+			if (checkHttpproxyTime(checkOptions) === false
+				|| checkHttpproxyKey(checkOptions) ===  false)
 			{
-				return {statusCode: 403};
+				return { statusCode: 403 };
 			}
 
 			debug('[%s] catch proxy route', action);
@@ -219,40 +227,43 @@ function formatLogTime(date)
 		+'.'+date.getMilliseconds();
 }
 
-function checkHttpproxyTime(linker, action, serverRouterTime, clientRequestTime, requestKey, options)
+function checkHttpproxyTime(checkOptions)
 {
+	var clientRequestTime = checkOptions.headers['xh-httpproxy-contenttime'];
 	if (!clientRequestTime)
 	{
-		debug('[%s] no clientRequestTime:%s', action, clientRequestTime);
+		debug('[%s] no clientRequestTime:%s', checkOptions.action, clientRequestTime);
 		return false;
 	}
 
-	var remain = serverRouterTime - clientRequestTime;
-	var httpproxyKeyRemain = options && options.httpproxyKeyRemain || 5 * 1000;
+	var remain = checkOptions.serverRouterTime - clientRequestTime;
+	var httpproxyKeyRemain = checkOptions.client.options.httpproxyKeyRemain || 5 * 1000;
 
 	if ((!remain && remain !== 0) || Math.abs(remain) > httpproxyKeyRemain)
 	{
 		debug('[%s] key expired, remain:%sms config:%sms sever:%s, client:%s',
-			action, remain, httpproxyKeyRemain,
-			formatLogTime(serverRouterTime),
+			checkOptions.action, remain, httpproxyKeyRemain,
+			formatLogTime(checkOptions.serverRouterTime),
 			formatLogTime(new Date(+clientRequestTime)));
 		return false;
 	}
 
 	// 用内存cache稍微档一下重放的请求。避免扫描导致的大量错误
-	var cacheList = linker._httpproxy_cachelist || (linker._httpproxy_cachelist = {});
+	var cacheList = checkOptions.linker.cache.httpproxyRequest || (checkOptions.linker.cache.httpproxyRequest = {});
 	var cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache(
 		{
 			maxAge: httpproxyKeyRemain * 2,
 			max: 100 * 1000,
 		}));
 
+	var requestKey = checkOptions.headers['xh-httpproxy-key'];
+
 	if (requestKey)
 	{
-		var key = action + ':' + requestKey;
+		var key = checkOptions.action + ':' + requestKey;
 		if (cache.peek(key))
 		{
-			debug('[%s] siginkey has require: %s', action, requestKey);
+			debug('[%s] siginkey has require: %s', checkOptions.action, requestKey);
 			return false;
 		}
 		else
@@ -262,17 +273,16 @@ function checkHttpproxyTime(linker, action, serverRouterTime, clientRequestTime,
 	}
 }
 
-function checkHttpproxyKey(action, clientRequestTime, requestKey, originalRaw, headers, options)
+function checkHttpproxyKey(checkOptions)
 {
-	options || (options = {});
-	var httpproxyKey = options.httpproxyKey;
-
-	debug('[%s] httpproxyKey: %s', action, httpproxyKey);
+	var httpproxyKey = checkOptions.client.options.httpproxyKey;
+	var requestKey = checkOptions.headers['xh-httpproxy-key'];
+	debug('[%s] httpproxyKey: %s', checkOptions.action, httpproxyKey);
 
 	if (!httpproxyKey) return;
 	if (!requestKey)
 	{
-		debug('[%s] no httpproxy aes key', action);
+		debug('[%s] no httpproxy aes key', checkOptions.action);
 		return false;
 	}
 
@@ -282,13 +292,14 @@ function checkHttpproxyKey(action, clientRequestTime, requestKey, originalRaw, h
 	// 	return;
 	// }
 
-	var hashContent = signature.get_sha_content(originalRaw);
-	var targetKey = signature.sha_content(hashContent, clientRequestTime, httpproxyKey);
+	var hashContent = signature.get_sha_content(checkOptions.originalRaw);
+	var random = checkOptions.headers['xh-httpproxy-contenttime'];
+	var targetKey = signature.sha_content(hashContent, random, httpproxyKey);
 	if (targetKey != requestKey)
 	{
 		debug('[%s] not match, time:%s cntMd5:%s %s retKey:%s %s',
-			action, clientRequestTime,
-			signature.md5(hashContent), headers['xh-httpproxy-debugmd5'],
+			checkOptions.action, random,
+			signature.md5(hashContent), checkOptions.headers['xh-httpproxy-debugmd5'],
 			targetKey, requestKey);
 		return false;
 	}
