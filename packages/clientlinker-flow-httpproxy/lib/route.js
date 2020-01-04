@@ -91,12 +91,7 @@ function httpAction(linker, serverRouterTime, req)
 					debug('[%s] linker run err:%o', action, err);
 					return {
 						statusCode: 500,
-						data:
-						{
-							env: body && body.env,
-							tmp: body && body.tmp,
-							result: err
-						}
+						data: { result: err }
 					};
 				})
 				.then(function(output)
@@ -123,10 +118,7 @@ function httpAction(linker, serverRouterTime, req)
 
 			return {
 				statusCode: 500,
-				data:
-				{
-					result	: err
-				}
+				data: { result: err }
 			};
 		})
 		.then(function(output)
@@ -180,40 +172,31 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 			return retPromise.then(function(data)
 				{
 					// console.log('svr env for data', runtime.env);
-					return {
-						statusCode	: 200,
-						data:
-						{
-							env		: runtime ? runtime.env : body.env,
-							tmp		: runtime ? runtime.tmp : body.tmp,
-							data	: data
-						}
-					};
+					return { data: data };
 				},
 				function(err)
 				{
-					var output =
-					{
-						data:
-						{
-							env		: runtime ? runtime.env : body.env,
-							tmp		: runtime ? runtime.tmp : body.tmp,
-							result	: err
-						}
-					};
+					return { result: err };
+				})
+				.then(function(data)
+				{
+					data.env = runtime ? runtime.env : body.env;
+					data.tmp = runtime ? runtime.tmp : body.tmp;
 
-					// console.log('svr env for err', env);
-					if (err && err.message && err.message.substr(0, 21) == 'CLIENTLINKER:NotFound')
-					{
-						debug('[%s] %s', action, err);
-						output.statusCode = 501;
+					if (data.result
+						&& data.result.message
+						&& data.result.message.substr(0, 21) == 'CLIENTLINKER:NotFound') {
+						debug('[%s] %s', action, data.result);
+						return {
+							statusCode: 501,
+							data: data
+						};
+					} else {
+						return {
+							statusCode: 200,
+							data: data,
+						};
 					}
-					else
-					{
-						output.statusCode = 200;
-					}
-
-					return output;
 				});
 		});
 }
