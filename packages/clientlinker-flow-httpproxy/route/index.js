@@ -5,7 +5,7 @@ var _			= require('lodash');
 var debug		= require('debug')('clientlinker-flow-httpproxy:route');
 var rawBody		= Promise.promisify(require('raw-body'));
 var signature	= require('../lib/signature');
-var json		= require('./json');
+var json		= require('../lib/json');
 var LRUCache	= require('lru-cache');
 
 exports = module.exports = HttpProxyRoute;
