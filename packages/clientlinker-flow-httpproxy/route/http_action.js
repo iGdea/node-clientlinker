@@ -1,12 +1,15 @@
 'use strict';
 
-var Promise		= require('bluebird');
-var _			= require('lodash');
-var debug		= require('debug')('clientlinker-flow-httpproxy:route');
-var rawBody		= Promise.promisify(require('raw-body'));
-var signature	= require('../lib/signature');
-var json		= require('../lib/json');
-var LRUCache	= require('lru-cache');
+var Promise	= require('bluebird');
+var _		= require('lodash');
+var debug	= require('debug')('clientlinker-flow-httpproxy:route');
+var rawBody	= Promise.promisify(require('raw-body'));
+var json	= require('../lib/json');
+var utils	= require('../lib/utils');
+
+var checkHttpproxyTime = require('./check_httpproxytime');
+var checkHttpproxyKey = require('./check_httpproxykey');
+
 
 module.exports = httpAction;
 
@@ -15,7 +18,7 @@ function httpAction(linker, serverRouterTime, req)
 	var deprecate_msg = [];
 	var client_msg = [];
 
-	var logmsg = 'route catch:' + formatLogTime(serverRouterTime);
+	var logmsg = 'route catch:' + utils.formatLogTime(serverRouterTime);
 	debug(logmsg);
 	client_msg.push(logmsg);
 
@@ -40,7 +43,7 @@ function httpAction(linker, serverRouterTime, req)
 				{
 					var endTime = new Date;
 					var logmsg = 'clientlinker run end:'
-						+ formatLogTime(endTime)
+						+ utils.formatLogTime(endTime)
 						+ ' ' + (endTime - serverRouterTime) + 'ms';
 					debug(logmsg);
 					client_msg.push(logmsg);
@@ -52,7 +55,7 @@ function httpAction(linker, serverRouterTime, req)
 		{
 			var endTime = new Date;
 			var logmsg = 'clientlinker run err:'
-				+ ' ' + formatLogTime(endTime)
+				+ ' ' + utils.formatLogTime(endTime)
 				+ ' ' + (endTime - serverRouterTime) + 'ms'
 				+ ' msg=' + ((err && err.message) || err);
 			debug(logmsg);
@@ -146,103 +149,4 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 					}
 				});
 		});
-}
-
-
-function formatLogTime(date)
-{
-	return date.getHours()
-		+':'+date.getMinutes()
-		+':'+date.getSeconds()
-		+'.'+date.getMilliseconds();
-}
-
-function checkHttpproxyTime(checkOptions)
-{
-	var clientRequestTime = checkOptions.headers['xh-httpproxy-contenttime'];
-	if (!clientRequestTime)
-	{
-		debug('[%s] no clientRequestTime:%s', checkOptions.action, clientRequestTime);
-		return false;
-	}
-
-	var remain = checkOptions.serverRouterTime - clientRequestTime;
-	var httpproxyKeyRemain = checkOptions.client.options.httpproxyKeyRemain || 5 * 1000;
-
-	if ((!remain && remain !== 0) || Math.abs(remain) > httpproxyKeyRemain)
-	{
-		debug('[%s] key expired, remain:%sms config:%sms sever:%s, client:%s',
-			checkOptions.action, remain, httpproxyKeyRemain,
-			formatLogTime(checkOptions.serverRouterTime),
-			formatLogTime(new Date(+clientRequestTime)));
-		return false;
-	}
-
-	// 用内存cache稍微档一下重放的请求。避免扫描导致的大量错误
-	var cacheList = checkOptions.linker.cache.httpproxyRequest || (checkOptions.linker.cache.httpproxyRequest = {});
-	var cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache(
-		{
-			maxAge: httpproxyKeyRemain * 2,
-			max: 100 * 1000,
-		}));
-
-	var requestKey = checkOptions.headers['xh-httpproxy-key2']
-		|| checkOptions.headers['xh-httpproxy-key'];
-
-	if (requestKey)
-	{
-		var key = checkOptions.action + ':' + requestKey;
-		if (cache.peek(key))
-		{
-			debug('[%s] siginkey has require: %s', checkOptions.action, requestKey);
-			return false;
-		}
-		else
-		{
-			cache.set(key, true);
-		}
-	}
-}
-
-function checkHttpproxyKey(checkOptions)
-{
-	var httpproxyKey = checkOptions.client.options.httpproxyKey;
-	// version2特性：
-	// 所有请求都会带上来
-	// 加密参数增加随机数
-	// @todo 老版本兼容2个大版本
-	var keyVersion = 2;
-	var requestKey = checkOptions.headers['xh-httpproxy-key2'];
-	if (!requestKey) {
-		keyVersion = 1;
-		requestKey = checkOptions.headers['xh-httpproxy-key'];
-	}
-	debug('[%s] httpproxyKey: %s keyversion: %s', checkOptions.action, httpproxyKey, keyVersion);
-
-	if (keyVersion == 1 && !httpproxyKey) return;
-	if (!requestKey)
-	{
-		debug('[%s] no httpproxy aes key', checkOptions.action);
-		return false;
-	}
-
-	// if (httpproxyKey == key)
-	// {
-	// 	debug('[%s] pass:use original key', action);
-	// 	return;
-	// }
-
-	var hashContent = signature.get_sha_content(checkOptions.originalRaw);
-	var random = checkOptions.headers['xh-httpproxy-contenttime'];
-	if (keyVersion == 2) random += checkOptions.query.random;
-	var targetKey = signature.sha_content(hashContent, random, httpproxyKey);
-
-	if (targetKey != requestKey)
-	{
-		debug('[%s] not match, time:%s cntMd5:%s %s retKey:%s %s',
-			checkOptions.action, random,
-			signature.md5(hashContent), checkOptions.headers['xh-httpproxy-debugmd5'],
-			targetKey, requestKey);
-		return false;
-	}
 }
