@@ -1,6 +1,5 @@
 'use strict';
 
-var json = require('../lib/json');
 var httpAction = require('./http_action');
 
 exports = module.exports = HttpProxyRoute;
@@ -30,15 +29,8 @@ function routeKoa(linker, serverRouterTime, ctx, next)
 		{
 			var res = ctx.response;
 			res.statusCode = output.statusCode || 200;
-			var data = output.data;
-			if (data && typeof data == 'object')
-			{
-				data = json.stringify(data);
-				data.CONST_KEY = json.CONST_KEY;
-			}
-
 			res.type = 'json';
-			res.body = data;
+			res.body = output.data;
 			res.set('XH-Httpproxy-ResponseTime', Date.now());
 		});
 }
@@ -52,11 +44,7 @@ function routeExpress(linker, serverRouterTime, req, res, next)
 		.then(function(output)
 		{
 			res.statusCode = output.statusCode || 200;
-			var data = output.data;
-			data = json.stringify(data);
-			data.CONST_KEY = json.CONST_KEY;
-
 			res.set('XH-Httpproxy-ResponseTime', Date.now());
-			res.json(data);
+			res.json(output.data);
 		});
 }

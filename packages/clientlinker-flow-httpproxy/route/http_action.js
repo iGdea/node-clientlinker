@@ -72,6 +72,10 @@ function httpAction(linker, serverRouterTime, req)
 			if (deprecate_msg.length)
 				data.httpproxy_deprecate = deprecate_msg;
 
+			data = json.stringify(data);
+			data.CONST_KEY = json.CONST_KEY;
+			output.data = data;
+
 			return output;
 		});
 }
