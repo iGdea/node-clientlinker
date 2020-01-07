@@ -1,3 +1,7 @@
+/**
+ * 校验数据时效性和唯一性
+ */
+
 'use strict';
 
 var debug		= require('debug')('clientlinker-flow-httpproxy:route');
@@ -11,7 +15,7 @@ function checkHttpproxyUniqKey(checkOptions) {
 	if (!uniqkey)
 	{
 		debug('[%s] no uniqkey:%s', checkOptions.action, uniqkey);
-		return;
+		return checkOptions.client.options.httpproxyEnableUniqKey === true ? false : undefined;
 	}
 
 	var aesObj = reqUniqKey.getAesObj(checkOptions.client);
@@ -41,11 +45,10 @@ function checkHttpproxyUniqKey(checkOptions) {
 	}
 
 	var cacheList = checkOptions.linker.cache.httpproxyUniqkeys || (checkOptions.linker.cache.httpproxyUniqkeys = {});
-	var cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache(
-		{
-			maxAge: httpproxyKeyRemain * 2,
-			max: httpproxyKeyRemain * 100,
-		}));
+	var cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache({
+		maxAge: httpproxyKeyRemain * 2,
+		max: 10000,
+	}));
 
 	var key = checkOptions.action + ':' + content;
 	if (cache.peek(key)) {

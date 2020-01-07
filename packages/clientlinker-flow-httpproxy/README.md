@@ -36,6 +36,7 @@ var linker = clientlinker({
     httpproxyHeaders: {},
     httpproxyKey: 'aeskey',
     httpproxyKeyRemain: 5000,
+    httpproxyEnableUniqKey: null,   // null / false / true
   },
   clients: {
     client: {

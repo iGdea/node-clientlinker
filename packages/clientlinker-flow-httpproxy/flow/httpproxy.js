@@ -18,21 +18,25 @@ async function httpproxy(runtime, callback) {
 	runtime.debug && runtime.debug('httpproxyRunParams', params);
 	// headers 头部信息往往比其他部分更新神奇
 	debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, requestBody.env, requestBody.tmp);
-	const requestUniqKeyParams = _.extend({}, params, {
-		url: appendUrl(runtime.client.options.httpproxy,
-			'cgi=req_uniq_key'
-			+ '&action=' + runtime.action
-			+ '&random=' + Date.now() + (Math.random() * 100000 | 0)),
-		body: JSON.stringify({ action: runtime.action })
-	});
 
-	const uniqKeyResult = await requestPromise(requestUniqKeyParams);
-	if (uniqKeyResult.response.statusCode == 200) {
-		const data = JSON.parse(uniqKeyResult.body);
-		params.headers['XH-Httpproxy-UniqKey'] = data.uniq_key;
-	} else {
-		debug('get uniqkey error: %o', runtime.action);
+	if (runtime.client.options.httpproxyEnableUniqKey !== false) {
+		const requestUniqKeyParams = _.extend({}, params, {
+			url: appendUrl(runtime.client.options.httpproxy,
+				'cgi=req_uniq_key'
+				+ '&action=' + runtime.action
+				+ '&random=' + Date.now() + (Math.random() * 100000 | 0)),
+			body: JSON.stringify({ action: runtime.action })
+		});
+
+		const uniqKeyResult = await requestPromise(requestUniqKeyParams);
+		if (uniqKeyResult.response.statusCode == 200) {
+			const data = JSON.parse(uniqKeyResult.body);
+			params.headers['XH-Httpproxy-UniqKey'] = data.uniq_key;
+		} else {
+			debug('get uniqkey error: %o', runtime.action);
+		}
 	}
+
 
 	const { response, body } = await requestPromise(params);
 	// const clientResponseTime = +response.responseStartTime;

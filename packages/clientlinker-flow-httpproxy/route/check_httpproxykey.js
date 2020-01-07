@@ -1,3 +1,7 @@
+/**
+ * 校验数据完整性
+ */
+
 'use strict';
 
 var debug		= require('debug')('clientlinker-flow-httpproxy:route');

@@ -1,6 +1,9 @@
 /**
+ * 校验数据时效性和唯一性
+ *
  * 待废弃
  * 使用 check_httpproxyuniqkey 替换
+ * 服务器时间和本地时间可能不一致，或者线程通讯卡顿；容易导致数据校验失败
  */
 
 'use strict';
@@ -33,12 +36,11 @@ function checkHttpproxyTime(checkOptions)
 	}
 
 	// 用内存cache稍微档一下重放的请求。避免扫描导致的大量错误
-	var cacheList = checkOptions.linker.cache.httpproxyRequest || (checkOptions.linker.cache.httpproxyRequest = {});
-	var cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache(
-		{
-			maxAge: httpproxyKeyRemain * 2,
-			max: httpproxyKeyRemain * 100,
-		}));
+	var cacheList = checkOptions.linker.cache.httpproxyKeys || (checkOptions.linker.cache.httpproxyKeys = {});
+	var cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache({
+		maxAge: httpproxyKeyRemain * 2,
+		max: 10000,
+	}));
 
 	var requestKey = checkOptions.headers['xh-httpproxy-key2']
 		|| checkOptions.headers['xh-httpproxy-key'];
