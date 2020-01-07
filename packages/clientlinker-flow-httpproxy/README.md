@@ -29,7 +29,13 @@ var clientlinker = require('clientlinker');
 var linker = clientlinker({
   flows: ['confighandler', 'httpproxy'],
   defaults: {
-    httpproxy: 'http://localhost/clientlinker_proxy'
+    httpproxy: 'http://localhost/clientlinker_proxy',
+    httpproxyMaxLevel: 5,
+    httpproxyTimeout: 10000,
+    httpproxyProxy: 'http://127.0.0.1:8888' || false,
+    httpproxyHeaders: {},
+    httpproxyKey: 'aeskey',
+    httpproxyKeyRemain: 5000,
   },
   clients: {
     client: {
