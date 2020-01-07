@@ -16,25 +16,31 @@ function httpproxy(runtime, callback)
 	if (!body) return callback.next();
 
 	var params = getRequestParams(runtime, body);
-	// debug('request params: %o', params);
-
-	return new Promise(function(resolve, reject)
+	runtime.debug && runtime.debug('httpproxyRunParams', params);
+	// headers 头部信息往往比其他部分更新神奇
+	debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, body.env, body.tmp);
+	var requestUniqKeyParams = _.extend({}, params,
 		{
-			runtime.debug && runtime.debug('httpproxyRunParams', params);
-			// headers 头部信息往往比其他部分更新神奇
-			debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, body.env, body.tmp);
+			url: appendUrl(runtime.client.options.httpproxy,
+				'cgi=req_uniq_key'
+				+ '&action=' + runtime.action
+				+ '&random=' + Date.now() + (Math.random() * 100000 | 0)),
+			body: JSON.stringify({ action: runtime.action })
+		});
 
-			request.post(params, function(err, response, body)
-			{
-				if (err)
-					reject(err);
-				else
-					resolve({ response: response, body: body });
-			});
+	return requestPromise(requestUniqKeyParams)
+		.then(function(result) {
+			if (result.response.statusCode == 200) {
+				var data = JSON.parse(result.body);
+				params.headers['XH-Httpproxy-UniqKey'] = data.uniq_key;
+			} else {
+				debug('get uniqkey error: %o', runtime.action);
+			}
+
+			return requestPromise(params);
 		})
 		.then(function(result) {
 			var response = result.response;
-
 			var clientResponseTime = +response.responseStartTime;
 			var serverResponseTime = +response.headers['xh-httpproxy-responsetime'];
 			debug('clientResponseTime: %s serverResponseTime: %s, remain: %sms',
@@ -212,7 +218,7 @@ function getRequestParams(runtime, body)
 
 	// URL 上的action只是为了方便查看抓包请求
 	// 实际以body.action为准
-	var url = appendUrl(options.httpproxy, 'action=' + runtime.action + '&random=' + random);
+	var url = appendUrl(options.httpproxy, 'cgi=http_action&action=' + runtime.action + '&random=' + random);
 
 	return {
 		url		: url,
@@ -222,4 +228,18 @@ function getRequestParams(runtime, body)
 		proxy	: proxy,
 		time	: true,
 	};
+}
+
+function requestPromise(params)
+{
+	return new Promise(function(resolve, reject)
+		{
+			request.post(params, function(err, response, body)
+			{
+				if (err)
+					reject(err);
+				else
+					resolve({ response: response, body: body });
+			});
+		});
 }

@@ -1,3 +1,8 @@
+/**
+ * 待废弃
+ * 使用 check_httpproxyuniqkey 替换
+ */
+
 'use strict';
 
 var debug		= require('debug')('clientlinker-flow-httpproxy:route');
@@ -12,7 +17,7 @@ function checkHttpproxyTime(checkOptions)
 	if (!clientRequestTime)
 	{
 		debug('[%s] no clientRequestTime:%s', checkOptions.action, clientRequestTime);
-		return false;
+		return;
 	}
 
 	var remain = checkOptions.serverRouterTime - clientRequestTime;

@@ -1,6 +1,7 @@
 'use strict';
 
 var httpAction = require('./http_action');
+var reqUniqKey = require('./req_uniq_key');
 
 exports = module.exports = HttpProxyRoute;
 exports.express = routeExpress;
@@ -24,7 +25,7 @@ function routeKoa(linker, serverRouterTime, ctx, next)
 {
 	if (!linker) return next();
 
-	return httpAction(linker, serverRouterTime, ctx.req)
+	return cgihandler(linker, serverRouterTime, ctx.req)
 		.then(function(output)
 		{
 			var res = ctx.response;
@@ -40,11 +41,20 @@ function routeExpress(linker, serverRouterTime, req, res, next)
 {
 	if (!linker) return next();
 
-	return httpAction(linker, serverRouterTime, req)
+	return cgihandler(linker, serverRouterTime, req)
 		.then(function(output)
 		{
 			res.statusCode = output.statusCode || 200;
 			res.set('XH-Httpproxy-ResponseTime', Date.now());
 			res.json(output.data);
 		});
+}
+
+function cgihandler(linker, serverRouterTime, req)
+{
+	if (req.query.cgi == 'req_uniq_key') {
+		return reqUniqKey(linker, req);
+	} else {
+		return httpAction(linker, serverRouterTime, req);
+	}
 }

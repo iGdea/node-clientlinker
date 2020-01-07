@@ -9,6 +9,7 @@ var utils	= require('../lib/utils');
 
 var checkHttpproxyTime = require('./check_httpproxytime');
 var checkHttpproxyKey = require('./check_httpproxykey');
+var checkHttpproxyUniqKey = require('./check_httpproxyuniqkey');
 
 
 module.exports = httpAction;
@@ -103,7 +104,12 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 				originalRaw: originalRaw,
 			};
 
-			if (checkHttpproxyTime(checkOptions) === false
+			var httpproxyUniqKeyRet = checkHttpproxyUniqKey(checkOptions);
+			var httpproxyTimeRet = checkHttpproxyTime(checkOptions);
+
+			if (httpproxyUniqKeyRet === false
+				|| httpproxyTimeRet === false
+				|| (!httpproxyTimeRet && !httpproxyTimeRet)
 				|| checkHttpproxyKey(checkOptions) ===  false)
 			{
 				return { statusCode: 403 };

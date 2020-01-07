@@ -16,6 +16,7 @@
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "aesid": "^3.3.1",
     "ajv": "^6.5.3",
     "bluebird": "^3.5.2",
     "debug": "^3.1.0",
