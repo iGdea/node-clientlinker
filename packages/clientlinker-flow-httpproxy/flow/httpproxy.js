@@ -35,18 +35,16 @@ async function httpproxy(runtime, callback) {
 	}
 
 	const { response, body } = await requestPromise(params);
-	const clientResponseTime = +response.responseStartTime;
-	const serverResponseTime = +response.headers['xh-httpproxy-responsetime'];
-	debug('clientResponseTime: %s serverResponseTime: %s, remain: %sms',
-		clientResponseTime, serverResponseTime, serverResponseTime - clientResponseTime);
+	// const clientResponseTime = +response.responseStartTime;
+	// const serverResponseTime = +response.headers['xh-httpproxy-responsetime'];
+	// debug('clientResponseTime: %s serverResponseTime: %s, remain: %sms',
+	// 	clientResponseTime, serverResponseTime, serverResponseTime - clientResponseTime);
 	let data;
 
 	try {
 		data = JSON.parse(body);
 		data = json.parse(data, data.CONST_KEY) || {};
-	}
-	catch(err)
-	{
+	} catch(err) {
 		debug('request parse json err:%o params:%o body:%s', err, params, body);
 		runtime.debug && runtime.debug('httpproxyResponseError', err);
 		return callback.next();
@@ -67,14 +65,12 @@ async function httpproxy(runtime, callback) {
 	}
 
 	// 预留接口，在客户端显示server端日志
-	if (data.httpproxy_msg
-		&& Array.isArray(data.httpproxy_msg)) {
+	if (data.httpproxy_msg && Array.isArray(data.httpproxy_msg)) {
 		data.httpproxy_msg.forEach(msg => debug('[route response] %s', msg));
 	}
 
 	// 预留接口，在客户端现实server端兼容日志
-	if (data.httpproxy_deprecate
-		&& Array.isArray(data.httpproxy_deprecate)) {
+	if (data.httpproxy_deprecate && Array.isArray(data.httpproxy_deprecate)) {
 		data.httpproxy_deprecate.forEach(msg => deprecate('[route response] '+msg));
 	}
 
