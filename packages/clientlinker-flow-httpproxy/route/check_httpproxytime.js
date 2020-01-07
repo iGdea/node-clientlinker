@@ -51,4 +51,6 @@ function checkHttpproxyTime(checkOptions)
 			cache.set(key, true);
 		}
 	}
+
+	return true;
 }

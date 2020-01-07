@@ -46,4 +46,6 @@ function checkHttpproxyKey(checkOptions)
 			targetKey, requestKey);
 		return false;
 	}
+
+	return true;
 }
