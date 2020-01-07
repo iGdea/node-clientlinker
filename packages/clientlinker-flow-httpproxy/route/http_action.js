@@ -105,17 +105,15 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 			};
 
 			var httpproxyUniqKeyRet = checkHttpproxyUniqKey(checkOptions);
-			var httpproxyTimeRet = checkHttpproxyTime(checkOptions);
-
 			if (httpproxyUniqKeyRet === false
-				|| httpproxyTimeRet === false
-				|| (!httpproxyTimeRet && !httpproxyTimeRet)
+				|| (!httpproxyUniqKeyRet && checkHttpproxyTime(checkOptions) === false)
 				|| checkHttpproxyKey(checkOptions) ===  false)
 			{
 				return { statusCode: 403 };
 			}
 
 			debug('[%s] catch proxy route', action);
+
 			var args = [action, body.query, body.body, null, body.options];
 			var env = _.extend({}, body.env, { httpproxyHeaders: headers, httpproxyQuery: query });
 			var retPromise = linker.runIn(args, 'httpproxy', env);
