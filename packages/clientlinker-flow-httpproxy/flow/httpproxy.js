@@ -16,17 +16,9 @@ async function httpproxy(runtime, callback) {
 
 	const params = getRequestParams(runtime, requestBody);
 	runtime.debug && runtime.debug('httpproxyRunParams', params);
-	// headers 头部信息往往比其他部分更新神奇
-	debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, requestBody.env, requestBody.tmp);
 
 	if (runtime.client.options.httpproxyEnableUniqKey !== false) {
-		const requestUniqKeyParams = _.extend({}, params, {
-			url: appendUrl(runtime.client.options.httpproxy,
-				'cgi=req_uniq_key'
-				+ '&action=' + runtime.action
-				+ '&random=' + Date.now() + (Math.random() * 100000 | 0)),
-			body: JSON.stringify({ action: runtime.action })
-		});
+		const requestUniqKeyParams = getRequestParams(runtime, {}, 'req_uniq_key');
 
 		const uniqKeyResult = await requestPromise(requestUniqKeyParams);
 		if (uniqKeyResult.response.statusCode == 200) {
@@ -36,6 +28,9 @@ async function httpproxy(runtime, callback) {
 			debug('get uniqkey error: %o', runtime.action);
 		}
 	}
+
+	// headers 头部信息往往比其他部分更新神奇
+	debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, requestBody.env, requestBody.tmp);
 
 
 	const { response, body } = await requestPromise(params);
@@ -150,8 +145,9 @@ function appendUrl(url, query) {
 }
 
 exports.getRequestParams_ = getRequestParams;
-function getRequestParams(runtime, body)
-{
+function getRequestParams(runtime, body, cginame) {
+	if (!cginame) cginame = 'http_action';
+
 	const client = runtime.client;
 	const options = client.options;
 	const runOptions = runtime.options || {};
@@ -185,16 +181,18 @@ function getRequestParams(runtime, body)
 	headers['XH-Httpproxy-DebugMd5'] = signature.md5(hashContent);
 
 	const requestStartTime = Date.now();
-	// @todo key1 保留2个大版本
-	if (options.httpproxyKey) {
-		headers['XH-Httpproxy-Key'] = signature.sha_content(hashContent, requestStartTime, options.httpproxyKey);
+	if (cginame == 'http_action') {
+		// @todo key1 保留2个大版本
+		if (options.httpproxyKey) {
+			headers['XH-Httpproxy-Key'] = signature.sha_content(hashContent, requestStartTime, options.httpproxyKey);
+		}
+		headers['XH-Httpproxy-Key2'] = signature.sha_content(hashContent, '' + requestStartTime + random, options.httpproxyKey);
+		headers['XH-Httpproxy-ContentTime'] = requestStartTime;
 	}
-	headers['XH-Httpproxy-Key2'] = signature.sha_content(hashContent, '' + requestStartTime + random, options.httpproxyKey);
-	headers['XH-Httpproxy-ContentTime'] = requestStartTime;
 
 	// URL 上的action只是为了方便查看抓包请求
 	// 实际以body.action为准
-	const url = appendUrl(options.httpproxy, 'cgi=http_action&action=' + runtime.action + '&random=' + random);
+	const url = appendUrl(options.httpproxy, 'cgi=' + cginame + '&action=' + runtime.action + '&random=' + random);
 
 	return {
 		url		: url,
