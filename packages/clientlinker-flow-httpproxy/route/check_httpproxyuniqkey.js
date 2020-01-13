@@ -12,8 +12,7 @@ var utils		= require('../lib/utils');
 module.exports = checkHttpproxyUniqKey;
 function checkHttpproxyUniqKey(checkOptions) {
 	var uniqkey = checkOptions.headers['xh-httpproxy-uniqkey'];
-	if (!uniqkey)
-	{
+	if (!uniqkey) {
 		debug('[%s] no uniqkey:%s', checkOptions.action, uniqkey);
 		return checkOptions.client.options.httpproxyEnableUniqKey === true ? false : undefined;
 	}

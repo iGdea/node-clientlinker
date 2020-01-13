@@ -14,6 +14,8 @@ async function httpproxy(runtime, callback) {
 	const requestBody = getRequestBody(runtime);
 	if (!requestBody) return callback.next();
 
+	// 注意：要比uniqKey先组装数据
+	// 组装数据可能需要很长的时间
 	const params = getRequestParams(runtime, requestBody);
 	runtime.debug && runtime.debug('httpproxyRunParams', params);
 
@@ -28,6 +30,8 @@ async function httpproxy(runtime, callback) {
 			debug('get uniqkey error: %o', runtime.action);
 		}
 	}
+
+	appendRequestTimeHeader(runtime, params);
 
 	// headers 头部信息往往比其他部分更新神奇
 	debug('<%s> httpproxyHeaders: %o, env: %o, tmp: %o', runtime.action, params.headers, requestBody.env, requestBody.tmp);
@@ -174,22 +178,6 @@ function getRequestParams(runtime, body, cginame) {
 	const bodystr = JSON.stringify(postBody, null, '\t')
 		.replace(/\n/g, '\r\n');
 
-	// 增加对内容的签名
-	// 内容可能会超级大，所以分批计算签名
-	// 并且requestStartTime要尽量精确
-	const hashContent = signature.get_sha_content(bodystr);
-	headers['XH-Httpproxy-DebugMd5'] = signature.md5(hashContent);
-
-	const requestStartTime = Date.now();
-	if (cginame == 'http_action') {
-		// @todo key1 保留2个大版本
-		if (options.httpproxyKey) {
-			headers['XH-Httpproxy-Key'] = signature.sha_content(hashContent, requestStartTime, options.httpproxyKey);
-		}
-		headers['XH-Httpproxy-Key2'] = signature.sha_content(hashContent, '' + requestStartTime + random, options.httpproxyKey);
-		headers['XH-Httpproxy-ContentTime'] = requestStartTime;
-	}
-
 	// URL 上的action只是为了方便查看抓包请求
 	// 实际以body.action为准
 	const url = appendUrl(options.httpproxy, 'cgi=' + cginame + '&action=' + runtime.action + '&random=' + random);
@@ -201,7 +189,29 @@ function getRequestParams(runtime, body, cginame) {
 		timeout	: timeout,
 		proxy	: proxy,
 		time	: true,
+		random	: random,
 	};
+}
+
+exports.appendRequestTimeHeader_ = appendRequestTimeHeader;
+function appendRequestTimeHeader(runtime, params) {
+	const options = runtime.client.options;
+	const headers = params.headers || (params.headers = {});
+	// 增加对内容的签名
+	// 内容可能会超级大，所以分批计算签名
+	// 并且requestStartTime要尽量精确
+	const hashContent = signature.get_sha_content(params.body);
+	headers['XH-Httpproxy-DebugMd5'] = signature.md5(hashContent);
+
+	const requestStartTime = Date.now();
+	// @todo key1 保留2个大版本
+	if (options.httpproxyKey) {
+		headers['XH-Httpproxy-Key'] = signature.sha_content(hashContent, requestStartTime, options.httpproxyKey);
+	}
+	headers['XH-Httpproxy-Key2'] = signature.sha_content(hashContent, '' + requestStartTime + params.random, options.httpproxyKey);
+	headers['XH-Httpproxy-ContentTime'] = requestStartTime;
+
+	return params;
 }
 
 function requestPromise(params) {

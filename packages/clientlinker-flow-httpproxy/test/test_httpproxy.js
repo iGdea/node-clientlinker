@@ -41,6 +41,8 @@ describe('#httpproxy', function()
 						{
 							var body = httpproxy.getRequestBody_(runtime);
 							var opts = httpproxy.getRequestParams_(runtime, body);
+							httpproxy.appendRequestTimeHeader_(runtime, opts);
+
 							request.post(opts, function(err, response, body)
 							{
 								callback.resolve(
@@ -107,6 +109,8 @@ describe('#httpproxy', function()
 						{
 							var body = httpproxy.getRequestBody_(runtime);
 							var opts = httpproxy.getRequestParams_(runtime, body);
+							httpproxy.appendRequestTimeHeader_(runtime, opts);
+
 							opts.body = '{dd';
 							request.post(opts, function(err, response, body)
 							{
@@ -181,6 +185,7 @@ describe('#httpproxy', function()
 								{
 									var body = httpproxy.getRequestBody_(runtime);
 									var opts = httpproxy.getRequestParams_(runtime, body);
+									httpproxy.appendRequestTimeHeader_(runtime, opts);
 
 									if (key) {
 										opts.headers['XH-Httpproxy-Key2'] = key;
@@ -234,6 +239,7 @@ describe('#httpproxy', function()
 								if (!firstOtps) {
 									var body = httpproxy.getRequestBody_(runtime);
 									firstOtps = httpproxy.getRequestParams_(runtime, body);
+									httpproxy.appendRequestTimeHeader_(runtime, firstOtps);
 								}
 
 								request.post(firstOtps, function(err, response, body)
@@ -282,6 +288,8 @@ describe('#httpproxy', function()
 							{
 								var body = httpproxy.getRequestBody_(runtime);
 								var opts = httpproxy.getRequestParams_(runtime, body);
+								httpproxy.appendRequestTimeHeader_(runtime, opts);
+
 								opts.body = opts.body.replace(/\t/g, '  ');
 
 								request.post(opts, function(err, response, body)
