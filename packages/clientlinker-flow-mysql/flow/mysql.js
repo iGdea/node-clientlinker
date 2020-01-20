@@ -1,11 +1,11 @@
 'use strict';
 
-var _		= require('lodash');
-var Promise	= require('bluebird');
-var fs		= Promise.promisifyAll(require('fs'));
-var ini		= require('ini');
-var debug	= require('debug')('clientlinker-flow-mysql');
-var mysql	= require('mysql');
+let _		= require('lodash');
+let Promise	= require('bluebird');
+let fs		= Promise.promisifyAll(require('fs'));
+let ini		= require('ini');
+let debug	= require('debug')('clientlinker-flow-mysql');
+let mysql	= require('mysql');
 
 exports.flow = mysqlFlow;
 exports.methods = methods;
@@ -14,13 +14,13 @@ exports._test = {};
 
 function mysqlFlow(runtime, callback)
 {
-	var client = runtime.client;
-	var options = client.options;
+	let client = runtime.client;
+	let options = client.options;
 	// handlerConfig
 	// [sql]          sql 模版，见mysql包
 	// [keys]         sql的values对应runtime.body的转化顺序
 	// [onlyFirst]    返回结果取第一条数据
-	var handlerConfig = options.mysqlhandler && options.mysqlhandler[runtime.method];
+	let handlerConfig = options.mysqlhandler && options.mysqlhandler[runtime.method];
 	if (!handlerConfig) return callback.next();
 
 	return initPool(client)
@@ -34,7 +34,7 @@ function mysqlFlow(runtime, callback)
 				{
 					if (err) return reject(err);
 
-					var values = translateValues(runtime.body, handlerConfig.keys, handlerConfig.subKeys);
+					let values = translateValues(runtime.body, handlerConfig.keys, handlerConfig.subKeys);
 
 					connection.query(handlerConfig.sql, values, function(err, results)
 					{
@@ -58,7 +58,7 @@ function methods(client)
 		{
 			if (!pool) return;
 
-			var options = client.options;
+			let options = client.options;
 			if (options.mysqlhandler && typeof options.mysqlhandler == 'object')
 			{
 				return Object.keys(options.mysqlhandler);
@@ -70,8 +70,8 @@ function initPool(client)
 {
 	if (client.cache.mysqlPool) return Promise.resolve(client.cache.mysqlPool);
 
-	var options = client.options;
-	var getConfigPromise;
+	let options = client.options;
+	let getConfigPromise;
 
 	// 如果有配置文件，优先使用配置文件
 	if (options.mysqlConfigFile && options.mysqlConfigKey)
@@ -79,9 +79,9 @@ function initPool(client)
 		getConfigPromise = fs.readFileAsync(options.mysqlConfigFile, {encoding: 'utf8'})
 			.then(function(data)
 			{
-				var json = ini.parse(data);
+				let json = ini.parse(data);
 				debug('config json:%o', json);
-				var config = json && json[options.mysqlConfigKey];
+				let config = json && json[options.mysqlConfigKey];
 
 				if (!config) return options.mysql;
 
@@ -130,24 +130,24 @@ function initPool(client)
 exports._test.translateValues = translateValues;
 function translateValues(mainValues, mainKeys, subKeys)
 {
-	var result = [];
+	let result = [];
 	if (!mainValues || !mainKeys) return result;
 
 	mainKeys.forEach(function(name)
 	{
-		var keys = subKeys && subKeys[name];
-		var value = mainValues[name];
+		let keys = subKeys && subKeys[name];
+		let value = mainValues[name];
 		if (keys)
 		{
-			var isValArray = Array.isArray(value);
+			let isValArray = Array.isArray(value);
 			if (!isValArray) value = [value];
 
-			var subVals = [];
+			let subVals = [];
 			value.forEach(function(params)
 			{
 				if (!params) return;
 
-				var tmpVal = [];
+				let tmpVal = [];
 				subVals.push(tmpVal);
 				keys.forEach(function(name)
 				{

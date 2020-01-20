@@ -1,7 +1,7 @@
 'use strict';
 
-var localfile = require('./localfile');
-var methods = require('./methods');
+let localfile = require('./localfile');
+let methods = require('./methods');
 
 module.exports = function(flow)
 {

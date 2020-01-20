@@ -1,6 +1,6 @@
 'use strict';
 
-var expect	= require('expect.js');
+let expect	= require('expect.js');
 
 describe('#mysql', function()
 {

@@ -1,12 +1,12 @@
 'use strict';
 
-var expect				= require('expect.js');
-var clientlinker		= require('clientlinker-core');
-var confighandlerTest	= require('clientlinker-flow-confighandler-test');
+let expect				= require('expect.js');
+let clientlinker		= require('clientlinker-core');
+let confighandlerTest	= require('clientlinker-flow-confighandler-test');
 
 describe('#confighandler', function()
 {
-	var linker = clientlinker(
+	let linker = clientlinker(
 	{
 		flows: ['confighandler'],
 		clients:
@@ -28,7 +28,7 @@ describe('#confighandler', function()
 			.then(function(map)
 			{
 				expect(map.client).to.be.an('object');
-				var methods = Object.keys(map.client.methods);
+				let methods = Object.keys(map.client.methods);
 				expect(methods).to.eql(
 				[
 					'method',

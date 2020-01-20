@@ -1,13 +1,13 @@
 'use strict';
 
-var _			= require('lodash');
-var Promise		= require('bluebird');
-var debug		= require('debug')('clientlinker:linker');
-var Client		= require('./client').Client;
-var Flow		= require('./flow').Flow;
-var Runtime		= require('./runtime/client_runtime').ClientRuntime;
-var utils		= require('./utils');
-var depLinker	= require('./deps/dep_linker');
+let _			= require('lodash');
+let Promise		= require('bluebird');
+let debug		= require('debug')('clientlinker:linker');
+let Client		= require('./client').Client;
+let Flow		= require('./flow').Flow;
+let Runtime		= require('./runtime/client_runtime').ClientRuntime;
+let utils		= require('./utils');
+let depLinker	= require('./deps/dep_linker');
 
 
 exports.Linker = Linker;
@@ -27,7 +27,7 @@ function Linker(options)
 	depLinker.init.call(this);
 }
 
-var proto = Linker.prototype;
+let proto = Linker.prototype;
 _.extend(proto,
 {
 	JSON		: utils.JSON,
@@ -50,7 +50,7 @@ _.extend(proto,
 			throw new Error('CLIENTLINKER:ClientOptionsMustBeObject,'+ clientName);
 		}
 
-		var defaultFlowOptions = options
+		let defaultFlowOptions = options
 			&& !options.flows
 			&& this.options.defaults
 			&& this.options.defaults.flows
@@ -61,7 +61,7 @@ _.extend(proto,
 
 		if (!options.flows) options.flows = [];
 
-		var client = this._clients[clientName] = new Client(clientName, this, options);
+		let client = this._clients[clientName] = new Client(clientName, this, options);
 		debug('add client:%s', clientName);
 
 		return client;
@@ -84,7 +84,7 @@ _.extend(proto,
 			throw new Error('CLIENTLINKER:FlowHandlerMustBeFunction,'+ flowName);
 		}
 
-		var flow = new Flow(flowName);
+		let flow = new Flow(flowName);
 		handler(flow, this);
 
 		if (typeof flow.run != 'function')
@@ -104,7 +104,7 @@ _.extend(proto,
 
 	onInit: function(checkHandler)
 	{
-		var self = this;
+		let self = this;
 		self._initProcessPromise = Promise.all(
 			[
 				self._initProcessPromise,
@@ -125,10 +125,10 @@ _.extend(proto,
 
 	runIn: function(args, source, env)
 	{
-		var self = this;
-		var action = args[0];
-		var callback = args[3];
-		var options = args[4];
+		let self = this;
+		let action = args[0];
+		let callback = args[3];
+		let options = args[4];
 
 		if (process.domain) debug('run by domain: %s', action);
 
@@ -142,7 +142,7 @@ _.extend(proto,
 			callback = null;
 		}
 
-		var runtime = new Runtime(self, action, args[1], args[2], options)
+		let runtime = new Runtime(self, action, args[1], args[2], options)
 
 		// 通过这种手段，同步情况下，暴露runtime
 		// runtime保存着运行时的所有数据，方便进行调试
@@ -156,7 +156,7 @@ _.extend(proto,
 		])
 			.then(function(arr)
 			{
-				var data = arr[0];
+				let data = arr[0];
 				runtime.method = data.method;
 				runtime.client = data.client;
 				if (env) _.extend(runtime.env, env);
@@ -168,7 +168,7 @@ _.extend(proto,
 
 	_runByRuntime: function(runtime, callback)
 	{
-		var retPromise = runtime.run();
+		let retPromise = runtime.run();
 
 		// 兼容callback
 		if (callback)
@@ -199,7 +199,7 @@ _.extend(proto,
 		return this.clients()
 			.then(function(list)
 			{
-				var info = utils.parseAction(action);
+				let info = utils.parseAction(action);
 
 				return {
 					client	: list[info.clientName],
@@ -214,7 +214,7 @@ _.extend(proto,
 		return this.clients()
 			.then(function(list)
 			{
-				var promises = _.map(list, function(client)
+				let promises = _.map(list, function(client)
 				{
 					return client.methods()
 						.then(function(methodList)
@@ -231,7 +231,7 @@ _.extend(proto,
 			// 整理
 			.then(function(list)
 			{
-				var map = {};
+				let map = {};
 				list.forEach(function(item)
 				{
 					map[item.client.name] = item;
@@ -242,8 +242,8 @@ _.extend(proto,
 
 	clients: function()
 	{
-		var self = this;
-		var clientPromise = self._initProcessPromise;
+		let self = this;
+		let clientPromise = self._initProcessPromise;
 
 		return clientPromise
 			.then(function()
@@ -255,13 +255,13 @@ _.extend(proto,
 			});
 	},
 	clearCache: function(clientName) {
-		var self = this;
+		let self = this;
 		if (!clientName) self.cache = {};
 
 		self.clients()
 			.then(function(list) {
 				if (clientName) {
-					var client = list[clientName];
+					let client = list[clientName];
 					if (client) client.cache = {};
 				} else {
 					_.each(list, function(item) {

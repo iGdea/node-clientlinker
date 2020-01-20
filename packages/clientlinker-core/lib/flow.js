@@ -1,9 +1,9 @@
 'use strict';
 
-var _		= require('lodash');
-var Promise	= require('bluebird');
-var debug	= require('debug')('clientlinker:flow');
-var depFlow	= require('./deps/dep_flow');
+let _		= require('lodash');
+let Promise	= require('bluebird');
+let debug	= require('debug')('clientlinker:flow');
+let depFlow	= require('./deps/dep_flow');
 
 exports.Flow = Flow;
 

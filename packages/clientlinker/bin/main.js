@@ -1,10 +1,10 @@
 'use strict';
 
-var Command			= require('./lib/command').Command;
-var commandActions	= require('./lib/command_actions');
-var stdout			= require('./lib/stdout');
+let Command			= require('./lib/command').Command;
+let commandActions	= require('./lib/command_actions');
+let stdout			= require('./lib/stdout');
 
-var command = new Command;
+let command = new Command;
 
 
 command.list()
@@ -26,7 +26,7 @@ command.exec()
 command.anycmd();
 command.help().action(function(){});
 
-var argv = process.argv.slice();
+let argv = process.argv.slice();
 if (argv.length < 3) argv.push('--help');
 
 command.program.parse(argv);

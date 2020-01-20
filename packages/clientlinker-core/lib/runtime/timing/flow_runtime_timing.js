@@ -1,6 +1,6 @@
 'use strict';
 
-var deprecate	= require('depd')('clientlinker:flow_runtime_timing');
+let deprecate	= require('depd')('clientlinker:flow_runtime_timing');
 
 exports.Timing = Timing;
 function Timing(runner)
@@ -8,7 +8,7 @@ function Timing(runner)
 	this.runner = runner;
 }
 
-var proto = Timing.prototype;
+let proto = Timing.prototype;
 
 Object.defineProperties(proto,
 {

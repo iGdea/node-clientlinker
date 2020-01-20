@@ -98,14 +98,16 @@ class ClientRuntime extends EventEmitter {
 			case 0:
 				return data;
 
-			case 1:
-				var arr = data[key];
+			case 1: {
+				let arr = data[key];
 				return arr && arr[arr.length - 1].value;
+			}
 
 			case 2:
-			default:
-				var arr = data[key] || (data[key] = []);
+			default: {
+				let arr = data[key] || (data[key] = []);
 				arr.push(new DebugData(val, this));
+			}
 		}
 	}
 

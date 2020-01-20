@@ -1,9 +1,9 @@
 'use strict';
 
-var expect		= require('expect.js');
-var rlutils		= require('../bin/lib/rlutils');
-var Command		= require('../bin/lib/command').Command;
-var debug		= require('debug')('clientlinker:test_command');
+let expect		= require('expect.js');
+let rlutils		= require('../bin/lib/rlutils');
+let Command		= require('../bin/lib/command').Command;
+let debug		= require('debug')('clientlinker:test_command');
 // var Command2	= require('commander').Command;
 
 // 屏蔽错误
@@ -23,7 +23,7 @@ describe('#command', function()
 {
 	it('#base', function()
 	{
-		var command = initCommand();
+		let command = initCommand();
 
 		expect(function(){testStrArgs(command, 'no_exists_cmd')})
 			.to.throwError(/^otherCommandFire$/);
@@ -54,11 +54,11 @@ describe('#command', function()
 
 	it('#list', function()
 	{
-		var command = initCommand();
+		let command = initCommand();
 		command.list()
 			.action(function(conf_file, command)
 			{
-				var options = command.__clk_options__;
+				let options = command.__clk_options__;
 				expect(conf_file).to.be('./conf.js');
 				expect(options.clients).to.be('client');
 				expect(options.flows).to.be('handler');
@@ -71,11 +71,11 @@ describe('#command', function()
 
 	it('#exec', function()
 	{
-		var command = initCommand();
+		let command = initCommand();
 		command.exec()
 			.action(function(conf_file, action, command)
 			{
-				var options = command.__clk_options__;
+				let options = command.__clk_options__;
 
 				expect(conf_file).to.be('./conf.js');
 				expect(action).to.be('action');
@@ -96,7 +96,7 @@ describe('#command', function()
 	{
 		it('#--no-color', function()
 		{
-			var command = initCommand();
+			let command = initCommand();
 			command.list().action(function(){});
 
 			rlutils.colors.enabled = true;
@@ -111,7 +111,7 @@ describe('#command', function()
 	{
 		it('#help1', function(done)
 		{
-			var command = new Command;
+			let command = new Command;
 			command.anycmd();
 			command.program.help = function()
 				{
@@ -123,7 +123,7 @@ describe('#command', function()
 
 		it('#help2', function(done)
 		{
-			var command = new Command;
+			let command = new Command;
 			command.anycmd();
 			command.program.help = function()
 				{
@@ -135,7 +135,7 @@ describe('#command', function()
 
 		it('#ignore help cmd', function(done)
 		{
-			var command = new Command;
+			let command = new Command;
 			command.anycmd();
 			command.program.help = function()
 				{
@@ -147,7 +147,7 @@ describe('#command', function()
 
 		it('#run command', function()
 		{
-			var command = new Command;
+			let command = new Command;
 			command.anycmd();
 
 			command.program.help = function()
@@ -158,7 +158,7 @@ describe('#command', function()
 			command.exec()
 				.action(function(conf_file, action, command)
 				{
-					var options = command.__clk_options__;
+					let options = command.__clk_options__;
 					expect(conf_file).to.be('./conf.js');
 					expect(action).to.be('action');
 					expect(options.query).to.be('q');
@@ -173,15 +173,15 @@ describe('#command', function()
 
 function testStrArgs(command, str)
 {
-	var args = ('node '+__dirname+'/../bin/clientlinker_cli.js '+str).split(/ +/);
+	let args = ('node '+__dirname+'/../bin/clientlinker_cli.js '+str).split(/ +/);
 	debug('args: %o', args);
 	command.program.parse(args);
 }
 
 function initCommand()
 {
-	var command = new Command;
-	var program = command.program;
+	let command = new Command;
+	let program = command.program;
 
 	program.command('*')
 		.action(function()

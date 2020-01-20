@@ -1,11 +1,11 @@
 'use strict';
 
-var _			= require('lodash');
-var Promise		= require('bluebird');
-var debug		= require('debug')('clientlinker:flows_runtime');
-var FlowRuntime	= require('./flow_runtime').FlowRuntime;
-var Timing		= require('./timing/flows_runtime_timing').Timing;
-var utils		= require('../utils');
+let _			= require('lodash');
+let Promise		= require('bluebird');
+let debug		= require('debug')('clientlinker:flows_runtime');
+let FlowRuntime	= require('./flow_runtime').FlowRuntime;
+let Timing		= require('./timing/flows_runtime_timing').Timing;
+let utils		= require('../utils');
 
 
 exports.FlowsRuntime = FlowsRuntime;
@@ -23,11 +23,11 @@ _.extend(FlowsRuntime.prototype,
 {
 	run: function()
 	{
-		var self = this;
+		let self = this;
 		self.started = true;
 		self.finished = false;
 
-		var promise = self.run_();
+		let promise = self.run_();
 		promise.finally(function(){self.finished = true})
 			// 避免 Unhandled rejection Error 提示
 			.catch(_.noop);
@@ -37,8 +37,8 @@ _.extend(FlowsRuntime.prototype,
 
 	getFlowRuntime: function(name)
 	{
-		var list = this.runned;
-		var index = list.length;
+		let list = this.runned;
+		let index = list.length;
 		while(index--)
 		{
 			if (list[index]
@@ -52,11 +52,11 @@ _.extend(FlowsRuntime.prototype,
 
 	run_: function()
 	{
-		var self = this;
-		var runtime = self.runtime;
-		var client = runtime.client;
-		var clientFlows = client.options.flows;
-		var runner = self.nextRunner();
+		let self = this;
+		let runtime = self.runtime;
+		let client = runtime.client;
+		let clientFlows = client.options.flows;
+		let runner = self.nextRunner();
 
 		if (!runner)
 		{
@@ -76,10 +76,10 @@ _.extend(FlowsRuntime.prototype,
 
 	nextRunner: function()
 	{
-		var flow;
-		var client = this.runtime.client;
+		let flow;
+		let client = this.runtime.client;
 
-		for(var flowName,
+		for(let flowName,
 			clientFlows = client.options.flows,
 			index = this.runned.length;
 			(flowName = clientFlows[index]);
@@ -92,7 +92,7 @@ _.extend(FlowsRuntime.prototype,
 
 		if (!flow) return;
 
-		var runner = new FlowRuntime(flow, this);
+		let runner = new FlowRuntime(flow, this);
 		this.runned.push(runner);
 		this.lastRunner = runner;
 

@@ -1,8 +1,8 @@
 'use strict';
 
-var clientlinker = require('../../');
+let clientlinker = require('../../');
 
-var linker = clientlinker(
+let linker = clientlinker(
 	{
 		flows: ['nextFlow', 'confighandler', 'pkghandler'],
 		clients:

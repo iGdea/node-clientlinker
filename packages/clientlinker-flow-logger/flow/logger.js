@@ -1,15 +1,15 @@
 'use strict';
 
-var debug = require('debug')('clientlinker-flow-logger');
+let debug = require('debug')('clientlinker-flow-logger');
 exports = module.exports = logger;
 
 function logger(runtime, callback)
 {
-	var client = runtime.client;
-	var options = client.options;
+	let client = runtime.client;
+	let options = client.options;
 
 	if (!options.logger) return callback.next();
-	var logger = typeof options.logger == 'function' ? options.logger : loggerHandler;
+	let logger = typeof options.logger == 'function' ? options.logger : loggerHandler;
 
 	runtime.promise.then(function(data)
 		{
@@ -27,8 +27,8 @@ function logger(runtime, callback)
 exports.loggerHandler = loggerHandler;
 function loggerHandler(runtime, err, data)
 {
-	var timing = runtime.timing;
-	var lastFlowTiming = runtime.lastFlow();
+	let timing = runtime.timing;
+	let lastFlowTiming = runtime.lastFlow();
 	lastFlowTiming = (lastFlowTiming && lastFlowTiming.timing) || {};
 
 	if (err)

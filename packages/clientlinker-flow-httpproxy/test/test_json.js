@@ -1,25 +1,25 @@
 'use strict';
 
-var expect	= require('expect.js');
-var json	= require('../lib/json');
+let expect	= require('expect.js');
+let json	= require('../lib/json');
 
 describe('#json', function()
 {
 	it('#stringify', function()
 	{
-		var err = new Error('err message2');
+		let err = new Error('err message2');
 		err.errCode = -1;
-		var data = {
+		let data = {
 			result: new Error('err message'),
 			result2: err,
 			data: {
-				string: "string",
+				string: 'string',
 				number: 123,
 				buffer: new Buffer('buffer')
 			}
 		};
 
-		var newData = json.stringify(data);
+		let newData = json.stringify(data);
 		expect(newData.result).not.to.be.a(Error);
 		expect(newData.result.type).to.be( json.CONST_VARS.ERROR_KEY);
 		expect(newData.result.data.message).to.be('err message');
@@ -38,31 +38,31 @@ describe('#json', function()
 
 	it('#parse', function()
 	{
-		var data = {
-			"result": {
-				"type": "1454824224156_err",
-				"data": { message: "err message" }
+		let data = {
+			'result': {
+				'type': '1454824224156_err',
+				'data': { message: 'err message' }
 			},
-			"result2": {
-				"type": "1454824224156_err",
-				"data": { message: "err message2", errCode: -1 }
+			'result2': {
+				'type': '1454824224156_err',
+				'data': { message: 'err message2', errCode: -1 }
 			},
-			"data": {
-				"string": "string",
-				"number": 123,
-				"buffer": {
-					"type": "1454824224156_buf",
-					"data": [98, 117, 102, 102, 101, 114]
+			'data': {
+				'string': 'string',
+				'number': 123,
+				'buffer': {
+					'type': '1454824224156_buf',
+					'data': [98, 117, 102, 102, 101, 114]
 				},
-				"buffer2": {
-					"type": "2222222222222_buf",
-					"data": [98, 117, 102, 102, 101, 114]
+				'buffer2': {
+					'type': '2222222222222_buf',
+					'data': [98, 117, 102, 102, 101, 114]
 				}
 			}
 		};
-		var KEY = 1454824224156;
+		let KEY = 1454824224156;
 
-		var newData = json.parse(data, KEY);
+		let newData = json.parse(data, KEY);
 		expect(newData.data).to.be.an('object');
 		expect(newData.result).to.be.an(Error);
 		expect(newData.result.message).to.be('err message');
@@ -83,7 +83,7 @@ describe('#json', function()
 
 	it('#array like', function()
 	{
-		var data = {length: 5};
+		let data = {length: 5};
 		expect(json.stringify(data)).to.be.eql(data);
 		expect(json.parse(data, {})).to.be.eql(data);
 	});

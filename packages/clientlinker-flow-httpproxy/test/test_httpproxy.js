@@ -1,13 +1,13 @@
 'use strict';
 
-var expect				= require('expect.js');
-var request				= require('request');
-var httpproxy			= require('../flow/httpproxy');
-var utilsTestHttpproxy	= require('./utils_test');
-var confighandlerTest	= require('clientlinker-flow-confighandler-test');
+let expect				= require('expect.js');
+let request				= require('request');
+let httpproxy			= require('../flow/httpproxy');
+let utilsTestHttpproxy	= require('./utils_test');
+let confighandlerTest	= require('clientlinker-flow-confighandler-test');
 
-var initLinker			= utilsTestHttpproxy.initLinker;
-var initTestSvrLinker	= utilsTestHttpproxy.initTestSvrLinker;
+let initLinker			= utilsTestHttpproxy.initLinker;
+let initTestSvrLinker	= utilsTestHttpproxy.initTestSvrLinker;
 
 
 describe('#httpproxy', function()
@@ -32,15 +32,15 @@ describe('#httpproxy', function()
 		describe('#5xx', function()
 		{
 			initTestSvrLinker();
-			var linker = initLinker(
+			let linker = initLinker(
 				{
 					flows: ['custom'],
 					customFlows:
 					{
 						custom: function custom(runtime, callback)
 						{
-							var body = httpproxy.getRequestBody_(runtime);
-							var opts = httpproxy.getRequestParams_(runtime, body);
+							let body = httpproxy.getRequestBody_(runtime);
+							let opts = httpproxy.getRequestParams_(runtime, body);
 							httpproxy.appendRequestTimeHeader_(runtime, opts);
 
 							request.post(opts, function(err, response, body)
@@ -56,7 +56,7 @@ describe('#httpproxy', function()
 					}
 				});
 
-			var linker2 = initLinker();
+			let linker2 = initLinker();
 
 			describe('#501', function()
 			{
@@ -74,14 +74,14 @@ describe('#httpproxy', function()
 
 					it('#run:'+name, function()
 					{
-						var retPromise = linker2.run(action);
-						var runtime = linker2.lastRuntime;
+						let retPromise = linker2.run(action);
+						let runtime = linker2.lastRuntime;
 
 						return retPromise
 							.then(function(){expect().fail()},
 								function(err)
 								{
-									var responseError = runtime.debug('httpproxyResponseError');
+									let responseError = runtime.debug('httpproxyResponseError');
 									expect(responseError.message)
 										.to.be('httpproxy,response!200,501');
 									expect(err.message.substr(0, 22))
@@ -100,15 +100,15 @@ describe('#httpproxy', function()
 		describe('#5xx_parse', function()
 		{
 			initTestSvrLinker();
-			var linker = initLinker(
+			let linker = initLinker(
 				{
 					flows: ['custom'],
 					customFlows:
 					{
 						custom: function custom(runtime, callback)
 						{
-							var body = httpproxy.getRequestBody_(runtime);
-							var opts = httpproxy.getRequestParams_(runtime, body);
+							let body = httpproxy.getRequestBody_(runtime);
+							let opts = httpproxy.getRequestParams_(runtime, body);
 							httpproxy.appendRequestTimeHeader_(runtime, opts);
 
 							opts.body = '{dd';
@@ -132,7 +132,7 @@ describe('#httpproxy', function()
 					{
 						expect(data.err).to.be(null);
 						expect(data.response.statusCode).to.be(500);
-						var body = JSON.parse(data.body);
+						let body = JSON.parse(data.body);
 						expect(body.httpproxy_msg).to.be.an('array')
 						expect(body.httpproxy_msg.join())
 							.to.contain('clientlinker run err:');
@@ -146,7 +146,7 @@ describe('#httpproxy', function()
 	{
 		describe('#httpproxyKey', function()
 		{
-			var httpproxyKey = 'xxfde&d023';
+			let httpproxyKey = 'xxfde&d023';
 			initTestSvrLinker(
 			{
 				defaults:
@@ -172,7 +172,7 @@ describe('#httpproxy', function()
 				{
 					it('#'+name, function()
 					{
-						var linker = initLinker(
+						let linker = initLinker(
 						{
 							flows: ['custom'],
 							defaults:
@@ -183,8 +183,8 @@ describe('#httpproxy', function()
 							{
 								custom: function custom(runtime, callback)
 								{
-									var body = httpproxy.getRequestBody_(runtime);
-									var opts = httpproxy.getRequestParams_(runtime, body);
+									let body = httpproxy.getRequestBody_(runtime);
+									let opts = httpproxy.getRequestParams_(runtime, body);
 									httpproxy.appendRequestTimeHeader_(runtime, opts);
 
 									if (key) {
@@ -224,8 +224,8 @@ describe('#httpproxy', function()
 
 				it('#repeat', function()
 				{
-					var firstOtps = null;
-					var linker = initLinker(
+					let firstOtps = null;
+					let linker = initLinker(
 					{
 						flows: ['custom'],
 						defaults:
@@ -237,7 +237,7 @@ describe('#httpproxy', function()
 							custom: function custom(runtime, callback)
 							{
 								if (!firstOtps) {
-									var body = httpproxy.getRequestBody_(runtime);
+									let body = httpproxy.getRequestBody_(runtime);
 									firstOtps = httpproxy.getRequestParams_(runtime, body);
 									httpproxy.appendRequestTimeHeader_(runtime, firstOtps);
 								}
@@ -275,7 +275,7 @@ describe('#httpproxy', function()
 
 				it('#check signa', function()
 				{
-					var linker = initLinker(
+					let linker = initLinker(
 					{
 						flows: ['custom'],
 						defaults:
@@ -286,8 +286,8 @@ describe('#httpproxy', function()
 						{
 							custom: function custom(runtime, callback)
 							{
-								var body = httpproxy.getRequestBody_(runtime);
-								var opts = httpproxy.getRequestParams_(runtime, body);
+								let body = httpproxy.getRequestBody_(runtime);
+								let opts = httpproxy.getRequestParams_(runtime, body);
 								httpproxy.appendRequestTimeHeader_(runtime, opts);
 
 								opts.body = opts.body.replace(/\t/g, '  ');
@@ -328,15 +328,15 @@ describe('#httpproxy', function()
 				{
 					it('#client run level:'+clientLevel, function()
 					{
-						var linker = initLinker(
+						let linker = initLinker(
 							{
 								defaults:
 								{
 									httpproxyMaxLevel: clientLevel
 								}
 							});
-						var retPromise = linker.run('client_its.method_no_exists');
-						var runtime = linker.lastRuntime;
+						let retPromise = linker.run('client_its.method_no_exists');
+						let runtime = linker.lastRuntime;
 
 						return retPromise
 							.then(function(){expect().fail()},
@@ -351,19 +351,19 @@ describe('#httpproxy', function()
 											.to.be(undefined);
 										expect(runtime.tmp.httpproxyLevel)
 											.to.be(undefined);
-										var responseError = runtime.retry[0]
+										let responseError = runtime.retry[0]
 											.getRunnedFlowByName('httpproxy')
 											.httpproxyResponseError;
 										expect(responseError).to.be(undefined);
 									}
 									else
 									{
-										var targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
+										let targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
 										expect(runtime.tmp.httpproxyLevelTotal)
 											.to.be(targetSvrLevel);
 										expect(runtime.tmp.httpproxyLevel)
 											.to.be(1);
-										var responseError = runtime.debug('httpproxyResponseError');
+										let responseError = runtime.debug('httpproxyResponseError');
 										expect(responseError.message)
 											.to.be('httpproxy,response!200,501');
 										expect(err.message.substr(0, 22))
@@ -431,7 +431,7 @@ describe('#httpproxy', function()
 
 			it('#httpproxyHeader', function()
 			{
-				var linker = initLinker(
+				let linker = initLinker(
 				{
 					defaults: {
 						httpproxyHeaders: {
@@ -475,7 +475,7 @@ describe('#httpproxy', function()
 
 			it('#httpproxyQuery', function()
 			{
-				var linker = initLinker(
+				let linker = initLinker(
 				{
 					httpproxyQuery: 'custom_query=xxxx',
 					clients: {

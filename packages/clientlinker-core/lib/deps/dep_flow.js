@@ -1,15 +1,15 @@
 'use strict';
 
-var deprecate	= require('depd')('clientlinker:flow');
-var debug		= require('debug')('clientlinker:flow-dep');
+let deprecate	= require('depd')('clientlinker:flow');
+let debug		= require('debug')('clientlinker:flow-dep');
 
 exports.proto = function(Flow)
 {
-	var proto = Flow.prototype;
+	let proto = Flow.prototype;
 
 	proto.register = deprecate.function(function(registerName, handler)
 		{
-			var registerNameType = typeof registerName;
+			let registerNameType = typeof registerName;
 			if (registerNameType == 'function')
 			{
 				handler = registerName;

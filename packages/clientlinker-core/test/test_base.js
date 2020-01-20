@@ -1,15 +1,15 @@
 'use strict';
 
-var Promise			= require('bluebird');
-var clientlinker	= require('../');
-var expect			= require('expect.js');
+let Promise			= require('bluebird');
+let clientlinker	= require('../');
+let expect			= require('expect.js');
 
 
 describe('#base', function()
 {
 	it('#addClient', function()
 	{
-		var linker = clientlinker()
+		let linker = clientlinker()
 
 		linker.addClient('client1');
 		return linker.clients()
@@ -32,21 +32,21 @@ describe('#base', function()
 	{
 		it('#function', function()
 		{
-			var linker = clientlinker();
+			let linker = clientlinker();
 			linker.bindFlow('flow1', function flow1(){});
 			expect(Object.keys(linker.flows).length).to.be(1);
 		});
 
 		it('#object', function()
 		{
-			var linker = clientlinker();
+			let linker = clientlinker();
 			linker.bindFlow({flow2: function flow2(){}, flow3: function flow3(){}});
 			expect(Object.keys(linker.flows).length).to.be(2);
 		});
 
 		it('#same', function()
 		{
-			var linker = clientlinker();
+			let linker = clientlinker();
 			linker.bindFlow('flow1', function flow1(){});
 			linker.bindFlow('flow1', function flow2(){});
 			expect(Object.keys(linker.flows).length).to.be(1);
@@ -56,7 +56,7 @@ describe('#base', function()
 		{
 			it('#promise', function()
 			{
-				var linker = clientlinker();
+				let linker = clientlinker();
 				function flowHanlder(){}
 				flowHanlder.init = function(linker2)
 				{
@@ -82,7 +82,7 @@ describe('#base', function()
 
 			it('#ignore bind', function()
 			{
-				var linker = clientlinker();
+				let linker = clientlinker();
 				function flowHanlder(){}
 				flowHanlder.init = function()
 				{
@@ -100,7 +100,7 @@ describe('#base', function()
 
 			it('#throw err', function()
 			{
-				var linker = clientlinker();
+				let linker = clientlinker();
 				function flowHanlder(){}
 				flowHanlder.init = function()
 				{
@@ -120,7 +120,7 @@ describe('#base', function()
 
 	it('#custom flow', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 			{
 				flows: ['custom', 'custom2'],
 				customFlows: {
@@ -133,7 +133,7 @@ describe('#base', function()
 
 	it('#pkg clients', function()
 	{
-		var linker1 = clientlinker(
+		let linker1 = clientlinker(
 			{
 				flows: ['pkghandler'],
 				clients:
@@ -142,7 +142,7 @@ describe('#base', function()
 				}
 			});
 
-		var linker2 = clientlinker(
+		let linker2 = clientlinker(
 			{
 				flows: ['pkghandler'],
 				clients:
@@ -158,18 +158,18 @@ describe('#base', function()
 		linker1.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
 		linker2.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
 
-		var promise1 = linker1.clients()
+		let promise1 = linker1.clients()
 				.then(function(clients)
 				{
-					var list = Object.keys(clients);
+					let list = Object.keys(clients);
 					expect(list.length).to.be(1);
 					expect(list[0]).to.be('client1');
 				});
 
-		var promise2 = linker2.clients()
+		let promise2 = linker2.clients()
 				.then(function(clients)
 				{
-					var list = Object.keys(clients);
+					let list = Object.keys(clients);
 					expect(list.length).to.be(2);
 				});
 
@@ -178,7 +178,7 @@ describe('#base', function()
 
 	it('#client options override', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 			{
 				flows: ['confighandler', 'pkghandler'],
 				clients:
@@ -204,8 +204,8 @@ describe('#base', function()
 	it('#clientrun', function(done)
 	{
 		// this.timeout(60*1000);
-		var runned = false;
-		var linker = clientlinker(
+		let runned = false;
+		let linker = clientlinker(
 			{
 				flows: ['custom'],
 				customFlows:
@@ -230,7 +230,7 @@ describe('#base', function()
 
 	it('#getRunnedFlowByName', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 			{
 				flows: ['pkghandler', 'confighandler'],
 				clients:
@@ -251,13 +251,13 @@ describe('#base', function()
 		linker.flow('pkghandler', require('clientlinker-flow-confighandler-test').flows.pkghandler);
 		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
-		var retPromise = linker.run('client.method');
-		var runtime = linker.lastRuntime;
+		let retPromise = linker.run('client.method');
+		let runtime = linker.lastRuntime;
 		return retPromise.then(function(data)
 			{
-				var flowsRun = runtime.retry[0];
-				var configCallback = flowsRun.getRunnedFlowByName('confighandler');
-				var configCallback2 = flowsRun.runned[1];
+				let flowsRun = runtime.retry[0];
+				let configCallback = flowsRun.getRunnedFlowByName('confighandler');
+				let configCallback2 = flowsRun.runned[1];
 
 				expect(configCallback.flow.name).to.be('confighandler');
 				expect(configCallback.flow).to.eql(configCallback2.flow);

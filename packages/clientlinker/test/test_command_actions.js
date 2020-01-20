@@ -1,13 +1,13 @@
 'use strict';
 
-var Promise			= require('bluebird');
-var expect			= require('expect.js');
-var commandActions	= require('../bin/lib/command_actions');
-var printTable		= require('../bin/lib/print_table');
-var printTpl		= require('../bin/lib/print_tpl');
+let Promise			= require('bluebird');
+let expect			= require('expect.js');
+let commandActions	= require('../bin/lib/command_actions');
+let printTable		= require('../bin/lib/print_table');
+let printTpl		= require('../bin/lib/print_tpl');
 
-var CONFIG_FILE			= __dirname+'/conf/simple.conf.js';
-var EMPTY_CONFIG_FILE	= __dirname+'/conf/empty.conf.js';
+let CONFIG_FILE			= __dirname+'/conf/simple.conf.js';
+let EMPTY_CONFIG_FILE	= __dirname+'/conf/empty.conf.js';
 
 require('../bin/lib/rlutils').colors.enabled = false;
 
@@ -15,7 +15,7 @@ describe('#commandActions', function()
 {
 	it('#runAction', function()
 	{
-		var linker = require(CONFIG_FILE);
+		let linker = require(CONFIG_FILE);
 
 		return Promise.all(
 			[
@@ -34,7 +34,7 @@ describe('#commandActions', function()
 	{
 		it('#base', function()
 		{
-			var output = [
+			let output = [
 				'    client               confighandler    pkghandler   ',
 				' 1  error                confighandler $               ',
 				' 2  error2               confighandler $               ',
@@ -60,7 +60,7 @@ describe('#commandActions', function()
 
 		it('#clients options', function()
 		{
-			var output = [
+			let output = [
 				'    client2     confighandler    pkghandler   ',
 				' 1  method      confighandler $               ',
 				' 2  method1                      pkghandler $ ',
@@ -81,7 +81,7 @@ describe('#commandActions', function()
 
 		it('#clients width useAction', function()
 		{
-			var output = [
+			let output = [
 				'    client2             confighandler    pkghandler   ',
 				' 1  client2.method      confighandler $               ',
 				' 2  client2.method1                      pkghandler $ ',
@@ -113,7 +113,7 @@ describe('#commandActions', function()
 
 		it('#flows options', function()
 		{
-			var output = ['    client      confighandler   ',
+			let output = ['    client      confighandler   ',
 				' 1  error       confighandler $ ',
 				' 2  error2      confighandler $ ',
 				' 3  success     confighandler $ ',
@@ -148,14 +148,14 @@ describe('#commandActions', function()
 
 		it('#run err', function()
 		{
-			var promise1 = commandActions.execAction(CONFIG_FILE, 'client.error', {})
+			let promise1 = commandActions.execAction(CONFIG_FILE, 'client.error', {})
 				.then(function(){expect().fail()},
 					function(err)
 					{
 						expect(err).to.be(undefined);
 					});
 
-			var promise2 = commandActions.execAction(CONFIG_FILE, 'client.error2', {})
+			let promise2 = commandActions.execAction(CONFIG_FILE, 'client.error2', {})
 				.then(function(){expect().fail()},
 					function(err)
 					{
@@ -189,15 +189,15 @@ describe('#commandActions', function()
 
 	it('#parseFilterFlows', function()
 	{
-		var allFlows = ['flow1', 'flow2', 'flow3'];
+		let allFlows = ['flow1', 'flow2', 'flow3'];
 
-		var items = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
+		let items = commandActions.parseFilterFlows('flow1, flow3,', allFlows);
 		expect(items).to.be.eql(['flow1', 'flow3']);
 
-		var items = commandActions.parseFilterFlows('flow1,', allFlows);
+		items = commandActions.parseFilterFlows('flow1,', allFlows);
 		expect(items).to.be.eql(['flow1']);
 
-		var items = commandActions.parseFilterFlows('flow4,', allFlows);
+		items = commandActions.parseFilterFlows('flow4,', allFlows);
 		expect(items).to.be.eql(allFlows);
 	});
 
@@ -209,7 +209,7 @@ describe('#printTpl', function()
 	it('#runActionUnexpectedError', function()
 	{
 		expect(printTpl.runActionUnexpectedError('action', 'errmsg'))
-			.to.be("\n ========= Unexpected Error action ========= \n'errmsg'");
+			.to.be('\n ========= Unexpected Error action ========= \n\'errmsg\'');
 	});
 
 	it('#rlRunHeader', function()

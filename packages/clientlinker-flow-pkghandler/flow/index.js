@@ -1,7 +1,7 @@
 'use strict';
 
-var pkghandler = require('./pkghandler');
-var methods = require('./methods');
+let pkghandler = require('./pkghandler');
+let methods = require('./methods');
 
 module.exports = function(flow)
 {

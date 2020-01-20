@@ -1,7 +1,7 @@
 'use strict';
 
-var Promise		= require('bluebird');
-var util		= require('util');
+let Promise		= require('bluebird');
+let util		= require('util');
 
 exports.is_verbose = true;
 exports.promise = Promise.resolve();
@@ -15,7 +15,7 @@ exports.stderr = process.stderr;
 		{
 			if (name != 'verbose' || exports.is_verbose)
 			{
-				var str = util.format.apply(null, arguments) + '\n';
+				let str = util.format.apply(null, arguments) + '\n';
 				if (name == 'verbose') str = '[verbose] '+str;
 				exports.write(str, name);
 			}
@@ -25,7 +25,7 @@ exports.stderr = process.stderr;
 		{
 			if (exports.is_verbose)
 			{
-				var str = util.format.apply(null, arguments) + '\n';
+				let str = util.format.apply(null, arguments) + '\n';
 				exports.write(str, name);
 			}
 		}
@@ -35,13 +35,13 @@ exports.stderr = process.stderr;
 exports.write = write;
 function write(str, name)
 {
-	var stdout = name == 'error' ? exports.stderr : exports.stdout;
-	var ok = stdout.write(''+str);
+	let stdout = name == 'error' ? exports.stderr : exports.stdout;
+	let ok = stdout.write(''+str);
 
 	if (!ok && !stdout._clientlinker_writing)
 	{
 		stdout._clientlinker_writing = true;
-		var promise = new Promise(function(resolve)
+		let promise = new Promise(function(resolve)
 			{
 				stdout.once('drain', function()
 				{

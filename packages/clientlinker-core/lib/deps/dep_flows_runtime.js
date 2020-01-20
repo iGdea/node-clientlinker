@@ -1,10 +1,10 @@
 'use strict';
 
-var deprecate	= require('depd')('clientlinker:linker');
+let deprecate	= require('depd')('clientlinker:linker');
 
 exports.proto = function(FlowsRuntime)
 {
-	var proto = FlowsRuntime.prototype;
+	let proto = FlowsRuntime.prototype;
 
 	proto.getRunnedFlowByName = deprecate.function(proto.getFlowRuntime,
 		'use `retry.getFlowRuntime` instead of `retry.getRunnedFlowByName`');

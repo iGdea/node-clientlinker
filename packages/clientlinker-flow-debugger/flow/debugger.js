@@ -1,13 +1,13 @@
 'use strict';
 
-var debug = require('debug')('clientlinker-flow-debugger');
+let debug = require('debug')('clientlinker-flow-debugger');
 
 module.exports = debuggerFlow;
 
 function debuggerFlow(runtime, callback)
 {
-	var client = runtime.client;
-	var options = client.options;
+	let client = runtime.client;
+	let options = client.options;
 
 	return callback.next()
 		.then(function(data)

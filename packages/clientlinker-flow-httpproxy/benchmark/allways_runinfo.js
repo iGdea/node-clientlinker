@@ -1,34 +1,34 @@
 'use strict';
 
-var Promise = require('bluebird');
-var fs = require('fs');
-var path = require('path');
-var mkdirp = require('mkdirp');
-var util = require('util');
+let Promise = require('bluebird');
+let fs = require('fs');
+let path = require('path');
+let mkdirp = require('mkdirp');
+let util = require('util');
 
-var utilsTestHttpproxy	= require('../test/utils_test');
-var confighandlerTest = require('clientlinker-flow-confighandler-test');
+let utilsTestHttpproxy	= require('../test/utils_test');
+let confighandlerTest = require('clientlinker-flow-confighandler-test');
 
-var LOG_FILE = __dirname + '/../test/tmp/allways_runinfo.log';
-var PORT = 3233;
-var EACH_REPEAT = 20;
-var MAX_LAST_RUNTIME_LENGTH = 10;
+let LOG_FILE = __dirname + '/../test/tmp/allways_runinfo.log';
+let PORT = 3233;
+let EACH_REPEAT = 20;
+let MAX_LAST_RUNTIME_LENGTH = 10;
 
 mkdirp.sync(path.dirname(LOG_FILE));
-var ws = fs.createWriteStream(LOG_FILE);
+let ws = fs.createWriteStream(LOG_FILE);
 
 utilsTestHttpproxy.PORT = PORT;
-var linker = utilsTestHttpproxy.initLinker();
-var svr = utilsTestHttpproxy.initSvrLinker();
+let linker = utilsTestHttpproxy.initLinker();
+let svr = utilsTestHttpproxy.initSvrLinker();
 svr.start();
 
 function runAll(index)
 {
-	var startTime = Date.now();
-	var promises = confighandlerTest.run.tests.map(function(handler)
+	let startTime = Date.now();
+	let promises = confighandlerTest.run.tests.map(function(handler)
 		{
-			var arr = [];
-			for(var i = EACH_REPEAT; i--;)
+			let arr = [];
+			for(let i = EACH_REPEAT; i--;)
 			{
 				arr.push(handler(linker));
 			}
@@ -61,13 +61,13 @@ function runNext(index)
 }
 
 
-var lastRunTimes = [];
-var runTimeTotal = 0;
-var runErrorTimes = 0;
+let lastRunTimes = [];
+let runTimeTotal = 0;
+let runErrorTimes = 0;
 function printSuc(index, startTime)
 {
-	var endTime = Date.now();
-	var useTime = endTime - startTime;
+	let endTime = Date.now();
+	let useTime = endTime - startTime;
 	runTimeTotal += useTime;
 
 	logHandler('run suc index[%d] use:%dms', index, useTime);
@@ -77,8 +77,8 @@ function printSuc(index, startTime)
 
 	if (!(index % MAX_LAST_RUNTIME_LENGTH))
 	{
-		var total = 0;
-		var last10 = 0;
+		let total = 0;
+		let last10 = 0;
 		lastRunTimes = lastRunTimes.filter(function(time)
 			{
 				if (time)
@@ -98,7 +98,7 @@ function printSuc(index, startTime)
 
 function printFail(index, startTime, err)
 {
-	var endTime = Date.now();
+	let endTime = Date.now();
 	runErrorTimes++;
 	logHandler('run err index[%d] use:%dms err:%s',
 		index,
@@ -108,8 +108,8 @@ function printFail(index, startTime, err)
 
 function logHandler()
 {
-	var now = new Date;
-	var msg = util.format('[allways] %d %d-%s-%s %s:%s:%s,%d %s',
+	let now = new Date;
+	let msg = util.format('[allways] %d %d-%s-%s %s:%s:%s,%d %s',
 		process.pid,
 		now.getFullYear(),
 		zero(now.getMonth()+1),

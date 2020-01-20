@@ -1,7 +1,7 @@
 'use strict';
 
-var _			= require('lodash');
-var deprecate	= require('depd')('clientlinker:client_runtime_timing');
+let _			= require('lodash');
+let deprecate	= require('depd')('clientlinker:client_runtime_timing');
 
 exports.Timing = Timing;
 function Timing(onetry)
@@ -9,18 +9,18 @@ function Timing(onetry)
 	this.onetry = onetry;
 }
 
-var proto = Timing.prototype;
+let proto = Timing.prototype;
 _.extend(proto,
 {
 	getStartTime: function()
 	{
-		var firstRunner = this.onetry.runned[0];
+		let firstRunner = this.onetry.runned[0];
 		return firstRunner && firstRunner.startTime;
 	},
 	getEndTime: function()
 	{
 		if (!this.onetry.finished) return;
-		var lastRunner = this.onetry.lastRunner;
+		let lastRunner = this.onetry.lastRunner;
 		return lastRunner && lastRunner.endTime;
 	},
 	toJSON: function()

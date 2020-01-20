@@ -1,19 +1,19 @@
 'use strict';
 
-var Promise			= require('bluebird');
-var clientlinker	= require('../');
-var expect			= require('expect.js');
+let Promise			= require('bluebird');
+let clientlinker	= require('../');
+let expect			= require('expect.js');
 
 
 describe('#runtime', function()
 {
 	it('#runtime of retPromise', function()
 	{
-		var linker = clientlinker();
+		let linker = clientlinker();
 		linker.addClient('client');
 
-		var retPromise = linker.run('client.method');
-		var runtime = linker.lastRuntime;
+		let retPromise = linker.run('client.method');
+		let runtime = linker.lastRuntime;
 
 		return retPromise
 			.then(function(){expect().fail()},
@@ -27,21 +27,21 @@ describe('#runtime', function()
 
 	it('#env of runtime', function()
 	{
-		var linker = clientlinker();
+		let linker = clientlinker();
 		linker.addClient('client');
 
-		var retPromise1 = linker.run('client.method');
-		var runtime1 = linker.lastRuntime;
-		var promise1 = retPromise1
+		let retPromise1 = linker.run('client.method');
+		let runtime1 = linker.lastRuntime;
+		let promise1 = retPromise1
 			.then(function(){expect().fail()},
 				function()
 				{
 					expect(runtime1.env.source).to.be('run');
 				});
 
-		var retPromise2 = linker.runInShell('client.method');
-		var runtime2 = linker.lastRuntime;
-		var promise2 = retPromise2
+		let retPromise2 = linker.runInShell('client.method');
+		let runtime2 = linker.lastRuntime;
+		let promise2 = retPromise2
 			.then(function(){expect().fail()},
 				function()
 				{
@@ -54,7 +54,7 @@ describe('#runtime', function()
 
 	it('#timing', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['assertHandler', 'custom1', 'custom2'],
 			customFlows:
@@ -69,8 +69,8 @@ describe('#runtime', function()
 				},
 				assertHandler: function assertHandler(runtime, callback)
 				{
-					var lastRunnerTiming = runtime.lastFlow().timing;
-					var timing = runtime.timing;
+					let lastRunnerTiming = runtime.lastFlow().timing;
+					let timing = runtime.timing;
 
 					expect(lastRunnerTiming.start)
 						.to.be.above(runtime.navigationStart-1);
@@ -89,13 +89,13 @@ describe('#runtime', function()
 			}
 		});
 
-		var retPromise = linker.run('client.method');
-		var runtime = linker.lastRuntime;
+		let retPromise = linker.run('client.method');
+		let runtime = linker.lastRuntime;
 
 		return retPromise.then(function()
 		{
-			var timing = runtime.timing;
-			var lastRunnerTiming = runtime.lastFlow().timing;
+			let timing = runtime.timing;
+			let lastRunnerTiming = runtime.lastFlow().timing;
 
 			expect(timing.flowsEnd).to.be(lastRunnerTiming.end);
 		});
@@ -104,7 +104,7 @@ describe('#runtime', function()
 
 	it('#debug', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['custom1'],
 			customFlows:
@@ -121,13 +121,13 @@ describe('#runtime', function()
 			}
 		});
 
-		var promise = linker.run('client.method');
-		var runtime = linker.lastRuntime;
+		let promise = linker.run('client.method');
+		let runtime = linker.lastRuntime;
 
 		return promise.then(function()
 		{
 			expect(runtime.debug('key1')).to.be(21);
-			var alldata = runtime.debug();
+			let alldata = runtime.debug();
 			expect(Object.keys(alldata)).to.eql(['key1']);
 			expect(alldata.key1).to.be.an('array');
 			expect(alldata.key1.length).to.be(1);
@@ -137,7 +137,7 @@ describe('#runtime', function()
 
 	it('#toJSON', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['custom1', 'custom2'],
 			customFlows:
@@ -157,22 +157,22 @@ describe('#runtime', function()
 			}
 		});
 
-		var promise = linker.run('client.method', 'query', 'body', 'run_options');
-		var runtime = linker.lastRuntime;
+		let promise = linker.run('client.method', 'query', 'body', 'run_options');
+		let runtime = linker.lastRuntime;
 
 		return promise.then(function()
 		{
-			var data = runtime.toJSON();
+			let data = runtime.toJSON();
 			expect(data.navigationStart).to.be.a('number');
 			delete data.navigationStart;
 
-			var timing = data.timing;
+			let timing = data.timing;
 			delete data.timing;
 			expect(Object.keys(timing)).to.eql(['startTime', 'endTime']);
 			expect(timing.startTime).to.be.a('number');
 			expect(timing.endTime).to.be.a('number');
 
-			var retry = data.retry;
+			let retry = data.retry;
 			delete data.retry;
 			expect(retry).to.be.an('array');
 			expect(retry.length).to.be(1);
@@ -183,7 +183,7 @@ describe('#runtime', function()
 			expect(timing.startTime).to.be.a('number');
 			expect(timing.endTime).to.be.a('number');
 
-			var runned = retry[0].runned;
+			let runned = retry[0].runned;
 			delete retry[0].runned;
 			expect(runned).to.be.an('array');
 			expect(runned.length).to.be(2);

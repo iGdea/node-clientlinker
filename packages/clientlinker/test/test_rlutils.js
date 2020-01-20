@@ -1,9 +1,9 @@
 'use strict';
 
-var rlutils			= require('../bin/lib/rlutils');
-var expect			= require('expect.js');
-var clientlinker	= require('../');
-var path			= require('path');
+let rlutils			= require('../bin/lib/rlutils');
+let expect			= require('expect.js');
+let clientlinker	= require('../');
+let path			= require('path');
 
 rlutils.colors.enabled = false;
 
@@ -16,17 +16,17 @@ describe('#rlutils', function()
 			.contain(__dirname)
 			.contain(__filename);
 
-		expect(rlutils.printObject('something')).to.be("'something'");
+		expect(rlutils.printObject('something')).to.be('\'something\'');
 		expect(rlutils.printObject(undefined)).to.be('undefined');
 		expect(rlutils.printObject(1)).to.be('1');
 		expect(rlutils.printObject(null)).to.be('null');
-		expect(rlutils.printObject({a:1,b:"b"})).to.be("{ a: 1, b: 'b' }");
+		expect(rlutils.printObject({a:1,b:'b'})).to.be('{ a: 1, b: \'b\' }');
 	});
 
 
 	it('#methods', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler'],
 			clients:
@@ -67,7 +67,7 @@ describe('#rlutils', function()
 
 	it('#methods width *', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler', 'custom'],
 			clients:

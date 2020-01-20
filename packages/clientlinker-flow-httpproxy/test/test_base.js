@@ -1,11 +1,11 @@
 'use strict';
 
-var expect				= require('expect.js');
-var utilsTestHttpproxy	= require('./utils_test');
-var confighandlerTest	= require('clientlinker-flow-confighandler-test');
+let expect				= require('expect.js');
+let utilsTestHttpproxy	= require('./utils_test');
+let confighandlerTest	= require('clientlinker-flow-confighandler-test');
 
-var initLinker			= utilsTestHttpproxy.initLinker;
-var initTestSvrLinker	= utilsTestHttpproxy.initTestSvrLinker;
+let initLinker			= utilsTestHttpproxy.initLinker;
+let initTestSvrLinker	= utilsTestHttpproxy.initTestSvrLinker;
 
 describe('#base', function()
 {
@@ -23,7 +23,7 @@ describe('#base', function()
 
 	it('#no client', function()
 	{
-		var linker = initLinker({});
+		let linker = initLinker({});
 		linker.client('client_not_exists', {});
 
 		return linker.run('client_not_exists.method')

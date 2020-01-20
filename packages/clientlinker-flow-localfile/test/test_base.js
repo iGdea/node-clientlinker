@@ -1,14 +1,14 @@
 'use strict';
 
-var Promise			= require('bluebird');
-var expect			= require('expect.js');
-var clientlinker	= require('clientlinker-core');
+let Promise			= require('bluebird');
+let expect			= require('expect.js');
+let clientlinker	= require('clientlinker-core');
 
 describe('#localfile', function()
 {
 	it('#base', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['localfile'],
 			defaults:
@@ -30,20 +30,20 @@ describe('#localfile', function()
 
 		linker.flow('localfile', require('../'));
 
-		var promise1 = linker.run('client.js')
+		let promise1 = linker.run('client.js')
 			.then(function(){expect().fail()},
 				function(err)
 				{
 					expect(err.message).to.be('local file errmsg')
 				});
 
-		var promise2 = linker.run('client.json')
+		let promise2 = linker.run('client.json')
 			.then(function(data)
 			{
 				expect(data.string).to.be('string');
 			});
 
-		var promise3 = linker.methods()
+		let promise3 = linker.methods()
 			.then(function(map)
 			{
 				expect(map.client).to.be.an('object');
@@ -53,7 +53,7 @@ describe('#localfile', function()
 				expect(map.client2.client.options.localfile)
 					.to.contain('localfile/not_exsits');
 
-				var methods = Object.keys(map.client.methods);
+				let methods = Object.keys(map.client.methods);
 				expect(methods).to.eql(['js','json']);
 			});
 
@@ -62,7 +62,7 @@ describe('#localfile', function()
 
 	it('#localfile2', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['localfile'],
 			clients:

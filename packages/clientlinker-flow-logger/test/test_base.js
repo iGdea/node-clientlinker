@@ -1,26 +1,26 @@
 'use strict';
 
-var Promise				= require('bluebird');
-var expect				= require('expect.js');
-var clientlinker		= require('clientlinker-core');
-var logger				= require('../flow/logger');
-var loggerFlow			= require('../');
-var confighanlderFlow	= require('clientlinker-flow-confighandler');
+let Promise				= require('bluebird');
+let expect				= require('expect.js');
+let clientlinker		= require('clientlinker-core');
+let logger				= require('../flow/logger');
+let loggerFlow			= require('../');
+let confighanlderFlow	= require('clientlinker-flow-confighandler');
 
 
 describe('#logger', function()
 {
 	it('#param', function()
 	{
-		var runDeffer = PromiseDeffer();
-		var errorDeffer = PromiseDeffer();
-		var linker = simpleLinker(function(type)
+		let runDeffer = PromiseDeffer();
+		let errorDeffer = PromiseDeffer();
+		let linker = simpleLinker(function(type)
 		{
 			return function(runtime, err, data)
 			{
 				try {
-					var timing = runtime.timing;
-					var lastFlowTiming = runtime.lastFlow().timing;
+					let timing = runtime.timing;
+					let lastFlowTiming = runtime.lastFlow().timing;
 
 					expect(lastFlowTiming.start).to.be.an('number');
 					expect(lastFlowTiming.end).to.be.an('number');
@@ -63,9 +63,9 @@ describe('#logger', function()
 
 	it('#defaultLoggerHander', function()
 	{
-		var runDeffer = PromiseDeffer();
-		var errorDeffer = PromiseDeffer();
-		var linker = simpleLinker(function(type)
+		let runDeffer = PromiseDeffer();
+		let errorDeffer = PromiseDeffer();
+		let linker = simpleLinker(function(type)
 		{
 			return function()
 			{
@@ -102,7 +102,7 @@ describe('#logger', function()
 
 function simpleLinker(genLoggerHander)
 {
-	var linker = clientlinker(
+	let linker = clientlinker(
 	{
 		flows: ['logger', 'confighandler'],
 		clients:
@@ -140,8 +140,8 @@ function simpleLinker(genLoggerHander)
 
 function PromiseDeffer()
 {
-	var resolve, reject;
-	var promise = new Promise(function(resolve0, reject0)
+	let resolve, reject;
+	let promise = new Promise(function(resolve0, reject0)
 	{
 		resolve = resolve0;
 		reject = reject0;

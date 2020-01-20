@@ -1,7 +1,7 @@
 'use strict';
 
-var Promise	= require('bluebird');
-var expect	= require('expect.js');
+let Promise	= require('bluebird');
+let expect	= require('expect.js');
 
 module.exports =
 {

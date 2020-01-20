@@ -1,14 +1,14 @@
 'use strict';
 
-var Promise			= require('bluebird');
-var clientlinker	= require('../');
-var expect			= require('expect.js');
+let Promise			= require('bluebird');
+let clientlinker	= require('../');
+let expect			= require('expect.js');
 
 describe('#deps', function()
 {
 	it('#runOptions', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['custom'],
 			customFlows: {
@@ -35,14 +35,14 @@ describe('#deps', function()
 
 	it('#navigationStart', function()
 	{
-		var linker = clientlinker();
-		var promise = linker.run('client.method');
-		var runtime = linker.lastRuntime;
+		let linker = clientlinker();
+		let promise = linker.run('client.method');
+		let runtime = linker.lastRuntime;
 
 		return promise.then(function(){expect().fail()},
 			function()
 			{
-				var navigationStart = runtime.timing.navigationStart;
+				let navigationStart = runtime.timing.navigationStart;
 				expect(navigationStart).to.be.a('number');
 				expect(navigationStart).to.be(runtime.navigationStart);
 			});
@@ -51,7 +51,7 @@ describe('#deps', function()
 
 	it('#runByKey', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler'],
 			clients:
@@ -89,7 +89,7 @@ describe('#deps', function()
 
 	it('#add', function()
 	{
-		var linker = clientlinker()
+		let linker = clientlinker()
 		linker.add('clientName1', {opt: 'myOpt'});
 
 		return linker.clients()
@@ -104,7 +104,7 @@ describe('#deps', function()
 
 	it('#clientDefaultOptions', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			clientDefaultOptions:
 			{
@@ -160,8 +160,8 @@ describe('#deps', function()
 
 	it('#loadFlow', function()
 	{
-		var linker = clientlinker()
-		var flow = linker.loadFlow('flow_empty', './deps/flows/flow_empty', module);
+		let linker = clientlinker()
+		let flow = linker.loadFlow('flow_empty', './deps/flows/flow_empty', module);
 		expect(flow).to.not.be.ok();
 		flow = linker.loadFlow('flow_resolve', './deps/flows/flow_resolve', module);
 		expect(flow).to.be.ok();
@@ -183,9 +183,9 @@ describe('#deps', function()
 
 	it('#methodKey', function()
 	{
-		var linker = clientlinker();
+		let linker = clientlinker();
 		linker.run('client.method').catch(function(){});
-		var runtime = linker.lastRuntime;
+		let runtime = linker.lastRuntime;
 
 		expect(runtime.methodKey).to.be('client.method')
 			.be(runtime.action);
@@ -194,7 +194,7 @@ describe('#deps', function()
 
 	it('#parseMethodKey', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 			{
 				clients:
 				{

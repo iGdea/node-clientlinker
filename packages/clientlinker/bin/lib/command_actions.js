@@ -1,27 +1,27 @@
 'use strict';
 
-var _			= require('lodash');
-var rlutils		= require('./rlutils');
-var printTable	= require('./print_table').printTable;
-var printTpl	= require('./print_tpl');
-var stdout		= require('./stdout');
-var pkg			= require('../../package.json');
+let _			= require('lodash');
+let rlutils		= require('./rlutils');
+let printTable	= require('./print_table').printTable;
+let printTpl	= require('./print_tpl');
+let stdout		= require('./stdout');
+let pkg			= require('../../package.json');
 
-var commandActions = exports;
+let commandActions = exports;
 
 
 exports.execAction = function execAction(conf_file, action, options, ignoreRunError)
 {
 	options || (options = {});
-	var linker = requireLinker(conf_file);
+	let linker = requireLinker(conf_file);
 
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
-			var realaction = rlutils.parseAction(action, allMethods);
+			let realaction = rlutils.parseAction(action, allMethods);
 			if (!realaction)
 			{
-				var err = new Error('Not Found Action');
+				let err = new Error('Not Found Action');
 				err.action = action;
 				throw err;
 			}
@@ -44,13 +44,13 @@ exports.execAction = function execAction(conf_file, action, options, ignoreRunEr
 exports.listAction = function listAction(conf_file, options)
 {
 	options || (options = {});
-	var linker = requireLinker(conf_file);
+	let linker = requireLinker(conf_file);
 
 	return commandActions.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods)
 		{
-			var flows = parseFilterFlows(options.flows, allMethods.allFlows);
-			var output = printTable(allMethods.lines, flows, options);
+			let flows = parseFilterFlows(options.flows, allMethods.allFlows);
+			let output = printTable(allMethods.lines, flows, options);
 			stdout.log(output);
 
 			return {
@@ -78,7 +78,7 @@ exports.listAction = function listAction(conf_file, options)
  */
 function parseFilterFlows(flowsStr, allFlows)
 {
-	var flows = flowsStr && flowsStr.split(/ *, */);
+	let flows = flowsStr && flowsStr.split(/ *, */);
 	if (flows) flows = _.intersection(flows, allFlows);
 	if (!flows || !flows.length) flows = allFlows;
 
@@ -92,7 +92,7 @@ exports.filterAllMehtods = function filterAllMehtods(linker, clients)
 	return linker.methods()
 		.then(function(list)
 		{
-			var reallist;
+			let reallist;
 
 			if (!clients)
 				reallist = list;
@@ -121,9 +121,9 @@ exports.filterAllMehtods = function filterAllMehtods(linker, clients)
 exports.runAction = function runAction(linker, action, query, body, options, ignoreRunError)
 {
 	options || (options = {});
-	var retPromise;
-	var args = [action, query, body, null, options];
-	var str = printTpl.runActionStart(action, query, body, options);
+	let retPromise;
+	let args = [action, query, body, null, options];
+	let str = printTpl.runActionStart(action, query, body, options);
 	stdout.log(str);
 
 	// 兼容老的linker
@@ -135,14 +135,14 @@ exports.runAction = function runAction(linker, action, query, body, options, ign
 	return retPromise
 		.then(function(data)
 		{
-			var str = printTpl.runActionEnd(action, 'data', retPromise.runtime, data);
+			let str = printTpl.runActionEnd(action, 'data', retPromise.runtime, data);
 			stdout.log(str);
 
 			return data;
 		},
 		function(err)
 		{
-			var str = printTpl.runActionEnd(action, 'error', retPromise.runtime, err);
+			let str = printTpl.runActionEnd(action, 'error', retPromise.runtime, err);
 			stdout.error(str);
 
 			if (!ignoreRunError) throw err;
@@ -152,11 +152,11 @@ exports.runAction = function runAction(linker, action, query, body, options, ign
 
 function requireLinker(conf_file)
 {
-	var linker = require(rlutils.resolve(conf_file));
+	let linker = require(rlutils.resolve(conf_file));
 
 	if (linker.version != pkg.version)
 	{
-		var str = printTpl.linkerVersionNotMatch(pkg.version, linker.version);
+		let str = printTpl.linkerVersionNotMatch(pkg.version, linker.version);
 		stdout.warn(str);
 	}
 

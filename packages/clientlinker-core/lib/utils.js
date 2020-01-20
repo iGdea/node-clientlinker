@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+let _ = require('lodash');
 
 exports.DEFAULT_ERROR = 'CLIENT_LINKER_DEFERT_ERROR';
 
@@ -9,8 +9,8 @@ function anyToError(originalError, runner)
 {
 	if (originalError instanceof Error) return originalError;
 
-	var errType = typeof originalError;
-	var err;
+	let errType = typeof originalError;
+	let err;
 
 	if (originalError && errType == 'object')
 	{
@@ -42,7 +42,7 @@ function expandError(err, runtime, flowName)
 	}
 	else
 	{
-		var actionInfo = parseAction(runtime.action);
+		let actionInfo = parseAction(runtime.action);
 		err.fromClient = actionInfo.clientName;
 		err.fromClientMethod = actionInfo.method;
 	}
@@ -55,7 +55,7 @@ function expandError(err, runtime, flowName)
 exports.newNotFoundError = newNotFoundError
 function newNotFoundError(type, runtime)
 {
-	var err = new Error('CLIENTLINKER:NotFound,'+runtime.action);
+	let err = new Error('CLIENTLINKER:NotFound,'+runtime.action);
 	err.CLIENTLINKER_TYPE = type;
 	expandError(err, runtime);
 	return err;
@@ -65,11 +65,11 @@ exports.parseActionCache = {};
 exports.parseAction = parseAction;
 function parseAction(action)
 {
-	var cache = exports.parseActionCache[action];
+	let cache = exports.parseActionCache[action];
 	if (!cache)
 	{
-		var arr			= action.split('.');
-		var clientName	= arr.shift();
+		let arr			= action.split('.');
+		let clientName	= arr.shift();
 
 		cache = exports.parseActionCache[action] =
 		{

@@ -1,6 +1,6 @@
 'use strict';
 
-var debug = require('debug')('clientlinker-flow-confighandler:flows/pkghandler');
+let debug = require('debug')('clientlinker-flow-confighandler:flows/pkghandler');
 
 module.exports = function(flow) {
 	flow.run = pkghandler;
@@ -9,11 +9,11 @@ module.exports = function(flow) {
 
 function pkghandler(runtime, callback)
 {
-	var client = runtime.client;
-	var mod = initClient(client);
+	let client = runtime.client;
+	let mod = initClient(client);
 
 	if (!mod) return callback.next();
-	var handler = mod[runtime.method];
+	let handler = mod[runtime.method];
 
 	if (handler)
 	{
@@ -29,13 +29,13 @@ function pkghandler(runtime, callback)
 
 function methods(client)
 {
-	var mod = initClient(client);
+	let mod = initClient(client);
 	if (mod) return Object.keys(mod);
 }
 
 function initClient(client)
 {
-	var options = client.options;
+	let options = client.options;
 	if (!options.pkghandler) return;
 
 	if (!client.pkghandlerModuleLoaded)

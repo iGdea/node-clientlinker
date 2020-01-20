@@ -1,24 +1,24 @@
 'use strict';
 
-var _			= require('lodash');
-var Promise		= require('bluebird');
-var isPromise	= require('is-promise');
-var debug		= require('debug')('clientlinker:flow_runtime');
-var deprecate	= require('depd')('clientlinker:flow_runtime');
-var Timing		= require('./timing/flow_runtime_timing').Timing;
-var utils		= require('../utils');
+let _			= require('lodash');
+let Promise		= require('bluebird');
+let isPromise	= require('is-promise');
+let debug		= require('debug')('clientlinker:flow_runtime');
+let deprecate	= require('depd')('clientlinker:flow_runtime');
+let Timing		= require('./timing/flow_runtime_timing').Timing;
+let utils		= require('../utils');
 
 exports.FlowRuntime = FlowRuntime;
 
 function FlowRuntime(flow, onetry)
 {
-	var self		= this;
+	let self		= this;
 	self.flow		= flow;
 	self.onetry		= onetry;
 	self.runtime	= onetry.runtime;
 
-	var resolve, reject;
-	var promise = new Promise(function(resolve0, reject0)
+	let resolve, reject;
+	let promise = new Promise(function(resolve0, reject0)
 		{
 			resolve = resolve0;
 			reject = reject0;
@@ -45,7 +45,7 @@ function FlowRuntime(flow, onetry)
 	self.timing = new Timing(self);
 }
 
-var proto = FlowRuntime.prototype;
+let proto = FlowRuntime.prototype;
 _.extend(proto,
 {
 	run: function()
@@ -54,7 +54,7 @@ _.extend(proto,
 
 		try {
 			debug('flow run:%s', this.flow.name);
-			var ret = this.flow.run(this.runtime, this);
+			let ret = this.flow.run(this.runtime, this);
 			if (isPromise(ret)) ret.then(this.resolve, this.reject);
 		}
 		catch(err)
@@ -66,7 +66,7 @@ _.extend(proto,
 	},
 	next: function()
 	{
-		var nextRunner = this.nextRunner;
+		let nextRunner = this.nextRunner;
 		if (!nextRunner)
 		{
 			nextRunner = this.nextRunner = this.onetry.nextRunner();
@@ -77,7 +77,7 @@ _.extend(proto,
 			}
 			else
 			{
-				var runtime = this.runtime;
+				let runtime = this.runtime;
 				debug('flow out: %s', runtime.action);
 				return Promise.reject(utils.newNotFoundError('CLIENT FLOW OUT', runtime));
 			}
@@ -111,7 +111,7 @@ _.extend(proto,
 	},
 	_error: function(err)
 	{
-		var client = this.runtime.client;
+		let client = this.runtime.client;
 		if (client.options.anyToError)
 			err = client.linker.anyToError(err, this);
 
@@ -128,8 +128,8 @@ _.extend(proto,
 	},
 	toFuncCallback: deprecate.function(function()
 	{
-		var self = this;
-		var callback = _.bind(self.callback, self);
+		let self = this;
+		let callback = _.bind(self.callback, self);
 
 		['resolve', 'reject', 'promise'].forEach(function(name)
 		{

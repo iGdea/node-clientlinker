@@ -1,7 +1,7 @@
 'use strict';
 
-var httpproxy = require('./httpproxy');
-var methods = require('./methods');
+let httpproxy = require('./httpproxy');
+let methods = require('./methods');
 
 module.exports = function(flow)
 {

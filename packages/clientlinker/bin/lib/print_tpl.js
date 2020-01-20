@@ -1,26 +1,26 @@
 'use strict';
 
-var util		= require('util');
-var rlutils		= require('./rlutils');
-var printTpl	= exports;
+let util		= require('util');
+let rlutils		= require('./rlutils');
+let printTpl	= exports;
 
 
 exports.runtime = function runtime(runtime)
 {
 	if (!runtime) return '';
 
-	var retryTimes = runtime.retry.length;
-	var alltime = runtime.timing.getEndTime() - runtime.navigationStart;
-	var lastRetry = runtime.retry[runtime.retry.length-1];
-	var flowStr = [];
-	for (var runned = lastRetry.runned, len = runned.length; len--;)
+	let retryTimes = runtime.retry.length;
+	let alltime = runtime.timing.getEndTime() - runtime.navigationStart;
+	let lastRetry = runtime.retry[runtime.retry.length-1];
+	let flowStr = [];
+	for (let runned = lastRetry.runned, len = runned.length; len--;)
 	{
-		var runner = runned[len];
+		let runner = runned[len];
 		if (!runner || !runner.flow) continue;
 
 		if (!flowStr.length)
 		{
-			var str = util.format('%s %sms',
+			let str = util.format('%s %sms',
 				rlutils.colors.green(runner.flow.name),
 				rlutils.colors.blue(runner.endTime - runner.startTime));
 
@@ -28,7 +28,7 @@ exports.runtime = function runtime(runtime)
 		}
 		else
 		{
-			var str = rlutils.colors.gray(runner.flow.name);
+			let str = rlutils.colors.gray(runner.flow.name);
 			flowStr.push(str);
 		}
 	}
@@ -77,7 +77,7 @@ exports.runActionStart = function runActionStart(action, query, body, options)
 
 exports.runActionEnd = function runActionEnd(action, type, runtime, data)
 {
-	var title = util.format(
+	let title = util.format(
 		' ========= Action Result %s %s =========',
 		type == 'error' ? 'Error' : 'Success',
 		rlutils.colors.green(action));
@@ -92,7 +92,7 @@ exports.runActionEnd = function runActionEnd(action, type, runtime, data)
 
 exports.runActionUnexpectedError = function runActionUnexpectedError(action, err)
 {
-	var title = util.format(
+	let title = util.format(
 		' ========= Unexpected Error %s ========= ',
 		rlutils.colors.green(action));
 
@@ -105,7 +105,7 @@ exports.runActionUnexpectedError = function runActionUnexpectedError(action, err
 
 exports.linkerVersionNotMatch = function linkerVersionNotMatch(pkgVersion, linkerVersion)
 {
-	var str = util.format('\n\n  version not match, cli version:%s, config file version:%s\n\n',
+	let str = util.format('\n\n  version not match, cli version:%s, config file version:%s\n\n',
 		rlutils.colors.green(pkgVersion),
 		rlutils.colors.green(linkerVersion));
 

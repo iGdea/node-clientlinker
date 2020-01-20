@@ -1,18 +1,18 @@
 'use strict';
 
-var Command2		= require('commander').Command;
-var pkg				= require('../../package.json');
-var rlutils			= require('./rlutils');
-var stdout			= require('./stdout');
-var util			= require('util');
-var EventEmitter	= require('events').EventEmitter;
+let Command2		= require('commander').Command;
+let pkg				= require('../../package.json');
+let rlutils			= require('./rlutils');
+let stdout			= require('./stdout');
+let util			= require('util');
+let EventEmitter	= require('events').EventEmitter;
 
 
 exports.Command = Command;
 function Command()
 {
 	// 强制使用clientlinker作为name
-	var program = this.program = new Command2(pkg.name);
+	let program = this.program = new Command2(pkg.name);
 	program.version('v'+pkg.version)
 		.option('-C, --no-color', 'Disable colored output.')
 		.option('-v, --verbose', 'Verbose mode. A lot more information output.')
@@ -24,11 +24,11 @@ function Command()
 		});
 }
 
-var proto = Command.prototype;
+let proto = Command.prototype;
 
 proto.list = function list()
 {
-	var options = {};
+	let options = {};
 
 	return this.program
 		.command('list <conf_file>')
@@ -58,7 +58,7 @@ proto.list = function list()
 
 proto.exec = function exec()
 {
-	var options = {};
+	let options = {};
 
 	return this.program
 		.command('exec <conf_file> <action>')
@@ -113,9 +113,9 @@ proto.help = function help()
 		.description('display help for [cmd]')
 		.action(function(cmd)
 		{
-			var self = this;
+			let self = this;
 
-			var command = findSubCommand(self.parent, cmd);
+			let command = findSubCommand(self.parent, cmd);
 			if (!command) throw new Error('No Defined Command, '+cmd);
 
 			// command.help();
@@ -140,7 +140,7 @@ proto.anycmd = function anycmd()
 		.allowUnknownOption(true)
 		.action(function(conf_file, cmd)
 		{
-			var command = cmd && cmd != 'help'
+			let command = cmd && cmd != 'help'
 					&& findSubCommand(this.parent, cmd);
 
 			// 默认输出帮助信息
@@ -148,7 +148,7 @@ proto.anycmd = function anycmd()
 				this.parent.help();
 			else
 			{
-				var avgs = this.parent.rawArgs.slice();
+				let avgs = this.parent.rawArgs.slice();
 				avgs.splice(2, 2, cmd, conf_file);
 				this.parent.parse(avgs);
 			}
@@ -159,7 +159,7 @@ proto.anycmd = function anycmd()
 // find sub command
 function findSubCommand(program, cmd)
 {
-	var command;
+	let command;
 	program.commands.some(function(item)
 	{
 		if (item.name() == cmd || item.alias() == cmd)
@@ -176,12 +176,12 @@ function findSubCommand(program, cmd)
 // Update Command Error Print Hanlder
 Command2.prototype.emitError = function()
 {
-	var msg = util.format.apply(util, arguments);
+	let msg = util.format.apply(util, arguments);
 
-	var command = this;
+	let command = this;
 	while(command.parent) command = command.parent;
 
-	var listenerCount;
+	let listenerCount;
 	if (command.listenerCount)
 		listenerCount = command.listenerCount('error');
 	else
@@ -197,21 +197,21 @@ Command2.prototype.emitError = function()
 };
 Command2.prototype.missingArgument = function(name)
 {
-	this.emitError("missing required argument `%s'", name);
+	this.emitError('missing required argument `%s\'', name);
 };
 Command2.prototype.optionMissingArgument = function(option, flag)
 {
 	if (flag)
-		this.emitError("option `%s' argument missing, got `%s'", option.flags, flag);
+		this.emitError('option `%s\' argument missing, got `%s\'', option.flags, flag);
 	else
-		this.emitError("option `%s' argument missing", option.flags);
+		this.emitError('option `%s\' argument missing', option.flags);
 };
 Command2.prototype.unknownOption = function(flag)
 {
 	if (this._allowUnknownOption) return;
-	this.emitError("unknown option `%s'", flag);
+	this.emitError('unknown option `%s\'', flag);
 };
 Command2.prototype.variadicArgNotLast = function(name)
 {
-	this.emitError("variadic arguments must be last `%s'", name);
+	this.emitError('variadic arguments must be last `%s\'', name);
 };

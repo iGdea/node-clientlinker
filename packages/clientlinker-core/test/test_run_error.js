@@ -1,15 +1,15 @@
 'use strict';
 
-var Promise			= require('bluebird');
-var clientlinker	= require('../');
-var expect			= require('expect.js');
-var debug			= require('debug')('clientlinker:test_run_error');
+let Promise			= require('bluebird');
+let clientlinker	= require('../');
+let expect			= require('expect.js');
+let debug			= require('debug')('clientlinker:test_run_error');
 
 describe('#run_error', function()
 {
 	it('#flow run Error', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler'],
 			clients:
@@ -37,7 +37,7 @@ describe('#run_error', function()
 
 		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
-		var promise1 = new Promise(function(resolve)
+		let promise1 = new Promise(function(resolve)
 		{
 			linker.run('client.method', null, null, function(err)
 				{
@@ -46,14 +46,14 @@ describe('#run_error', function()
 				});
 		});
 
-		var promise2 = linker.run('client.method')
+		let promise2 = linker.run('client.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
 					expect(err).to.be(333);
 				});
 
-		var promise3 = linker.run('client.not_exit_method')
+		let promise3 = linker.run('client.not_exit_method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -64,7 +64,7 @@ describe('#run_error', function()
 					// expect(err.CLIENTLINKER_CLIENT).to.be('client');
 				});
 
-		var promise4 = linker.run('client1.method')
+		let promise4 = linker.run('client1.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -74,7 +74,7 @@ describe('#run_error', function()
 					// expect(err.CLIENTLINKER_ACTION).to.be('client1.method');
 				});
 
-		var promise5 = linker.run('client2.method')
+		let promise5 = linker.run('client2.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -85,7 +85,7 @@ describe('#run_error', function()
 					// expect(err.CLIENTLINKER_CLIENT).to.be('client2');
 				});
 
-		var promise6 = linker.run('client.not_exit_method')
+		let promise6 = linker.run('client.not_exit_method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -99,7 +99,7 @@ describe('#run_error', function()
 					expect(err.fromClientMethod).to.be('not_exit_method');
 				});
 
-		var promise7 = linker.run('client.method2')
+		let promise7 = linker.run('client.method2')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -120,7 +120,7 @@ describe('#run_error', function()
 
 	it('#not exportErrorInfo', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler'],
 			defaults:
@@ -158,7 +158,7 @@ describe('#run_error', function()
 
 	it('#anyToError', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler'],
 			defaults: {anyToError: true},
@@ -190,7 +190,7 @@ describe('#run_error', function()
 		});
 		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
-		var promise1 = linker.run('client.method1')
+		let promise1 = linker.run('client.method1')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -199,7 +199,7 @@ describe('#run_error', function()
 					expect(err.isClientLinkerNewError).to.be.ok();
 				});
 
-		var promise2 = linker.run('client.method2')
+		let promise2 = linker.run('client.method2')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -208,7 +208,7 @@ describe('#run_error', function()
 					expect(err.isClientLinkerNewError).to.be.ok();
 				});
 
-		var promise3 = linker.run('client.method3')
+		let promise3 = linker.run('client.method3')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -217,7 +217,7 @@ describe('#run_error', function()
 					expect(err.isClientLinkerNewError).to.be.ok();
 				});
 
-		var promise4 = linker.run('client.method4')
+		let promise4 = linker.run('client.method4')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -226,7 +226,7 @@ describe('#run_error', function()
 					expect(err.isClientLinkerNewError).to.not.be.ok();
 				});
 
-		var promise5 = linker.run('client.method5')
+		let promise5 = linker.run('client.method5')
 			.then(function(){expect().fail()},
 				function(err)
 				{
@@ -243,7 +243,7 @@ describe('#run_error', function()
 
 	it('#from flow run', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['custom'],
 			customFlows: {
@@ -272,9 +272,9 @@ describe('#run_error', function()
 	{
 		it('#in defualts', function()
 		{
-			var runTimes = 0;
-			var triggerTimes = 0;
-			var linker = clientlinker(
+			let runTimes = 0;
+			let triggerTimes = 0;
+			let linker = clientlinker(
 			{
 				flows: ['timingCheck', 'confighandler'],
 				customFlows:
@@ -317,7 +317,7 @@ describe('#run_error', function()
 			});
 			linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
-			var retPromise = linker.run('client.method')
+			let retPromise = linker.run('client.method')
 				.then(function(data)
 				{
 					expect(data).to.be(555);
@@ -334,8 +334,8 @@ describe('#run_error', function()
 
 		it('#runOptions', function()
 		{
-			var runTimes = 0;
-			var linker = clientlinker(
+			let runTimes = 0;
+			let linker = clientlinker(
 			{
 				flows: ['timingCheck', 'confighandler'],
 				customFlows:
@@ -384,7 +384,7 @@ describe('#run_error', function()
 
 	it('#throw null err', function()
 	{
-		var linker = clientlinker(
+		let linker = clientlinker(
 		{
 			flows: ['confighandler'],
 			clients:
@@ -403,9 +403,9 @@ describe('#run_error', function()
 		});
 		linker.flow('confighandler', require('clientlinker-flow-confighandler-test').flows.confighandler);
 
-		var resolve;
-		var callbackPromise = new Promise(function(resolve0){resolve = resolve0});
-		var runPromise = linker.run('client.method', null, null, function(err)
+		let resolve;
+		let callbackPromise = new Promise(function(resolve0){resolve = resolve0});
+		let runPromise = linker.run('client.method', null, null, function(err)
 			{
 				expect(err).to.be('CLIENT_LINKER_DEFERT_ERROR');
 				resolve();

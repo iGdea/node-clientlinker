@@ -1,9 +1,9 @@
 'use strict';
 
-var _			= require('lodash');
-var Module		= require('module').Module;
-var deprecate	= require('depd')('clientlinker:linker');
-var debug		= require('debug')('clientlinker:linker-dep');
+let _			= require('lodash');
+let Module		= require('module').Module;
+let deprecate	= require('depd')('clientlinker:linker');
+let debug		= require('debug')('clientlinker:linker-dep');
 
 
 exports.init = function()
@@ -31,7 +31,7 @@ exports.init = function()
 
 exports.proto = function(Linker)
 {
-	var proto = Linker.prototype;
+	let proto = Linker.prototype;
 
 	proto.add = deprecate.function(_addClient,
 		'use `linker.client` instead of `linker.add`');
@@ -48,7 +48,7 @@ exports.proto = function(Linker)
 
 	proto.runByKey = deprecate.function(function runByKey(key)
 		{
-			var action = key.replace(':', '.');
+			let action = key.replace(':', '.');
 
 			if (action != key)
 			{
@@ -62,16 +62,19 @@ exports.proto = function(Linker)
 
 	proto.bindFlow = deprecate.function(function(name, handler)
 		{
-			var self = this;
+			let self = this;
 			function bindFlow(handler, name)
 			{
 				if (typeof handler != 'function') return false;
+
+				let ret;
 				if (typeof handler.init == 'function')
 				{
-					var ret = handler.init(self);
+					ret = handler.init(self);
 					if (ret === false) return false;
 				}
 				self.onInit(function(){return ret});
+
 				try {
 					self.flow(name, function(flow)
 					{
@@ -106,7 +109,7 @@ exports.proto = function(Linker)
 
 	proto.loadFlow = deprecate.function(function(name, pkgpath, module)
 		{
-			var self = this;
+			let self = this;
 			function loadFlow(name, pkghandler, module)
 			{
 				if (!pkgpath)
@@ -122,7 +125,7 @@ exports.proto = function(Linker)
 				}
 
 				debug('loadflow, file: %s, name: %s, module: %s', pkghandler, name, module);
-				var handler = module ? module.require(pkghandler) : require(pkghandler);
+				let handler = module ? module.require(pkghandler) : require(pkghandler);
 				return self.bindFlow(name, handler);
 			}
 
@@ -144,7 +147,7 @@ exports.proto = function(Linker)
 
 function _addClient(name, options)
 {
-	var self = this;
+	let self = this;
 	function addClient(options, name)
 	{
 		self.client(name, options || {});

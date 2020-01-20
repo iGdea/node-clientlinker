@@ -1,6 +1,6 @@
 'use strict';
 
-var debuggerFlow = require('./debugger');
+let debuggerFlow = require('./debugger');
 
 module.exports = function(flow)
 {

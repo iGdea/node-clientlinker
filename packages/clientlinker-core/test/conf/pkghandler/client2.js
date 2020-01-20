@@ -1,6 +1,6 @@
 'use strict';
 
-var Promise = require('bluebird');
+let Promise = require('bluebird');
 
 module.exports =
 {

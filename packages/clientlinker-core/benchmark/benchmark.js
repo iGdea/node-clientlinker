@@ -1,9 +1,9 @@
 'use strict';
 
-var Promise = require('bluebird');
-var Benchmark = require('benchmark');
-var suite = new Benchmark.Suite;
-var clientlinker = require('../');
+let Promise = require('bluebird');
+let Benchmark = require('benchmark');
+let suite = new Benchmark.Suite;
+let clientlinker = require('../');
 
 function methodHandler(query, body, callback)
 {
@@ -11,7 +11,7 @@ function methodHandler(query, body, callback)
 	callback && callback(null);
 }
 
-var linker = clientlinker(
+let linker = clientlinker(
 	{
 		flows: ['confighandler'],
 		clients:

@@ -1,9 +1,9 @@
 'use strict';
 
-var _			= require('lodash');
-var Linker		= require('./linker').Linker;
-var debug		= require('debug')('clientlinker');
-var deprecate	= require('depd')('clientlinker');
+let _			= require('lodash');
+let Linker		= require('./linker').Linker;
+let debug		= require('debug')('clientlinker');
+let deprecate	= require('depd')('clientlinker');
 
 
 /**
@@ -17,10 +17,10 @@ exports = module.exports = clientlinker;
 function clientlinker(options)
 {
 	options || (options = {});
-	var defaults = options.defaults || options.clientDefaultOptions || (options.defaults = {});
+	let defaults = options.defaults || options.clientDefaultOptions || (options.defaults = {});
 	!defaults.flows && options.flows && (defaults.flows = options.flows.slice());
 
-	var linker = new Linker(options);
+	let linker = new Linker(options);
 	// client options
 	if (options.clients)
 	{

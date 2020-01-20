@@ -1,11 +1,11 @@
 'use strict';
 
-var deprecate	= require('depd')('clientlinker:client_runtime');
+let deprecate	= require('depd')('clientlinker:client_runtime');
 
 
 exports.proto = function(Runtime)
 {
-	var proto = Runtime.prototype;
+	let proto = Runtime.prototype;
 	Object.defineProperties(proto,
 	{
 		runOptions:

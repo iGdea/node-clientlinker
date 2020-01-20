@@ -1,7 +1,7 @@
 'use strict';
 
-var table = require('table');
-var useSymbole
+let table = require('table');
+let useSymbole
 	= exports.useSymbole
 	// = process.platform == 'win32' ? '\u221A' : '✓';
 	= '*';
@@ -10,8 +10,8 @@ exports.printTable = printTable;
 function printTable(data, allFlows, options)
 {
 	options || (options = {});
-	var defaultFlowFromArr = [];
-	var flowFromIndexMap = {};
+	let defaultFlowFromArr = [];
+	let flowFromIndexMap = {};
 
 	allFlows.forEach(function(from, index)
 		{
@@ -19,7 +19,7 @@ function printTable(data, allFlows, options)
 			flowFromIndexMap[from] = index;
 		});
 
-	var tableData = [];
+	let tableData = [];
 	data.forEach(function(item)
 		{
 			switch(item.type)
@@ -28,26 +28,27 @@ function printTable(data, allFlows, options)
 					// 空一行
 					if (tableData.length)
 					{
-						var line = [' ', '', ''].concat(defaultFlowFromArr);
+						let line = [' ', '', ''].concat(defaultFlowFromArr);
 						tableData.push(line);
 					}
 
 					tableData.push(['', item.client, ' '].concat(allFlows));
 					break;
 
-				case 'nomethods':
-					var line = ['', '** No Methods **', '']
+				case 'nomethods': {
+					let line = ['', '** No Methods **', '']
 							.concat(defaultFlowFromArr);
 					tableData.push(line);
 					break;
+				}
 
-				default:
-					var realFlowList = defaultFlowFromArr.slice();
-					var froms = item.froms.map(function(name)
+				default: {
+					let realFlowList = defaultFlowFromArr.slice();
+					let froms = item.froms.map(function(name)
 						{
 							if (name === undefined) name = 'undefined';
 
-							var flowTabIndex = flowFromIndexMap[name];
+							let flowTabIndex = flowFromIndexMap[name];
 							if (flowTabIndex || flowTabIndex === 0)
 							{
 								realFlowList[flowTabIndex] = name+' '+useSymbole;
@@ -56,7 +57,7 @@ function printTable(data, allFlows, options)
 							return name;
 						});
 
-					var line = [
+					let line = [
 							item.index,
 							options.useAction ? item.action : item.method,
 							'' && froms.join(',')
@@ -64,10 +65,11 @@ function printTable(data, allFlows, options)
 						.concat(realFlowList);
 
 					tableData.push(line);
+				}
 			}
 		});
 
-	var output = table.table(tableData,
+	let output = table.table(tableData,
 		{
 			border: table.getBorderCharacters('void'),
 			columnDefault:

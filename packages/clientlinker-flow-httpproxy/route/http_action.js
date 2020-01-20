@@ -1,35 +1,35 @@
 'use strict';
 
-var Promise	= require('bluebird');
-var _		= require('lodash');
-var debug	= require('debug')('clientlinker-flow-httpproxy:route');
-var rawBody	= Promise.promisify(require('raw-body'));
-var json	= require('../lib/json');
-var utils	= require('../lib/utils');
+let Promise	= require('bluebird');
+let _		= require('lodash');
+let debug	= require('debug')('clientlinker-flow-httpproxy:route');
+let rawBody	= Promise.promisify(require('raw-body'));
+let json	= require('../lib/json');
+let utils	= require('../lib/utils');
 
-var checkHttpproxyTime = require('./check_httpproxytime');
-var checkHttpproxyKey = require('./check_httpproxykey');
-var checkHttpproxyUniqKey = require('./check_httpproxyuniqkey');
+let checkHttpproxyTime = require('./check_httpproxytime');
+let checkHttpproxyKey = require('./check_httpproxykey');
+let checkHttpproxyUniqKey = require('./check_httpproxyuniqkey');
 
 
 module.exports = httpAction;
 
 function httpAction(linker, serverRouterTime, req)
 {
-	var deprecate_msg = [];
-	var client_msg = [];
+	let deprecate_msg = [];
+	let client_msg = [];
 
-	var logmsg = 'route catch:' + utils.formatLogTime(serverRouterTime);
+	let logmsg = 'route catch:' + utils.formatLogTime(serverRouterTime);
 	debug(logmsg);
 	client_msg.push(logmsg);
 
 	return rawBody(req)
 		.then(function(buf)
 		{
-			var originalRaw = buf.toString();
-			var originalBody = JSON.parse(originalRaw);
-			var action = originalBody.action;
-			var body = json.parse(originalBody.data, originalBody.CONST_KEY);
+			let originalRaw = buf.toString();
+			let originalBody = JSON.parse(originalRaw);
+			let action = originalBody.action;
+			let body = json.parse(originalBody.data, originalBody.CONST_KEY);
 
 			return runAction(linker, action, serverRouterTime, body, req.headers, req.query, originalRaw, originalBody)
 				.catch(function(err)
@@ -42,8 +42,8 @@ function httpAction(linker, serverRouterTime, req)
 				})
 				.then(function(output)
 				{
-					var endTime = new Date;
-					var logmsg = 'clientlinker run end:'
+					let endTime = new Date;
+					let logmsg = 'clientlinker run end:'
 						+ utils.formatLogTime(endTime)
 						+ ' ' + (endTime - serverRouterTime) + 'ms';
 					debug(logmsg);
@@ -54,8 +54,8 @@ function httpAction(linker, serverRouterTime, req)
 		})
 		.catch(function(err)
 		{
-			var endTime = new Date;
-			var logmsg = 'clientlinker run err:'
+			let endTime = new Date;
+			let logmsg = 'clientlinker run err:'
 				+ ' ' + utils.formatLogTime(endTime)
 				+ ' ' + (endTime - serverRouterTime) + 'ms'
 				+ ' msg=' + ((err && err.message) || err);
@@ -69,7 +69,7 @@ function httpAction(linker, serverRouterTime, req)
 		})
 		.then(function(output)
 		{
-			var data = output.data || (output.data = {});
+			let data = output.data || (output.data = {});
 
 			if (client_msg.length)
 				data.httpproxy_msg = client_msg;
@@ -93,7 +93,7 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 		{
 			if (!methodInfo.client) return { statusCode: 501 };
 
-			var checkOptions = {
+			let checkOptions = {
 				linker: linker,
 				client: methodInfo.client,
 				action: action,
@@ -104,7 +104,7 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 				originalRaw: originalRaw,
 			};
 
-			var httpproxyUniqKeyRet = checkHttpproxyUniqKey(checkOptions);
+			let httpproxyUniqKeyRet = checkHttpproxyUniqKey(checkOptions);
 			if (httpproxyUniqKeyRet === false
 				|| (!httpproxyUniqKeyRet && checkHttpproxyTime(checkOptions) === false)
 				|| checkHttpproxyKey(checkOptions) ===  false)
@@ -114,10 +114,10 @@ function runAction(linker, action, serverRouterTime, body, headers, query, origi
 
 			debug('[%s] catch proxy route', action);
 
-			var args = [action, body.query, body.body, null, body.options];
-			var env = _.extend({}, body.env, { httpproxyHeaders: headers, httpproxyQuery: query });
-			var retPromise = linker.runIn(args, 'httpproxy', env);
-			var runtime = linker.lastRuntime;
+			let args = [action, body.query, body.body, null, body.options];
+			let env = _.extend({}, body.env, { httpproxyHeaders: headers, httpproxyQuery: query });
+			let retPromise = linker.runIn(args, 'httpproxy', env);
+			let runtime = linker.lastRuntime;
 			// 重试的时候，需要将tmp传回去
 			runtime.on('retry', function() {
 				_.extend(this.tmp, body.tmp);

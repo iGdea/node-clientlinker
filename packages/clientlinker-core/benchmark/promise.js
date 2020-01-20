@@ -2,8 +2,8 @@
 
 'use strict';
 
-var Benchmark = require('benchmark');
-var suite = new Benchmark.Suite;
+let Benchmark = require('benchmark');
+let suite = new Benchmark.Suite;
 
 
 suite.add('#directly', function()

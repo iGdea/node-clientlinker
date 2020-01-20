@@ -1,13 +1,13 @@
 'use strict';
 
-var _		= require('lodash');
-var util	= require('util');
-var path	= require('path');
-var chalk	= require('chalk');
-var clientlinker = require('clientlinker-core');
-var rlutils	= exports;
+let _		= require('lodash');
+let util	= require('util');
+let path	= require('path');
+let chalk	= require('chalk');
+let clientlinker = require('clientlinker-core');
+let rlutils	= exports;
 
-var colors = exports.colors = new chalk.constructor();
+let colors = exports.colors = new chalk.constructor();
 
 exports.parseAction = parseAction;
 function parseAction(str, allMethods)
@@ -21,7 +21,7 @@ function parseAction(str, allMethods)
 		return allMethods[Number(str)-1];
 	else
 	{
-		var clientName = clientlinker.util.parseAction(str).clientName;
+		let clientName = clientlinker.util.parseAction(str).clientName;
 		if (allMethods.indexOf(clientName+'.*') != -1)
 			return str;
 	}
@@ -54,32 +54,32 @@ function printObject(obj)
 exports.getAllMethods = getAllMethods;
 function getAllMethods(list)
 {
-	var allMethods	= [];
-	var lines		= [];
-	var allFlows	= [];
-	var clientNames	= Object.keys(list).sort();
+	let allMethods	= [];
+	let lines		= [];
+	let allFlows	= [];
+	let clientNames	= Object.keys(list).sort();
 
 	clientNames.forEach(function(clientName)
 	{
-		var item = list[clientName];
+		let item = list[clientName];
 		lines.push(
 		{
 			type: 'header',
 			client: clientName
 		});
 
-		var methods = item && item.methods && Object.keys(item.methods).sort();
+		let methods = item && item.methods && Object.keys(item.methods).sort();
 		if (methods && methods.length)
 		{
 			methods.forEach(function(method)
 			{
-				var froms = item.methods[method]
+				let froms = item.methods[method]
 						.map(function(from)
 						{
 							return from && from.name;
 						});
 
-				var action = clientName+'.'+method;
+				let action = clientName+'.'+method;
 				allFlows.push.apply(allFlows, froms);
 
 				lines.push(

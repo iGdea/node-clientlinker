@@ -1,13 +1,13 @@
 'use strict';
 
-var Promise				= require('bluebird');
-var expect				= require('expect.js');
-var clientlinker		= require('clientlinker-core');
+let Promise				= require('bluebird');
+let expect				= require('expect.js');
+let clientlinker		= require('clientlinker-core');
 
 
 describe('#debugger', function()
 {
-	var linker = clientlinker(
+	let linker = clientlinker(
 	{
 		flows: ['debugger', 'confighandler'],
 		clients:
@@ -41,21 +41,21 @@ describe('#debugger', function()
 
 	it('#run', function()
 	{
-		var promise1 = linker.run('client1.method')
+		let promise1 = linker.run('client1.method')
 			.then(function(){expect().fail()},
 				function(err)
 				{
-					var runtime = err.__runtime__;
+					let runtime = err.__runtime__;
 					expect(err).to.be.an(Error);
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 					expect(runtime).to.be.an('object');
 					expect(runtime.navigationStart).to.be.a('number');
 				});
 
-		var promise2 = linker.run('client1.method1')
+		let promise2 = linker.run('client1.method1')
 			.then(function(data)
 			{
-				var runtime = data.__runtime__;
+				let runtime = data.__runtime__;
 				expect(data.string).to.be('string1');
 				expect(runtime).to.be.an('object');
 				expect(runtime.navigationStart).to.be.a('number');
@@ -66,21 +66,21 @@ describe('#debugger', function()
 
 	it('#runtime', function()
 	{
-		var promise1 = linker.run('client2.method')
+		let promise1 = linker.run('client2.method')
 			.then(function(){expect().fail()},
 				function(runtime)
 				{
-					var err = runtime.originalReturn;
+					let err = runtime.originalReturn;
 					expect(err).to.be.an(Error);
 					expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 					expect(runtime).to.be.an('object');
 					expect(runtime.navigationStart).to.be.a('number');
 				});
 
-		var promise2 = linker.run('client2.method1')
+		let promise2 = linker.run('client2.method1')
 			.then(function(runtime)
 			{
-				var data = runtime.originalReturn;
+				let data = runtime.originalReturn;
 				expect(data.string).to.be('string1');
 				expect(runtime).to.be.an('object');
 				expect(runtime.navigationStart).to.be.a('number');
