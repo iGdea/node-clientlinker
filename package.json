@@ -12,8 +12,7 @@
   },
   "devDependencies": {
     "lerna": "^3.16.4",
-    "babel-eslint": "^10.0.3",
     "eslint": "^6.5.1",
-    "eslint-config-brcjs": "^1.1.1"
+    "eslint-config-brcjs": "^1.2.0"
   }
 }
