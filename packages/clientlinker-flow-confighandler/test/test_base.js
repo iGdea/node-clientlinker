@@ -1,18 +1,14 @@
 'use strict';
 
-let expect				= require('expect.js');
-let clientlinker		= require('clientlinker-core');
-let confighandlerTest	= require('clientlinker-flow-confighandler-test');
+let expect = require('expect.js');
+let clientlinker = require('clientlinker-core');
+let confighandlerTest = require('clientlinker-flow-confighandler-test');
 
-describe('#confighandler', function()
-{
-	let linker = clientlinker(
-	{
+describe('#confighandler', function() {
+	let linker = clientlinker({
 		flows: ['confighandler'],
-		clients:
-		{
-			client:
-			{
+		clients: {
+			client: {
 				confighandler: confighandlerTest.methods
 			}
 		}
@@ -22,24 +18,20 @@ describe('#confighandler', function()
 
 	confighandlerTest.run(linker, 'client');
 
-	it('#methods', function()
-	{
-		return linker.methods()
-			.then(function(map)
-			{
-				expect(map.client).to.be.an('object');
-				let methods = Object.keys(map.client.methods);
-				expect(methods).to.eql(
-				[
-					'method',
-					'method_params',
-					'method_promise_resolve',
-					'method_promise_reject_number',
-					'method_promise_reject_error',
-					'method_callback_data',
-					'method_callback_error_number',
-					'method_callback_error_error'
-				]);
-			});
+	it('#methods', function() {
+		return linker.methods().then(function(map) {
+			expect(map.client).to.be.an('object');
+			let methods = Object.keys(map.client.methods);
+			expect(methods).to.eql([
+				'method',
+				'method_params',
+				'method_promise_resolve',
+				'method_promise_reject_number',
+				'method_promise_reject_error',
+				'method_callback_data',
+				'method_callback_error_number',
+				'method_callback_error_error'
+			]);
+		});
 	});
 });

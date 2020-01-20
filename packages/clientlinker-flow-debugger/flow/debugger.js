@@ -4,36 +4,28 @@ let debug = require('debug')('clientlinker-flow-debugger');
 
 module.exports = debuggerFlow;
 
-function debuggerFlow(runtime, callback)
-{
+function debuggerFlow(runtime, callback) {
 	let client = runtime.client;
 	let options = client.options;
 
-	return callback.next()
-		.then(function(data)
-		{
-			if (options.debuggerRuntime)
-			{
+	return callback
+		.next()
+		.then(function(data) {
+			if (options.debuggerRuntime) {
 				debug('return runtime!!');
 				runtime.originalReturn = data;
 				callback.resolve(runtime);
-			}
-			else
-			{
+			} else {
 				if (data) data.__runtime__ = runtime;
 				callback.resolve(data);
 			}
 		})
-		.catch(function(err)
-		{
-			if (options.debuggerRuntime)
-			{
+		.catch(function(err) {
+			if (options.debuggerRuntime) {
 				debug('return runtime!!');
 				runtime.originalReturn = err;
 				callback.reject(runtime);
-			}
-			else
-			{
+			} else {
 				if (err && typeof err == 'object') err.__runtime__ = runtime;
 				callback.reject(err);
 			}

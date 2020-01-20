@@ -4,13 +4,12 @@
 
 'use strict';
 
-let debug		= require('debug')('clientlinker-flow-httpproxy:route');
-let signature	= require('../lib/signature');
+let debug = require('debug')('clientlinker-flow-httpproxy:route');
+let signature = require('../lib/signature');
 
 module.exports = checkHttpproxyKey;
 
-function checkHttpproxyKey(checkOptions)
-{
+function checkHttpproxyKey(checkOptions) {
 	let httpproxyKey = checkOptions.client.options.httpproxyKey;
 	// version2特性：
 	// 所有请求都会带上来
@@ -22,11 +21,15 @@ function checkHttpproxyKey(checkOptions)
 		keyVersion = 1;
 		requestKey = checkOptions.headers['xh-httpproxy-key'];
 	}
-	debug('[%s] httpproxyKey: %s keyversion: %s', checkOptions.action, httpproxyKey, keyVersion);
+	debug(
+		'[%s] httpproxyKey: %s keyversion: %s',
+		checkOptions.action,
+		httpproxyKey,
+		keyVersion
+	);
 
 	if (keyVersion == 1 && !httpproxyKey) return;
-	if (!requestKey)
-	{
+	if (!requestKey) {
 		debug('[%s] no httpproxy aes key', checkOptions.action);
 		return false;
 	}
@@ -42,12 +45,16 @@ function checkHttpproxyKey(checkOptions)
 	if (keyVersion == 2) random += checkOptions.query.random;
 	let targetKey = signature.sha_content(hashContent, random, httpproxyKey);
 
-	if (targetKey != requestKey)
-	{
-		debug('[%s] not match, time:%s cntMd5:%s %s retKey:%s %s',
-			checkOptions.action, random,
-			signature.md5(hashContent), checkOptions.headers['xh-httpproxy-debugmd5'],
-			targetKey, requestKey);
+	if (targetKey != requestKey) {
+		debug(
+			'[%s] not match, time:%s cntMd5:%s %s retKey:%s %s',
+			checkOptions.action,
+			random,
+			signature.md5(hashContent),
+			checkOptions.headers['xh-httpproxy-debugmd5'],
+			targetKey,
+			requestKey
+		);
 		return false;
 	}
 

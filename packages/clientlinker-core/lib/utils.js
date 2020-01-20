@@ -5,25 +5,21 @@ let _ = require('lodash');
 exports.DEFAULT_ERROR = 'CLIENT_LINKER_DEFERT_ERROR';
 
 exports.anyToError = anyToError;
-function anyToError(originalError, runner)
-{
+function anyToError(originalError, runner) {
 	if (originalError instanceof Error) return originalError;
 
 	let errType = typeof originalError;
 	let err;
 
-	if (originalError && errType == 'object')
-	{
+	if (originalError && errType == 'object') {
 		err = new Error(originalError.message || 'ERROR');
 		_.extend(err, originalError);
-	}
-	else if (errType == 'number')
-	{
-		err = new Error('client,'+runner.runtime.action+','+originalError);
+	} else if (errType == 'number') {
+		err = new Error(
+			'client,' + runner.runtime.action + ',' + originalError
+		);
 		err.code = err.errCode = originalError;
-	}
-	else
-	{
+	} else {
 		err = new Error(originalError || exports.DEFAULT_ERROR);
 	}
 
@@ -33,15 +29,11 @@ function anyToError(originalError, runner)
 }
 
 exports.expandError = expandError;
-function expandError(err, runtime, flowName)
-{
-	if (runtime.client)
-	{
+function expandError(err, runtime, flowName) {
+	if (runtime.client) {
 		err.fromClient = runtime.client.name;
 		err.fromClientMethod = runtime.method;
-	}
-	else
-	{
+	} else {
 		let actionInfo = parseAction(runtime.action);
 		err.fromClient = actionInfo.clientName;
 		err.fromClientMethod = actionInfo.method;
@@ -52,10 +44,9 @@ function expandError(err, runtime, flowName)
 	return err;
 }
 
-exports.newNotFoundError = newNotFoundError
-function newNotFoundError(type, runtime)
-{
-	let err = new Error('CLIENTLINKER:NotFound,'+runtime.action);
+exports.newNotFoundError = newNotFoundError;
+function newNotFoundError(type, runtime) {
+	let err = new Error('CLIENTLINKER:NotFound,' + runtime.action);
 	err.CLIENTLINKER_TYPE = type;
 	expandError(err, runtime);
 	return err;
@@ -63,18 +54,15 @@ function newNotFoundError(type, runtime)
 
 exports.parseActionCache = {};
 exports.parseAction = parseAction;
-function parseAction(action)
-{
+function parseAction(action) {
 	let cache = exports.parseActionCache[action];
-	if (!cache)
-	{
-		let arr			= action.split('.');
-		let clientName	= arr.shift();
+	if (!cache) {
+		let arr = action.split('.');
+		let clientName = arr.shift();
 
-		cache = exports.parseActionCache[action] =
-		{
-			clientName	: clientName,
-			method		: arr.join('.')
+		cache = exports.parseActionCache[action] = {
+			clientName: clientName,
+			method: arr.join('.')
 		};
 	}
 

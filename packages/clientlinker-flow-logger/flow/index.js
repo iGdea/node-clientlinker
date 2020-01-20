@@ -2,7 +2,6 @@
 
 let logger = require('./logger');
 
-module.exports = function(flow)
-{
+module.exports = function(flow) {
 	flow.run = logger;
 };

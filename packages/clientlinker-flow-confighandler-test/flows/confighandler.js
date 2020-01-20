@@ -1,36 +1,32 @@
 'use strict';
 
-let debug = require('debug')('clientlinker-flow-confighandler-test:flows/confighandler');
+let debug = require('debug')(
+	'clientlinker-flow-confighandler-test:flows/confighandler'
+);
 
 module.exports = function(flow) {
 	flow.run = confighandler;
 	flow.methods = methods;
 };
 
-function methods(client)
-{
+function methods(client) {
 	let options = client.options;
-	if (typeof options.confighandler == 'object')
-	{
+	if (typeof options.confighandler == 'object') {
 		return Object.keys(options.confighandler);
 	}
 }
 
-function confighandler(runtime, callback)
-{
+function confighandler(runtime, callback) {
 	let client = runtime.client;
 	let options = client.options;
 	if (!options.confighandler) return callback.next();
 
 	let handler = options.confighandler[runtime.method];
 
-	if (typeof handler == 'function')
-	{
+	if (typeof handler == 'function') {
 		if (typeof callback == 'object') callback = callback.toFuncCallback();
 		return handler(runtime.query, runtime.body, callback, runtime.options);
-	}
-	else
-	{
+	} else {
 		debug('config no handler:%s', runtime.method);
 		return callback.next();
 	}

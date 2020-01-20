@@ -3,5 +3,5 @@ exports.methods = require('./lib/methods');
 
 exports.flows = {
 	confighandler: require('./flows/confighandler'),
-	pkghandler: require('./flows/pkghandler'),
+	pkghandler: require('./flows/pkghandler')
 };

@@ -1,92 +1,85 @@
 'use strict';
 
-let expect				= require('expect.js');
-let request				= require('request');
-let httpproxy			= require('../flow/httpproxy');
-let utilsTestHttpproxy	= require('./utils_test');
-let confighandlerTest	= require('clientlinker-flow-confighandler-test');
+let expect = require('expect.js');
+let request = require('request');
+let httpproxy = require('../flow/httpproxy');
+let utilsTestHttpproxy = require('./utils_test');
+let confighandlerTest = require('clientlinker-flow-confighandler-test');
 
-let initLinker			= utilsTestHttpproxy.initLinker;
-let initTestSvrLinker	= utilsTestHttpproxy.initTestSvrLinker;
+let initLinker = utilsTestHttpproxy.initLinker;
+let initTestSvrLinker = utilsTestHttpproxy.initTestSvrLinker;
 
-
-describe('#httpproxy', function()
-{
-	describe('#utils', function()
-	{
-		it('#appendUrl', function()
-		{
-			expect(httpproxy.appendUrl_('http://127.0.0.1/', 'a=1'))
-				.to.be('http://127.0.0.1/?a=1');
-			expect(httpproxy.appendUrl_('http://127.0.0.1/?', 'a=1'))
-				.to.be('http://127.0.0.1/?a=1');
-			expect(httpproxy.appendUrl_('http://127.0.0.1/?b=1', 'a=1'))
-				.to.be('http://127.0.0.1/?b=1&a=1');
-			expect(httpproxy.appendUrl_('http://127.0.0.1/?b=1&', 'a=1'))
-				.to.be('http://127.0.0.1/?b=1&a=1');
+describe('#httpproxy', function() {
+	describe('#utils', function() {
+		it('#appendUrl', function() {
+			expect(httpproxy.appendUrl_('http://127.0.0.1/', 'a=1')).to.be(
+				'http://127.0.0.1/?a=1'
+			);
+			expect(httpproxy.appendUrl_('http://127.0.0.1/?', 'a=1')).to.be(
+				'http://127.0.0.1/?a=1'
+			);
+			expect(httpproxy.appendUrl_('http://127.0.0.1/?b=1', 'a=1')).to.be(
+				'http://127.0.0.1/?b=1&a=1'
+			);
+			expect(httpproxy.appendUrl_('http://127.0.0.1/?b=1&', 'a=1')).to.be(
+				'http://127.0.0.1/?b=1&a=1'
+			);
 		});
 	});
 
-	describe('#err statusCode', function()
-	{
-		describe('#5xx', function()
-		{
+	describe('#err statusCode', function() {
+		describe('#5xx', function() {
 			initTestSvrLinker();
-			let linker = initLinker(
-				{
-					flows: ['custom'],
-					customFlows:
-					{
-						custom: function custom(runtime, callback)
-						{
-							let body = httpproxy.getRequestBody_(runtime);
-							let opts = httpproxy.getRequestParams_(runtime, body);
-							httpproxy.appendRequestTimeHeader_(runtime, opts);
+			let linker = initLinker({
+				flows: ['custom'],
+				customFlows: {
+					custom: function custom(runtime, callback) {
+						let body = httpproxy.getRequestBody_(runtime);
+						let opts = httpproxy.getRequestParams_(runtime, body);
+						httpproxy.appendRequestTimeHeader_(runtime, opts);
 
-							request.post(opts, function(err, response, body)
-							{
-								callback.resolve(
-									{
-										err: err,
-										response: response,
-										body: body
-									});
+						request.post(opts, function(err, response, body) {
+							callback.resolve({
+								err: err,
+								response: response,
+								body: body
 							});
-						}
+						});
 					}
-				});
+				}
+			});
 
 			let linker2 = initLinker();
 
-			describe('#501', function()
-			{
-				function itKey(name, action)
-				{
-					it('#request:'+name, function()
-					{
-						return linker.run(action)
-							.then(function(data)
-							{
-								expect(data.err).to.be(null);
-								expect(data.response.statusCode).to.be(501);
-							});
+			describe('#501', function() {
+				function itKey(name, action) {
+					it('#request:' + name, function() {
+						return linker.run(action).then(function(data) {
+							expect(data.err).to.be(null);
+							expect(data.response.statusCode).to.be(501);
+						});
 					});
 
-					it('#run:'+name, function()
-					{
+					it('#run:' + name, function() {
 						let retPromise = linker2.run(action);
 						let runtime = linker2.lastRuntime;
 
-						return retPromise
-							.then(function(){expect().fail()},
-								function(err)
-								{
-									let responseError = runtime.debug('httpproxyResponseError');
-									expect(responseError.message)
-										.to.be('httpproxy,response!200,501');
-									expect(err.message.substr(0, 22))
-										.to.be('CLIENTLINKER:NotFound,');
-								});
+						return retPromise.then(
+							function() {
+								expect().fail();
+							},
+							function(err) {
+								let responseError = runtime.debug(
+									'httpproxyResponseError'
+								);
+								expect(responseError.message).to.be(
+									'httpproxy,response!200,501'
+								);
+								expect(err.message.substr(0, 22)).to.be(
+									'CLIENTLINKER:NotFound,'
+								);
+							}
+						);
 					});
 				}
 
@@ -96,122 +89,116 @@ describe('#httpproxy', function()
 			});
 		});
 
-
-		describe('#5xx_parse', function()
-		{
+		describe('#5xx_parse', function() {
 			initTestSvrLinker();
-			let linker = initLinker(
-				{
-					flows: ['custom'],
-					customFlows:
-					{
-						custom: function custom(runtime, callback)
-						{
-							let body = httpproxy.getRequestBody_(runtime);
-							let opts = httpproxy.getRequestParams_(runtime, body);
-							httpproxy.appendRequestTimeHeader_(runtime, opts);
+			let linker = initLinker({
+				flows: ['custom'],
+				customFlows: {
+					custom: function custom(runtime, callback) {
+						let body = httpproxy.getRequestBody_(runtime);
+						let opts = httpproxy.getRequestParams_(runtime, body);
+						httpproxy.appendRequestTimeHeader_(runtime, opts);
 
-							opts.body = '{dd';
-							request.post(opts, function(err, response, body)
-							{
-								callback.resolve(
-									{
-										err: err,
-										response: response,
-										body: body
-									});
+						opts.body = '{dd';
+						request.post(opts, function(err, response, body) {
+							callback.resolve({
+								err: err,
+								response: response,
+								body: body
 							});
-						}
+						});
 					}
-				});
+				}
+			});
 
-			it('#err', function()
-			{
-				return linker.run('client_its.method_promise_resolve')
-					.then(function(data)
-					{
+			it('#err', function() {
+				return linker
+					.run('client_its.method_promise_resolve')
+					.then(function(data) {
 						expect(data.err).to.be(null);
 						expect(data.response.statusCode).to.be(500);
 						let body = JSON.parse(data.body);
-						expect(body.httpproxy_msg).to.be.an('array')
-						expect(body.httpproxy_msg.join())
-							.to.contain('clientlinker run err:');
+						expect(body.httpproxy_msg).to.be.an('array');
+						expect(body.httpproxy_msg.join()).to.contain(
+							'clientlinker run err:'
+						);
 					});
 			});
 		});
 	});
 
-
-	describe('#options', function()
-	{
-		describe('#httpproxyKey', function()
-		{
+	describe('#options', function() {
+		describe('#httpproxyKey', function() {
 			let httpproxyKey = 'xxfde&d023';
-			initTestSvrLinker(
-			{
-				defaults:
-				{
+			initTestSvrLinker({
+				defaults: {
 					httpproxyKey: httpproxyKey
 				}
 			});
 
-			describe('#run client', function()
-			{
-				confighandlerTest.run(initLinker(
-				{
-					defaults:
-					{
-						httpproxyKey: httpproxyKey
-					}
-				}));
+			describe('#run client', function() {
+				confighandlerTest.run(
+					initLinker({
+						defaults: {
+							httpproxyKey: httpproxyKey
+						}
+					})
+				);
 			});
 
-			describe('#err403', function()
-			{
-				function itKey(name, statusCode, key)
-				{
-					it('#'+name, function()
-					{
-						let linker = initLinker(
-						{
+			describe('#err403', function() {
+				function itKey(name, statusCode, key) {
+					it('#' + name, function() {
+						let linker = initLinker({
 							flows: ['custom'],
-							defaults:
-							{
+							defaults: {
 								httpproxyKey: httpproxyKey
 							},
-							customFlows:
-							{
-								custom: function custom(runtime, callback)
-								{
-									let body = httpproxy.getRequestBody_(runtime);
-									let opts = httpproxy.getRequestParams_(runtime, body);
-									httpproxy.appendRequestTimeHeader_(runtime, opts);
+							customFlows: {
+								custom: function custom(runtime, callback) {
+									let body = httpproxy.getRequestBody_(
+										runtime
+									);
+									let opts = httpproxy.getRequestParams_(
+										runtime,
+										body
+									);
+									httpproxy.appendRequestTimeHeader_(
+										runtime,
+										opts
+									);
 
 									if (key) {
 										opts.headers['XH-Httpproxy-Key2'] = key;
 									} else if (key === null) {
 										delete opts.headers['XH-Httpproxy-Key'];
-										delete opts.headers['XH-Httpproxy-Key2'];
+										delete opts.headers[
+											'XH-Httpproxy-Key2'
+										];
 									}
 
-									request.post(opts, function(err, response, body)
-									{
-										callback.resolve(
-											{
-												err: err,
-												response: response,
-												body: body
-											});
+									request.post(opts, function(
+										err,
+										response,
+										body
+									) {
+										callback.resolve({
+											err: err,
+											response: response,
+											body: body
+										});
 									});
 								}
 							}
 						});
 
-						return linker.run('client_its.method')
-							.then(function(data)
-							{
+						return linker
+							.run('client_its.method')
+							.then(function(data) {
 								expect(data.err).to.be(null);
-								expect(data.response.statusCode).to.be(statusCode);
+								expect(data.response.statusCode).to.be(
+									statusCode
+								);
 								expect(data.body).to.contain('route catch:');
 							});
 					});
@@ -222,42 +209,47 @@ describe('#httpproxy', function()
 				itKey('no key', 403, null);
 				itKey('direct', 403, httpproxyKey);
 
-				it('#repeat', function()
-				{
+				it('#repeat', function() {
 					let firstOtps = null;
-					let linker = initLinker(
-					{
+					let linker = initLinker({
 						flows: ['custom'],
-						defaults:
-						{
+						defaults: {
 							httpproxyKey: httpproxyKey
 						},
-						customFlows:
-						{
-							custom: function custom(runtime, callback)
-							{
+						customFlows: {
+							custom: function custom(runtime, callback) {
 								if (!firstOtps) {
-									let body = httpproxy.getRequestBody_(runtime);
-									firstOtps = httpproxy.getRequestParams_(runtime, body);
-									httpproxy.appendRequestTimeHeader_(runtime, firstOtps);
+									let body = httpproxy.getRequestBody_(
+										runtime
+									);
+									firstOtps = httpproxy.getRequestParams_(
+										runtime,
+										body
+									);
+									httpproxy.appendRequestTimeHeader_(
+										runtime,
+										firstOtps
+									);
 								}
 
-								request.post(firstOtps, function(err, response, body)
-								{
-									callback.resolve(
-										{
-											err: err,
-											response: response,
-											body: body
-										});
+								request.post(firstOtps, function(
+									err,
+									response,
+									body
+								) {
+									callback.resolve({
+										err: err,
+										response: response,
+										body: body
+									});
 								});
 							}
 						}
 					});
 
-					return linker.run('client_its.method')
-						.then(function(data)
-						{
+					return linker
+						.run('client_its.method')
+						.then(function(data) {
 							expect(data.err).to.be(null);
 							expect(data.response.statusCode).to.be(200);
 							expect(data.body).to.contain('route catch:');
@@ -265,128 +257,123 @@ describe('#httpproxy', function()
 						.then(function() {
 							return linker.run('client_its.method');
 						})
-						.then(function(data)
-						{
+						.then(function(data) {
 							expect(data.err).to.be(null);
 							expect(data.response.statusCode).to.be(403);
 							expect(data.body).to.contain('route catch:');
 						});
 				});
 
-				it('#check signa', function()
-				{
-					let linker = initLinker(
-					{
+				it('#check signa', function() {
+					let linker = initLinker({
 						flows: ['custom'],
-						defaults:
-						{
+						defaults: {
 							httpproxyKey: httpproxyKey
 						},
-						customFlows:
-						{
-							custom: function custom(runtime, callback)
-							{
+						customFlows: {
+							custom: function custom(runtime, callback) {
 								let body = httpproxy.getRequestBody_(runtime);
-								let opts = httpproxy.getRequestParams_(runtime, body);
-								httpproxy.appendRequestTimeHeader_(runtime, opts);
+								let opts = httpproxy.getRequestParams_(
+									runtime,
+									body
+								);
+								httpproxy.appendRequestTimeHeader_(
+									runtime,
+									opts
+								);
 
 								opts.body = opts.body.replace(/\t/g, '  ');
 
-								request.post(opts, function(err, response, body)
-								{
-									callback.resolve(
-										{
-											err: err,
-											response: response,
-											body: body
-										});
+								request.post(opts, function(
+									err,
+									response,
+									body
+								) {
+									callback.resolve({
+										err: err,
+										response: response,
+										body: body
+									});
 								});
 							}
 						}
 					});
 
-					return linker.run('client_its.method')
-						.then(function(data)
-						{
-							expect(data.err).to.be(null);
-							expect(data.response.statusCode).to.be(403);
-							expect(data.body).to.contain('route catch:');
-						});
+					return linker.run('client_its.method').then(function(data) {
+						expect(data.err).to.be(null);
+						expect(data.response.statusCode).to.be(403);
+						expect(data.body).to.contain('route catch:');
+					});
 				});
-
-
 			});
-
 		});
 
-
-		describe('#httpproxyMaxLevel', function()
-		{
-			function descKey(svrLevel)
-			{
-				function itClientKey(clientLevel)
-				{
-					it('#client run level:'+clientLevel, function()
-					{
-						let linker = initLinker(
-							{
-								defaults:
-								{
-									httpproxyMaxLevel: clientLevel
-								}
-							});
-						let retPromise = linker.run('client_its.method_no_exists');
+		describe('#httpproxyMaxLevel', function() {
+			function descKey(svrLevel) {
+				function itClientKey(clientLevel) {
+					it('#client run level:' + clientLevel, function() {
+						let linker = initLinker({
+							defaults: {
+								httpproxyMaxLevel: clientLevel
+							}
+						});
+						let retPromise = linker.run(
+							'client_its.method_no_exists'
+						);
 						let runtime = linker.lastRuntime;
 
-						return retPromise
-							.then(function(){expect().fail()},
-								function(err)
-								{
-									expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-									expect(runtime.env.source).to.be('run');
+						return retPromise.then(
+							function() {
+								expect().fail();
+							},
+							function(err) {
+								expect(err.CLIENTLINKER_TYPE).to.be(
+									'CLIENT FLOW OUT'
+								);
+								expect(runtime.env.source).to.be('run');
 
-									if (clientLevel === 0)
-									{
-										expect(runtime.tmp.httpproxyLevelTotal)
-											.to.be(undefined);
-										expect(runtime.tmp.httpproxyLevel)
-											.to.be(undefined);
-										let responseError = runtime.retry[0]
-											.getRunnedFlowByName('httpproxy')
-											.httpproxyResponseError;
-										expect(responseError).to.be(undefined);
-									}
-									else
-									{
-										let targetSvrLevel = svrLevel > 0 ? svrLevel : 1;
-										expect(runtime.tmp.httpproxyLevelTotal)
-											.to.be(targetSvrLevel);
-										expect(runtime.tmp.httpproxyLevel)
-											.to.be(1);
-										let responseError = runtime.debug('httpproxyResponseError');
-										expect(responseError.message)
-											.to.be('httpproxy,response!200,501');
-										expect(err.message.substr(0, 22))
-											.to.be('CLIENTLINKER:NotFound,');
-									}
-
-								});
+								if (clientLevel === 0) {
+									expect(
+										runtime.tmp.httpproxyLevelTotal
+									).to.be(undefined);
+									expect(runtime.tmp.httpproxyLevel).to.be(
+										undefined
+									);
+									let responseError = runtime.retry[0].getRunnedFlowByName(
+										'httpproxy'
+									).httpproxyResponseError;
+									expect(responseError).to.be(undefined);
+								} else {
+									let targetSvrLevel =
+										svrLevel > 0 ? svrLevel : 1;
+									expect(
+										runtime.tmp.httpproxyLevelTotal
+									).to.be(targetSvrLevel);
+									expect(runtime.tmp.httpproxyLevel).to.be(1);
+									let responseError = runtime.debug(
+										'httpproxyResponseError'
+									);
+									expect(responseError.message).to.be(
+										'httpproxy,response!200,501'
+									);
+									expect(err.message.substr(0, 22)).to.be(
+										'CLIENTLINKER:NotFound,'
+									);
+								}
+							}
+						);
 					});
 				}
 
-				describe('#svrLevel:'+svrLevel, function()
-				{
-					initTestSvrLinker(
-					{
+				describe('#svrLevel:' + svrLevel, function() {
+					initTestSvrLinker({
 						// flows: ['httpproxy'],
-						defaults:
-						{
+						defaults: {
 							httpproxyMaxLevel: svrLevel
 						}
 					});
 
-					describe('#run new client', function()
-					{
+					describe('#run new client', function() {
 						confighandlerTest.run(initLinker({}));
 					});
 
@@ -406,92 +393,75 @@ describe('#httpproxy', function()
 		});
 	});
 
-	describe('#env', function()
-	{
-		describe('#httpproxyHeader', function()
-		{
+	describe('#env', function() {
+		describe('#httpproxyHeader', function() {
 			initTestSvrLinker({
-				clients:
-				{
-					client_svr_customflow:
-					{
-						flows: ['it_customflow'],
+				clients: {
+					client_svr_customflow: {
+						flows: ['it_customflow']
 					}
 				},
-				customFlows:
-				{
-					it_customflow: function custom(runtime, callback)
-					{
+				customFlows: {
+					it_customflow: function custom(runtime, callback) {
 						callback.resolve({
-							httpproxyHeaders: runtime.env.httpproxyHeaders,
+							httpproxyHeaders: runtime.env.httpproxyHeaders
 						});
-					},
+					}
 				}
 			});
 
-			it('#httpproxyHeader', function()
-			{
-				let linker = initLinker(
-				{
+			it('#httpproxyHeader', function() {
+				let linker = initLinker({
 					defaults: {
 						httpproxyHeaders: {
 							httpproxyCustomHeader: 'httpproxyCustomHeader'
-						},
+						}
 					},
 					clients: {
-						client_svr_customflow: {},
+						client_svr_customflow: {}
 					}
 				});
 
-				return linker.run('client_svr_customflow.method')
-					.then(function(data)
-					{
-						expect(data.httpproxyHeaders.httpproxycustomheader).to.be('httpproxyCustomHeader');
+				return linker
+					.run('client_svr_customflow.method')
+					.then(function(data) {
+						expect(
+							data.httpproxyHeaders.httpproxycustomheader
+						).to.be('httpproxyCustomHeader');
 					});
 			});
-
 		});
 
-		describe('#httpproxyQuery', function()
-		{
+		describe('#httpproxyQuery', function() {
 			initTestSvrLinker({
-				clients:
-				{
-					client_svr_customflow:
-					{
-						flows: ['it_customflow'],
+				clients: {
+					client_svr_customflow: {
+						flows: ['it_customflow']
 					}
 				},
-				customFlows:
-				{
-					it_customflow: function custom(runtime, callback)
-					{
+				customFlows: {
+					it_customflow: function custom(runtime, callback) {
 						callback.resolve({
-							httpproxyQuery: runtime.env.httpproxyQuery,
+							httpproxyQuery: runtime.env.httpproxyQuery
 						});
-					},
+					}
 				}
 			});
 
-			it('#httpproxyQuery', function()
-			{
-				let linker = initLinker(
-				{
+			it('#httpproxyQuery', function() {
+				let linker = initLinker({
 					httpproxyQuery: 'custom_query=xxxx',
 					clients: {
-						client_svr_customflow: {},
+						client_svr_customflow: {}
 					}
 				});
 
-				return linker.run('client_svr_customflow.method')
-					.then(function(data)
-					{
+				return linker
+					.run('client_svr_customflow.method')
+					.then(function(data) {
 						expect(data.httpproxyQuery.custom_query).to.be('xxxx');
 					});
 			});
-
 		});
-
 	});
-
 });

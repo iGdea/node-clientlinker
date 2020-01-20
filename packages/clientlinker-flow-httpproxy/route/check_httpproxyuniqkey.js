@@ -4,26 +4,29 @@
 
 'use strict';
 
-let debug		= require('debug')('clientlinker-flow-httpproxy:route');
-let LRUCache	= require('lru-cache');
-let reqUniqKey	= require('./req_uniq_key');
-let utils		= require('../lib/utils');
+let debug = require('debug')('clientlinker-flow-httpproxy:route');
+let LRUCache = require('lru-cache');
+let reqUniqKey = require('./req_uniq_key');
+let utils = require('../lib/utils');
 
 module.exports = checkHttpproxyUniqKey;
 function checkHttpproxyUniqKey(checkOptions) {
 	let uniqkey = checkOptions.headers['xh-httpproxy-uniqkey'];
 	if (!uniqkey) {
 		debug('[%s] no uniqkey:%s', checkOptions.action, uniqkey);
-		return checkOptions.client.options.httpproxyEnableUniqKey === true ? false : undefined;
+		return checkOptions.client.options.httpproxyEnableUniqKey === true
+			? false
+			: undefined;
 	}
 
 	let aesObj = reqUniqKey.getAesObj(checkOptions.client);
-	let httpproxyKeyRemain = checkOptions.client.options.httpproxyKeyRemain || 5 * 1000;
+	let httpproxyKeyRemain =
+		checkOptions.client.options.httpproxyKeyRemain || 5 * 1000;
 
 	let content;
 	try {
 		content = aesObj.decrypt(uniqkey);
-	} catch(err) {
+	} catch (err) {
 		debug('[%s] aes decrypt err: %o', checkOptions.action, err);
 		return false;
 	}
@@ -36,18 +39,26 @@ function checkHttpproxyUniqKey(checkOptions) {
 
 	let remain = checkOptions.serverRouterTime - requestTime;
 	if ((!remain && remain !== 0) || Math.abs(remain) > httpproxyKeyRemain) {
-		debug('[%s] uniqkey expired, remain:%sms config:%sms sever:%s, client:%s',
-			checkOptions.action, remain, httpproxyKeyRemain,
+		debug(
+			'[%s] uniqkey expired, remain:%sms config:%sms sever:%s, client:%s',
+			checkOptions.action,
+			remain,
+			httpproxyKeyRemain,
 			utils.formatLogTime(checkOptions.serverRouterTime),
-			utils.formatLogTime(new Date(+requestTime)));
+			utils.formatLogTime(new Date(+requestTime))
+		);
 		return false;
 	}
 
-	let cacheList = checkOptions.linker.cache.httpproxyUniqkeys || (checkOptions.linker.cache.httpproxyUniqkeys = {});
-	let cache = cacheList[httpproxyKeyRemain] || (cacheList[httpproxyKeyRemain] = new LRUCache({
-		maxAge: httpproxyKeyRemain * 2,
-		max: 10000,
-	}));
+	let cacheList =
+		checkOptions.linker.cache.httpproxyUniqkeys ||
+		(checkOptions.linker.cache.httpproxyUniqkeys = {});
+	let cache =
+		cacheList[httpproxyKeyRemain] ||
+		(cacheList[httpproxyKeyRemain] = new LRUCache({
+			maxAge: httpproxyKeyRemain * 2,
+			max: 10000
+		}));
 
 	let key = checkOptions.action + ':' + content;
 	if (cache.peek(key)) {

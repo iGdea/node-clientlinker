@@ -1,35 +1,30 @@
 'use strict';
 
-let fs				= require('fs');
-let path			= require('path');
-let mkdirp			= require('mkdirp');
-let stdout			= require('../bin/lib/stdout');
-let TMP_LOG_FILE	= __dirname+'/tmp/stdout_log_file_'+process.pid;
+let fs = require('fs');
+let path = require('path');
+let mkdirp = require('mkdirp');
+let stdout = require('../bin/lib/stdout');
+let TMP_LOG_FILE = __dirname + '/tmp/stdout_log_file_' + process.pid;
 mkdirp.sync(path.dirname(TMP_LOG_FILE));
-let ws				= fs.createWriteStream(TMP_LOG_FILE, {flag:'a'});
+let ws = fs.createWriteStream(TMP_LOG_FILE, { flag: 'a' });
 
-describe('#stdout', function()
-{
-	beforeEach(function()
-	{
+describe('#stdout', function() {
+	beforeEach(function() {
 		stdout.stdout = ws;
 		stdout.stderr = ws;
 	});
 
-	afterEach(function()
-	{
+	afterEach(function() {
 		stdout.stdout = process.stdout;
 		stdout.stderr = process.stderr;
 	});
 
-	after(function()
-	{
+	after(function() {
 		stdout.stdout = process.stdout;
 		stdout.stderr = process.stderr;
 	});
 
-	it('#console', function()
-	{
+	it('#console', function() {
 		console.log(1);
 		console.log();
 		console.log('ab, %s', 'cd');
@@ -39,8 +34,7 @@ describe('#stdout', function()
 		console.error('ab, %s', 'cd');
 	});
 
-	it('#stdout', function()
-	{
+	it('#stdout', function() {
 		stdout.log(1);
 		stdout.log();
 		stdout.log('ab, %s', 'cd');
@@ -50,21 +44,19 @@ describe('#stdout', function()
 		stdout.error('ab, %s', 'cd');
 	});
 
-	it('#write', function()
-	{
+	it('#write', function() {
 		stdout.write('');
 		stdout.write('abc');
 		stdout.write('abc', 'error');
 		stdout.write('abc', 'log');
 	});
 
-	it('#drain', function()
-	{
-		this.timeout(200*1000);
+	it('#drain', function() {
+		this.timeout(200 * 1000);
 
 		let times = 10000;
 		let content = new Array(100000).join('123456789\n');
-		while(stdout.write(content) && !--times);
+		while (stdout.write(content) && !--times);
 		return stdout.promise;
 	});
 });

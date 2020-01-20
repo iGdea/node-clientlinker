@@ -1,3 +1,5 @@
 'use strict';
 
-module.exports = function methods(){return ['*']};
+module.exports = function methods() {
+	return ['*'];
+};

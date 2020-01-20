@@ -1,32 +1,30 @@
 'use strict';
 
-let http				= require('http');
-let expr				= require('express');
-let debug				= require('debug')('clientlinker-flow-httpproxy:utils_test');
-let clientlinker		= require('clientlinker-core');
-let proxyRoute			= require('../route');
-let expect				= require('expect.js');
-let confighandlerFlow	= require('clientlinker-flow-confighandler');
-let confighandlerTest	= require('clientlinker-flow-confighandler-test');
-let httpproxyFlow		= require('../');
-
-
+let http = require('http');
+let expr = require('express');
+let debug = require('debug')('clientlinker-flow-httpproxy:utils_test');
+let clientlinker = require('clientlinker-core');
+let proxyRoute = require('../route');
+let expect = require('expect.js');
+let confighandlerFlow = require('clientlinker-flow-confighandler');
+let confighandlerTest = require('clientlinker-flow-confighandler-test');
+let httpproxyFlow = require('../');
 
 exports.PORT = 3423;
 exports.initLinker = initLinker;
-function initLinker(options)
-{
+function initLinker(options) {
 	options || (options = {});
 	options.flows || (options.flows = ['httpproxy']);
 
-	let httpproxyQuery = options.httpproxyQuery ? '?' + options.httpproxyQuery : '';
-	(options.defaults || (options.defaults = {})).httpproxy
-			= 'http://127.0.0.1:'+exports.PORT+'/route_proxy' + httpproxyQuery;
+	let httpproxyQuery = options.httpproxyQuery
+		? '?' + options.httpproxyQuery
+		: '';
+	(options.defaults || (options.defaults = {})).httpproxy =
+		'http://127.0.0.1:' + exports.PORT + '/route_proxy' + httpproxyQuery;
 
 	options.clients || (options.clients = {});
-	options.clients.client_its =
-	{
-		confighandler: confighandlerTest.methods,
+	options.clients.client_its = {
+		confighandler: confighandlerTest.methods
 	};
 	options.clients.client_svr_noflows = {};
 	options.clients.client_svr_not_exists = {};
@@ -35,29 +33,24 @@ function initLinker(options)
 	linker.flow('httpproxy', httpproxyFlow);
 	linker.flow('confighandler', confighandlerFlow);
 
-
 	return linker;
 }
 
-
 exports.initSvrLinker = initSvrLinker;
-function initSvrLinker(options)
-{
+function initSvrLinker(options) {
 	options || (options = {});
 	options.flows || (options.flows = ['custom', 'confighandler', 'httpproxy']);
-	(options.defaults || (options.defaults = {})).httpproxy
-			= 'http://127.0.0.1:'+exports.PORT+'/route_proxy';
+	(options.defaults || (options.defaults = {})).httpproxy =
+		'http://127.0.0.1:' + exports.PORT + '/route_proxy';
 
 	options.clients || (options.clients = {});
 	options.clients.client_svr_not_exists = null;
-	options.clients.client_svr_noflows = {flows: []};
-	options.clients.client_its =
-	{
+	options.clients.client_svr_noflows = { flows: [] };
+	options.clients.client_its = {
 		confighandler: confighandlerTest.methods
 	};
 	options.customFlows || (options.customFlows = {});
-	options.customFlows.custom = function(runtime, callback)
-	{
+	options.customFlows.custom = function(runtime, callback) {
 		expect(runtime.env.source).to.be('httpproxy');
 		return callback.next();
 	};
@@ -69,30 +62,25 @@ function initSvrLinker(options)
 
 	return {
 		linker: linker,
-		start: function(callback)
-		{
+		start: function(callback) {
 			let app = expr();
 			app.use('/route_proxy', proxyRoute(linker));
 			svr = http.createServer();
-			svr.listen(exports.PORT, function()
-			{
+			svr.listen(exports.PORT, function() {
 				debug('proxy ok:http://127.0.0.1:%d/route_proxy', exports.PORT);
 				callback && callback();
 			});
 
 			app.listen(svr);
 		},
-		close: function()
-		{
+		close: function() {
 			svr.close();
 		}
-	}
+	};
 }
 
-
 exports.initTestSvrLinker = initTestSvrLinker;
-function initTestSvrLinker(options)
-{
+function initTestSvrLinker(options) {
 	let svr = initSvrLinker(options);
 
 	before(svr.start);

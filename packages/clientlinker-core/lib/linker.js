@@ -1,18 +1,16 @@
 'use strict';
 
-let _			= require('lodash');
-let Promise		= require('bluebird');
-let debug		= require('debug')('clientlinker:linker');
-let Client		= require('./client').Client;
-let Flow		= require('./flow').Flow;
-let Runtime		= require('./runtime/client_runtime').ClientRuntime;
-let utils		= require('./utils');
-let depLinker	= require('./deps/dep_linker');
-
+let _ = require('lodash');
+let Promise = require('bluebird');
+let debug = require('debug')('clientlinker:linker');
+let Client = require('./client').Client;
+let Flow = require('./flow').Flow;
+let Runtime = require('./runtime/client_runtime').ClientRuntime;
+let utils = require('./utils');
+let depLinker = require('./deps/dep_linker');
 
 exports.Linker = Linker;
-function Linker(options)
-{
+function Linker(options) {
 	this._clients = {};
 	this._initProcessPromise = Promise.resolve();
 	this.flows = {};
@@ -28,73 +26,77 @@ function Linker(options)
 }
 
 let proto = Linker.prototype;
-_.extend(proto,
-{
-	JSON		: utils.JSON,
-	version		: require('../package.json').version,
-	anyToError	: utils.anyToError,
+_.extend(proto, {
+	JSON: utils.JSON,
+	version: require('../package.json').version,
+	anyToError: utils.anyToError,
 
-	client: function(clientName, options)
-	{
-		if (typeof clientName != 'string')
-		{
-			throw new Error('CLIENTLINKER:ClientNameMustBeString,'+ clientName);
+	client: function(clientName, options) {
+		if (typeof clientName != 'string') {
+			throw new Error(
+				'CLIENTLINKER:ClientNameMustBeString,' + clientName
+			);
 		}
-		if (arguments.length == 1)
-		{
+		if (arguments.length == 1) {
 			debug('get client instead of set');
 			return this._clients[clientName];
 		}
-		if (typeof options != 'object')
-		{
-			throw new Error('CLIENTLINKER:ClientOptionsMustBeObject,'+ clientName);
+		if (typeof options != 'object') {
+			throw new Error(
+				'CLIENTLINKER:ClientOptionsMustBeObject,' + clientName
+			);
 		}
 
-		let defaultFlowOptions = options
-			&& !options.flows
-			&& this.options.defaults
-			&& this.options.defaults.flows
-			&& {flows: this.options.defaults.flows.slice()};
+		let defaultFlowOptions = options &&
+			!options.flows &&
+			this.options.defaults &&
+			this.options.defaults.flows && {
+				flows: this.options.defaults.flows.slice()
+			};
 
-		options = _.extend({}, this.options.defaults,
-			defaultFlowOptions, options);
+		options = _.extend(
+			{},
+			this.options.defaults,
+			defaultFlowOptions,
+			options
+		);
 
 		if (!options.flows) options.flows = [];
 
-		let client = this._clients[clientName] = new Client(clientName, this, options);
+		let client = (this._clients[clientName] = new Client(
+			clientName,
+			this,
+			options
+		));
 		debug('add client:%s', clientName);
 
 		return client;
 	},
 
 	// 注册flower
-	flow: function(flowName, handler)
-	{
-		if (typeof flowName != 'string')
-		{
-			throw new Error('CLIENTLINKER:FlowNameMustBeString,'+ flowName);
-		}
-		else if (arguments.length == 1)
-		{
+	flow: function(flowName, handler) {
+		if (typeof flowName != 'string') {
+			throw new Error('CLIENTLINKER:FlowNameMustBeString,' + flowName);
+		} else if (arguments.length == 1) {
 			debug('get client instead of set');
 			return this.flows[flowName];
-		}
-		else if (typeof handler != 'function')
-		{
-			throw new Error('CLIENTLINKER:FlowHandlerMustBeFunction,'+ flowName);
+		} else if (typeof handler != 'function') {
+			throw new Error(
+				'CLIENTLINKER:FlowHandlerMustBeFunction,' + flowName
+			);
 		}
 
 		let flow = new Flow(flowName);
 		handler(flow, this);
 
-		if (typeof flow.run != 'function')
-		{
+		if (typeof flow.run != 'function') {
 			throw new Error('CLIENTLINKER:Flow.runMustBeFunction,' + flowName);
 		}
 
-		if (flow.methods && typeof flow.methods != 'function')
-		{
-			throw new Error('CLIENTLINKER:Flow.methodsMustBeFunction,' + flowName);
+		if (flow.methods && typeof flow.methods != 'function') {
+			throw new Error(
+				'CLIENTLINKER:Flow.methodsMustBeFunction,' + flowName
+			);
 		}
 
 		this.flows[flowName] = flow;
@@ -102,29 +104,24 @@ _.extend(proto,
 		return flow;
 	},
 
-	onInit: function(checkHandler)
-	{
+	onInit: function(checkHandler) {
 		let self = this;
-		self._initProcessPromise = Promise.all(
-			[
-				self._initProcessPromise,
-				checkHandler(self)
-			]);
+		self._initProcessPromise = Promise.all([
+			self._initProcessPromise,
+			checkHandler(self)
+		]);
 	},
 	// 标准输入参数
-	run: function(action, query, body, callback, options)
-	{
+	run: function(action, query, body, callback, options) {
 		/* eslint no-unused-vars: off */
 		return this.runIn(arguments, 'run');
 	},
 
-	runInShell: function()
-	{
+	runInShell: function() {
 		return this.runIn(arguments, 'shell');
 	},
 
-	runIn: function(args, source, env)
-	{
+	runIn: function(args, source, env) {
 		let self = this;
 		let action = args[0];
 		let callback = args[3];
@@ -132,17 +129,15 @@ _.extend(proto,
 
 		if (process.domain) debug('run by domain: %s', action);
 
-		if (typeof callback != 'function')
-		{
-			if (callback && args.length < 5)
-			{
+		if (typeof callback != 'function') {
+			if (callback && args.length < 5) {
 				options = callback;
 			}
 
 			callback = null;
 		}
 
-		let runtime = new Runtime(self, action, args[1], args[2], options)
+		let runtime = new Runtime(self, action, args[1], args[2], options);
 
 		// 通过这种手段，同步情况下，暴露runtime
 		// runtime保存着运行时的所有数据，方便进行调试
@@ -152,125 +147,105 @@ _.extend(proto,
 			self.parseAction(action),
 			// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
 			// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
-			new Promise(process.nextTick),
-		])
-			.then(function(arr)
-			{
-				let data = arr[0];
-				runtime.method = data.method;
-				runtime.client = data.client;
-				if (env) _.extend(runtime.env, env);
-				runtime.env.source = source;
+			new Promise(process.nextTick)
+		]).then(function(arr) {
+			let data = arr[0];
+			runtime.method = data.method;
+			runtime.client = data.client;
+			if (env) _.extend(runtime.env, env);
+			runtime.env.source = source;
 
-				return self._runByRuntime(runtime, callback);
-			});
+			return self._runByRuntime(runtime, callback);
+		});
 	},
 
-	_runByRuntime: function(runtime, callback)
-	{
+	_runByRuntime: function(runtime, callback) {
 		let retPromise = runtime.run();
 
 		// 兼容callback
-		if (callback)
-		{
-			retPromise.then(function(data)
-			{
-				// 增加process.nextTick，防止error被promise捕捉到
-				process.nextTick(function()
-				{
-					callback(null, data);
-				});
-			},
-			function(ret)
-			{
-				process.nextTick(function()
-				{
-					callback(ret || utils.DEFAULT_ERROR);
-				});
-			});
+		if (callback) {
+			retPromise.then(
+				function(data) {
+					// 增加process.nextTick，防止error被promise捕捉到
+					process.nextTick(function() {
+						callback(null, data);
+					});
+				},
+				function(ret) {
+					process.nextTick(function() {
+						callback(ret || utils.DEFAULT_ERROR);
+					});
+				}
+			);
 		}
 
 		return retPromise;
 	},
 
 	// 解析action
-	parseAction: function(action)
-	{
-		return this.clients()
-			.then(function(list)
-			{
-				let info = utils.parseAction(action);
+	parseAction: function(action) {
+		return this.clients().then(function(list) {
+			let info = utils.parseAction(action);
 
-				return {
-					client	: list[info.clientName],
-					method	: info.method
-				};
-			});
+			return {
+				client: list[info.clientName],
+				method: info.method
+			};
+		});
 	},
 
 	// 罗列methods
-	methods: function()
-	{
-		return this.clients()
-			.then(function(list)
-			{
-				let promises = _.map(list, function(client)
-				{
-					return client.methods()
-						.then(function(methodList)
-						{
+	methods: function() {
+		return (
+			this.clients()
+				.then(function(list) {
+					let promises = _.map(list, function(client) {
+						return client.methods().then(function(methodList) {
 							return {
 								client: client,
 								methods: methodList
 							};
 						});
-				});
+					});
 
-				return Promise.all(promises);
-			})
-			// 整理
-			.then(function(list)
-			{
-				let map = {};
-				list.forEach(function(item)
-				{
-					map[item.client.name] = item;
-				});
-				return map;
-			});
+					return Promise.all(promises);
+				})
+				// 整理
+				.then(function(list) {
+					let map = {};
+					list.forEach(function(item) {
+						map[item.client.name] = item;
+					});
+					return map;
+				})
+		);
 	},
 
-	clients: function()
-	{
+	clients: function() {
 		let self = this;
 		let clientPromise = self._initProcessPromise;
 
-		return clientPromise
-			.then(function()
-			{
-				if (self._initProcessPromise === clientPromise)
-					return self._clients;
-				else
-					return self.clients();
-			});
+		return clientPromise.then(function() {
+			if (self._initProcessPromise === clientPromise)
+				return self._clients;
+			else return self.clients();
+		});
 	},
 	clearCache: function(clientName) {
 		let self = this;
 		if (!clientName) self.cache = {};
 
-		self.clients()
-			.then(function(list) {
-				if (clientName) {
-					let client = list[clientName];
-					if (client) client.cache = {};
-				} else {
-					_.each(list, function(item) {
-						item.cache = {};
-					});
-				}
-			});
-	},
+		self.clients().then(function(list) {
+			if (clientName) {
+				let client = list[clientName];
+				if (client) client.cache = {};
+			} else {
+				_.each(list, function(item) {
+					item.cache = {};
+				});
+			}
+		});
+	}
 });
-
 
 depLinker.proto(Linker);

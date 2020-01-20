@@ -2,7 +2,6 @@
 
 let debuggerFlow = require('./debugger');
 
-module.exports = function(flow)
-{
+module.exports = function(flow) {
 	flow.run = debuggerFlow;
 };

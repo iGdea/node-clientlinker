@@ -8,7 +8,6 @@ const utils = require('../utils');
 const { EventEmitter } = require('events');
 
 class ClientRuntime extends EventEmitter {
-
 	constructor(linker, action, query, body, options) {
 		super();
 
@@ -45,20 +44,17 @@ class ClientRuntime extends EventEmitter {
 
 	run() {
 		const self = this;
-		if (!self.client) throw utils.newNotFoundError('NO CLIENT',
-			self);
+		if (!self.client) throw utils.newNotFoundError('NO CLIENT', self);
 
 		let retry;
-		if (self.options && self.options.retry)
-			retry = self.options.retry;
-		else
-			retry = self.client.options.retry;
+		if (self.options && self.options.retry) retry = self.options.retry;
+		else retry = self.client.options.retry;
 
 		// 需要先给self赋值，在运行run
 		// 避免flow运行的时候，self.promise = null
 		// 例如：clientlinker-flow-logger
-		self.promise = new Promise(function (resolve, reject) {
-			process.nextTick(function () {
+		self.promise = new Promise(function(resolve, reject) {
+			process.nextTick(function() {
 				self.promise = mainPromise;
 				mainPromise.then(resolve, reject);
 			});
@@ -66,13 +62,10 @@ class ClientRuntime extends EventEmitter {
 
 		self.promise.catch(_.noop);
 
-		const mainPromise = self._run()
-			.catch(function (err) {
-				if (self.retry.length < retry)
-					return self._run();
-				else
-					throw err;
-			});
+		const mainPromise = self._run().catch(function(err) {
+			if (self.retry.length < retry) return self._run();
+			else throw err;
+		});
 
 		// 清理绑定事件
 		mainPromise.catch(_.noop).then(function() {
@@ -131,8 +124,8 @@ class ClientRuntime extends EventEmitter {
 
 	toJSON() {
 		const debugData = {};
-		_.each(this._debugData, function (vals, key) {
-			debugData[key] = vals.map(function (item) {
+		_.each(this._debugData, function(vals, key) {
+			debugData[key] = vals.map(function(item) {
 				return item.toJSON();
 			});
 		});
@@ -150,23 +143,19 @@ class ClientRuntime extends EventEmitter {
 			timing: this.timing.toJSON(),
 			navigationStart: this.navigationStart,
 
-			retry: this.retry.map(function (item) {
+			retry: this.retry.map(function(item) {
 				return item.toJSON();
 			}),
 
 			started: this.isStarted(),
-			finished: this.isFinished(),
+			finished: this.isFinished()
 		};
 	}
 }
 
-
 exports.ClientRuntime = ClientRuntime;
 
-
-
 class DebugData {
-
 	constructor(value, runtime) {
 		this.value = value;
 		this.retry = runtime.retry.length;

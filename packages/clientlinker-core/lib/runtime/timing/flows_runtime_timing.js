@@ -1,30 +1,25 @@
 'use strict';
 
-let _			= require('lodash');
-let deprecate	= require('depd')('clientlinker:client_runtime_timing');
+let _ = require('lodash');
+let deprecate = require('depd')('clientlinker:client_runtime_timing');
 
 exports.Timing = Timing;
-function Timing(onetry)
-{
+function Timing(onetry) {
 	this.onetry = onetry;
 }
 
 let proto = Timing.prototype;
-_.extend(proto,
-{
-	getStartTime: function()
-	{
+_.extend(proto, {
+	getStartTime: function() {
 		let firstRunner = this.onetry.runned[0];
 		return firstRunner && firstRunner.startTime;
 	},
-	getEndTime: function()
-	{
+	getEndTime: function() {
 		if (!this.onetry.finished) return;
 		let lastRunner = this.onetry.lastRunner;
 		return lastRunner && lastRunner.endTime;
 	},
-	toJSON: function()
-	{
+	toJSON: function() {
 		return {
 			startTime: this.getStartTime(),
 			endTime: this.getEndTime()
@@ -32,36 +27,49 @@ _.extend(proto,
 	}
 });
 
-Object.defineProperties(proto,
-{
-	startTime:
-	{
-		get: function() {return this.getStartTime()}
+Object.defineProperties(proto, {
+	startTime: {
+		get: function() {
+			return this.getStartTime();
+		}
 	},
-	endTime:
-	{
-		get: function() {return this.getEndTime()}
+	endTime: {
+		get: function() {
+			return this.getEndTime();
+		}
 	},
-	flowsStart:
-	{
+	flowsStart: {
 		configurable: true,
-		get: function() {return this.getStartTime()}
+		get: function() {
+			return this.getStartTime();
+		}
 	},
-	flowsEnd:
-	{
+	flowsEnd: {
 		configurable: true,
-		get: function() {return this.getEndTime()}
+		get: function() {
+			return this.getEndTime();
+		}
 	},
-	navigationStart:
-	{
+	navigationStart: {
 		configurable: true,
-		get: function() {return this.onetry.runtime.navigationStart}
+		get: function() {
+			return this.onetry.runtime.navigationStart;
+		}
 	}
 });
 
-deprecate.property(proto, 'navigationStart',
-	'use `runtime.navigationStart` instead of `try.timing.navigationStart`');
-deprecate.property(proto, 'flowsStart',
-	'use `timing.getStartTime()` instead of `timing.flowsStart`');
-deprecate.property(proto, 'flowsEnd',
-	'use `timing.getEndTime()` instead of `timing.flowsEnd`');
+deprecate.property(
+	proto,
+	'navigationStart',
+	'use `runtime.navigationStart` instead of `try.timing.navigationStart`'
+);
+deprecate.property(
+	proto,
+	'flowsStart',
+	'use `timing.getStartTime()` instead of `timing.flowsStart`'
+);
+deprecate.property(
+	proto,
+	'flowsEnd',
+	'use `timing.getEndTime()` instead of `timing.flowsEnd`'
+);

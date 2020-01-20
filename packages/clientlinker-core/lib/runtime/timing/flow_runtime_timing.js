@@ -1,45 +1,57 @@
 'use strict';
 
-let deprecate	= require('depd')('clientlinker:flow_runtime_timing');
+let deprecate = require('depd')('clientlinker:flow_runtime_timing');
 
 exports.Timing = Timing;
-function Timing(runner)
-{
+function Timing(runner) {
 	this.runner = runner;
 }
 
 let proto = Timing.prototype;
 
-Object.defineProperties(proto,
-{
-	startTime:
-	{
-		get: function() {return this.runner.startTime}
+Object.defineProperties(proto, {
+	startTime: {
+		get: function() {
+			return this.runner.startTime;
+		}
 	},
-	endTime:
-	{
-		get: function() {return this.runner.endTime}
+	endTime: {
+		get: function() {
+			return this.runner.endTime;
+		}
 	},
-	start:
-	{
+	start: {
 		configurable: true,
-		get: function() {return this.runner.startTime}
+		get: function() {
+			return this.runner.startTime;
+		}
 	},
-	end:
-	{
+	end: {
 		configurable: true,
-		get: function() {return this.runner.endTime}
+		get: function() {
+			return this.runner.endTime;
+		}
 	},
-	navigationStart:
-	{
+	navigationStart: {
 		configurable: true,
-		get: function() {return this.runner.runtime.navigationStart}
+		get: function() {
+			return this.runner.runtime.navigationStart;
+		}
 	}
 });
 
-deprecate.property(proto, 'navigationStart',
-	'use `runtime.navigationStart` instead of `runner.timing.navigationStart`');
-deprecate.property(proto, 'start',
-	'use `runner.startTime` instead of `runner.timing.start`');
-deprecate.property(proto, 'end',
-	'use `runner.endTime` instead of `runner.timing.end`');
+deprecate.property(
+	proto,
+	'navigationStart',
+	'use `runtime.navigationStart` instead of `runner.timing.navigationStart`'
+);
+deprecate.property(
+	proto,
+	'start',
+	'use `runner.startTime` instead of `runner.timing.start`'
+);
+deprecate.property(
+	proto,
+	'end',
+	'use `runner.endTime` instead of `runner.timing.end`'
+);
