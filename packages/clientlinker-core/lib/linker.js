@@ -115,7 +115,7 @@ class Linker {
 		return this.runIn(arguments, 'shell');
 	}
 
-	runIn(args, source, env) {
+	async runIn(args, source, env) {
 		const self = this;
 		const action = args[0];
 		let callback = args[3];
@@ -137,20 +137,20 @@ class Linker {
 		// runtime保存着运行时的所有数据，方便进行调试
 		self.lastRuntime = runtime;
 
-		return Promise.all([
+		const arr = await Promise.all([
 			self.parseAction(action),
 			// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
 			// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
 			new Promise(process.nextTick)
-		]).then(function(arr) {
-			const data = arr[0];
-			runtime.method = data.method;
-			runtime.client = data.client;
-			if (env) _.extend(runtime.env, env);
-			runtime.env.source = source;
+		]);
 
-			return self._runByRuntime(runtime, callback);
-		});
+		const data = arr[0];
+		runtime.method = data.method;
+		runtime.client = data.client;
+		if (env) _.extend(runtime.env, env);
+		runtime.env.source = source;
+
+		return self._runByRuntime(runtime, callback);
 	}
 
 	_runByRuntime(runtime, callback) {
@@ -177,42 +177,37 @@ class Linker {
 	}
 
 	// 解析action
-	parseAction(action) {
-		return this.clients().then(function(list) {
-			const info = utils.parseAction(action);
+	async parseAction(action) {
+		const list = await this.clients();
+		const info = utils.parseAction(action);
 
-			return {
-				client: list[info.clientName],
-				method: info.method
-			};
-		});
+		return {
+			client: list[info.clientName],
+			method: info.method
+		};
 	}
 
 	// 罗列methods
-	methods() {
-		return (
-			this.clients()
-				.then(function(list) {
-					const promises = _.map(list, function(client) {
-						return client.methods().then(function(methodList) {
-							return {
-								client: client,
-								methods: methodList
-							};
-						});
-					});
+	async methods() {
+		const clients = await this.clients();
 
-					return Promise.all(promises);
-				})
-				// 整理
-				.then(function(list) {
-					const map = {};
-					list.forEach(function(item) {
-						map[item.client.name] = item;
-					});
-					return map;
-				})
-		);
+		const promises = _.map(clients, async function(client) {
+			const methodList = await client.methods();
+			return {
+				client: client,
+				methods: methodList
+			};
+		});
+
+		const list = await Promise.all(promises);
+
+		// 整理
+		const map = {};
+		list.forEach(function(item) {
+			map[item.client.name] = item;
+		});
+
+		return map;
 	}
 
 	clients() {
@@ -226,20 +221,19 @@ class Linker {
 		});
 	}
 
-	clearCache(clientName) {
-		const self = this;
-		if (!clientName) self.cache = {};
+	async clearCache(clientName) {
+		if (!clientName) this.cache = {};
 
-		self.clients().then(function(list) {
-			if (clientName) {
-				const client = list[clientName];
-				if (client) client.cache = {};
-			} else {
-				_.each(list, function(item) {
-					item.cache = {};
-				});
-			}
-		});
+		const clients = await this.clients();
+
+		if (clientName) {
+			const client = clients[clientName];
+			if (client) client.cache = {};
+		} else {
+			_.each(clients, function(item) {
+				item.cache = {};
+			});
+		}
 	}
 }
 
