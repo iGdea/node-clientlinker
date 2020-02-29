@@ -1,14 +1,14 @@
 'use strict';
 
-let debug = require('debug')('clientlinker-flow-logger');
+const debug = require('debug')('clientlinker-flow-logger');
 exports = module.exports = logger;
 
 function logger(runtime, callback) {
-	let client = runtime.client;
-	let options = client.options;
+	const client = runtime.client;
+	const options = client.options;
 
 	if (!options.logger) return callback.next();
-	let logger =
+	const logger =
 		typeof options.logger == 'function' ? options.logger : loggerHandler;
 
 	runtime.promise.then(

@@ -1,16 +1,16 @@
 'use strict';
 
-let Promise = require('bluebird');
-let Benchmark = require('benchmark');
-let suite = new Benchmark.Suite();
-let clientlinker = require('../');
+const Promise = require('bluebird');
+const Benchmark = require('benchmark');
+const suite = new Benchmark.Suite();
+const clientlinker = require('../');
 
 function methodHandler(query, body, callback) {
 	query();
 	callback && callback(null);
 }
 
-let linker = clientlinker({
+const linker = clientlinker({
 	flows: ['confighandler'],
 	clients: {
 		client: {
@@ -58,7 +58,7 @@ suite
 	.on('cycle', function(event) {
 		console.log(String(event.target));
 	})
-	.on('complete', function() {
+	.on('compconste', function() {
 		console.log('Fastest is ' + this.filter('fastest').map('name'));
 	})
 	.run({ async: true });

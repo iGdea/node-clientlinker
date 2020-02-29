@@ -4,14 +4,14 @@
 
 'use strict';
 
-let debug = require('debug')('clientlinker-flow-httpproxy:route');
-let LRUCache = require('lru-cache');
-let reqUniqKey = require('./req_uniq_key');
-let utils = require('../lib/utils');
+const debug = require('debug')('clientlinker-flow-httpproxy:route');
+const LRUCache = require('lru-cache');
+const reqUniqKey = require('./req_uniq_key');
+const utils = require('../lib/utils');
 
 module.exports = checkHttpproxyUniqKey;
 function checkHttpproxyUniqKey(checkOptions) {
-	let uniqkey = checkOptions.headers['xh-httpproxy-uniqkey'];
+	const uniqkey = checkOptions.headers['xh-httpproxy-uniqkey'];
 	if (!uniqkey) {
 		debug('[%s] no uniqkey:%s', checkOptions.action, uniqkey);
 		return checkOptions.client.options.httpproxyEnableUniqKey === true
@@ -19,8 +19,8 @@ function checkHttpproxyUniqKey(checkOptions) {
 			: undefined;
 	}
 
-	let aesObj = reqUniqKey.getAesObj(checkOptions.client);
-	let httpproxyKeyRemain =
+	const aesObj = reqUniqKey.getAesObj(checkOptions.client);
+	const httpproxyKeyRemain =
 		checkOptions.client.options.httpproxyKeyRemain || 5 * 1000;
 
 	let content;
@@ -31,13 +31,13 @@ function checkHttpproxyUniqKey(checkOptions) {
 		return false;
 	}
 
-	let requestTime = content.split(',')[0];
+	const requestTime = content.split(',')[0];
 	if (!requestTime) {
 		debug('[%s] no requestTime', checkOptions.action);
 		return false;
 	}
 
-	let remain = checkOptions.serverRouterTime - requestTime;
+	const remain = checkOptions.serverRouterTime - requestTime;
 	if ((!remain && remain !== 0) || Math.abs(remain) > httpproxyKeyRemain) {
 		debug(
 			'[%s] uniqkey expired, remain:%sms config:%sms sever:%s, client:%s',
@@ -50,17 +50,17 @@ function checkHttpproxyUniqKey(checkOptions) {
 		return false;
 	}
 
-	let cacheList =
+	const cacheList =
 		checkOptions.linker.cache.httpproxyUniqkeys ||
 		(checkOptions.linker.cache.httpproxyUniqkeys = {});
-	let cache =
+	const cache =
 		cacheList[httpproxyKeyRemain] ||
 		(cacheList[httpproxyKeyRemain] = new LRUCache({
 			maxAge: httpproxyKeyRemain * 2,
 			max: 10000
 		}));
 
-	let key = checkOptions.action + ':' + content;
+	const key = checkOptions.action + ':' + content;
 	if (cache.peek(key)) {
 		debug('[%s] siginkey has require: %s', checkOptions.action, content);
 		return false;

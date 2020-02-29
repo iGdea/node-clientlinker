@@ -1,22 +1,22 @@
 'use strict';
 
-let Promise = require('bluebird');
-let fs = Promise.promisifyAll(require('fs'));
-let vm = require('vm');
-let debug = require('debug')('clientlinker-flow-localfile');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
+const vm = require('vm');
+const debug = require('debug')('clientlinker-flow-localfile');
 
 exports = module.exports = localfile;
 
 function localfile(runtime, callback) {
-	let client = runtime.client;
-	let options = client.options;
+	const client = runtime.client;
+	const options = client.options;
 
 	if (!options.localfile) return callback.next();
 
-	let file = options.localfile + '/' + runtime.method;
+	const file = options.localfile + '/' + runtime.method;
 
 	checkExists(file, ['js', 'json']).then(function(exists) {
-		let fileInfo = exists[0];
+		const fileInfo = exists[0];
 		if (!fileInfo) return callback.next();
 
 		fs.readFileAsync(fileInfo.file, { encoding: 'utf8' })
@@ -40,7 +40,7 @@ function checkExists(file, extnames) {
 	return Promise.map(
 		extnames,
 		function(extname) {
-			let thisFile = file + '.' + extname;
+			const thisFile = file + '.' + extname;
 
 			return fs.statAsync(thisFile).then(
 				function(stats) {
@@ -67,7 +67,7 @@ function parseContent(linker, content, extname) {
 	if (extname == 'json') {
 		return JSON.parse(content);
 	} else {
-		let data = { module: { exports: {} } };
+		const data = { module: { exports: {} } };
 		vm.runInNewContext(content, data);
 		return data.module.exports;
 	}

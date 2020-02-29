@@ -1,7 +1,7 @@
 'use strict';
 
-let Promise = require('bluebird');
-let expect = require('expect.js');
+const Promise = require('bluebird');
+const expect = require('expect.js');
 
 module.exports = {
 	method: function() {

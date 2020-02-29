@@ -1,16 +1,16 @@
 'use strict';
 
-let Command2 = require('commander').Command;
-let pkg = require('../../package.json');
-let rlutils = require('./rlutils');
-let stdout = require('./stdout');
-let util = require('util');
-let EventEmitter = require('events').EventEmitter;
+const Command2 = require('commander').Command;
+const pkg = require('../../package.json');
+const rlutils = require('./rlutils');
+const stdout = require('./stdout');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 exports.Command = Command;
 function Command() {
 	// 强制使用clientlinker作为name
-	let program = (this.program = new Command2(pkg.name));
+	const program = (this.program = new Command2(pkg.name));
 	program
 		.version('v' + pkg.version)
 		.option('-C, --no-color', 'Disable colored output.')
@@ -24,7 +24,7 @@ function Command() {
 		});
 }
 
-let proto = Command.prototype;
+const proto = Command.prototype;
 
 proto.list = function list() {
 	let options = {};
@@ -97,9 +97,9 @@ proto.help = function help() {
 		.command('help <cmd>')
 		.description('display help for [cmd]')
 		.action(function(cmd) {
-			let self = this;
+			const self = this;
 
-			let command = findSubCommand(self.parent, cmd);
+			const command = findSubCommand(self.parent, cmd);
 			if (!command) throw new Error('No Defined Command, ' + cmd);
 
 			// command.help();
@@ -126,13 +126,13 @@ proto.anycmd = function anycmd() {
 		.command('* [conf_file] [cmd]', null, { noHelp: true })
 		.allowUnknownOption(true)
 		.action(function(conf_file, cmd) {
-			let command =
+			const command =
 				cmd && cmd != 'help' && findSubCommand(this.parent, cmd);
 
 			// 默认输出帮助信息
 			if (!command) this.parent.help();
 			else {
-				let avgs = this.parent.rawArgs.slice();
+				const avgs = this.parent.rawArgs.slice();
 				avgs.splice(2, 2, cmd, conf_file);
 				this.parent.parse(avgs);
 			}
@@ -154,7 +154,7 @@ function findSubCommand(program, cmd) {
 
 // Update Command Error Print Hanlder
 Command2.prototype.emitError = function() {
-	let msg = util.format.apply(util, arguments);
+	const msg = util.format.apply(util, arguments);
 
 	let command = this;
 	while (command.parent) command = command.parent;

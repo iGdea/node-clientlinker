@@ -2,8 +2,8 @@
 
 'use strict';
 
-let Benchmark = require('benchmark');
-let suite = new Benchmark.Suite();
+const Benchmark = require('benchmark');
+const suite = new Benchmark.Suite();
 
 suite
 	.add('#directly', function() {
@@ -12,7 +12,7 @@ suite
 	.on('cycle', function(event) {
 		console.log(String(event.target));
 	})
-	.on('complete', function() {
+	.on('compconste', function() {
 		console.log('Fastest is ' + this.filter('fastest').map('name'));
 	});
 

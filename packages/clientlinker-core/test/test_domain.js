@@ -1,13 +1,13 @@
 'use strict';
 
-let Promise = require('bluebird');
-let clientlinker = require('../');
-let expect = require('expect.js');
-let debug = require('debug')('clientlinker:test_domain');
+const Promise = require('bluebird');
+const clientlinker = require('../');
+const expect = require('expect.js');
+const debug = require('debug')('clientlinker:test_domain');
 
 describe('#domain', function() {
 	it('#callback', function(done) {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['confighandler'],
 			clients: {
 				client: {
@@ -25,8 +25,8 @@ describe('#domain', function() {
 			require('clientlinker-flow-confighandler-test').flows.confighandler
 		);
 
-		let domain = require('domain');
-		let dm = domain.create();
+		const domain = require('domain');
+		const dm = domain.create();
 
 		dm.on('error', function(err) {
 			debug('domain err:%s', err.stack);
@@ -50,7 +50,7 @@ describe('#domain', function() {
 	});
 
 	it('#promise', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['confighandler'],
 			clients: {
 				client: {
@@ -74,8 +74,8 @@ describe('#domain', function() {
 			require('clientlinker-flow-confighandler-test').flows.confighandler
 		);
 
-		let domain = require('domain');
-		let dm = domain.create();
+		const domain = require('domain');
+		const dm = domain.create();
 		dm._mark_assert = 234;
 
 		return new Promise(function(resolve, reject) {
@@ -93,7 +93,7 @@ describe('#domain', function() {
 						expect(domain.active).to.be.ok();
 						expect(domain.active._mark_assert).to.be(234);
 						expect(data).to.be(222);
-						let promise = linker.run('client.method3');
+						const promise = linker.run('client.method3');
 						promise.catch(function(err) {
 							expect(err).to.be(333);
 							resolve();
@@ -113,7 +113,7 @@ describe('#domain', function() {
 			return Promise.resolve();
 		}
 
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['confighandler'],
 			clients: {
 				client: {
@@ -138,13 +138,13 @@ describe('#domain', function() {
 			require('clientlinker-flow-confighandler-test').flows.confighandler
 		);
 
-		let domain = require('domain');
-		let dm = domain.create();
+		const domain = require('domain');
+		const dm = domain.create();
 		dm._mark_assert = 222;
 
-		let promise1 = dm.run(function() {
+		const promise1 = dm.run(function() {
 			let promise11;
-			let promise12 = new Promise(function(resolve) {
+			const promise12 = new Promise(function(resolve) {
 				promise11 = linker
 					.run('client.callback', null, null, function(err, data) {
 						expect(data).to.be('hello world');
@@ -160,10 +160,10 @@ describe('#domain', function() {
 			return Promise.all([promise11, promise12]);
 		});
 
-		let dm2 = domain.create();
+		const dm2 = domain.create();
 		dm2._mark_assert = 333;
 
-		let promise2 = dm2.run(function() {
+		const promise2 = dm2.run(function() {
 			return linker.run('client.resolve').then(function(data) {
 				expect(data).to.be('hello world');
 				expect(domain.active._mark_assert).to.be(333);

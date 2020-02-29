@@ -1,16 +1,16 @@
 'use strict';
 
-let Promise = require('bluebird');
-let clientlinker = require('../');
-let expect = require('expect.js');
+const Promise = require('bluebird');
+const clientlinker = require('../');
+const expect = require('expect.js');
 
 describe('#runtime', function() {
 	it('#runtime of retPromise', function() {
-		let linker = clientlinker();
+		const linker = clientlinker();
 		linker.addClient('client');
 
-		let retPromise = linker.run('client.method');
-		let runtime = linker.lastRuntime;
+		const retPromise = linker.run('client.method');
+		const runtime = linker.lastRuntime;
 
 		return retPromise.then(
 			function() {
@@ -23,12 +23,12 @@ describe('#runtime', function() {
 	});
 
 	it('#env of runtime', function() {
-		let linker = clientlinker();
+		const linker = clientlinker();
 		linker.addClient('client');
 
-		let retPromise1 = linker.run('client.method');
-		let runtime1 = linker.lastRuntime;
-		let promise1 = retPromise1.then(
+		const retPromise1 = linker.run('client.method');
+		const runtime1 = linker.lastRuntime;
+		const promise1 = retPromise1.then(
 			function() {
 				expect().fail();
 			},
@@ -37,9 +37,9 @@ describe('#runtime', function() {
 			}
 		);
 
-		let retPromise2 = linker.runInShell('client.method');
-		let runtime2 = linker.lastRuntime;
-		let promise2 = retPromise2.then(
+		const retPromise2 = linker.runInShell('client.method');
+		const runtime2 = linker.lastRuntime;
+		const promise2 = retPromise2.then(
 			function() {
 				expect().fail();
 			},
@@ -52,7 +52,7 @@ describe('#runtime', function() {
 	});
 
 	it('#debug', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['custom1'],
 			customFlows: {
 				custom1: function(runtime, callback) {
@@ -65,12 +65,12 @@ describe('#runtime', function() {
 			}
 		});
 
-		let promise = linker.run('client.method');
-		let runtime = linker.lastRuntime;
+		const promise = linker.run('client.method');
+		const runtime = linker.lastRuntime;
 
 		return promise.then(function() {
 			expect(runtime.debug('key1')).to.be(21);
-			let alldata = runtime.debug();
+			const alldata = runtime.debug();
 			expect(Object.keys(alldata)).to.eql(['key1']);
 			expect(alldata.key1).to.be.an('array');
 			expect(alldata.key1.length).to.be(1);
@@ -83,7 +83,7 @@ describe('#runtime', function() {
 	});
 
 	it('#toJSON', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['custom1', 'custom2'],
 			customFlows: {
 				custom1: function(runtime, callback) {
@@ -98,22 +98,22 @@ describe('#runtime', function() {
 			}
 		});
 
-		let promise = linker.run(
+		const promise = linker.run(
 			'client.method',
 			'query',
 			'body',
 			'run_options'
 		);
-		let runtime = linker.lastRuntime;
+		const runtime = linker.lastRuntime;
 
 		return promise.then(function() {
-			let data = runtime.toJSON();
-			let retry = data.retry;
+			const data = runtime.toJSON();
+			const retry = data.retry;
 			delete data.retry;
 			expect(retry).to.be.an('array');
 			expect(retry.length).to.be(1);
 
-			let runned = retry[0].runned;
+			const runned = retry[0].runned;
 			delete retry[0].runned;
 			expect(runned).to.be.an('array');
 			expect(runned.length).to.be(2);

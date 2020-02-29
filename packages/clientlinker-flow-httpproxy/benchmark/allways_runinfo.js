@@ -1,31 +1,31 @@
 'use strict';
 
-let Promise = require('bluebird');
-let fs = require('fs');
-let path = require('path');
-let mkdirp = require('mkdirp');
-let util = require('util');
+const Promise = require('bluebird');
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const util = require('util');
 
-let utilsTestHttpproxy = require('../test/utils_test');
-let confighandlerTest = require('clientlinker-flow-confighandler-test');
+const utilsTestHttpproxy = require('../test/utils_test');
+const confighandlerTest = require('clientlinker-flow-confighandler-test');
 
-let LOG_FILE = __dirname + '/../test/tmp/allways_runinfo.log';
-let PORT = 3233;
-let EACH_REPEAT = 20;
-let MAX_LAST_RUNTIME_LENGTH = 10;
+const LOG_FILE = __dirname + '/../test/tmp/allways_runinfo.log';
+const PORT = 3233;
+const EACH_REPEAT = 20;
+const MAX_LAST_RUNTIME_LENGTH = 10;
 
 mkdirp.sync(path.dirname(LOG_FILE));
-let ws = fs.createWriteStream(LOG_FILE);
+const ws = fs.createWriteStream(LOG_FILE);
 
 utilsTestHttpproxy.PORT = PORT;
-let linker = utilsTestHttpproxy.initLinker();
-let svr = utilsTestHttpproxy.initSvrLinker();
+const linker = utilsTestHttpproxy.initLinker();
+const svr = utilsTestHttpproxy.initSvrLinker();
 svr.start();
 
 function runAll(index) {
-	let startTime = Date.now();
-	let promises = confighandlerTest.run.tests.map(function(handler) {
-		let arr = [];
+	const startTime = Date.now();
+	const promises = confighandlerTest.run.tests.map(function(handler) {
+		const arr = [];
 		for (let i = EACH_REPEAT; i--; ) {
 			arr.push(handler(linker));
 		}
@@ -55,8 +55,8 @@ let lastRunTimes = [];
 let runTimeTotal = 0;
 let runErrorTimes = 0;
 function printSuc(index, startTime) {
-	let endTime = Date.now();
-	let useTime = endTime - startTime;
+	const endTime = Date.now();
+	const useTime = endTime - startTime;
 	runTimeTotal += useTime;
 
 	logHandler('run suc index[%d] use:%dms', index, useTime);
@@ -86,7 +86,7 @@ function printSuc(index, startTime) {
 }
 
 function printFail(index, startTime, err) {
-	let endTime = Date.now();
+	const endTime = Date.now();
 	runErrorTimes++;
 	logHandler(
 		'run err index[%d] use:%dms err:%s',
@@ -97,8 +97,8 @@ function printFail(index, startTime, err) {
 }
 
 function logHandler() {
-	let now = new Date();
-	let msg = util.format(
+	const now = new Date();
+	const msg = util.format(
 		'[allways] %d %d-%s-%s %s:%s:%s,%d %s',
 		process.pid,
 		now.getFullYear(),

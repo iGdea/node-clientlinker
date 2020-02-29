@@ -1,7 +1,7 @@
 'use strict';
 
-let confighandler = require('./confighandler');
-let methods = require('./methods');
+const confighandler = require('./confighandler');
+const methods = require('./methods');
 
 module.exports = function(flow) {
 	flow.run = confighandler;

@@ -1,12 +1,12 @@
 'use strict';
 
-let Promise = require('bluebird');
-let clientlinker = require('../');
-let expect = require('expect.js');
+const Promise = require('bluebird');
+const clientlinker = require('../');
+const expect = require('expect.js');
 
 describe('#deps', function() {
 	it('#runOptions', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['custom'],
 			customFlows: {
 				custom: function flow(runtime, callback) {
@@ -28,7 +28,7 @@ describe('#deps', function() {
 	});
 
 	it('#runByKey', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['confighandler'],
 			clients: {
 				client: {
@@ -60,7 +60,7 @@ describe('#deps', function() {
 	// });
 
 	it('#add', function() {
-		let linker = clientlinker();
+		const linker = clientlinker();
 		linker.add('clientName1', { opt: 'myOpt' });
 
 		return linker.clients().then(function(map) {
@@ -74,7 +74,7 @@ describe('#deps', function() {
 	});
 
 	it('#clientDefaultOptions', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			clientDefaultOptions: {
 				opt: 'default',
 				some: 'hihi'
@@ -118,7 +118,7 @@ describe('#deps', function() {
 	});
 
 	it('#loadFlow', function() {
-		let linker = clientlinker();
+		const linker = clientlinker();
 		let flow = linker.loadFlow(
 			'flow_empty',
 			'./deps/flows/flow_empty',
@@ -144,9 +144,9 @@ describe('#deps', function() {
 	});
 
 	it('#methodKey', function() {
-		let linker = clientlinker();
+		const linker = clientlinker();
 		linker.run('client.method').catch(function() {});
-		let runtime = linker.lastRuntime;
+		const runtime = linker.lastRuntime;
 
 		expect(runtime.methodKey)
 			.to.be('client.method')
@@ -154,7 +154,7 @@ describe('#deps', function() {
 	});
 
 	it('#parseMethodKey', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			clients: {
 				client: null
 			}

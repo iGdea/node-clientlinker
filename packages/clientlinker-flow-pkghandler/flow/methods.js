@@ -1,7 +1,7 @@
 'use strict';
 
-let pkghandler = require('./pkghandler');
+const pkghandler = require('./pkghandler');
 module.exports = function methods(client) {
-	let mod = pkghandler.initClient(client);
+	const mod = pkghandler.initClient(client);
 	if (mod) return Object.keys(mod);
 };

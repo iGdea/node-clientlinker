@@ -1,9 +1,9 @@
 'use strict';
 
-let KEY = Date.now() + process.pid + Math.floor(Math.random() * 10000);
-let BUFFER_KEY = KEY + '_buf';
-let ERROR_KEY = KEY + '_err';
-let hasOwnProperty = Object.prototype.hasOwnProperty;
+const KEY = Date.now() + process.pid + Math.floor(Math.random() * 10000);
+const BUFFER_KEY = KEY + '_buf';
+const ERROR_KEY = KEY + '_err';
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function stringify(data) {
 	if (!data || typeof data != 'object') return data;
@@ -26,8 +26,8 @@ function stringify(data) {
 function parse(data, KEY) {
 	if (!data || typeof data != 'object' || !KEY) return data;
 
-	let BUFFER_KEY = KEY + '_buf';
-	let ERROR_KEY = KEY + '_err';
+	const BUFFER_KEY = KEY + '_buf';
+	const ERROR_KEY = KEY + '_err';
 
 	return originalMap(data, function(item) {
 		if (item && typeof item == 'object') {
@@ -55,7 +55,7 @@ function originalMap(list, handler, tmpData) {
 	} else {
 		if (!tmpData) tmpData = {};
 
-		for (let i in list) {
+		for (const i in list) {
 			if (hasOwnProperty.call(list, i)) {
 				tmpData[i] = handler(list[i], i);
 			}

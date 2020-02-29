@@ -1,13 +1,13 @@
 'use strict';
 
-let _ = require('lodash');
-let util = require('util');
-let path = require('path');
-let chalk = require('chalk');
-let clientlinker = require('clientlinker-core');
-let rlutils = exports;
+const _ = require('lodash');
+const util = require('util');
+const path = require('path');
+const chalk = require('chalk');
+const clientlinker = require('clientlinker-core');
+const rlutils = exports;
 
-let colors = (exports.colors = new chalk.constructor());
+const colors = (exports.colors = new chalk.constructor());
 
 exports.parseAction = parseAction;
 function parseAction(str, allMethods) {
@@ -16,7 +16,7 @@ function parseAction(str, allMethods) {
 	else if (allMethods.indexOf(str) != -1) return str;
 	else if (!isNaN(str)) return allMethods[Number(str) - 1];
 	else {
-		let clientName = clientlinker.util.parseAction(str).clientName;
+		const clientName = clientlinker.util.parseAction(str).clientName;
 		if (allMethods.indexOf(clientName + '.*') != -1) return str;
 	}
 }
@@ -37,26 +37,26 @@ function printObject(obj) {
 
 exports.getAllMethods = getAllMethods;
 function getAllMethods(list) {
-	let allMethods = [];
-	let lines = [];
-	let allFlows = [];
-	let clientNames = Object.keys(list).sort();
+	const allMethods = [];
+	const lines = [];
+	const allFlows = [];
+	const clientNames = Object.keys(list).sort();
 
 	clientNames.forEach(function(clientName) {
-		let item = list[clientName];
+		const item = list[clientName];
 		lines.push({
 			type: 'header',
 			client: clientName
 		});
 
-		let methods = item && item.methods && Object.keys(item.methods).sort();
+		const methods = item && item.methods && Object.keys(item.methods).sort();
 		if (methods && methods.length) {
 			methods.forEach(function(method) {
-				let froms = item.methods[method].map(function(from) {
+				const froms = item.methods[method].map(function(from) {
 					return from && from.name;
 				});
 
-				let action = clientName + '.' + method;
+				const action = clientName + '.' + method;
 				allFlows.push.apply(allFlows, froms);
 
 				lines.push({

@@ -8,14 +8,14 @@
 
 'use strict';
 
-let debug = require('debug')('clientlinker-flow-httpproxy:route');
-let LRUCache = require('lru-cache');
-let utils = require('../lib/utils');
+const debug = require('debug')('clientlinker-flow-httpproxy:route');
+const LRUCache = require('lru-cache');
+const utils = require('../lib/utils');
 
 module.exports = checkHttpproxyTime;
 
 function checkHttpproxyTime(checkOptions) {
-	let clientRequestTime = checkOptions.headers['xh-httpproxy-contenttime'];
+	const clientRequestTime = checkOptions.headers['xh-httpproxy-contenttime'];
 	if (!clientRequestTime) {
 		debug(
 			'[%s] no clientRequestTime:%s',
@@ -25,8 +25,8 @@ function checkHttpproxyTime(checkOptions) {
 		return;
 	}
 
-	let remain = checkOptions.serverRouterTime - clientRequestTime;
-	let httpproxyKeyRemain =
+	const remain = checkOptions.serverRouterTime - clientRequestTime;
+	const httpproxyKeyRemain =
 		checkOptions.client.options.httpproxyKeyRemain || 5 * 1000;
 
 	if ((!remain && remain !== 0) || Math.abs(remain) > httpproxyKeyRemain) {
@@ -42,22 +42,22 @@ function checkHttpproxyTime(checkOptions) {
 	}
 
 	// 用内存cache稍微档一下重放的请求。避免扫描导致的大量错误
-	let cacheList =
+	const cacheList =
 		checkOptions.linker.cache.httpproxyKeys ||
 		(checkOptions.linker.cache.httpproxyKeys = {});
-	let cache =
+	const cache =
 		cacheList[httpproxyKeyRemain] ||
 		(cacheList[httpproxyKeyRemain] = new LRUCache({
 			maxAge: httpproxyKeyRemain * 2,
 			max: 10000
 		}));
 
-	let requestKey =
+	const requestKey =
 		checkOptions.headers['xh-httpproxy-key2'] ||
 		checkOptions.headers['xh-httpproxy-key'];
 
 	if (requestKey) {
-		let key = checkOptions.action + ':' + requestKey;
+		const key = checkOptions.action + ':' + requestKey;
 		if (cache.peek(key)) {
 			debug(
 				'[%s] siginkey has require: %s',

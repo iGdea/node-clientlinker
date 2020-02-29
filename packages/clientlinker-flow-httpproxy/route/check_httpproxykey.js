@@ -4,13 +4,13 @@
 
 'use strict';
 
-let debug = require('debug')('clientlinker-flow-httpproxy:route');
-let signature = require('../lib/signature');
+const debug = require('debug')('clientlinker-flow-httpproxy:route');
+const signature = require('../lib/signature');
 
 module.exports = checkHttpproxyKey;
 
 function checkHttpproxyKey(checkOptions) {
-	let httpproxyKey = checkOptions.client.options.httpproxyKey;
+	const httpproxyKey = checkOptions.client.options.httpproxyKey;
 	// version2特性：
 	// 所有请求都会带上来
 	// 加密参数增加随机数
@@ -40,10 +40,10 @@ function checkHttpproxyKey(checkOptions) {
 	// 	return;
 	// }
 
-	let hashContent = signature.get_sha_content(checkOptions.originalRaw);
+	const hashContent = signature.get_sha_content(checkOptions.originalRaw);
 	let random = checkOptions.headers['xh-httpproxy-contenttime'];
 	if (keyVersion == 2) random += checkOptions.query.random;
-	let targetKey = signature.sha_content(hashContent, random, httpproxyKey);
+	const targetKey = signature.sha_content(hashContent, random, httpproxyKey);
 
 	if (targetKey != requestKey) {
 		debug(

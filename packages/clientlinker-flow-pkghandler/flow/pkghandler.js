@@ -1,13 +1,13 @@
 'use strict';
 
-let debug = require('debug')('clientlinker-flow-pkghandler');
+const debug = require('debug')('clientlinker-flow-pkghandler');
 
 exports = module.exports = function pkghandler(runtime, callback) {
-	let client = runtime.client;
-	let mod = initClient(client);
+	const client = runtime.client;
+	const mod = initClient(client);
 
 	if (!mod) return callback.next();
-	let handler = mod[runtime.method];
+	const handler = mod[runtime.method];
 
 	if (handler) {
 		if (typeof callback == 'object') callback = callback.toFuncCallback();
@@ -20,7 +20,7 @@ exports = module.exports = function pkghandler(runtime, callback) {
 
 exports.initClient = initClient;
 function initClient(client) {
-	let options = client.options;
+	const options = client.options;
 	if (!options.pkghandler) return;
 
 	if (!client.pkghandlerModuleLoaded) {

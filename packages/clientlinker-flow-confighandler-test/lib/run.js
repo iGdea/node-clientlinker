@@ -1,8 +1,8 @@
 'use strict';
 
-let Promise = require('bluebird');
-let expect = require('expect.js');
-let debug = require('debug')('clientlinker-flow-confighandler-test');
+const Promise = require('bluebird');
+const expect = require('expect.js');
+const debug = require('debug')('clientlinker-flow-confighandler-test');
 
 exports = module.exports = runClientHandler;
 exports.tests = [
@@ -40,7 +40,7 @@ function testReturnPromiseData(linker, clientName) {
 
 function testReturnPromiseError(linker, clientName) {
 	if (!clientName) clientName = 'client_its';
-	let promise1 = linker
+	const promise1 = linker
 		.run(clientName + '.method_promise_reject_number')
 		.then(
 			function() {
@@ -51,7 +51,7 @@ function testReturnPromiseError(linker, clientName) {
 			}
 		);
 
-	let promise2 = linker.run(clientName + '.method_promise_reject_error').then(
+	const promise2 = linker.run(clientName + '.method_promise_reject_error').then(
 		function() {
 			expect().fail();
 		},
@@ -75,7 +75,7 @@ function testCallbackData(linker, clientName) {
 
 function testCallbackError(linker, clientName) {
 	if (!clientName) clientName = 'client_its';
-	let promise1 = linker
+	const promise1 = linker
 		.run(clientName + '.method_callback_error_number')
 		.then(
 			function() {
@@ -86,7 +86,7 @@ function testCallbackError(linker, clientName) {
 			}
 		);
 
-	let promise2 = linker.run(clientName + '.method_callback_error_error').then(
+	const promise2 = linker.run(clientName + '.method_callback_error_error').then(
 		function() {
 			expect().fail();
 		},

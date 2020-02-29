@@ -1,13 +1,13 @@
 'use strict';
 
-let _ = require('lodash');
-let rlutils = require('./rlutils');
-let printTable = require('./print_table').printTable;
-let printTpl = require('./print_tpl');
-let stdout = require('./stdout');
-let pkg = require('../../package.json');
+const _ = require('lodash');
+const rlutils = require('./rlutils');
+const printTable = require('./print_table').printTable;
+const printTpl = require('./print_tpl');
+const stdout = require('./stdout');
+const pkg = require('../../package.json');
 
-let commandActions = exports;
+const commandActions = exports;
 
 exports.execAction = function execAction(
 	conf_file,
@@ -16,14 +16,14 @@ exports.execAction = function execAction(
 	ignoreRunError
 ) {
 	options || (options = {});
-	let linker = requireLinker(conf_file);
+	const linker = requireLinker(conf_file);
 
 	return commandActions
 		.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods) {
-			let realaction = rlutils.parseAction(action, allMethods);
+			const realaction = rlutils.parseAction(action, allMethods);
 			if (!realaction) {
-				let err = new Error('Not Found Action');
+				const err = new Error('Not Found Action');
 				err.action = action;
 				throw err;
 			}
@@ -45,13 +45,13 @@ exports.execAction = function execAction(
 
 exports.listAction = function listAction(conf_file, options) {
 	options || (options = {});
-	let linker = requireLinker(conf_file);
+	const linker = requireLinker(conf_file);
 
 	return commandActions
 		.filterAllMehtods(linker, options.clients)
 		.then(function(allMethods) {
-			let flows = parseFilterFlows(options.flows, allMethods.allFlows);
-			let output = printTable(allMethods.lines, flows, options);
+			const flows = parseFilterFlows(options.flows, allMethods.allFlows);
+			const output = printTable(allMethods.lines, flows, options);
 			stdout.log(output);
 
 			return {
@@ -84,27 +84,24 @@ function parseFilterFlows(flowsStr, allFlows) {
 }
 exports.parseFilterFlows = parseFilterFlows;
 
-exports.filterAllMehtods = function filterAllMehtods(linker, clients) {
-	return linker
-		.methods()
-		.then(function(list) {
-			let reallist;
+exports.filterAllMehtods = async function filterAllMehtods(linker, clients) {
+	const list = await linker.methods()
+	let reallist;
 
-			if (!clients) reallist = list;
-			else {
-				reallist = {};
-				clients.split(/ *, */).forEach(function(name) {
-					reallist[name] = list[name];
-				});
-			}
-
-			return rlutils.getAllMethods(reallist);
-		})
-		.then(function(allMethods) {
-			if (!allMethods || !allMethods.length)
-				throw new Error('No Client Has Methods');
-			else return allMethods;
+	if (!clients) reallist = list;
+	else {
+		reallist = {};
+		clients.split(/ *, */).forEach(function(name) {
+			reallist[name] = list[name];
 		});
+	}
+
+	const allMethods = await rlutils.getAllMethods(reallist);
+	if (!allMethods || !allMethods.length) {
+		throw new Error('No Client Has Methods');
+	} else {
+		return allMethods;
+	}
 };
 
 exports.runAction = function runAction(
@@ -117,8 +114,8 @@ exports.runAction = function runAction(
 ) {
 	options || (options = {});
 	let retPromise;
-	let args = [action, query, body, null, options];
-	let str = printTpl.runActionStart(action, query, body, options);
+	const args = [action, query, body, null, options];
+	const str = printTpl.runActionStart(action, query, body, options);
 	stdout.log(str);
 
 	// 兼容老的linker
@@ -127,7 +124,7 @@ exports.runAction = function runAction(
 
 	return retPromise.then(
 		function(data) {
-			let str = printTpl.runActionEnd(
+			const str = printTpl.runActionEnd(
 				action,
 				'data',
 				retPromise.runtime,
@@ -138,7 +135,7 @@ exports.runAction = function runAction(
 			return data;
 		},
 		function(err) {
-			let str = printTpl.runActionEnd(
+			const str = printTpl.runActionEnd(
 				action,
 				'error',
 				retPromise.runtime,
@@ -152,10 +149,10 @@ exports.runAction = function runAction(
 };
 
 function requireLinker(conf_file) {
-	let linker = require(rlutils.resolve(conf_file));
+	const linker = require(rlutils.resolve(conf_file));
 
 	if (linker.version != pkg.version) {
-		let str = printTpl.linkerVersionNotMatch(pkg.version, linker.version);
+		const str = printTpl.linkerVersionNotMatch(pkg.version, linker.version);
 		stdout.warn(str);
 	}
 

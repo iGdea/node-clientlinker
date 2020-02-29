@@ -1,10 +1,10 @@
 'use strict';
 
-let Command = require('./lib/command').Command;
-let commandActions = require('./lib/command_actions');
-let stdout = require('./lib/stdout');
+const Command = require('./lib/command').Command;
+const commandActions = require('./lib/command_actions');
+const stdout = require('./lib/stdout');
 
-let command = new Command();
+const command = new Command();
 
 command.list().action(function(conf_file, command) {
 	commandActions
@@ -27,7 +27,7 @@ command.exec().action(function(conf_file, action, command) {
 command.anycmd();
 command.help().action(function() {});
 
-let argv = process.argv.slice();
+const argv = process.argv.slice();
 if (argv.length < 3) argv.push('--help');
 
 command.program.parse(argv);

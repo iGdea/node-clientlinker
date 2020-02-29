@@ -1,7 +1,7 @@
 'use strict';
 
-let localfile = require('./localfile');
-let methods = require('./methods');
+const localfile = require('./localfile');
+const methods = require('./methods');
 
 module.exports = function(flow) {
 	flow.run = localfile;
