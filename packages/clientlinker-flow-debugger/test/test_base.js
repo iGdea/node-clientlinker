@@ -39,7 +39,6 @@ describe('#debugger', function() {
 				expect(err).to.be.an(Error);
 				expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 				expect(runtime).to.be.an('object');
-				expect(runtime.navigationStart).to.be.a('number');
 			}
 		);
 
@@ -47,7 +46,6 @@ describe('#debugger', function() {
 			let runtime = data.__runtime__;
 			expect(data.string).to.be('string1');
 			expect(runtime).to.be.an('object');
-			expect(runtime.navigationStart).to.be.a('number');
 		});
 
 		return Promise.all([promise1, promise2]);
@@ -63,7 +61,6 @@ describe('#debugger', function() {
 				expect(err).to.be.an(Error);
 				expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
 				expect(runtime).to.be.an('object');
-				expect(runtime.navigationStart).to.be.a('number');
 			}
 		);
 
@@ -71,7 +68,6 @@ describe('#debugger', function() {
 			let data = runtime.originalReturn;
 			expect(data.string).to.be('string1');
 			expect(runtime).to.be.an('object');
-			expect(runtime.navigationStart).to.be.a('number');
 		});
 
 		return Promise.all([promise1, promise2]);
