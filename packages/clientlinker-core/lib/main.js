@@ -1,9 +1,9 @@
 'use strict';
 
-let _ = require('lodash');
-let Linker = require('./linker').Linker;
-let debug = require('debug')('clientlinker');
-let deprecate = require('depd')('clientlinker');
+const _ = require('lodash');
+const Linker = require('./linker').Linker;
+const debug = require('debug')('clientlinker');
+const deprecate = require('depd')('clientlinker');
 
 /**
  * [options]
@@ -12,10 +12,9 @@ let deprecate = require('depd')('clientlinker');
  * 	clients
  * 	defaults
  */
-exports = module.exports = clientlinker;
 function clientlinker(options) {
 	options || (options = {});
-	let defaults =
+	const defaults =
 		options.defaults ||
 		options.clientDefaultOptions ||
 		(options.defaults = {});
@@ -23,7 +22,7 @@ function clientlinker(options) {
 		options.flows &&
 		(defaults.flows = options.flows.slice());
 
-	let linker = new Linker(options);
+	const linker = new Linker(options);
 	// client options
 	if (options.clients) {
 		_.each(options.clients, function(handler, name) {
@@ -50,3 +49,5 @@ function clientlinker(options) {
 
 	return linker;
 }
+
+exports = module.exports = clientlinker;

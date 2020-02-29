@@ -1,37 +1,30 @@
 'use strict';
 
-let _ = require('lodash');
-let Promise = require('bluebird');
-let debug = require('debug')('clientlinker:linker');
-let Client = require('./client').Client;
-let Flow = require('./flow').Flow;
-let Runtime = require('./runtime/client_runtime').ClientRuntime;
-let utils = require('./utils');
-let depLinker = require('./deps/dep_linker');
+const _ = require('lodash');
+const Promise = require('bluebird');
+const debug = require('debug')('clientlinker:linker');
+const Client = require('./client').Client;
+const Flow = require('./flow').Flow;
+const Runtime = require('./runtime/client_runtime').ClientRuntime;
+const utils = require('./utils');
+const depLinker = require('./deps/dep_linker');
+class Linker {
+	constructor(options) {
+		this._clients = {};
+		this._initProcessPromise = Promise.resolve();
+		this.flows = {};
+		// 包含初始化client的一些配置
+		this.options = options || {};
+		// 用来暴露最近一次执行runIn时，返回的runtime对象
+		this.lastRuntime = null;
 
-exports.Linker = Linker;
-function Linker(options) {
-	this._clients = {};
-	this._initProcessPromise = Promise.resolve();
-	this.flows = {};
-	// 包含初始化client的一些配置
-	this.options = options || {};
-	// 用来暴露最近一次执行runIn时，返回的runtime对象
-	this.lastRuntime = null;
+		// flow 可能会放一些缓存变量在这里
+		this.cache = {};
 
-	// flow 可能会放一些缓存变量在这里
-	this.cache = {};
+		depLinker.init.call(this);
+	}
 
-	depLinker.init.call(this);
-}
-
-let proto = Linker.prototype;
-_.extend(proto, {
-	JSON: utils.JSON,
-	version: require('../package.json').version,
-	anyToError: utils.anyToError,
-
-	client: function(clientName, options) {
+	client(clientName, options) {
 		if (typeof clientName != 'string') {
 			throw new Error(
 				'CLIENTLINKER:ClientNameMustBeString,' + clientName
@@ -47,7 +40,7 @@ _.extend(proto, {
 			);
 		}
 
-		let defaultFlowOptions = options &&
+		const defaultFlowOptions = options &&
 			!options.flows &&
 			this.options.defaults &&
 			this.options.defaults.flows && {
@@ -63,7 +56,7 @@ _.extend(proto, {
 
 		if (!options.flows) options.flows = [];
 
-		let client = (this._clients[clientName] = new Client(
+		const client = (this._clients[clientName] = new Client(
 			clientName,
 			this,
 			options
@@ -71,10 +64,10 @@ _.extend(proto, {
 		debug('add client:%s', clientName);
 
 		return client;
-	},
+	}
 
 	// 注册flower
-	flow: function(flowName, handler) {
+	flow(flowName, handler) {
 		if (typeof flowName != 'string') {
 			throw new Error('CLIENTLINKER:FlowNameMustBeString,' + flowName);
 		} else if (arguments.length == 1) {
@@ -86,7 +79,7 @@ _.extend(proto, {
 			);
 		}
 
-		let flow = new Flow(flowName);
+		const flow = new Flow(flowName);
 		handler(flow, this);
 
 		if (typeof flow.run != 'function') {
@@ -102,28 +95,29 @@ _.extend(proto, {
 		this.flows[flowName] = flow;
 
 		return flow;
-	},
+	}
 
-	onInit: function(checkHandler) {
-		let self = this;
+	onInit(checkHandler) {
+		const self = this;
 		self._initProcessPromise = Promise.all([
 			self._initProcessPromise,
 			checkHandler(self)
 		]);
-	},
+	}
+
 	// 标准输入参数
-	run: function(action, query, body, callback, options) {
+	run(action, query, body, callback, options) {
 		/* eslint no-unused-vars: off */
 		return this.runIn(arguments, 'run');
-	},
+	}
 
-	runInShell: function() {
+	runInShell() {
 		return this.runIn(arguments, 'shell');
-	},
+	}
 
-	runIn: function(args, source, env) {
-		let self = this;
-		let action = args[0];
+	runIn(args, source, env) {
+		const self = this;
+		const action = args[0];
 		let callback = args[3];
 		let options = args[4];
 
@@ -137,7 +131,7 @@ _.extend(proto, {
 			callback = null;
 		}
 
-		let runtime = new Runtime(self, action, args[1], args[2], options);
+		const runtime = new Runtime(self, action, args[1], args[2], options);
 
 		// 通过这种手段，同步情况下，暴露runtime
 		// runtime保存着运行时的所有数据，方便进行调试
@@ -149,7 +143,7 @@ _.extend(proto, {
 			// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
 			new Promise(process.nextTick)
 		]).then(function(arr) {
-			let data = arr[0];
+			const data = arr[0];
 			runtime.method = data.method;
 			runtime.client = data.client;
 			if (env) _.extend(runtime.env, env);
@@ -157,10 +151,10 @@ _.extend(proto, {
 
 			return self._runByRuntime(runtime, callback);
 		});
-	},
+	}
 
-	_runByRuntime: function(runtime, callback) {
-		let retPromise = runtime.run();
+	_runByRuntime(runtime, callback) {
+		const retPromise = runtime.run();
 
 		// 兼容callback
 		if (callback) {
@@ -180,26 +174,26 @@ _.extend(proto, {
 		}
 
 		return retPromise;
-	},
+	}
 
 	// 解析action
-	parseAction: function(action) {
+	parseAction(action) {
 		return this.clients().then(function(list) {
-			let info = utils.parseAction(action);
+			const info = utils.parseAction(action);
 
 			return {
 				client: list[info.clientName],
 				method: info.method
 			};
 		});
-	},
+	}
 
 	// 罗列methods
-	methods: function() {
+	methods() {
 		return (
 			this.clients()
 				.then(function(list) {
-					let promises = _.map(list, function(client) {
+					const promises = _.map(list, function(client) {
 						return client.methods().then(function(methodList) {
 							return {
 								client: client,
@@ -212,32 +206,33 @@ _.extend(proto, {
 				})
 				// 整理
 				.then(function(list) {
-					let map = {};
+					const map = {};
 					list.forEach(function(item) {
 						map[item.client.name] = item;
 					});
 					return map;
 				})
 		);
-	},
+	}
 
-	clients: function() {
-		let self = this;
-		let clientPromise = self._initProcessPromise;
+	clients() {
+		const self = this;
+		const clientPromise = self._initProcessPromise;
 
 		return clientPromise.then(function() {
 			if (self._initProcessPromise === clientPromise)
 				return self._clients;
 			else return self.clients();
 		});
-	},
-	clearCache: function(clientName) {
-		let self = this;
+	}
+
+	clearCache(clientName) {
+		const self = this;
 		if (!clientName) self.cache = {};
 
 		self.clients().then(function(list) {
 			if (clientName) {
-				let client = list[clientName];
+				const client = list[clientName];
 				if (client) client.cache = {};
 			} else {
 				_.each(list, function(item) {
@@ -246,6 +241,13 @@ _.extend(proto, {
 			}
 		});
 	}
-});
+}
+
+exports.Linker = Linker;
+
+
+Linker.prototype.JSON = utils.JSON;
+Linker.prototype.version = require('../package.json').version;
+Linker.prototype.anyToError = utils.anyToError;
 
 depLinker.proto(Linker);
