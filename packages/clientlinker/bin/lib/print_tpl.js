@@ -8,7 +8,6 @@ exports.runtime = function runtime(runtime) {
 	if (!runtime) return '';
 
 	let retryTimes = runtime.retry.length;
-	let alltime = runtime.timing.getEndTime() - runtime.navigationStart;
 	let lastRetry = runtime.retry[runtime.retry.length - 1];
 	let flowStr = [];
 	for (let runned = lastRetry.runned, len = runned.length; len--; ) {
@@ -32,9 +31,6 @@ exports.runtime = function runtime(runtime) {
 	return util.format(
 		'%s use: %s ms, retry: %s\n%s %s',
 		rlutils.colors.cyan.underline('[Runtime]'),
-		alltime > 250
-			? rlutils.colors.red(alltime)
-			: rlutils.colors.green(alltime),
 		retryTimes != 1
 			? rlutils.colors.red(retryTimes)
 			: rlutils.colors.green(retryTimes),
