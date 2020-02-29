@@ -14,14 +14,6 @@ describe('#logger', function() {
 		let linker = simpleLinker(function(type) {
 			return function(runtime, err, data) {
 				try {
-					let timing = runtime.timing;
-					let lastFlowTiming = runtime.lastFlow().timing;
-
-					expect(lastFlowTiming.start).to.be.an('number');
-					expect(lastFlowTiming.end).to.be.an('number');
-					expect(timing.flowsStart).to.be.an('number');
-					expect(timing.flowsEnd).to.be.an('number');
-
 					if (type == 'error') {
 						expect(err.message).to.be('error');
 						expect(err.fromClient).to.be('client_error');

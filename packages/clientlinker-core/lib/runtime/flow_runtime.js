@@ -5,7 +5,6 @@ const Promise = require('bluebird');
 const isPromise = require('is-promise');
 const debug = require('debug')('clientlinker:flow_runtime');
 const deprecate = require('depd')('clientlinker:flow_runtime');
-const Timing = require('./timing/flow_runtime_timing').Timing;
 const utils = require('../utils');
 
 class FlowRuntime {
@@ -19,30 +18,18 @@ class FlowRuntime {
 		const promise = new Promise(function(resolve0, reject0) {
 			resolve = resolve0;
 			reject = reject0;
-		}).then(
-			function(data) {
-				self._timeEnd();
-				return data;
-			},
-			function(err) {
-				self._timeEnd();
-				err = self._error(err);
-				throw err;
-			}
-		);
+		}).catch(function(err) {
+			err = self._error(err);
+			throw err;
+		});
 
 		self.promise = promise;
 		self.resolve = resolve;
 		self.reject = reject;
 		self.nextRunner = null;
-		self.startTime = null;
-		self.endTime = null;
-
-		self.timing = new Timing(self);
 	}
 
 	run() {
-		this.startTime = Date.now();
 
 		try {
 			debug('flow run:%s', this.flow.name);
@@ -85,13 +72,7 @@ class FlowRuntime {
 	toJSON() {
 		return {
 			name: this.flow.name,
-			startTime: this.startTime,
-			endTime: this.endTime
 		};
-	}
-
-	_timeEnd() {
-		this.endTime = Date.now();
 	}
 
 	_error(err) {

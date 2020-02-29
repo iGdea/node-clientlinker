@@ -18,7 +18,6 @@ describe('#runtime', function() {
 			},
 			function() {
 				expect(runtime).to.be.an('object');
-				expect(runtime.navigationStart).to.be.a('number');
 			}
 		);
 	});
@@ -50,50 +49,6 @@ describe('#runtime', function() {
 		);
 
 		return Promise.all([promise1, promise2]);
-	});
-
-	it('#timing', function() {
-		let linker = clientlinker({
-			flows: ['assertHandler', 'custom1', 'custom2'],
-			customFlows: {
-				custom1: function custom1(runtime, callback) {
-					setTimeout(callback.nextAndResolve.bind(callback), 100);
-				},
-				custom2: function custom2(runtime, callback) {
-					setTimeout(callback.callback.bind(callback), 100);
-				},
-				assertHandler: function assertHandler(runtime, callback) {
-					let lastRunnerTiming = runtime.lastFlow().timing;
-					let timing = runtime.timing;
-
-					expect(lastRunnerTiming.start).to.be.above(
-						runtime.navigationStart - 1
-					);
-					expect(
-						lastRunnerTiming.start - runtime.navigationStart
-					).to.be.below(10);
-
-					expect(lastRunnerTiming.start).to.be(timing.flowsStart);
-
-					return callback.next();
-				}
-			},
-			clients: {
-				client: {
-					method: null
-				}
-			}
-		});
-
-		let retPromise = linker.run('client.method');
-		let runtime = linker.lastRuntime;
-
-		return retPromise.then(function() {
-			let timing = runtime.timing;
-			let lastRunnerTiming = runtime.lastFlow().timing;
-
-			expect(timing.flowsEnd).to.be(lastRunnerTiming.end);
-		});
 	});
 
 	it('#debug', function() {
@@ -153,32 +108,15 @@ describe('#runtime', function() {
 
 		return promise.then(function() {
 			let data = runtime.toJSON();
-			expect(data.navigationStart).to.be.a('number');
-			delete data.navigationStart;
-
-			let timing = data.timing;
-			delete data.timing;
-			expect(Object.keys(timing)).to.eql(['startTime', 'endTime']);
-			expect(timing.startTime).to.be.a('number');
-			expect(timing.endTime).to.be.a('number');
-
 			let retry = data.retry;
 			delete data.retry;
 			expect(retry).to.be.an('array');
 			expect(retry.length).to.be(1);
 
-			timing = retry[0].timing;
-			delete retry[0].timing;
-			expect(Object.keys(timing)).to.eql(['startTime', 'endTime']);
-			expect(timing.startTime).to.be.a('number');
-			expect(timing.endTime).to.be.a('number');
-
 			let runned = retry[0].runned;
 			delete retry[0].runned;
 			expect(runned).to.be.an('array');
 			expect(runned.length).to.be(2);
-			expect(runned[0].startTime).to.be.a('number');
-			expect(runned[0].endTime).to.be.a('number');
 			expect(
 				runned.map(function(item) {
 					return item.name;

@@ -286,7 +286,7 @@ describe('#run_error', function() {
 					timingCheck: function(runtime, callback) {
 						runTimes++;
 						if (runTimes == 2) {
-							expect(runtime.retry[0].timing.flowsEnd).to.be.ok();
+							expect(runtime.retry[0].finished).to.be.ok();
 						}
 
 						return callback.next();
@@ -336,7 +336,7 @@ describe('#run_error', function() {
 					timingCheck: function(runtime, callback) {
 						runTimes++;
 						if (runTimes == 2) {
-							expect(runtime.retry[0].timing.flowsEnd).to.be.ok();
+							expect(runtime.retry[0].finished).to.be.ok();
 						}
 
 						return callback.next();

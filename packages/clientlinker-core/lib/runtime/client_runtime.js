@@ -3,7 +3,6 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
 const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
-const Timing = require('./timing/client_runtime_timing').Timing;
 const utils = require('../utils');
 const { EventEmitter } = require('events');
 
@@ -37,9 +36,6 @@ class ClientRuntime extends EventEmitter {
 		this.retry = [];
 		this.lastTry = null;
 		this.promise = null;
-
-		this.timing = new Timing(this);
-		this.navigationStart = Date.now();
 	}
 
 	run() {
@@ -139,9 +135,6 @@ class ClientRuntime extends EventEmitter {
 			client: this.client && this.client.name,
 			env: this.env,
 			debugData: debugData,
-
-			timing: this.timing.toJSON(),
-			navigationStart: this.navigationStart,
 
 			retry: this.retry.map(function(item) {
 				return item.toJSON();

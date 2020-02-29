@@ -4,8 +4,8 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:flows_runtime');
 const FlowRuntime = require('./flow_runtime').FlowRuntime;
-const Timing = require('./timing/flows_runtime_timing').Timing;
 const utils = require('../utils');
+
 class FlowsRuntime {
 	constructor(runtime) {
 		this.runtime = runtime;
@@ -13,7 +13,6 @@ class FlowsRuntime {
 		this.lastRunner = null;
 		this.started = false;
 		this.finished = false;
-		this.timing = new Timing(this);
 	}
 
 	run() {
@@ -105,7 +104,6 @@ class FlowsRuntime {
 
 			started: this.started,
 			finished: this.finished,
-			timing: this.timing.toJSON()
 		};
 	}
 }

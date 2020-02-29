@@ -27,23 +27,6 @@ describe('#deps', function() {
 		return linker.run('client.method', null, null, null, { param: 'pp' });
 	});
 
-	it('#navigationStart', function() {
-		let linker = clientlinker();
-		let promise = linker.run('client.method');
-		let runtime = linker.lastRuntime;
-
-		return promise.then(
-			function() {
-				expect().fail();
-			},
-			function() {
-				let navigationStart = runtime.timing.navigationStart;
-				expect(navigationStart).to.be.a('number');
-				expect(navigationStart).to.be(runtime.navigationStart);
-			}
-		);
-	});
-
 	it('#runByKey', function() {
 		let linker = clientlinker({
 			flows: ['confighandler'],
