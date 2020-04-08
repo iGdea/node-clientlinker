@@ -1,6 +1,6 @@
 {
   "name": "clientlinker",
-  "version": "11.1.0",
+  "version": "11.1.1",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   "dependencies": {
     "bluebird": "^3.5.2",
     "chalk": "^2.4.1",
-    "clientlinker-core": "^10.1.0",
+    "clientlinker-core": "^10.1.1",
     "commander": "2.9.0",
     "debug": "^3.1.0",
     "depd": "^1.1.2",
@@ -41,9 +41,9 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "clientlinker-flow-confighandler": "^4.0.1",
-    "clientlinker-flow-confighandler-test": "^3.0.1",
-    "clientlinker-flow-pkghandler": "^4.0.1",
+    "clientlinker-flow-confighandler": "^4.0.2",
+    "clientlinker-flow-confighandler-test": "^3.0.2",
+    "clientlinker-flow-pkghandler": "^4.0.2",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
