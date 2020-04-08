@@ -1,4 +1,5 @@
 'use strict';
+
 const Promise = require('bluebird');
 const rawBody = Promise.promisify(require('raw-body'));
 const aesid = require('aesid');

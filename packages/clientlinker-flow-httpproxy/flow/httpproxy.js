@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const _ = require('lodash');
 const debug = require('debug')('clientlinker-flow-httpproxy');
 const deprecate = require('depd')('clientlinker-flow-httpproxy');

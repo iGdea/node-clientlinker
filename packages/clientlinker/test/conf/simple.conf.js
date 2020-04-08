@@ -1,6 +1,5 @@
 'use strict';
 
-let Promise = require('bluebird');
 let clientlinker = require('../../');
 
 let linker = clientlinker({

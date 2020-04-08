@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const clientlinker = require('../');
 const expect = require('expect.js');
 const debug = require('debug')('clientlinker:test_run_error');

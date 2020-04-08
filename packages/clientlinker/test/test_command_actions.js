@@ -1,6 +1,5 @@
 'use strict';
 
-let Promise = require('bluebird');
 let expect = require('expect.js');
 let commandActions = require('../bin/lib/command_actions');
 let printTable = require('../bin/lib/print_table');

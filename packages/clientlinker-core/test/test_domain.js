@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const clientlinker = require('../');
 const expect = require('expect.js');
 const debug = require('debug')('clientlinker:test_domain');
@@ -12,9 +11,7 @@ describe('#domain', function() {
 			clients: {
 				client: {
 					confighandler: {
-						method: function() {
-							return Promise.resolve();
-						}
+						method: function() {}
 					}
 				}
 			}

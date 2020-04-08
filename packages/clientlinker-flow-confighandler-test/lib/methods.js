@@ -1,12 +1,9 @@
 'use strict';
 
-const Promise = require('bluebird');
 const expect = require('expect.js');
 
 module.exports = {
-	method: function() {
-		return Promise.resolve();
-	},
+	method: function() {},
 	method_params: function(req, body, options) {
 		expect(req).to.be(123);
 		expect(body.name).to.be('bb');

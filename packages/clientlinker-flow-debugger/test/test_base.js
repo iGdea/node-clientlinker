@@ -1,6 +1,5 @@
 'use strict';
 
-let Promise = require('bluebird');
 let expect = require('expect.js');
 let clientlinker = require('clientlinker-core');
 

@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const util = require('util');
 
 exports.is_verbose = true;
