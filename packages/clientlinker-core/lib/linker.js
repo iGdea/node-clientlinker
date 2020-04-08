@@ -12,7 +12,6 @@ const utils = require('./utils');
 class Linker {
 	constructor(options) {
 		this._clients = {};
-		this._initProcessPromise = Promise.resolve();
 		this.flows = {};
 		// 包含初始化client的一些配置
 		this.options = options || {};
@@ -98,14 +97,6 @@ class Linker {
 		return flow;
 	}
 
-	onInit(checkHandler) {
-		const self = this;
-		self._initProcessPromise = Promise.all([
-			self._initProcessPromise,
-			checkHandler(self)
-		]);
-	}
-
 	// 标准输入参数
 	run(action, query, body, options) {
 		/* eslint no-unused-vars: off */
@@ -138,14 +129,10 @@ class Linker {
 		// runtime保存着运行时的所有数据，方便进行调试
 		self.lastRuntime = runtime;
 
-		const arr = await Promise.all([
-			self.parseAction(action),
-			// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
-			// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
-			new Promise(process.nextTick)
-		]);
+		// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
+		// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
+		const data = await this._parseAction(action);
 
-		const data = arr[0];
 		runtime.method = data.method;
 		runtime.client = data.client;
 		if (env) _.extend(runtime.env, env);
@@ -179,7 +166,11 @@ class Linker {
 
 	// 解析action
 	async parseAction(action) {
-		const list = await this.clients();
+		return this._parseAction(action);
+	}
+
+	_parseAction(action) {
+		const list = this._clients;
 		const info = utils.parseAction(action);
 
 		return {
@@ -190,7 +181,7 @@ class Linker {
 
 	// 罗列methods
 	async methods() {
-		const clients = await this.clients();
+		const clients = this._clients;
 
 		const promises = _.map(clients, async function(client) {
 			const methodList = await client.methods();
@@ -211,21 +202,14 @@ class Linker {
 		return map;
 	}
 
-	clients() {
-		const self = this;
-		const clientPromise = self._initProcessPromise;
-
-		return clientPromise.then(function() {
-			if (self._initProcessPromise === clientPromise)
-				return self._clients;
-			else return self.clients();
-		});
+	async clients() {
+		return this._clients;
 	}
 
 	async clearCache(clientName) {
 		if (!clientName) this.cache = {};
 
-		const clients = await this.clients();
+		const clients = this._clients;
 
 		if (clientName) {
 			const client = clients[clientName];

@@ -108,6 +108,7 @@ remove deps handlers
 `flow.register`
 `runtime.getRunnedFlowByName` `runtime.runnedFlows`
 `linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
+`linker.onInit`
 
 remove options
 `option.clientDefaultOptions`
