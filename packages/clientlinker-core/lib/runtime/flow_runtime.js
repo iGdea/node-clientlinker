@@ -91,21 +91,3 @@ class FlowRuntime {
 }
 
 exports.FlowRuntime = FlowRuntime;
-
-
-// FlowRuntime.prototype.toFuncCallback = deprecate.function(function() {
-// 	const self = this;
-// 	const callback = _.bind(self.callback, self);
-
-// 	['resolve', 'reject', 'promise'].forEach(function(name) {
-// 		callback[name] = self[name];
-// 	});
-
-// 	['next', 'nextAndResolve'].forEach(function(name) {
-// 		callback[name] = _.bind(self[name], self);
-// 	});
-
-// 	callback.callback = callback;
-
-// 	return callback;
-// }, 'Callback Param has be an Object');

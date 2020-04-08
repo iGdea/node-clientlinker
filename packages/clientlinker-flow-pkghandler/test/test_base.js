@@ -38,16 +38,13 @@ describe('#pkghandler', function() {
 				'method_params',
 				'method_promise_resolve',
 				'method_promise_reject_number',
-				'method_promise_reject_error',
-				'method_callback_data',
-				'method_callback_error_number',
-				'method_callback_error_error'
+				'method_promise_reject_error'
 			]);
 		});
 	});
 
 	it('#not_exsits', function() {
-		linker.addClient('client2', {
+		linker.client('client2', {
 			pkghandler: __dirname + '/pkghandler/not_exsits'
 		});
 

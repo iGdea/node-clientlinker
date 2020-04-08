@@ -44,21 +44,7 @@ describe('#rlutils', function() {
 			})
 			.then(function(allMethods) {
 				expect(allMethods).to.not.be.empty();
-				expect(allMethods[2]).to.be(
-					'client_its.method_callback_error_error'
-				);
 				expect(allMethods.lines[2].index).to.be(2);
-
-				expect(rlutils.parseAction('2', allMethods)).to.be(
-					'client_its.method_callback_data'
-				);
-				expect(
-					rlutils.parseAction(
-						'client_its.method_callback_data',
-						allMethods
-					)
-				).to.be('client_its.method_callback_data');
-
 				expect(rlutils.parseAction('', allMethods)).to.be(undefined);
 				expect(rlutils.parseAction('1999', allMethods)).to.be(
 					undefined

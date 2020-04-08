@@ -14,20 +14,20 @@ function debuggerFlow(runtime, callback) {
 			if (options.debuggerRuntime) {
 				debug('return runtime!!');
 				runtime.originalReturn = data;
-				callback.resolve(runtime);
+				return runtime;
 			} else {
 				if (data) data.__runtime__ = runtime;
-				callback.resolve(data);
+				return data;
 			}
 		})
 		.catch(function(err) {
 			if (options.debuggerRuntime) {
 				debug('return runtime!!');
 				runtime.originalReturn = err;
-				callback.reject(runtime);
+				throw runtime;
 			} else {
 				if (err && typeof err == 'object') err.__runtime__ = runtime;
-				callback.reject(err);
+				throw err;
 			}
 		});
 }

@@ -15,24 +15,19 @@ function localfile(runtime, callback) {
 
 	const file = options.localfile + '/' + runtime.method;
 
-	checkExists(file, ['js', 'json']).then(function(exists) {
+	return checkExists(file, ['js', 'json']).then(function(exists) {
 		const fileInfo = exists[0];
 		if (!fileInfo) return callback.next();
 
-		fs.readFileAsync(fileInfo.file, { encoding: 'utf8' })
+		return fs.readFileAsync(fileInfo.file, { encoding: 'utf8' })
 			.then(function(content) {
 				return parseContent(client.linker, content, fileInfo.extname);
 			})
-			.then(
-				function(data) {
-					if (!data) callback.reject(data);
-					else if (data.result) callback.reject(data.result);
-					else callback.resolve(data.data);
-				},
-				function(err) {
-					callback.reject(err);
-				}
-			);
+			.then(function(data) {
+				if (!data) throw data;
+				else if (data.result) throw data.result;
+				else return data.data;
+			});
 	});
 }
 

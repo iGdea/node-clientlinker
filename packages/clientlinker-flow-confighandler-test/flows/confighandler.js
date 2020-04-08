@@ -24,8 +24,7 @@ function confighandler(runtime, callback) {
 	const handler = options.confighandler[runtime.method];
 
 	if (typeof handler == 'function') {
-		if (typeof callback == 'object') callback = callback.toFuncCallback();
-		return handler(runtime.query, runtime.body, callback, runtime.options);
+		return handler(runtime.query, runtime.body, runtime.options);
 	} else {
 		debug('config no handler:%s', runtime.method);
 		return callback.next();

@@ -10,8 +10,7 @@ exports = module.exports = function pkghandler(runtime, callback) {
 	const handler = mod[runtime.method];
 
 	if (handler) {
-		if (typeof callback == 'object') callback = callback.toFuncCallback();
-		return handler(runtime.query, runtime.body, callback, runtime.options);
+		return handler(runtime.query, runtime.body, runtime.options);
 	} else {
 		debug('pkg no handler:%s', runtime.method);
 		return callback.next();

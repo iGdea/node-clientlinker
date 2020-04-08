@@ -9,8 +9,6 @@ exports.tests = [
 	testRunParam,
 	testReturnPromiseData,
 	testReturnPromiseError,
-	testCallbackData,
-	testCallbackError,
 	testMethodNotExists,
 	testClentNotExists
 ];
@@ -58,41 +56,6 @@ function testReturnPromiseError(linker, clientName) {
 		function(err) {
 			expect(err).to.be.an(Error);
 			expect(err.message).to.be('err123');
-		}
-	);
-
-	return Promise.all([promise1, promise2]);
-}
-
-function testCallbackData(linker, clientName) {
-	if (!clientName) clientName = 'client_its';
-	return linker
-		.run(clientName + '.method_callback_data')
-		.then(function(data) {
-			expect(data).to.be(22);
-		});
-}
-
-function testCallbackError(linker, clientName) {
-	if (!clientName) clientName = 'client_its';
-	const promise1 = linker
-		.run(clientName + '.method_callback_error_number')
-		.then(
-			function() {
-				expect().fail();
-			},
-			function(err) {
-				expect(err).to.be(33);
-			}
-		);
-
-	const promise2 = linker.run(clientName + '.method_callback_error_error').then(
-		function() {
-			expect().fail();
-		},
-		function(err) {
-			expect(err).to.be.an(Error);
-			expect(err.message).to.be('err44');
 		}
 	);
 

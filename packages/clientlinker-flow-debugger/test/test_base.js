@@ -11,7 +11,7 @@ describe('#debugger', function() {
 			client1: {
 				confighandler: {
 					method1: function() {
-						return Promise.resolve({ string: 'string1' });
+						return { string: 'string1' };
 					}
 				}
 			},
@@ -19,7 +19,7 @@ describe('#debugger', function() {
 				debuggerRuntime: true,
 				confighandler: {
 					method1: function() {
-						return Promise.resolve({ string: 'string1' });
+						return { string: 'string1' };
 					}
 				}
 			}
