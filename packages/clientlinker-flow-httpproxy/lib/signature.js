@@ -1,10 +1,10 @@
 'use strict';
 
-let crypto = require('crypto');
+const crypto = require('crypto');
 
 exports.sha_content = sha_content;
 function sha_content(content, random, key) {
-	let newkey = sha256(random + ',' + key);
+	const newkey = sha256(random + ',' + key);
 
 	return crypto
 		.createHmac('sha256', newkey)
@@ -19,14 +19,14 @@ function get_sha_content(content) {
 
 exports.sha256 = sha256;
 function sha256(str) {
-	let hash = crypto.createHash('sha256');
+	const hash = crypto.createHash('sha256');
 	hash.update(str);
 	return hash.digest('hex');
 }
 
 exports.md5 = md5;
 function md5(str) {
-	let hash = crypto.createHash('md5');
+	const hash = crypto.createHash('md5');
 	hash.update(str);
 	return hash.digest('hex');
 }

@@ -1,7 +1,7 @@
 'use strict';
 
-let httpAction = require('./http_action');
-let reqUniqKey = require('./req_uniq_key');
+const httpAction = require('./http_action');
+const reqUniqKey = require('./req_uniq_key');
 
 exports = module.exports = HttpProxyRoute;
 exports.express = routeExpress;
@@ -9,7 +9,7 @@ exports.koa = routeKoa;
 
 function HttpProxyRoute(linker) {
 	return function HttpProxyRouteHandle(req, res, next) {
-		let serverRouterTime = new Date();
+		const serverRouterTime = new Date();
 		res.set('XH-Httpproxy-RequestTime', +serverRouterTime);
 
 		if (arguments.length >= 3)
@@ -22,7 +22,7 @@ function routeKoa(linker, serverRouterTime, ctx, next) {
 	if (!linker) return next();
 
 	return cgihandler(linker, serverRouterTime, ctx.req).then(function(output) {
-		let res = ctx.response;
+		const res = ctx.response;
 		res.statusCode = output.statusCode || 200;
 		res.type = 'json';
 		res.body = output.data;

@@ -1,6 +1,6 @@
 'use strict';
 
-let _ = require('lodash');
+const _ = require('lodash');
 
 exports.DEFAULT_ERROR = 'CLIENT_LINKER_DEFERT_ERROR';
 
@@ -8,7 +8,7 @@ exports.anyToError = anyToError;
 function anyToError(originalError, runner) {
 	if (originalError instanceof Error) return originalError;
 
-	let errType = typeof originalError;
+	const errType = typeof originalError;
 	let err;
 
 	if (originalError && errType == 'object') {

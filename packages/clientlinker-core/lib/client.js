@@ -1,20 +1,18 @@
 'use strict';
 
-let _ = require('lodash');
-let Promise = require('bluebird');
-let debug = require('debug')('clientlinker:client');
+const Promise = require('bluebird');
+const debug = require('debug')('clientlinker:client');
 
-exports.Client = Client;
-function Client(name, linker, options) {
-	this.name = name;
-	this.linker = linker;
-	this.options = options || {};
-	// flow 会放一些cache在这里
-	this.cache = {};
-}
+class Client {
+	constructor(name, linker, options) {
+		this.name = name;
+		this.linker = linker;
+		this.options = options || {};
+		// flow 会放一些cache在这里
+		this.cache = {};
+	}
 
-_.extend(Client.prototype, {
-	run: function(runtime) {
+	run(runtime) {
 		// var self = this;
 		// var clientFlows = self.options.flows;
 		// if (!clientFlows || !clientFlows.length)
@@ -29,15 +27,15 @@ _.extend(Client.prototype, {
 		// }
 
 		return runtime.run();
-	},
+	}
 
-	methods: function() {
-		let self = this;
-		let clientFlows = self.options.flows;
+	methods() {
+		const self = this;
+		const clientFlows = self.options.flows;
 		if (!clientFlows) return Promise.resolve([]);
 
-		let promises = clientFlows.map(function(flowName) {
-			let flow = self.linker.flow(flowName);
+		const promises = clientFlows.map(function(flowName) {
+			const flow = self.linker.flow(flowName);
 			if (!flow) return;
 
 			return Promise.resolve(flow.methods(self)).then(function(list) {
@@ -54,11 +52,11 @@ _.extend(Client.prototype, {
 		});
 
 		return Promise.all(promises).then(function(methodList) {
-			let map = {};
+			const map = {};
 			methodList.forEach(function(item) {
 				if (!item) return;
 				item.methods.forEach(function(method) {
-					let methodInfo = map[method] || (map[method] = []);
+					const methodInfo = map[method] || (map[method] = []);
 					methodInfo.push(item.flow);
 				});
 			});
@@ -66,4 +64,6 @@ _.extend(Client.prototype, {
 			return map;
 		});
 	}
-});
+}
+
+exports.Client = Client;

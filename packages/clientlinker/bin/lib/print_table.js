@@ -1,28 +1,28 @@
 'use strict';
 
-let table = require('table');
-let useSymbole = (exports.useSymbole =
+const table = require('table');
+const useSymbole = (exports.useSymbole =
 	// = process.platform == 'win32' ? '\u221A' : '✓';
 	'*');
 
 exports.printTable = printTable;
 function printTable(data, allFlows, options) {
 	options || (options = {});
-	let defaultFlowFromArr = [];
-	let flowFromIndexMap = {};
+	const defaultFlowFromArr = [];
+	const flowFromIndexMap = {};
 
 	allFlows.forEach(function(from, index) {
 		defaultFlowFromArr.push('');
 		flowFromIndexMap[from] = index;
 	});
 
-	let tableData = [];
+	const tableData = [];
 	data.forEach(function(item) {
 		switch (item.type) {
 			case 'header':
 				// 空一行
 				if (tableData.length) {
-					let line = [' ', '', ''].concat(defaultFlowFromArr);
+					const line = [' ', '', ''].concat(defaultFlowFromArr);
 					tableData.push(line);
 				}
 
@@ -30,7 +30,7 @@ function printTable(data, allFlows, options) {
 				break;
 
 			case 'nomethods': {
-				let line = ['', '** No Methods **', ''].concat(
+				const line = ['', '** No Methods **', ''].concat(
 					defaultFlowFromArr
 				);
 				tableData.push(line);
@@ -38,11 +38,11 @@ function printTable(data, allFlows, options) {
 			}
 
 			default: {
-				let realFlowList = defaultFlowFromArr.slice();
-				let froms = item.froms.map(function(name) {
+				const realFlowList = defaultFlowFromArr.slice();
+				const froms = item.froms.map(function(name) {
 					if (name === undefined) name = 'undefined';
 
-					let flowTabIndex = flowFromIndexMap[name];
+					const flowTabIndex = flowFromIndexMap[name];
 					if (flowTabIndex || flowTabIndex === 0) {
 						realFlowList[flowTabIndex] = name + ' ' + useSymbole;
 					}
@@ -50,7 +50,7 @@ function printTable(data, allFlows, options) {
 					return name;
 				});
 
-				let line = [
+				const line = [
 					item.index,
 					options.useAction ? item.action : item.method,
 					'' && froms.join(',')
@@ -61,7 +61,7 @@ function printTable(data, allFlows, options) {
 		}
 	});
 
-	let output = table.table(tableData, {
+	const output = table.table(tableData, {
 		border: table.getBorderCharacters('void'),
 		columnDefault: {
 			paddingLeft: 1,

@@ -1,27 +1,19 @@
 'use strict';
 
-let Promise = require('bluebird');
-let expect = require('expect.js');
-let clientlinker = require('clientlinker-core');
-let logger = require('../flow/logger');
-let loggerFlow = require('../');
-let confighanlderFlow = require('clientlinker-flow-confighandler');
+const Promise = require('bluebird');
+const expect = require('expect.js');
+const clientlinker = require('clientlinker-core');
+const logger = require('../flow/logger');
+const loggerFlow = require('../');
+const confighanlderFlow = require('clientlinker-flow-confighandler');
 
 describe('#logger', function() {
 	it('#param', function() {
-		let runDeffer = PromiseDeffer();
-		let errorDeffer = PromiseDeffer();
-		let linker = simpleLinker(function(type) {
+		const runDeffer = PromiseDeffer();
+		const errorDeffer = PromiseDeffer();
+		const linker = simpleLinker(function(type) {
 			return function(runtime, err, data) {
 				try {
-					let timing = runtime.timing;
-					let lastFlowTiming = runtime.lastFlow().timing;
-
-					expect(lastFlowTiming.start).to.be.an('number');
-					expect(lastFlowTiming.end).to.be.an('number');
-					expect(timing.flowsStart).to.be.an('number');
-					expect(timing.flowsEnd).to.be.an('number');
-
 					if (type == 'error') {
 						expect(err.message).to.be('error');
 						expect(err.fromClient).to.be('client_error');
@@ -55,9 +47,9 @@ describe('#logger', function() {
 	});
 
 	it('#defaultLoggerHander', function() {
-		let runDeffer = PromiseDeffer();
-		let errorDeffer = PromiseDeffer();
-		let linker = simpleLinker(function(type) {
+		const runDeffer = PromiseDeffer();
+		const errorDeffer = PromiseDeffer();
+		const linker = simpleLinker(function(type) {
 			return function() {
 				try {
 					logger.loggerHandler.apply(null, arguments);
@@ -85,7 +77,7 @@ describe('#logger', function() {
 });
 
 function simpleLinker(genLoggerHander) {
-	let linker = clientlinker({
+	const linker = clientlinker({
 		flows: ['logger', 'confighandler'],
 		clients: {
 			client_run: {
@@ -115,7 +107,7 @@ function simpleLinker(genLoggerHander) {
 
 function PromiseDeffer() {
 	let resolve, reject;
-	let promise = new Promise(function(resolve0, reject0) {
+	const promise = new Promise(function(resolve0, reject0) {
 		resolve = resolve0;
 		reject = reject0;
 	});

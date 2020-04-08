@@ -2,7 +2,7 @@
 
 'use strict';
 
-let expect = require('expect.js');
+const expect = require('expect.js');
 
 describe('#promise', function() {
 	it('#global promise', function() {

@@ -1,6 +1,6 @@
 'use strict';
 
-let debug = require('debug')(
+const debug = require('debug')(
 	'clientlinker-flow-confighandler-test:flows/confighandler'
 );
 
@@ -10,18 +10,18 @@ module.exports = function(flow) {
 };
 
 function methods(client) {
-	let options = client.options;
+	const options = client.options;
 	if (typeof options.confighandler == 'object') {
 		return Object.keys(options.confighandler);
 	}
 }
 
 function confighandler(runtime, callback) {
-	let client = runtime.client;
-	let options = client.options;
+	const client = runtime.client;
+	const options = client.options;
 	if (!options.confighandler) return callback.next();
 
-	let handler = options.confighandler[runtime.method];
+	const handler = options.confighandler[runtime.method];
 
 	if (typeof handler == 'function') {
 		if (typeof callback == 'object') callback = callback.toFuncCallback();

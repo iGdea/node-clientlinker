@@ -1,22 +1,21 @@
 'use strict';
 
-let util = require('util');
-let rlutils = require('./rlutils');
-let printTpl = exports;
+const util = require('util');
+const rlutils = require('./rlutils');
+const printTpl = exports;
 
 exports.runtime = function runtime(runtime) {
 	if (!runtime) return '';
 
-	let retryTimes = runtime.retry.length;
-	let alltime = runtime.timing.getEndTime() - runtime.navigationStart;
-	let lastRetry = runtime.retry[runtime.retry.length - 1];
-	let flowStr = [];
+	const retryTimes = runtime.retry.length;
+	const lastRetry = runtime.retry[runtime.retry.length - 1];
+	const flowStr = [];
 	for (let runned = lastRetry.runned, len = runned.length; len--; ) {
-		let runner = runned[len];
+		const runner = runned[len];
 		if (!runner || !runner.flow) continue;
 
 		if (!flowStr.length) {
-			let str = util.format(
+			const str = util.format(
 				'%s %sms',
 				rlutils.colors.green(runner.flow.name),
 				rlutils.colors.blue(runner.endTime - runner.startTime)
@@ -24,7 +23,7 @@ exports.runtime = function runtime(runtime) {
 
 			flowStr.push(str);
 		} else {
-			let str = rlutils.colors.gray(runner.flow.name);
+			const str = rlutils.colors.gray(runner.flow.name);
 			flowStr.push(str);
 		}
 	}
@@ -32,9 +31,6 @@ exports.runtime = function runtime(runtime) {
 	return util.format(
 		'%s use: %s ms, retry: %s\n%s %s',
 		rlutils.colors.cyan.underline('[Runtime]'),
-		alltime > 250
-			? rlutils.colors.red(alltime)
-			: rlutils.colors.green(alltime),
 		retryTimes != 1
 			? rlutils.colors.red(retryTimes)
 			: rlutils.colors.green(retryTimes),
@@ -88,7 +84,7 @@ exports.runActionUnexpectedError = function runActionUnexpectedError(
 	action,
 	err
 ) {
-	let title = util.format(
+	const title = util.format(
 		' ========= Unexpected Error %s ========= ',
 		rlutils.colors.green(action)
 	);
@@ -100,7 +96,7 @@ exports.linkerVersionNotMatch = function linkerVersionNotMatch(
 	pkgVersion,
 	linkerVersion
 ) {
-	let str = util.format(
+	const str = util.format(
 		'\n\n  version not match, cli version:%s, config file version:%s\n\n',
 		rlutils.colors.green(pkgVersion),
 		rlutils.colors.green(linkerVersion)

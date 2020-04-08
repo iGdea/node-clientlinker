@@ -1,25 +1,25 @@
 'use strict';
 
-let _ = require('lodash');
-let Promise = require('bluebird');
-let debug = require('debug')('clientlinker:flow');
-let depFlow = require('./deps/dep_flow');
+const Promise = require('bluebird');
+const debug = require('debug')('clientlinker:flow');
+const depFlow = require('./deps/dep_flow');
 
-exports.Flow = Flow;
+class Flow {
+	constructor(name) {
+		this.name = name;
+	}
 
-function Flow(name) {
-	this.name = name;
-}
-
-_.extend(Flow.prototype, {
-	run: function(runtime, callback) {
+	run(runtime, callback) {
 		debug('skip by no handler: %s', this.name);
 		return callback.next();
-	},
-	methods: function() {
+	}
+
+	methods() {
 		debug('skip by no handler: %s', this.name);
 		return Promise.resolve([]);
 	}
-});
+}
+
+exports.Flow = Flow;
 
 depFlow.proto(Flow);

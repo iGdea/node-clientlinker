@@ -1,12 +1,12 @@
 'use strict';
 
-let expect = require('expect.js');
-let clientlinker = require('clientlinker-core');
-let confighandlerTest = require('clientlinker-flow-confighandler-test');
+const expect = require('expect.js');
+const clientlinker = require('clientlinker-core');
+const confighandlerTest = require('clientlinker-flow-confighandler-test');
 
 describe('#pkghandler', function() {
-	let pkghandlerFile = 'clientlinker-flow-confighandler-test/lib/methods';
-	let linker = clientlinker({
+	const pkghandlerFile = 'clientlinker-flow-confighandler-test/lib/methods';
+	const linker = clientlinker({
 		flows: ['pkghandler'],
 		defaults: {
 			opt: 'myOpt'
@@ -32,7 +32,7 @@ describe('#pkghandler', function() {
 			// expect(map.client2.client.options.pkghandler)
 			//	.to.contain('pkghandler/not_exsits');
 
-			let methods = Object.keys(map.client_its.methods);
+			const methods = Object.keys(map.client_its.methods);
 			expect(methods).to.eql([
 				'method',
 				'method_params',

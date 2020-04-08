@@ -1,29 +1,26 @@
 'use strict';
 
-let _ = require('lodash');
-let Promise = require('bluebird');
-let debug = require('debug')('clientlinker:flows_runtime');
-let FlowRuntime = require('./flow_runtime').FlowRuntime;
-let Timing = require('./timing/flows_runtime_timing').Timing;
-let utils = require('../utils');
+const _ = require('lodash');
+const Promise = require('bluebird');
+const debug = require('debug')('clientlinker:flows_runtime');
+const FlowRuntime = require('./flow_runtime').FlowRuntime;
+const utils = require('../utils');
 
-exports.FlowsRuntime = FlowsRuntime;
-function FlowsRuntime(runtime) {
-	this.runtime = runtime;
-	this.runned = [];
-	this.lastRunner = null;
-	this.started = false;
-	this.finished = false;
-	this.timing = new Timing(this);
-}
+class FlowsRuntime {
+	constructor(runtime) {
+		this.runtime = runtime;
+		this.runned = [];
+		this.lastRunner = null;
+		this.started = false;
+		this.finished = false;
+	}
 
-_.extend(FlowsRuntime.prototype, {
-	run: function() {
-		let self = this;
+	run() {
+		const self = this;
 		self.started = true;
 		self.finished = false;
 
-		let promise = self.run_();
+		const promise = self.run_();
 		promise
 			.finally(function() {
 				self.finished = true;
@@ -32,10 +29,10 @@ _.extend(FlowsRuntime.prototype, {
 			.catch(_.noop);
 
 		return promise;
-	},
+	}
 
-	getFlowRuntime: function(name) {
-		let list = this.runned;
+	getFlowRuntime(name) {
+		const list = this.runned;
 		let index = list.length;
 		while (index--) {
 			if (
@@ -46,14 +43,14 @@ _.extend(FlowsRuntime.prototype, {
 				return list[index];
 			}
 		}
-	},
+	}
 
-	run_: function() {
-		let self = this;
-		let runtime = self.runtime;
-		let client = runtime.client;
-		let clientFlows = client.options.flows;
-		let runner = self.nextRunner();
+	run_() {
+		const self = this;
+		const runtime = self.runtime;
+		const client = runtime.client;
+		const clientFlows = client.options.flows;
+		const runner = self.nextRunner();
 
 		if (!runner) {
 			debug('flow out: %s', runtime.action);
@@ -72,11 +69,11 @@ _.extend(FlowsRuntime.prototype, {
 		);
 
 		return runner.run();
-	},
+	}
 
-	nextRunner: function() {
+	nextRunner() {
 		let flow;
-		let client = this.runtime.client;
+		const client = this.runtime.client;
 
 		for (
 			let flowName,
@@ -92,14 +89,14 @@ _.extend(FlowsRuntime.prototype, {
 
 		if (!flow) return;
 
-		let runner = new FlowRuntime(flow, this);
+		const runner = new FlowRuntime(flow, this);
 		this.runned.push(runner);
 		this.lastRunner = runner;
 
 		return runner;
-	},
+	}
 
-	toJSON: function() {
+	toJSON() {
 		return {
 			runned: this.runned.map(function(item) {
 				return item.toJSON();
@@ -107,9 +104,10 @@ _.extend(FlowsRuntime.prototype, {
 
 			started: this.started,
 			finished: this.finished,
-			timing: this.timing.toJSON()
 		};
 	}
-});
+}
+
+exports.FlowsRuntime = FlowsRuntime;
 
 require('../deps/dep_flows_runtime').proto(FlowsRuntime);

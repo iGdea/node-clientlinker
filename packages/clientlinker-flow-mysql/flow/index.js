@@ -1,6 +1,6 @@
 'use strict';
 
-let mysqlFlow = require('./mysql');
+const mysqlFlow = require('./mysql');
 
 module.exports = function(flow) {
 	flow.run = mysqlFlow.flow;

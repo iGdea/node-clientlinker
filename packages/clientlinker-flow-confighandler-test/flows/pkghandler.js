@@ -1,6 +1,6 @@
 'use strict';
 
-let debug = require('debug')(
+const debug = require('debug')(
 	'clientlinker-flow-confighandler:flows/pkghandler'
 );
 
@@ -10,11 +10,11 @@ module.exports = function(flow) {
 };
 
 function pkghandler(runtime, callback) {
-	let client = runtime.client;
-	let mod = initClient(client);
+	const client = runtime.client;
+	const mod = initClient(client);
 
 	if (!mod) return callback.next();
-	let handler = mod[runtime.method];
+	const handler = mod[runtime.method];
 
 	if (handler) {
 		if (typeof callback == 'object') callback = callback.toFuncCallback();
@@ -26,12 +26,12 @@ function pkghandler(runtime, callback) {
 }
 
 function methods(client) {
-	let mod = initClient(client);
+	const mod = initClient(client);
 	if (mod) return Object.keys(mod);
 }
 
 function initClient(client) {
-	let options = client.options;
+	const options = client.options;
 	if (!options.pkghandler) return;
 
 	if (!client.pkghandlerModuleLoaded) {

@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-core",
-  "version": "8.0.0",
+  "version": "9.0.1",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,9 @@
   "homepage": "https://github.com/Bacra/node-clientlinker#readme",
   "author": "Bacra <bacra.woo@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=10.16.0"
+  },
   "dependencies": {
     "bluebird": "^3.5.2",
     "chalk": "^2.4.1",
@@ -35,7 +38,7 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "clientlinker-flow-confighandler-test": "^2.0.0",
+    "clientlinker-flow-confighandler-test": "^2.0.1",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
