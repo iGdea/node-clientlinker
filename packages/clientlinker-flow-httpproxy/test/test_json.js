@@ -13,7 +13,7 @@ describe('#json', function() {
 			data: {
 				string: 'string',
 				number: 123,
-				buffer: new Buffer('buffer')
+				buffer: Buffer.from('buffer')
 			}
 		};
 

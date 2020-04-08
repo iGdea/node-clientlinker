@@ -19,7 +19,7 @@ function testRunParam(linker, clientName) {
 		.run(
 			clientName + '.method_params',
 			123,
-			{ name: 'bb', buffer: new Buffer('buffer') },
+			{ name: 'bb', buffer: Buffer.from('buffer') },
 			{ timeout: 1000 }
 		)
 		.then(function(data) {
