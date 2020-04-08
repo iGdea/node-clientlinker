@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const Promise = require('bluebird');
 const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
 const utils = require('../utils');
 const { EventEmitter } = require('events');

@@ -1,10 +1,8 @@
 'use strict';
 
-// const _ = require('lodash');
 const Promise = require('bluebird');
 const isPromise = require('is-promise');
 const debug = require('debug')('clientlinker:flow_runtime');
-// const deprecate = require('depd')('clientlinker:flow_runtime');
 const utils = require('../utils');
 
 class FlowRuntime {
