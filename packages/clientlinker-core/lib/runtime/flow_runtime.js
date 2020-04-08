@@ -1,10 +1,10 @@
 'use strict';
 
-const _ = require('lodash');
+// const _ = require('lodash');
 const Promise = require('bluebird');
 const isPromise = require('is-promise');
 const debug = require('debug')('clientlinker:flow_runtime');
-const deprecate = require('depd')('clientlinker:flow_runtime');
+// const deprecate = require('depd')('clientlinker:flow_runtime');
 const utils = require('../utils');
 
 class FlowRuntime {
@@ -61,10 +61,6 @@ class FlowRuntime {
 		return nextRunner.promise;
 	}
 
-	nextAndResolve() {
-		this.next().then(this.resolve, this.reject);
-	}
-
 	callback(ret, data) {
 		ret ? this.reject(ret) : this.resolve(data);
 	}
@@ -99,19 +95,19 @@ class FlowRuntime {
 exports.FlowRuntime = FlowRuntime;
 
 
-FlowRuntime.prototype.toFuncCallback = deprecate.function(function() {
-	const self = this;
-	const callback = _.bind(self.callback, self);
+// FlowRuntime.prototype.toFuncCallback = deprecate.function(function() {
+// 	const self = this;
+// 	const callback = _.bind(self.callback, self);
 
-	['resolve', 'reject', 'promise'].forEach(function(name) {
-		callback[name] = self[name];
-	});
+// 	['resolve', 'reject', 'promise'].forEach(function(name) {
+// 		callback[name] = self[name];
+// 	});
 
-	['next', 'nextAndResolve'].forEach(function(name) {
-		callback[name] = _.bind(self[name], self);
-	});
+// 	['next', 'nextAndResolve'].forEach(function(name) {
+// 		callback[name] = _.bind(self[name], self);
+// 	});
 
-	callback.callback = callback;
+// 	callback.callback = callback;
 
-	return callback;
-}, 'Callback Param has be an Object');
+// 	return callback;
+// }, 'Callback Param has be an Object');

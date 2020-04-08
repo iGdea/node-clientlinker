@@ -168,17 +168,17 @@ describe('#run_error', function() {
 			clients: {
 				client: {
 					confighandler: {
-						method1: function(query, body, callback) {
-							callback('errmsg');
+						method1: function() {
+							return Promise.reject('errmsg');
 						},
-						method2: function(query, body, callback) {
-							callback.reject();
+						method2: function() {
+							return Promise.reject();
 						},
-						method3: function(query, body, callback) {
-							callback(-1);
+						method3: function() {
+							return Promise.reject(-1);
 						},
-						method4: function(query, body, callback) {
-							callback(new Error('errmsg'));
+						method4: function() {
+							return Promise.reject(new Error('errmsg'));
 						}
 					}
 				}
@@ -299,10 +299,10 @@ describe('#run_error', function() {
 				clients: {
 					client: {
 						confighandler: {
-							method: function(query, body, callback) {
+							method: function() {
 								if (runTimes == 1) throw 333;
 								else {
-									callback(null, 555);
+									return 555;
 								}
 							}
 						}
@@ -345,10 +345,10 @@ describe('#run_error', function() {
 				clients: {
 					client: {
 						confighandler: {
-							method: function(query, body, callback) {
+							method: function() {
 								if (runTimes == 1) throw 333;
 								else {
-									callback(null, 555);
+									return 555;
 								}
 							}
 						}

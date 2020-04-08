@@ -7,7 +7,8 @@ const Client = require('./client').Client;
 const Flow = require('./flow').Flow;
 const Runtime = require('./runtime/client_runtime').ClientRuntime;
 const utils = require('./utils');
-const depLinker = require('./deps/dep_linker');
+// const depLinker = require('./deps/dep_linker');
+
 class Linker {
 	constructor(options) {
 		this._clients = {};
@@ -21,7 +22,7 @@ class Linker {
 		// flow 可能会放一些缓存变量在这里
 		this.cache = {};
 
-		depLinker.init.call(this);
+		// depLinker.init.call(this);
 	}
 
 	client(clientName, options) {
@@ -106,7 +107,7 @@ class Linker {
 	}
 
 	// 标准输入参数
-	run(action, query, body, callback, options) {
+	run(action, query, body, options) {
 		/* eslint no-unused-vars: off */
 		return this.runIn(arguments, 'run');
 	}
@@ -244,4 +245,4 @@ Linker.prototype.JSON = utils.JSON;
 Linker.prototype.version = require('../package.json').version;
 Linker.prototype.anyToError = utils.anyToError;
 
-depLinker.proto(Linker);
+// depLinker.proto(Linker);

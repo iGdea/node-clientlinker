@@ -8,14 +8,15 @@ describe('#base', function() {
 	it('#addClient', function() {
 		const linker = clientlinker();
 
-		linker.addClient('client1');
+		linker.client('client1', {});
 		return linker
 			.clients()
 			.then(function(clients) {
 				expect(Object.keys(clients).length).to.be(1);
 			})
 			.then(function() {
-				linker.addClient({ client2: null, client3: {} });
+				linker.client('client2', {});
+				linker.client('client3', {});
 				return linker.clients();
 			})
 			.then(function(clients) {
@@ -26,73 +27,17 @@ describe('#base', function() {
 	describe('#bindFlow', function() {
 		it('#function', function() {
 			const linker = clientlinker();
-			linker.bindFlow('flow1', function flow1() {});
+			linker.flow('flow1', flow => flow.run = function() {});
 			expect(Object.keys(linker.flows).length).to.be(1);
-		});
-
-		it('#object', function() {
-			const linker = clientlinker();
-			linker.bindFlow({
-				flow2: function flow2() {},
-				flow3: function flow3() {}
-			});
-			expect(Object.keys(linker.flows).length).to.be(2);
 		});
 
 		it('#same', function() {
 			const linker = clientlinker();
-			linker.bindFlow('flow1', function flow1() {});
-			linker.bindFlow('flow1', function flow2() {});
+			linker.flow('flow1', flow => flow.run = function() {});
+			linker.flow('flow1', flow => flow.run = function() {});
 			expect(Object.keys(linker.flows).length).to.be(1);
 		});
 
-		describe('#width init', function() {
-			it('#promise', function() {
-				const linker = clientlinker();
-				function flowHanlder() {}
-				flowHanlder.init = function(linker2) {
-					expect(linker2).to.be(linker);
-					return new Promise(function(resolve) {
-						setTimeout(function() {
-							linker._test_val = '111';
-							resolve();
-						}, 10);
-					});
-				};
-
-				linker.bindFlow('flowInit', flowHanlder);
-
-				return linker.clients().then(function() {
-					expect(linker._test_val).to.be('111');
-				});
-			});
-
-			it('#ignore bind', function() {
-				const linker = clientlinker();
-				function flowHanlder() {}
-				flowHanlder.init = function() {
-					return false;
-				};
-
-				linker.bindFlow('flowInit', flowHanlder);
-
-				return linker.clients().then(function() {
-					expect(Object.keys(linker.flows).length).to.be(0);
-				});
-			});
-
-			it('#throw err', function() {
-				const linker = clientlinker();
-				function flowHanlder() {}
-				flowHanlder.init = function() {
-					throw new Error();
-				};
-
-				expect(function() {
-					linker.bindFlow('flowInit', flowHanlder);
-				}).to.throwError();
-			});
-		});
 	});
 
 	it('#custom flow', function() {
@@ -178,7 +123,7 @@ describe('#base', function() {
 			}
 		});
 
-		linker.addClient('client', { flows: ['custom'] });
+		linker.client('client', { flows: ['custom'] });
 		linker.run('client.xxxx', null, null, function(err) {
 			expect(err).to.be(null);
 			expect(runned).to.be.ok();
@@ -213,7 +158,7 @@ describe('#base', function() {
 		const runtime = linker.lastRuntime;
 		return retPromise.then(function(data) {
 			const flowsRun = runtime.retry[0];
-			const configCallback = flowsRun.getRunnedFlowByName('confighandler');
+			const configCallback = flowsRun.getFlowRuntime('confighandler');
 			const configCallback2 = flowsRun.runned[1];
 
 			expect(configCallback.flow.name).to.be('confighandler');

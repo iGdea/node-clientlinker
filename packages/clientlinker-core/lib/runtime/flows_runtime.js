@@ -110,4 +110,4 @@ class FlowsRuntime {
 
 exports.FlowsRuntime = FlowsRuntime;
 
-require('../deps/dep_flows_runtime').proto(FlowsRuntime);
+// require('../deps/dep_flows_runtime').proto(FlowsRuntime);

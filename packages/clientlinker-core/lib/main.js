@@ -35,10 +35,8 @@ function clientlinker(options) {
 
 		_.each(options.customFlows, function(handler, name) {
 			linker.flow(name, function(flow) {
-				flow.register(handler);
-				if (handler.methods) {
-					flow.register('methods', handler.methods);
-				}
+				flow.run = handler;
+				if (handler.methods) flow.methods = handler.methods;
 			});
 		});
 	}

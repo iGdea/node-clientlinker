@@ -2,7 +2,6 @@
 
 const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:flow');
-const depFlow = require('./deps/dep_flow');
 
 class Flow {
 	constructor(name) {
@@ -22,4 +21,4 @@ class Flow {
 
 exports.Flow = Flow;
 
-depFlow.proto(Flow);
+// require('./deps/dep_flow').proto(Flow);

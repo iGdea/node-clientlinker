@@ -7,7 +7,7 @@ const expect = require('expect.js');
 describe('#runtime', function() {
 	it('#runtime of retPromise', function() {
 		const linker = clientlinker();
-		linker.addClient('client');
+		linker.client('client', {});
 
 		const retPromise = linker.run('client.method');
 		const runtime = linker.lastRuntime;
@@ -24,7 +24,7 @@ describe('#runtime', function() {
 
 	it('#env of runtime', function() {
 		const linker = clientlinker();
-		linker.addClient('client');
+		linker.client('client', {});
 
 		const retPromise1 = linker.run('client.method');
 		const runtime1 = linker.lastRuntime;

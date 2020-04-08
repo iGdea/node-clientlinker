@@ -5,8 +5,8 @@ const Benchmark = require('benchmark');
 const suite = new Benchmark.Suite();
 const clientlinker = require('../');
 
-function methodHandler(query, body, callback) {
-	callback && callback(null);
+function methodHandler() {
+	return Promise.resolve();
 }
 
 const linker = clientlinker({
@@ -26,28 +26,18 @@ linker.flow(
 );
 
 suite
-	.add(
-		'#native promise',
-		function(deferred) {
-			new Promise(function(resolve) {
-				methodHandler(
-					null,
-					null,
-					resolve
-				);
-			}).then(deferred.resolve.bind(deferred));
-		},
-		{ defer: true }
-	)
+	.add('#native promise', function(deferred) {
+		new Promise(function(resolve) {
+			methodHandler().then(resolve);
+		}).then(deferred.resolve.bind(deferred));
+	},
+	{ defer: true })
 
-	.add(
-		'#clientlinker',
-		function(deferred) {
-			linker.run('client.method')
-				.then(deferred.resolve.bind(deferred));
-		},
-		{ defer: true }
-	)
+	.add('#clientlinker', function(deferred) {
+		linker.run('client.method')
+			.then(deferred.resolve.bind(deferred));
+	},
+	{ defer: true })
 
 	.on('cycle', function(event) {
 		console.log(String(event.target));

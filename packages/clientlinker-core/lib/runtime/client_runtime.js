@@ -164,4 +164,4 @@ class DebugData {
 	}
 }
 
-require('../deps/dep_client_runtime').proto(ClientRuntime);
+// require('../deps/dep_client_runtime').proto(ClientRuntime);
