@@ -108,7 +108,6 @@ class Linker {
 	}
 
 	async runIn(args, source, env) {
-		const self = this;
 		const action = args[0];
 		let callback = args[3];
 		let options = args[4];
@@ -123,11 +122,11 @@ class Linker {
 			callback = null;
 		}
 
-		const runtime = new Runtime(self, action, args[1], args[2], options);
+		const runtime = new Runtime(this, action, args[1], args[2], options);
 
 		// 通过这种手段，同步情况下，暴露runtime
 		// runtime保存着运行时的所有数据，方便进行调试
-		self.lastRuntime = runtime;
+		this.lastRuntime = runtime;
 
 		// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
 		// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
@@ -138,7 +137,7 @@ class Linker {
 		if (env) _.extend(runtime.env, env);
 		runtime.env.source = source;
 
-		return self._runByRuntime(runtime, callback);
+		return this._runByRuntime(runtime, callback);
 	}
 
 	_runByRuntime(runtime, callback) {

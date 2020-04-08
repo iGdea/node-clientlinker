@@ -6,11 +6,10 @@ const utils = require('../utils');
 
 class FlowRuntime {
 	constructor(flow, onetry) {
-		const self = this;
-		self.flow = flow;
-		self.onetry = onetry;
-		self.runtime = onetry.runtime;
-		self._nextRunnerPromise = null;
+		this.flow = flow;
+		this.onetry = onetry;
+		this.runtime = onetry.runtime;
+		this._nextRunnerPromise = null;
 	}
 
 	async run() {

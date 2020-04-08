@@ -38,13 +38,12 @@ class ClientRuntime extends EventEmitter {
 	}
 
 	run() {
-		const self = this;
-		if (!self.client) throw utils.newNotFoundError('NO CLIENT', self);
+		if (!this.client) throw utils.newNotFoundError('NO CLIENT', this);
 
-		const mainPromise = self._run();
+		const mainPromise = this._run();
 		// 清理绑定事件
-		mainPromise.catch(_.noop).then(function() {
-			self.removeAllListeners();
+		mainPromise.catch(_.noop).then(() => {
+			this.removeAllListeners();
 		});
 
 		return mainPromise;
@@ -106,8 +105,8 @@ class ClientRuntime extends EventEmitter {
 
 	toJSON() {
 		const debugData = {};
-		_.each(this._debugData, function(vals, key) {
-			debugData[key] = vals.map(function(item) {
+		_.each(this._debugData, (vals, key) => {
+			debugData[key] = vals.map(item => {
 				return item.toJSON();
 			});
 		});
@@ -122,7 +121,7 @@ class ClientRuntime extends EventEmitter {
 			env: this.env,
 			debugData: debugData,
 
-			retry: this.retry.map(function(item) {
+			retry: this.retry.map(item => {
 				return item.toJSON();
 			}),
 

@@ -29,40 +29,38 @@ class Client {
 		return runtime.run();
 	}
 
-	methods() {
-		const self = this;
-		const clientFlows = self.options.flows;
+	async methods() {
+		const clientFlows = this.options.flows;
 		if (!clientFlows) return Promise.resolve([]);
 
-		const promises = clientFlows.map(function(flowName) {
-			const flow = self.linker.flow(flowName);
+		const promises = clientFlows.map(async flowName => {
+			const flow = this.linker.flow(flowName);
 			if (!flow) return;
 
-			return Promise.resolve(flow.methods(self)).then(function(list) {
-				if (!list) {
-					debug('no method inifo: %s', flowName);
-					return;
-				}
+			const list = await flow.methods(this);
 
-				return {
-					flow: flow,
-					methods: list
-				};
+			if (!list) {
+				debug('no method inifo: %s', flowName);
+				return;
+			}
+
+			return {
+				flow: flow,
+				methods: list
+			};
+		});
+
+		const methodList = await Promise.all(promises);
+		const map = {};
+		methodList.forEach(item => {
+			if (!item) return;
+			item.methods.forEach(method => {
+				const methodInfo = map[method] || (map[method] = []);
+				methodInfo.push(item.flow);
 			});
 		});
 
-		return Promise.all(promises).then(function(methodList) {
-			const map = {};
-			methodList.forEach(function(item) {
-				if (!item) return;
-				item.methods.forEach(function(method) {
-					const methodInfo = map[method] || (map[method] = []);
-					methodInfo.push(item.flow);
-				});
-			});
-
-			return map;
-		});
+		return map;
 	}
 }
 

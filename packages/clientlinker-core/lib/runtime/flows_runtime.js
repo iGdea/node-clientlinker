@@ -16,17 +16,11 @@ class FlowsRuntime {
 	}
 
 	run() {
-		const self = this;
-		self.started = true;
-		self.finished = false;
+		this.started = true;
+		this.finished = false;
 
-		const promise = self.run_();
-		promise
-			.finally(function() {
-				self.finished = true;
-			})
-			// 避免 Unhandled rejection Error 提示
-			.catch(_.noop);
+		const promise = this.run_();
+		promise.then(() => this.finished = true, () => this.finished = true);
 
 		return promise;
 	}
@@ -46,27 +40,26 @@ class FlowsRuntime {
 	}
 
 	run_() {
-		const self = this;
-		const runtime = self.runtime;
-		const client = runtime.client;
-		const clientFlows = client.options.flows;
-		const runner = self.nextRunner();
+		const runner = this.nextRunner();
 
 		if (!runner) {
+			const runtime = this.runtime;
 			debug('flow out: %s', runtime.action);
 			return Promise.reject(
 				utils.newNotFoundError('CLIENT NO FLOWS', runtime)
 			);
 		}
 
-		debug(
-			'run %s.%s flow:%s(%d/%d)',
-			client.name,
-			runtime.method,
-			runner.flow.name,
-			self.runned.length,
-			clientFlows.length
-		);
+		// const client = runtime.client;
+		// const clientFlows = client.options.flows;
+		// debug(
+		// 	'run %s.%s flow:%s(%d/%d)',
+		// 	client.name,
+		// 	runtime.method,
+		// 	runner.flow.name,
+		// 	this.runned.length,
+		// 	clientFlows.length
+		// );
 
 		return runner.run();
 	}
