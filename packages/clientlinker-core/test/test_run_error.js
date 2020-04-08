@@ -346,8 +346,9 @@ describe('#run_error', function() {
 					client: {
 						confighandler: {
 							method: function() {
-								if (runTimes == 1) throw 333;
-								else {
+								if (runTimes < 4) {
+									throw 333;
+								} else {
 									return 555;
 								}
 							}
@@ -365,7 +366,7 @@ describe('#run_error', function() {
 				.run('client.method', null, null, { retry: 5 })
 				.then(function(data) {
 					expect(data).to.be(555);
-					expect(runTimes).to.be(2);
+					expect(runTimes).to.be(4);
 				});
 		});
 	});

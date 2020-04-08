@@ -42,15 +42,7 @@ class ClientRuntime extends EventEmitter {
 		const self = this;
 		if (!self.client) throw utils.newNotFoundError('NO CLIENT', self);
 
-		let retry;
-		if (self.options && self.options.retry) retry = self.options.retry;
-		else retry = self.client.options.retry;
-
-		const mainPromise = self._run().catch(function(err) {
-			if (self.retry.length < retry) return self._run();
-			else throw err;
-		});
-
+		const mainPromise = self._run();
 		// 清理绑定事件
 		mainPromise.catch(_.noop).then(function() {
 			self.removeAllListeners();
@@ -66,7 +58,14 @@ class ClientRuntime extends EventEmitter {
 		this.retry.push(onetry);
 		this.emit('retry');
 
-		return onetry.run();
+		let promise = onetry.run();
+
+		const retry = this.options && this.options.retry || this.client.options.retry;
+		if (this.retry.length < retry) {
+			promise = promise.catch(() => this._run());
+		}
+
+		return promise;
 	}
 
 	debug(key, val) {
