@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:flow');
 
 class Flow {
@@ -13,9 +12,9 @@ class Flow {
 		return callback.next();
 	}
 
-	methods() {
+	async methods() {
 		debug('skip by no handler: %s', this.name);
-		return Promise.resolve([]);
+		return [];
 	}
 }
 

@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:linker');
 const Client = require('./client').Client;
 const Flow = require('./flow').Flow;

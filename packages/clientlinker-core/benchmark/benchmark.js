@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const Benchmark = require('benchmark');
 const suite = new Benchmark.Suite();
 const clientlinker = require('../');

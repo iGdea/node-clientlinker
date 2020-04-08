@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:client');
 
 class Client {
@@ -13,25 +12,12 @@ class Client {
 	}
 
 	run(runtime) {
-		// var self = this;
-		// var clientFlows = self.options.flows;
-		// if (!clientFlows || !clientFlows.length)
-		// {
-		// 	var err = new Error('CLIENTLINKER:NotFound,'+self.name);
-		// 	err.CLIENTLINKER_TYPE = 'CLIENT NO FLOWS';
-		// 	err.CLIENTLINKER_CLIENT = self.name;
-		// 	err.CLIENTLINKER_ACTION = runtime.action;
-		//
-		// 	debug('not found flows options: %s', runtime.action);
-		// 	return Promise.reject(err);
-		// }
-
 		return runtime.run();
 	}
 
 	async methods() {
 		const clientFlows = this.options.flows;
-		if (!clientFlows) return Promise.resolve([]);
+		if (!clientFlows) return [];
 
 		const promises = clientFlows.map(async flowName => {
 			const flow = this.linker.flow(flowName);

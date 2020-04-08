@@ -1,7 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:flows_runtime');
 const FlowRuntime = require('./flow_runtime').FlowRuntime;
 const utils = require('../utils');
@@ -39,15 +37,13 @@ class FlowsRuntime {
 		}
 	}
 
-	run_() {
+	async run_() {
 		const runner = this.nextRunner();
 
 		if (!runner) {
 			const runtime = this.runtime;
 			debug('flow out: %s', runtime.action);
-			return Promise.reject(
-				utils.newNotFoundError('CLIENT NO FLOWS', runtime)
-			);
+			throw utils.newNotFoundError('CLIENT NO FLOWS', runtime);
 		}
 
 		// const client = runtime.client;

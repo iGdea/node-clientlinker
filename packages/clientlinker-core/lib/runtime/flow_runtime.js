@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const debug = require('debug')('clientlinker:flow_runtime');
 const utils = require('../utils');
 
@@ -23,7 +22,7 @@ class FlowRuntime {
 		}
 	}
 
-	next() {
+	async next() {
 		if (!this._nextRunnerPromise) {
 			const nextRunner = this.onetry.nextRunner();
 			if (nextRunner) {
@@ -32,9 +31,7 @@ class FlowRuntime {
 			} else {
 				const runtime = this.runtime;
 				debug('flow out: %s', runtime.action);
-				return Promise.reject(
-					utils.newNotFoundError('CLIENT FLOW OUT', runtime)
-				);
+				throw utils.newNotFoundError('CLIENT FLOW OUT', runtime)
 			}
 		} else {
 			debug('next handler run twice');
