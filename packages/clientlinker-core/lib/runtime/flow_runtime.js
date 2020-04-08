@@ -24,8 +24,8 @@ class FlowRuntime {
 		});
 
 		self.promise = promise;
-		self.resolve = resolve;
-		self.reject = reject;
+		self._resolve = resolve;
+		self._reject = reject;
 		self.nextRunner = null;
 	}
 
@@ -33,10 +33,12 @@ class FlowRuntime {
 
 		try {
 			debug('flow run:%s', this.flow.name);
-			const ret = this.flow.run(this.runtime, this);
-			if (isPromise(ret)) ret.then(this.resolve, this.reject);
+			let ret = this.flow.run(this.runtime, this);
+			if (!isPromise(ret)) ret = Promise.resolve(ret);
+
+			ret.then(this._resolve, this._reject);
 		} catch (err) {
-			this.reject(err);
+			this._reject(err);
 		}
 
 		return this.promise;
@@ -59,10 +61,6 @@ class FlowRuntime {
 		} else debug('run next twice');
 
 		return nextRunner.promise;
-	}
-
-	callback(ret, data) {
-		ret ? this.reject(ret) : this.resolve(data);
 	}
 
 	toJSON() {

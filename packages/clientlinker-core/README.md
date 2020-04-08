@@ -98,6 +98,30 @@ var linker = require('./clientlinker.conf.js');
 linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
 ```
 
+## Upgrade
+
+### 10x
+
+remove deps handlers
+
+`runtime.runOptions` `runtime.methodKey` `runtime.lastFlow`
+`flow.register`
+`runtime.getRunnedFlowByName` `runtime.runnedFlows`
+`linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
+
+remove options
+`option.clientDefaultOptions`
+
+flow not support `init` callback
+
+remove callback handlers of `flow.run(runtime, callback)`
+
+`callback.toFuncCallback`
+`callback.reject` `callback.resolve` `callback.callback` `callback.nextAndResolve`
+
+`flow.run` ret switch to Promise always.
+
+
 [npm-image]: https://img.shields.io/npm/v/clientlinker-core.svg
 [downloads-image]: https://img.shields.io/npm/dm/clientlinker-core.svg
 [npm-url]: https://www.npmjs.org/package/clientlinker-core

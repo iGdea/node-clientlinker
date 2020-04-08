@@ -55,9 +55,8 @@ describe('#runtime', function() {
 		const linker = clientlinker({
 			flows: ['custom1'],
 			customFlows: {
-				custom1: function(runtime, callback) {
+				custom1: function(runtime) {
 					runtime.debug('key1', 21);
-					callback.resolve();
 				}
 			},
 			clients: {
@@ -89,8 +88,7 @@ describe('#runtime', function() {
 				custom1: function(runtime, callback) {
 					return callback.next();
 				},
-				custom2: function(runtime, callback) {
-					callback.resolve();
+				custom2: function() {
 				}
 			},
 			clients: {

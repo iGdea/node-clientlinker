@@ -116,9 +116,8 @@ describe('#base', function() {
 		const linker = clientlinker({
 			flows: ['custom'],
 			customFlows: {
-				custom: function custom(runtime, callback) {
+				custom: function custom() {
 					runned = true;
-					callback.callback();
 				}
 			}
 		});
