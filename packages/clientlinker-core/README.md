@@ -110,6 +110,9 @@ remove deps handlers
 `linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
 `linker.onInit`
 
+remove attrs
+`runtime.promise`
+
 remove options
 `option.clientDefaultOptions`
 

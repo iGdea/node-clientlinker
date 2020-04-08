@@ -8,19 +8,16 @@ function logger(runtime, callback) {
 	const options = client.options;
 
 	if (!options.logger) return callback.next();
-	const logger =
-		typeof options.logger == 'function' ? options.logger : loggerHandler;
+	const logger = typeof options.logger == 'function' ? options.logger : loggerHandler;
+	const promise = callback.next();
 
-	runtime.promise.then(
-		function(data) {
-			logger(runtime, null, data);
-		},
-		function(err) {
-			logger(runtime, err || 'CLIENT_LINKER_DEFERT_ERROR', null);
-		}
-	);
+	promise.then(function(data) {
+		logger(runtime, null, data);
+	}, function(err) {
+		logger(runtime, err || 'CLIENT_LINKER_DEFERT_ERROR', null);
+	});
 
-	return callback.next();
+	return promise;
 }
 
 exports.loggerHandler = loggerHandler;

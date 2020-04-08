@@ -46,18 +46,6 @@ class ClientRuntime extends EventEmitter {
 		if (self.options && self.options.retry) retry = self.options.retry;
 		else retry = self.client.options.retry;
 
-		// 需要先给self赋值，在运行run
-		// 避免flow运行的时候，self.promise = null
-		// 例如：clientlinker-flow-logger
-		self.promise = new Promise(function(resolve, reject) {
-			process.nextTick(function() {
-				self.promise = mainPromise;
-				mainPromise.then(resolve, reject);
-			});
-		});
-
-		self.promise.catch(_.noop);
-
 		const mainPromise = self._run().catch(function(err) {
 			if (self.retry.length < retry) return self._run();
 			else throw err;
