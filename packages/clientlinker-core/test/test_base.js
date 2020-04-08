@@ -155,18 +155,13 @@ describe('#base', function() {
 
 		const retPromise = linker.run('client.method');
 		const runtime = linker.lastRuntime;
-		return retPromise.then(function(data) {
+		return retPromise.then(function() {
 			const flowsRun = runtime.retry[0];
 			const configCallback = flowsRun.getFlowRuntime('confighandler');
 			const configCallback2 = flowsRun.runned[1];
 
 			expect(configCallback.flow.name).to.be('confighandler');
 			expect(configCallback.flow).to.eql(configCallback2.flow);
-
-			return configCallback.promise.then(function(data2) {
-				expect(data2).to.be(data);
-				expect(data2).to.be('heihei');
-			});
 		});
 	});
 });

@@ -1,7 +1,6 @@
 'use strict';
 
 const Promise = require('bluebird');
-const isPromise = require('is-promise');
 const debug = require('debug')('clientlinker:flow_runtime');
 const utils = require('../utils');
 
@@ -11,44 +10,26 @@ class FlowRuntime {
 		self.flow = flow;
 		self.onetry = onetry;
 		self.runtime = onetry.runtime;
-
-		let resolve, reject;
-		const promise = new Promise(function(resolve0, reject0) {
-			resolve = resolve0;
-			reject = reject0;
-		}).catch(function(err) {
-			err = self._error(err);
-			throw err;
-		});
-
-		self.promise = promise;
-		self._resolve = resolve;
-		self._reject = reject;
-		self.nextRunner = null;
+		self._nextRunnerPromise = null;
 	}
 
-	run() {
-
+	async run() {
 		try {
 			debug('flow run:%s', this.flow.name);
-			let ret = this.flow.run(this.runtime, this);
-			if (!isPromise(ret)) ret = Promise.resolve(ret);
-
-			ret.then(this._resolve, this._reject);
+			// 必须要用await，否则直接return Promise.reject 无法捕获到
+			const ret = await this.flow.run(this.runtime, this);
+			return ret;
 		} catch (err) {
-			this._reject(err);
+			throw this._error(err);
 		}
-
-		return this.promise;
 	}
 
 	next() {
-		let nextRunner = this.nextRunner;
-		if (!nextRunner) {
-			nextRunner = this.nextRunner = this.onetry.nextRunner();
+		if (!this._nextRunnerPromise) {
+			const nextRunner = this.onetry.nextRunner();
 			if (nextRunner) {
 				debug('nextRunner:%s', nextRunner.flow.name);
-				nextRunner.run();
+				this._nextRunnerPromise = nextRunner.run();
 			} else {
 				const runtime = this.runtime;
 				debug('flow out: %s', runtime.action);
@@ -56,9 +37,11 @@ class FlowRuntime {
 					utils.newNotFoundError('CLIENT FLOW OUT', runtime)
 				);
 			}
-		} else debug('run next twice');
+		} else {
+			debug('next handler run twice');
+		}
 
-		return nextRunner.promise;
+		return this._nextRunnerPromise;
 	}
 
 	toJSON() {

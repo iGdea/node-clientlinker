@@ -121,7 +121,7 @@ flow not support `init` callback
 remove callback handlers of `flow.run(runtime, callback)`
 
 `callback.toFuncCallback`
-`callback.reject` `callback.resolve` `callback.callback` `callback.nextAndResolve`
+`callback.reject` `callback.resolve` `callback.callback` `callback.nextAndResolve` `callback.promise` `callback.nextRunner`
 
 `flow.run` ret switch to Promise always.
 
