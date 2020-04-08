@@ -6,7 +6,6 @@ let suite = new Benchmark.Suite();
 let clientlinker = require('../');
 
 function methodHandler(query, body, callback) {
-	query();
 	callback && callback(null);
 }
 
@@ -28,13 +27,11 @@ linker.flow(
 
 suite
 	.add(
-		'#only one promise run',
+		'#native promise',
 		function(deferred) {
 			new Promise(function(resolve) {
 				methodHandler(
-					function() {
-						'2,3'.split(',');
-					},
+					null,
 					null,
 					resolve
 				);
@@ -46,10 +43,7 @@ suite
 	.add(
 		'#clientlinker',
 		function(deferred) {
-			linker
-				.run('client.method', function() {
-					'2,3'.split(',');
-				})
+			linker.run('client.method')
 				.then(deferred.resolve.bind(deferred));
 		},
 		{ defer: true }
