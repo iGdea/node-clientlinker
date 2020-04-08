@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-debugger",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "description": "Debugger flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "bluebird": "^3.5.2",
-    "clientlinker-core": "^9.0.1",
-    "clientlinker-flow-confighandler": "^3.0.3",
+    "clientlinker-core": "^10.0.0",
+    "clientlinker-flow-confighandler": "^4.0.0",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
