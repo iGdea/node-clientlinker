@@ -21,35 +21,6 @@ describe('#runtime', function() {
 		);
 	});
 
-	it('#env of runtime', function() {
-		const linker = clientlinker();
-		linker.client('client', {});
-
-		const retPromise1 = linker.run('client.method');
-		const runtime1 = linker.lastRuntime;
-		const promise1 = retPromise1.then(
-			function() {
-				expect().fail();
-			},
-			function() {
-				expect(runtime1.env.source).to.be('run');
-			}
-		);
-
-		const retPromise2 = linker.runInShell('client.method');
-		const runtime2 = linker.lastRuntime;
-		const promise2 = retPromise2.then(
-			function() {
-				expect().fail();
-			},
-			function() {
-				expect(runtime2.env.source).to.be('shell');
-			}
-		);
-
-		return Promise.all([promise1, promise2]);
-	});
-
 	it('#debug', function() {
 		const linker = clientlinker({
 			flows: ['custom1'],

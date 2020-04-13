@@ -102,10 +102,6 @@ class Linker {
 		return this.runIn(arguments, 'run');
 	}
 
-	runInShell() {
-		return this.runIn(arguments, 'shell');
-	}
-
 	async runIn(args, source, env) {
 		const action = args[0];
 		let callback = args[3];

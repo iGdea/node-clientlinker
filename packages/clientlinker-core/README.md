@@ -86,18 +86,6 @@ linker.run('mail.read', userid, {mailid: 'xxxx'}, options)
   .then(function(data){});
 ```
 
-### Run in Shell
-
-```javascript
-// you can use `runInShell` instead of `run`.
-// Of course, you can continue to use `run`.
-// example
-
-var linker = require('./clientlinker.conf.js');
-
-linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
-```
-
 ## Upgrade
 
 ### 10x
@@ -108,7 +96,7 @@ remove deps handlers
 `flow.register`
 `runtime.getRunnedFlowByName` `runtime.runnedFlows`
 `linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
-`linker.onInit`
+`linker.onInit` `linker.runInShell`
 
 remove attrs
 `runtime.promise`

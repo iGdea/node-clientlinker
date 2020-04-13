@@ -88,18 +88,6 @@ linker.run('mail.read', userid, {mailid: 'xxxx'}, options)
   .then(function(data){});
 ```
 
-### Run in Shell
-
-```javascript
-// you can use `runInShell` instead of `run`.
-// Of course, you can continue to use `run`.
-// example
-
-var linker = require('./clientlinker.conf.js');
-
-linker.runInShell('mail.read', userid, {mailid: 'xxxx'}, callback, options);
-```
-
 ### Run in Terminal
 
 ```shell
