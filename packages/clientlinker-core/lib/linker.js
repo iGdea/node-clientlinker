@@ -132,26 +132,13 @@ class Linker {
 		runtime.client = data.client;
 		runtime.env.source = source;
 
-		return this._runByRuntime(runtime, callback);
-	}
-
-	_runByRuntime(runtime, callback) {
 		const retPromise = runtime.run();
-
 		// 兼容callback
 		if (callback) {
+			// 增加process.nextTick，防止error被promise捕捉到
 			retPromise.then(
-				function(data) {
-					// 增加process.nextTick，防止error被promise捕捉到
-					process.nextTick(function() {
-						callback(null, data);
-					});
-				},
-				function(ret) {
-					process.nextTick(function() {
-						callback(ret || utils.DEFAULT_ERROR);
-					});
-				}
+				data => process.nextTick(() => callback(null, data)),
+				err => process.nextTick(() => callback(err || utils.DEFAULT_ERROR))
 			);
 		}
 
