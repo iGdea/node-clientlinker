@@ -118,6 +118,7 @@ class Linker {
 		}
 
 		const runtime = new Runtime(this, action, args[1], args[2], options);
+		if (env) runtime.env = env;
 
 		// 通过这种手段，同步情况下，暴露runtime
 		// runtime保存着运行时的所有数据，方便进行调试
@@ -129,7 +130,6 @@ class Linker {
 
 		runtime.method = data.method;
 		runtime.client = data.client;
-		if (env) _.extend(runtime.env, env);
 		runtime.env.source = source;
 
 		return this._runByRuntime(runtime, callback);
