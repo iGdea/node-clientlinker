@@ -316,8 +316,10 @@ describe('#run_error', function() {
 				expect(triggerTimes).to.be(2);
 			});
 
-			linker.lastRuntime.on('retry', function() {
-				triggerTimes++;
+			const lastRuntime = linker.lastRuntime;
+
+			linker.on('retry', function(runtime) {
+				if (runtime === lastRuntime) triggerTimes++;
 			});
 
 			return retPromise;

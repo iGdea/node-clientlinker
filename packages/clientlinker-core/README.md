@@ -90,7 +90,7 @@ linker.run('mail.read', userid, {mailid: 'xxxx'}, options)
 
 ### 10x
 
-remove deps handlers
+Remove deps handlers
 
 `runtime.runOptions` `runtime.methodKey` `runtime.lastFlow`
 `flow.register`
@@ -98,20 +98,22 @@ remove deps handlers
 `linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
 `linker.onInit` `linker.runInShell`
 
-remove attrs
+Remove attrs
 `runtime.promise`
 
-remove options
+Remove options
 `option.clientDefaultOptions`
 
-flow not support `init` callback
+Flow not support `init` callback.
 
-remove callback handlers of `flow.run(runtime, callback)`
+Remove callback handlers of `flow.run(runtime, callback)`
 
 `callback.toFuncCallback`
 `callback.reject` `callback.resolve` `callback.callback` `callback.nextAndResolve` `callback.promise` `callback.nextRunner`
 
 `flow.run` ret switch to Promise always.
+
+Remove `retry` event of `runtime`. Add `retry` event of `linker`.
 
 
 [npm-image]: https://img.shields.io/npm/v/clientlinker-core.svg

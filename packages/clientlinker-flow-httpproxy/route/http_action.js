@@ -21,6 +21,13 @@ function httpAction(linker, serverRouterTime, req) {
 	debug(logmsg);
 	client_msg.push(logmsg);
 
+	// 重试的时候，需要将tmp传回去
+	linker.on('retry', function(runtime) {
+		if (runtime._httpproxyBobyTmp) {
+			_.extend(runtime.tmp, runtime._httpproxyBobyTmp);
+		}
+	});
+
 	return rawBody(req)
 		.then(function(buf) {
 			const originalRaw = buf.toString();
@@ -134,10 +141,7 @@ function runAction(
 		});
 		const retPromise = linker.runIn(args, 'httpproxy', env);
 		const runtime = linker.lastRuntime;
-		// 重试的时候，需要将tmp传回去
-		runtime.on('retry', function() {
-			_.extend(this.tmp, body.tmp);
-		});
+		runtime._httpproxyBobyTmp = body.tmp;
 
 		return retPromise
 			.then(

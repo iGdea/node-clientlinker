@@ -6,10 +6,12 @@ const Client = require('./client').Client;
 const Flow = require('./flow').Flow;
 const Runtime = require('./runtime/client_runtime').ClientRuntime;
 const utils = require('./utils');
-// const depLinker = require('./deps/dep_linker');
+const { EventEmitter } = require('events');
 
-class Linker {
+class Linker extends EventEmitter {
 	constructor(options) {
+		super();
+
 		this._clients = {};
 		this.flows = {};
 		// 包含初始化client的一些配置
@@ -19,8 +21,6 @@ class Linker {
 
 		// flow 可能会放一些缓存变量在这里
 		this.cache = {};
-
-		// depLinker.init.call(this);
 	}
 
 	client(clientName, options) {
@@ -132,6 +132,8 @@ class Linker {
 		runtime.client = data.client;
 		runtime.env.source = source;
 
+		if (!runtime.client) throw utils.newNotFoundError('NO CLIENT', runtime);
+
 		const retPromise = runtime.run();
 		// 兼容callback
 		if (callback) {
@@ -209,5 +211,3 @@ exports.Linker = Linker;
 Linker.prototype.JSON = utils.JSON;
 Linker.prototype.version = require('../package.json').version;
 Linker.prototype.anyToError = utils.anyToError;
-
-// depLinker.proto(Linker);

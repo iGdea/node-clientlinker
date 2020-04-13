@@ -2,13 +2,9 @@
 
 const _ = require('lodash');
 const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
-const utils = require('../utils');
-const { EventEmitter } = require('events');
 
-class ClientRuntime extends EventEmitter {
+class ClientRuntime {
 	constructor(linker, action, query, body, options) {
-		super();
-
 		this.linker = linker;
 		this.action = action;
 		this.client = null;
@@ -38,29 +34,20 @@ class ClientRuntime extends EventEmitter {
 	}
 
 	run() {
-		if (!this.client) throw utils.newNotFoundError('NO CLIENT', this);
-
-		const mainPromise = this._run();
-		// 清理绑定事件
-		mainPromise.catch(_.noop).then(() => {
-			this.removeAllListeners();
-		});
-
-		return mainPromise;
-	}
-
-	_run() {
 		const onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
 		this.tmp = {};
 		this.retry.push(onetry);
-		this.emit('retry');
+
+		// 减少client linker的逻辑，将retry放到linker
+		// 否则要绑定removeAllListner
+		this.linker.emit('retry', this);
 
 		let promise = onetry.run();
 
 		const retry = this.options && this.options.retry || this.client.options.retry;
 		if (this.retry.length < retry) {
-			promise = promise.catch(() => this._run());
+			promise = promise.catch(() => this.run());
 		}
 
 		return promise;
