@@ -94,7 +94,7 @@ remove deps handlers
 
 `runtime.runOptions` `runtime.methodKey` `runtime.lastFlow`
 `flow.register`
-`runtime.getRunnedFlowByName` `runtime.runnedFlows`
+`runtime.getRunnedFlowByName` `runtime.runnedFlows` `runtime.isFinished`
 `linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
 `linker.onInit` `linker.runInShell`
 

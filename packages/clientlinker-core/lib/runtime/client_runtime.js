@@ -99,10 +99,6 @@ class ClientRuntime extends EventEmitter {
 		return firstTry && firstTry.started;
 	}
 
-	isFinished() {
-		return this.lastTry && this.lastTry.finished;
-	}
-
 	toJSON() {
 		const debugData = {};
 		_.each(this._debugData, (vals, key) => {
@@ -126,7 +122,6 @@ class ClientRuntime extends EventEmitter {
 			}),
 
 			started: this.isStarted(),
-			finished: this.isFinished()
 		};
 	}
 }
@@ -148,5 +143,3 @@ class DebugData {
 		};
 	}
 }
-
-// require('../deps/dep_client_runtime').proto(ClientRuntime);

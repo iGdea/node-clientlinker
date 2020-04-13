@@ -10,17 +10,11 @@ class FlowsRuntime {
 		this.runned = [];
 		this.lastRunner = null;
 		this.started = false;
-		this.finished = false;
 	}
 
 	run() {
 		this.started = true;
-		this.finished = false;
-
-		const promise = this.run_();
-		promise.then(() => this.finished = true, () => this.finished = true);
-
-		return promise;
+		return this.run_();
 	}
 
 	getFlowRuntime(name) {
@@ -87,16 +81,12 @@ class FlowsRuntime {
 
 	toJSON() {
 		return {
+			started: this.started,
 			runned: this.runned.map(function(item) {
 				return item.toJSON();
 			}),
-
-			started: this.started,
-			finished: this.finished,
 		};
 	}
 }
 
 exports.FlowsRuntime = FlowsRuntime;
-
-// require('../deps/dep_flows_runtime').proto(FlowsRuntime);

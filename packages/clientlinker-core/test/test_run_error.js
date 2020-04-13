@@ -284,10 +284,6 @@ describe('#run_error', function() {
 				customFlows: {
 					timingCheck: function(runtime, callback) {
 						runTimes++;
-						if (runTimes == 2) {
-							expect(runtime.retry[0].finished).to.be.ok();
-						}
-
 						return callback.next();
 					}
 				},
@@ -334,10 +330,6 @@ describe('#run_error', function() {
 				customFlows: {
 					timingCheck: function(runtime, callback) {
 						runTimes++;
-						if (runTimes == 2) {
-							expect(runtime.retry[0].finished).to.be.ok();
-						}
-
 						return callback.next();
 					}
 				},
