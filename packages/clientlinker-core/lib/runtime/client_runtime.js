@@ -81,11 +81,6 @@ class ClientRuntime {
 		return firstTry && firstTry.runned[0];
 	}
 
-	isStarted() {
-		const firstTry = this.retry[0];
-		return firstTry && firstTry.started;
-	}
-
 	toJSON() {
 		const debugData = {};
 		_.each(this._debugData, (vals, key) => {
@@ -107,8 +102,6 @@ class ClientRuntime {
 			retry: this.retry.map(item => {
 				return item.toJSON();
 			}),
-
-			started: this.isStarted(),
 		};
 	}
 }

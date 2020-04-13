@@ -91,8 +91,6 @@ describe('#runtime', function() {
 				})
 			).to.be.eql(['custom1', 'custom2']);
 
-			expect(retry[0]).to.be.eql({ started: true });
-
 			expect(data).to.be.eql({
 				action: 'client.method',
 				query: 'query',
@@ -101,7 +99,6 @@ describe('#runtime', function() {
 				client: 'client',
 				env: { source: 'run' },
 				debugData: {},
-				started: true,
 			});
 		});
 	});

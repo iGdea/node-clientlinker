@@ -9,12 +9,6 @@ class FlowsRuntime {
 		this.runtime = runtime;
 		this.runned = [];
 		this.lastRunner = null;
-		this.started = false;
-	}
-
-	run() {
-		this.started = true;
-		return this.run_();
 	}
 
 	getFlowRuntime(name) {
@@ -31,7 +25,7 @@ class FlowsRuntime {
 		}
 	}
 
-	async run_() {
+	async run() {
 		const runner = this.nextRunner();
 
 		if (!runner) {
@@ -81,7 +75,6 @@ class FlowsRuntime {
 
 	toJSON() {
 		return {
-			started: this.started,
 			runned: this.runned.map(function(item) {
 				return item.toJSON();
 			}),
