@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-httpproxy",
-  "version": "7.1.2",
+  "version": "7.1.3",
   "description": "Httpproxy flow for clientlinker",
   "main": "index.js",
   "scripts": {
@@ -27,8 +27,8 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "clientlinker-core": "^10.2.2",
-    "clientlinker-flow-confighandler": "^4.0.5",
+    "clientlinker-core": "^10.2.3",
+    "clientlinker-flow-confighandler": "^4.0.6",
     "clientlinker-flow-confighandler-test": "^3.0.2",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
