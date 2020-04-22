@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-core",
-  "version": "10.2.1",
+  "version": "10.2.2",
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
