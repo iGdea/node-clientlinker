@@ -9,13 +9,24 @@ function methodHandler() {
 }
 
 const linker = clientlinker({
-	flows: ['confighandler'],
+	customFlows: {
+		next(runtime, callback) {
+			return callback.next();
+		}
+	},
 	clients: {
 		client: {
+			flows: ['confighandler'],
 			confighandler: {
 				method: methodHandler
 			}
-		}
+		},
+		client2: {
+			flows: ['next', 'confighandler'],
+			confighandler: {
+				method: methodHandler
+			}
+		},
 	}
 });
 
@@ -25,18 +36,22 @@ linker.flow(
 );
 
 suite
-	.add('#native promise', function(deferred) {
-		new Promise(function(resolve) {
-			methodHandler().then(resolve);
-		}).then(deferred.resolve.bind(deferred));
-	},
-	{ defer: true })
+	.add('#native promise', deferred => {
+		new Promise(r => methodHandler().then(r))
+			.then(deferred.resolve.bind(deferred));
+	}, { defer: true })
+	.add('#native promise2', deferred => {
+		methodHandler().then(deferred.resolve.bind(deferred));
+	}, { defer: true })
 
-	.add('#clientlinker', function(deferred) {
+	.add('#clientlinker', deferred => {
 		linker.run('client.method')
 			.then(deferred.resolve.bind(deferred));
-	},
-	{ defer: true })
+	}, { defer: true })
+	.add('#clientlinker2', deferred => {
+		linker.run('client2.method')
+			.then(deferred.resolve.bind(deferred));
+	}, { defer: true })
 
 	.on('cycle', function(event) {
 		console.log(String(event.target));
