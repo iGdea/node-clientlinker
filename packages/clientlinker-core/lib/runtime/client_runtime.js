@@ -33,11 +33,14 @@ class ClientRuntime {
 		this.promise = null;
 	}
 
-	run() {
+	async run() {
 		const onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
 		this.tmp = {};
-		this.retry.push(onetry);
+
+		// 执行逻辑放到下一个event loop， linker.lastRuntime 在当前就可以获取到，逻辑更加清晰
+		// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
+		await this.retry.push(onetry);
 
 		// 减少client linker的逻辑，将retry放到linker
 		// 否则要绑定removeAllListner

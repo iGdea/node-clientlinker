@@ -117,20 +117,16 @@ class Linker extends EventEmitter {
 			callback = null;
 		}
 
+		const data = this._parseAction(action);
 		const runtime = new Runtime(this, action, args[1], args[2], options);
 		if (env) runtime.env = env;
+		runtime.method = data.method;
+		runtime.client = data.client;
+		runtime.env.source = source;
 
 		// 通过这种手段，同步情况下，暴露runtime
 		// runtime保存着运行时的所有数据，方便进行调试
 		this.lastRuntime = runtime;
-
-		// 执行逻辑放到下一个event loop，runtime在当前就可以获取到，逻辑更加清晰
-		// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
-		const data = await this._parseAction(action);
-
-		runtime.method = data.method;
-		runtime.client = data.client;
-		runtime.env.source = source;
 
 		if (!runtime.client) throw utils.newNotFoundError('NO CLIENT', runtime);
 
