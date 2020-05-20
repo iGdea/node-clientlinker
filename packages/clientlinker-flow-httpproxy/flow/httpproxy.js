@@ -173,7 +173,6 @@ function getRequestParams(runtime, body, cginame) {
 	const client = runtime.client;
 	const options = client.options;
 	const runOptions = runtime.options || {};
-	const timeout = runOptions.timeout || options.httpproxyTimeout || 10000;
 	let proxy =
 		runOptions.httpproxyProxy ||
 		options.httpproxyProxy ||
@@ -214,7 +213,6 @@ function getRequestParams(runtime, body, cginame) {
 		url: url,
 		body: bodystr,
 		headers: headers,
-		timeout: timeout,
 		proxy: proxy,
 		time: true,
 		random: random

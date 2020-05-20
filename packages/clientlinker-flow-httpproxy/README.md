@@ -31,7 +31,6 @@ var linker = clientlinker({
   defaults: {
     httpproxy: 'http://localhost/clientlinker_proxy',
     httpproxyMaxLevel: 5,
-    httpproxyTimeout: 10000,
     httpproxyProxy: 'http://127.0.0.1:8888' || false,
     httpproxyHeaders: {},
     httpproxyKey: 'aeskey',
