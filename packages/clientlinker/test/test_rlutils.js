@@ -1,9 +1,9 @@
 'use strict';
 
-let rlutils = require('../bin/lib/rlutils');
-let expect = require('expect.js');
-let clientlinker = require('../');
-let path = require('path');
+const rlutils = require('../bin/lib/rlutils');
+const expect = require('expect.js');
+const clientlinker = require('../');
+const path = require('path');
 
 rlutils.colors.enabled = false;
 
@@ -22,7 +22,7 @@ describe('#rlutils', function() {
 	});
 
 	it('#methods', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['confighandler'],
 			clients: {
 				client_its: {
@@ -62,7 +62,7 @@ describe('#rlutils', function() {
 	});
 
 	it('#methods width *', function() {
-		let linker = clientlinker({
+		const linker = clientlinker({
 			flows: ['confighandler', 'custom'],
 			clients: {
 				client_its: {

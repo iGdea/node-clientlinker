@@ -1,12 +1,13 @@
 'use strict';
 
-let fs = require('fs');
-let path = require('path');
-let mkdirp = require('mkdirp');
-let stdout = require('../bin/lib/stdout');
-let TMP_LOG_FILE = __dirname + '/tmp/stdout_log_file_' + process.pid;
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const stdout = require('../bin/lib/stdout');
+const TMP_LOG_FILE = __dirname + '/tmp/stdout_log_file_' + process.pid;
+
 mkdirp.sync(path.dirname(TMP_LOG_FILE));
-let ws = fs.createWriteStream(TMP_LOG_FILE, { flag: 'a' });
+const ws = fs.createWriteStream(TMP_LOG_FILE, { flag: 'a' });
 
 describe('#stdout', function() {
 	beforeEach(function() {
@@ -55,7 +56,7 @@ describe('#stdout', function() {
 		this.timeout(200 * 1000);
 
 		let times = 10000;
-		let content = new Array(100000).join('123456789\n');
+		const content = new Array(100000).join('123456789\n');
 		while (stdout.write(content) && !--times);
 		return stdout.promise;
 	});
