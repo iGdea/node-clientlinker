@@ -1,15 +1,17 @@
 'use strict';
 
-let expect = require('expect.js');
-let json = require('../lib/json');
+const expect = require('expect.js');
+const json = require('../lib/json');
 
 describe('#json', function() {
 	it('#stringify', function() {
-		let err = new Error('err message2');
+		const err = new Error('err message2');
 		err.errCode = -1;
-		let data = {
+		const now = new Date();
+		const data = {
 			result: new Error('err message'),
 			result2: err,
+			result3: now,
 			data: {
 				string: 'string',
 				number: 123,
@@ -17,17 +19,21 @@ describe('#json', function() {
 			}
 		};
 
-		let newData = json.stringify(data);
+		const KEYS = new json.DateKey(json.CONST_KEY);
+		const newData = json.stringify(data);
 		expect(newData.result).not.to.be.a(Error);
-		expect(newData.result.type).to.be(json.CONST_VARS.ERROR_KEY);
+		expect(newData.result.type).to.be(KEYS.ERROR);
 		expect(newData.result.data.message).to.be('err message');
 
-		expect(newData.result2.type).to.be(json.CONST_VARS.ERROR_KEY);
+		expect(newData.result2.type).to.be(KEYS.ERROR);
 		expect(newData.result2.data.message).to.be('err message2');
 		expect(newData.result2.data.errCode).to.be(-1);
 
+		expect(newData.result3.type).to.be(KEYS.DATE);
+		expect(newData.result3.data).to.be(now.toJSON());
+
 		expect(newData.data.buffer).to.not.be.a(Buffer);
-		expect(newData.data.buffer.type).to.be(json.CONST_VARS.BUFFER_KEY);
+		expect(newData.data.buffer.type).to.be(KEYS.BUFFER);
 		expect(newData.data.buffer.data).to.be.a('string');
 
 		expect(newData.data.string).to.be('string');
@@ -35,7 +41,8 @@ describe('#json', function() {
 	});
 
 	it('#parse', function() {
-		let data = {
+		const now = new Date();
+		const data = {
 			result: {
 				type: '1454824224156_err',
 				data: { message: 'err message' }
@@ -43,6 +50,10 @@ describe('#json', function() {
 			result2: {
 				type: '1454824224156_err',
 				data: { message: 'err message2', errCode: -1 }
+			},
+			result3: {
+				type: '1454824224156_date',
+				data: now.toJSON(),
 			},
 			data: {
 				string: 'string',
@@ -57,9 +68,9 @@ describe('#json', function() {
 				}
 			}
 		};
-		let KEY = 1454824224156;
+		const KEY = 1454824224156;
 
-		let newData = json.parse(data, KEY);
+		const newData = json.parse(data, KEY);
 		expect(newData.data).to.be.an('object');
 		expect(newData.result).to.be.an(Error);
 		expect(newData.result.message).to.be('err message');
@@ -67,6 +78,9 @@ describe('#json', function() {
 		expect(newData.result2).to.be.an(Error);
 		expect(newData.result2.message).to.be('err message2');
 		expect(newData.result2.errCode).to.be(-1);
+
+		expect(newData.result3).to.be.an(Date);
+		expect(+newData.result3).to.be(+now);
 
 		expect(newData.data.buffer).to.be.a(Buffer);
 		expect(newData.data.buffer.toString()).to.be('buffer');
@@ -78,7 +92,7 @@ describe('#json', function() {
 	});
 
 	it('#array like', function() {
-		let data = { length: 5 };
+		const data = { length: 5 };
 		expect(json.stringify(data)).to.be.eql(data);
 		expect(json.parse(data, {})).to.be.eql(data);
 	});

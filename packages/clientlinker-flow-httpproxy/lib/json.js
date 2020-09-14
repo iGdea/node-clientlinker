@@ -1,45 +1,72 @@
 'use strict';
 
 const KEY = Date.now() + process.pid + Math.floor(Math.random() * 10000);
-const BUFFER_KEY = KEY + '_buf';
-const ERROR_KEY = KEY + '_err';
 const hasOwnProperty = Object.prototype.hasOwnProperty;
+
+class DateKey {
+	constructor(key) {
+		this.key = key;
+	}
+
+	get BUFFER() {
+		return `${this.key}_buf`;
+	}
+
+	get ERROR() {
+		return `${this.key}_err`;
+	}
+
+	get DATE() {
+		return `${this.key}_date`;
+	}
+}
+
+const KEYS =  new DateKey(KEY);
 
 function stringify(data) {
 	if (!data || typeof data != 'object') return data;
 
 	return originalMap(data, function(item) {
 		if (Buffer.isBuffer(item)) {
-			return { type: BUFFER_KEY, data: item.toString('base64') };
+			return { type: KEYS.BUFFER, data: item.toString('base64') };
 		} else if (item instanceof Error) {
 			return {
-				type: ERROR_KEY,
+				type: KEYS.ERROR,
 				data: originalMap(item, exports.stringify, {
 					message: item.message
 				})
 			};
-		} else if (typeof item == 'object') return exports.stringify(item);
-		else return item;
+		} else if (item instanceof Date) {
+			return {
+				type: KEYS.DATE,
+				data: item.toJSON()
+			};
+		} else if (typeof item == 'object') {
+			return exports.stringify(item);
+		} else {
+			return item;
+		}
 	});
 }
 
 function parse(data, KEY) {
 	if (!data || typeof data != 'object' || !KEY) return data;
-
-	const BUFFER_KEY = KEY + '_buf';
-	const ERROR_KEY = KEY + '_err';
+	const KEYS = new DateKey(KEY);
 
 	return originalMap(data, function(item) {
 		if (item && typeof item == 'object') {
 			if (item.type) {
-				if (item.type == BUFFER_KEY)
+				if (item.type == KEYS.BUFFER) {
 					return Buffer.from(item.data || '', 'base64');
-				else if (item.type == ERROR_KEY)
+				} else if (item.type == KEYS.ERROR) {
 					return originalMap(
 						item.data,
 						exports.parse,
 						new Error(item.data.message)
 					);
+				} else if (item.type == KEYS.DATE) {
+					return new Date(item.data);
+				}
 			}
 
 			return exports.parse(item, KEY);
@@ -69,7 +96,4 @@ exports.parse = parse;
 exports.stringify = stringify;
 
 exports.CONST_KEY = KEY;
-exports.CONST_VARS = {
-	BUFFER_KEY: BUFFER_KEY,
-	ERROR_KEY: ERROR_KEY
-};
+exports.DateKey = DateKey;
