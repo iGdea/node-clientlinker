@@ -14,7 +14,7 @@ exports.parseAction = parseAction;
 function parseAction(action) {
 	let cache = exports.parseActionCache[action];
 	if (!cache) {
-		let arr = action.split('.');
+		let arr = action.split(/\.|:/);
 		let clientName = arr.shift();
 
 		cache = exports.parseActionCache[action] = {
