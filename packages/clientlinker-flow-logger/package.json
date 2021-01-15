@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-logger",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Logger flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
@@ -19,10 +19,10 @@
     "debug": "^3.1.0"
   },
   "devDependencies": {
-    "clientlinker-core": "^11.0.0",
-    "clientlinker-flow-confighandler": "^4.0.8",
+    "clientlinker-core": "^11.0.1",
+    "clientlinker-flow-confighandler": "^4.0.9",
     "clientlinker-flow-confighandler-test": "^3.0.3",
-    "clientlinker-flow-pkghandler": "^4.0.8",
+    "clientlinker-flow-pkghandler": "^4.0.9",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
