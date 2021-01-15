@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
+const utils = require('../utils');
 
 class ClientRuntime {
 	constructor(linker, action, query, body, options) {
@@ -30,10 +31,13 @@ class ClientRuntime {
 		// 运行中的状态
 		this.retry = [];
 		this.lastTry = null;
-		this.promise = null;
 	}
 
-	async run() {
+	run() {
+		return this.run_();
+	}
+
+	async run_(err) {
 		const onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
 		this.tmp = {};
@@ -44,16 +48,24 @@ class ClientRuntime {
 
 		// 减少client linker的逻辑，将retry放到linker
 		// 否则要绑定removeAllListner
-		this.linker.emit('retry', this);
+		this.linker.emit('retry', {
+			runtime: this,
+			error: err
+		});
 
-		let promise = onetry.run();
+		try {
+			const data = await onetry.run_();
+			return data;
+		} catch (err) {
+			const err2 = this._error(err);
 
-		const retry = this.options && this.options.retry || this.client.options.retry;
-		if (this.retry.length < retry) {
-			promise = promise.catch(() => this.run());
+			const retry = this.options && this.options.retry || this.client.options.retry;
+			if (this.retry.length < retry) {
+				return this.run_(err2);
+			} else {
+				throw err2;
+			}
 		}
-
-		return promise;
 	}
 
 	debug(key, val) {
@@ -106,6 +118,27 @@ class ClientRuntime {
 				return item.toJSON();
 			}),
 		};
+	}
+
+	_error(err) {
+		const client = this.client;
+		const runner = this.getLastRunner();
+		if (client.options.anyToError) {
+			err = client.linker.anyToError(err, runner);
+		}
+
+		// 方便定位问题
+		if (
+			err &&
+			client.options.exportErrorInfo !== false &&
+			!err.fromClient &&
+			!err.CLIENTLINKER_TYPE &&
+			typeof err == 'object'
+		) {
+			utils.expandError(err, this, runner.flow.name);
+		}
+
+		return err;
 	}
 }
 

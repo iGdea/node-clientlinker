@@ -22,7 +22,7 @@ function httpAction(linker, serverRouterTime, req) {
 	client_msg.push(logmsg);
 
 	// 重试的时候，需要将tmp传回去
-	linker.on('retry', function(runtime) {
+	linker.on('retry', function({ runtime }) {
 		if (runtime._httpproxyBobyTmp) {
 			_.extend(runtime.tmp, runtime._httpproxyBobyTmp);
 		}

@@ -26,6 +26,10 @@ class FlowsRuntime {
 	}
 
 	async run() {
+		return this.run_();
+	}
+
+	run_() {
 		const runner = this.nextRunner();
 
 		if (!runner) {
@@ -45,7 +49,7 @@ class FlowsRuntime {
 		// 	clientFlows.length
 		// );
 
-		return runner.run();
+		return runner.run_();
 	}
 
 	nextRunner() {

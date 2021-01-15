@@ -295,10 +295,8 @@ describe('#run_error', function() {
 					client: {
 						confighandler: {
 							method: function() {
-								if (runTimes == 1) throw 333;
-								else {
-									return 555;
-								}
+								if (runTimes === 1) throw 333;
+								else return 555;
 							}
 						}
 					}
@@ -318,7 +316,7 @@ describe('#run_error', function() {
 
 			const lastRuntime = linker.lastRuntime;
 
-			linker.on('retry', function(runtime) {
+			linker.on('retry', function({ runtime }) {
 				if (runtime === lastRuntime) triggerTimes++;
 			});
 

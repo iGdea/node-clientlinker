@@ -128,7 +128,7 @@ class Linker extends EventEmitter {
 
 		if (!runtime.client) throw utils.newNotFoundError('NO CLIENT', runtime);
 
-		const retPromise = runtime.run();
+		const retPromise = runtime.run_();
 		// 兼容callback
 		if (callback) {
 			// 增加process.nextTick，防止error被promise捕捉到

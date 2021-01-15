@@ -12,22 +12,21 @@ class FlowRuntime {
 	}
 
 	async run() {
-		try {
-			debug('flow run:%s', this.flow.name);
-			// 必须要用await，否则直接return Promise.reject 无法捕获到
-			const ret = await this.flow.run(this.runtime, this);
-			return ret;
-		} catch (err) {
-			throw this._error(err);
-		}
+		return this.run_();
 	}
 
+	// 对内接口，直接去掉async
+	run_() {
+		return this.flow.run(this.runtime, this);
+	}
+
+	// 对外接口，使用async
 	async next() {
 		if (!this._nextRunnerPromise) {
 			const nextRunner = this.onetry.nextRunner();
 			if (nextRunner) {
 				debug('nextRunner:%s', nextRunner.flow.name);
-				this._nextRunnerPromise = nextRunner.run();
+				this._nextRunnerPromise = Promise.resolve(nextRunner.run_());
 			} else {
 				const runtime = this.runtime;
 				debug('flow out: %s', runtime.action);
@@ -45,26 +44,6 @@ class FlowRuntime {
 			name: this.flow.name,
 		};
 	}
-
-	_error(err) {
-		const client = this.runtime.client;
-		if (client.options.anyToError)
-			err = client.linker.anyToError(err, this);
-
-		// 方便定位问题
-		if (
-			err &&
-			client.options.exportErrorInfo !== false &&
-			!err.fromClient &&
-			!err.CLIENTLINKER_TYPE &&
-			typeof err == 'object'
-		) {
-			utils.expandError(err, this.runtime, this.flow.name);
-		}
-
-		return err;
-	}
-
 }
 
 exports.FlowRuntime = FlowRuntime;
