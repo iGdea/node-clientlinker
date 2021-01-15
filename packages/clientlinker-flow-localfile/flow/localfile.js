@@ -1,7 +1,7 @@
 'use strict';
 
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
+const PromiseMap = require('p-map');
+const fs = require('fs').promises;
 const vm = require('vm');
 const debug = require('debug')('clientlinker-flow-localfile');
 
@@ -19,7 +19,7 @@ function localfile(runtime, callback) {
 		const fileInfo = exists[0];
 		if (!fileInfo) return callback.next();
 
-		return fs.readFileAsync(fileInfo.file, { encoding: 'utf8' })
+		return fs.readFile(fileInfo.file, { encoding: 'utf8' })
 			.then(function(content) {
 				return parseContent(client.linker, content, fileInfo.extname);
 			})
@@ -32,12 +32,12 @@ function localfile(runtime, callback) {
 }
 
 function checkExists(file, extnames) {
-	return Promise.map(
+	return PromiseMap(
 		extnames,
 		function(extname) {
 			const thisFile = file + '.' + extname;
 
-			return fs.statAsync(thisFile).then(
+			return fs.stat(thisFile).then(
 				function(stats) {
 					if (stats.isFile())
 						return { extname: extname, file: thisFile };

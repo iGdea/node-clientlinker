@@ -1,8 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
+const fs = require('fs').promises;
 const ini = require('ini');
 const debug = require('debug')('clientlinker-flow-mysql');
 const mysql = require('mysql');
@@ -74,7 +73,7 @@ function initPool(client) {
 	// 如果有配置文件，优先使用配置文件
 	if (options.mysqlConfigFile && options.mysqlConfigKey) {
 		getConfigPromise = fs
-			.readFileAsync(options.mysqlConfigFile, { encoding: 'utf8' })
+			.readFile(options.mysqlConfigFile, { encoding: 'utf8' })
 			.then(function(data) {
 				const json = ini.parse(data);
 				debug('config json:%o', json);

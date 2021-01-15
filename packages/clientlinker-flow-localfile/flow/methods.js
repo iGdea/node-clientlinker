@@ -1,7 +1,7 @@
 'use strict';
 
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
+const PromiseMap = require('p-map');
+const fs = require('fs').promises;
 const debug = require('debug')('clientlinker-flow-localfile:methods');
 
 module.exports = methods;
@@ -9,9 +9,9 @@ function methods(client) {
 	const pathdir = client.options.localfile;
 	if (!pathdir) return;
 
-	return fs.readdirAsync(pathdir).then(
+	return fs.readdir(pathdir).then(
 		function(dirs) {
-			return Promise.map(
+			return PromiseMap(
 				dirs,
 				function(filename) {
 					if (filename[0] == '.') return;
@@ -19,7 +19,7 @@ function methods(client) {
 					const arr = filename.split('.');
 					const extname = arr.pop();
 					if (extname == 'json' || extname == 'js') {
-						return fs.statAsync(pathdir + '/' + filename).then(
+						return fs.stat(pathdir + '/' + filename).then(
 							function(stats) {
 								if (stats.isFile()) return arr.join('.');
 							},

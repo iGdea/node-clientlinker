@@ -30,7 +30,6 @@
   "author": "Bacra <bacra.woo@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.2",
     "chalk": "^2.4.1",
     "clientlinker-core": "^10.2.3",
     "commander": "2.9.0",
