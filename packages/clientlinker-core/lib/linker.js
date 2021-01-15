@@ -107,8 +107,6 @@ class Linker extends EventEmitter {
 		let callback = args[3];
 		let options = args[4];
 
-		if (process.domain) debug('run by domain: %s', action);
-
 		if (typeof callback != 'function') {
 			if (callback && args.length < 5) {
 				options = callback;
@@ -149,11 +147,10 @@ class Linker extends EventEmitter {
 	}
 
 	_parseAction(action) {
-		const list = this._clients;
 		const info = utils.parseAction(action);
 
 		return {
-			client: list[info.clientName],
+			client: this._clients[info.clientName],
 			method: info.method
 		};
 	}
