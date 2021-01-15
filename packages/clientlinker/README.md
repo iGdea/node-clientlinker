@@ -28,7 +28,6 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 {
   flows: ['logger', 'pkghandler', 'httpproxy'],
   defaults: {
-    anyToError: true,
     timeout: 4000
   },
   clients: {
@@ -101,6 +100,11 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 
 
 # Upgrade
+
+### 7.x.x => 8.0.0
+
+ * remove `andToError`
+ * remove ext errinfo of `expandError`
 
 ### 6.x.x => 7.0.0
 

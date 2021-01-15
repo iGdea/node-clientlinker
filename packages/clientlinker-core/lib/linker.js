@@ -203,4 +203,3 @@ exports.Linker = Linker;
 
 Linker.prototype.JSON = utils.JSON;
 Linker.prototype.version = require('../package.json').version;
-Linker.prototype.anyToError = utils.anyToError;

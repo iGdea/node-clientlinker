@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
-const utils = require('../utils');
 
 class ClientRuntime {
 	constructor(linker, action, query, body, options) {
@@ -53,19 +52,13 @@ class ClientRuntime {
 			error: err
 		});
 
-		try {
-			const data = await onetry.run_();
-			return data;
-		} catch (err) {
-			const err2 = this._error(err);
-
-			const retry = this.options && this.options.retry || this.client.options.retry;
-			if (this.retry.length < retry) {
-				return this.run_(err2);
-			} else {
-				throw err2;
-			}
+		let promise = onetry.run_();
+		const retry = this.options && this.options.retry || this.client.options.retry;
+		if (this.retry.length < retry) {
+			promise = promise.catch(err => this.run_(err));
 		}
+
+		return promise;
 	}
 
 	debug(key, val) {
@@ -118,27 +111,6 @@ class ClientRuntime {
 				return item.toJSON();
 			}),
 		};
-	}
-
-	_error(err) {
-		const client = this.client;
-		const runner = this.getLastRunner();
-		if (client.options.anyToError) {
-			err = client.linker.anyToError(err, runner);
-		}
-
-		// 方便定位问题
-		if (
-			err &&
-			client.options.exportErrorInfo !== false &&
-			!err.fromClient &&
-			!err.CLIENTLINKER_TYPE &&
-			typeof err == 'object'
-		) {
-			utils.expandError(err, this, runner.flow.name);
-		}
-
-		return err;
 	}
 }
 

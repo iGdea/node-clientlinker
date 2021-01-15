@@ -27,7 +27,6 @@ or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flo
 {
   flows: ['logger', 'pkghandler', 'httpproxy'],
   defaults: {
-    anyToError: true,
     timeout: 4000
   },
   clients: {

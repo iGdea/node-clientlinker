@@ -92,11 +92,6 @@ describe('#run_error', function() {
 				debug('err: %s', err.stack);
 				expect(err).to.be.an(Error);
 				expect(err.CLIENTLINKER_TYPE).to.be('CLIENT FLOW OUT');
-				// expect(err.CLIENTLINKER_ACTION).to.be('client.not_exit_method');
-				// expect(err.CLIENTLINKER_CLIENT).to.be('client');
-				expect(err.fromClient).to.be('client');
-				expect(err.fromClientFlow).to.be(undefined);
-				expect(err.fromClientMethod).to.be('not_exit_method');
 			}
 		);
 
@@ -107,9 +102,6 @@ describe('#run_error', function() {
 			function(err) {
 				expect(err).to.be.an(Error);
 				expect(err.message).to.be('errmsg');
-				expect(err.fromClient).to.be('client');
-				expect(err.fromClientFlow).to.be('confighandler');
-				expect(err.fromClientMethod).to.be('method2');
 			}
 		);
 
@@ -160,94 +152,6 @@ describe('#run_error', function() {
 		);
 	});
 
-	it('#anyToError', function() {
-		const linker = clientlinker({
-			flows: ['confighandler'],
-			defaults: { anyToError: true },
-			clients: {
-				client: {
-					confighandler: {
-						method1: function() {
-							return Promise.reject('errmsg');
-						},
-						method2: function() {
-							return Promise.reject();
-						},
-						method3: function() {
-							return Promise.reject(-1);
-						},
-						method4: function() {
-							return Promise.reject(new Error('errmsg'));
-						}
-					}
-				}
-			}
-		});
-		linker.flow(
-			'confighandler',
-			require('clientlinker-flow-confighandler-test').flows.confighandler
-		);
-
-		const promise1 = linker.run('client.method1').then(
-			function() {
-				expect().fail();
-			},
-			function(err) {
-				expect(err).to.be.an(Error);
-				expect(err.message).to.be('errmsg');
-				expect(err.isClientLinkerNewError).to.be.ok();
-			}
-		);
-
-		const promise2 = linker.run('client.method2').then(
-			function() {
-				expect().fail();
-			},
-			function(err) {
-				expect(err).to.be.an(Error);
-				expect(err.message).to.be('CLIENT_LINKER_DEFERT_ERROR');
-				expect(err.isClientLinkerNewError).to.be.ok();
-			}
-		);
-
-		const promise3 = linker.run('client.method3').then(
-			function() {
-				expect().fail();
-			},
-			function(err) {
-				expect(err).to.be.an(Error);
-				expect(err.message).to.be('client,client.method3,-1');
-				expect(err.isClientLinkerNewError).to.be.ok();
-			}
-		);
-
-		const promise4 = linker.run('client.method4').then(
-			function() {
-				expect().fail();
-			},
-			function(err) {
-				expect(err).to.be.an(Error);
-				expect(err.message).to.be('errmsg');
-				expect(err.isClientLinkerNewError).to.not.be.ok();
-			}
-		);
-
-		const promise5 = linker.run('client.method5').then(
-			function() {
-				expect().fail();
-			},
-			function(err) {
-				expect(err).to.be.an(Error);
-				expect(err.message).to.be(
-					'CLIENTLINKER:NotFound,client.method5'
-				);
-				expect(err.isClientLinkerNewError).to.not.be.ok();
-			}
-		);
-
-		return Promise.all([promise1, promise2, promise3, promise4, promise5]);
-	});
-
 	it('#from flow run', function() {
 		const linker = clientlinker({
 			flows: ['custom'],
@@ -289,7 +193,6 @@ describe('#run_error', function() {
 				},
 				defaults: {
 					retry: 5,
-					anyToError: true
 				},
 				clients: {
 					client: {

@@ -15,8 +15,6 @@ describe('#logger', function() {
 				try {
 					if (type == 'error') {
 						expect(err.message).to.be('error');
-						expect(err.fromClient).to.be('client_error');
-						expect(err.fromClientFlow).to.be('confighandler');
 						expect(data).to.be(null);
 						errorDeffer.resolve();
 					} else {
