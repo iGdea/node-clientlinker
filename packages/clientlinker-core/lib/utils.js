@@ -1,7 +1,5 @@
 'use strict';
 
-exports.DEFAULT_ERROR = 'CLIENT_LINKER_DEFERT_ERROR';
-
 exports.newNotFoundError = newNotFoundError;
 function newNotFoundError(type, runtime) {
 	const err = new Error('CLIENTLINKER:NotFound,' + runtime.action);

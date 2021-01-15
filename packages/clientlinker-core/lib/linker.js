@@ -97,26 +97,14 @@ class Linker extends EventEmitter {
 	}
 
 	// 标准输入参数
-	run(action, query, body, options) {
-		/* eslint no-unused-vars: off */
+	run() {
 		return this.runIn(arguments, 'run');
 	}
 
-	async runIn(args, source, env) {
-		const action = args[0];
-		let callback = args[3];
-		let options = args[4];
-
-		if (typeof callback != 'function') {
-			if (callback && args.length < 5) {
-				options = callback;
-			}
-
-			callback = null;
-		}
-
+	async runIn([action, query, body, options], source, env) {
 		const data = this._parseAction(action);
-		const runtime = new ClientRuntime(this, action, args[1], args[2], options);
+
+		const runtime = new ClientRuntime(this, action, query, body, options);
 		if (env) runtime.env = env;
 		runtime.method = data.method;
 		runtime.client = data.client;
@@ -128,17 +116,7 @@ class Linker extends EventEmitter {
 
 		if (!runtime.client) throw utils.newNotFoundError('NO CLIENT', runtime);
 
-		const retPromise = runtime.run_();
-		// 兼容callback
-		if (callback) {
-			// 增加process.nextTick，防止error被promise捕捉到
-			retPromise.then(
-				data => process.nextTick(() => callback(null, data)),
-				err => process.nextTick(() => callback(err || utils.DEFAULT_ERROR))
-			);
-		}
-
-		return retPromise;
+		return runtime.run_();
 	}
 
 	// 解析action

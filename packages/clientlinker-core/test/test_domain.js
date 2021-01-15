@@ -4,48 +4,7 @@ const clientlinker = require('../');
 const expect = require('expect.js');
 const debug = require('debug')('clientlinker:test_domain');
 
-describe('#domain', function() {
-	it('#callback', function(done) {
-		const linker = clientlinker({
-			flows: ['confighandler'],
-			clients: {
-				client: {
-					confighandler: {
-						method: function() {}
-					}
-				}
-			}
-		});
-
-		linker.flow(
-			'confighandler',
-			require('clientlinker-flow-confighandler-test').flows.confighandler
-		);
-
-		const domain = require('domain');
-		const dm = domain.create();
-
-		dm.on('error', function(err) {
-			debug('domain err:%s', err.stack);
-			let mainErr;
-			try {
-				expect(err).to.be(333);
-			} catch (err) {
-				mainErr = err;
-			}
-
-			// domian onerror之后还会保留 process.domain
-			dm.exit();
-			done(mainErr);
-		});
-		dm.run(function() {
-			linker.run('client.method', null, null, function(err) {
-				expect(err).to.be(null);
-				throw 333;
-			});
-		});
-	});
-
+describe('#domain', () => {
 	it('#promise', function() {
 		const linker = clientlinker({
 			flows: ['confighandler'],

@@ -109,7 +109,7 @@ describe('#base', function() {
 		});
 	});
 
-	it('#clientrun', function(done) {
+	it('#clientrun', async () => {
 		// this.timeout(60*1000);
 		let runned = false;
 		const linker = clientlinker({
@@ -122,11 +122,8 @@ describe('#base', function() {
 		});
 
 		linker.client('client', { flows: ['custom'] });
-		linker.run('client.xxxx', null, null, function(err) {
-			expect(err).to.be(null);
-			expect(runned).to.be.ok();
-			done();
-		});
+		await linker.run('client.xxxx');
+		expect(runned).to.be.ok();
 	});
 
 	it('#getRunnedFlowByName', function() {

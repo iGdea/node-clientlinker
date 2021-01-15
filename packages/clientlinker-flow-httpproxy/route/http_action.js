@@ -134,7 +134,7 @@ function runAction(
 
 		debug('[%s] catch proxy route', action);
 
-		const args = [action, body.query, body.body, null, body.options];
+		const args = [action, body.query, body.body, body.options];
 		const env = _.extend({}, body.env, {
 			httpproxyHeaders: headers,
 			httpproxyQuery: query

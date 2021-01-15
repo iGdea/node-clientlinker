@@ -30,13 +30,6 @@ describe('#run_error', function() {
 			require('clientlinker-flow-confighandler-test').flows.confighandler
 		);
 
-		const promise1 = new Promise(function(resolve) {
-			linker.run('client.method', null, null, function(err) {
-				expect(err).to.be(333);
-				resolve();
-			});
-		});
-
 		const promise2 = linker.run('client.method').then(
 			function() {
 				expect().fail();
@@ -106,7 +99,6 @@ describe('#run_error', function() {
 		);
 
 		return Promise.all([
-			promise1,
 			promise2,
 			promise3,
 			promise4,
@@ -283,24 +275,11 @@ describe('#run_error', function() {
 			require('clientlinker-flow-confighandler-test').flows.confighandler
 		);
 
-		let resolve;
-		const callbackPromise = new Promise(function(resolve0) {
-			resolve = resolve0;
-		});
-		const runPromise = linker
-			.run('client.method', null, null, function(err) {
-				expect(err).to.be('CLIENT_LINKER_DEFERT_ERROR');
-				resolve();
-			})
+		return linker
+			.run('client.method')
 			.then(
-				function() {
-					expect().fail();
-				},
-				function(err) {
-					expect(err).to.be(undefined);
-				}
+				() => expect().fail(),
+				err => expect(err).to.be(undefined)
 			);
-
-		return Promise.all([callbackPromise, runPromise]);
 	});
 });

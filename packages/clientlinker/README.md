@@ -101,10 +101,11 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
 
 # Upgrade
 
-### 7.x.x => 8.0.0
+### 11.x.x => 12.0.0
 
  * remove `andToError`
  * remove ext errinfo of `expandError`
+ * remove `callback` param of `clientlinker.run` and `clientlinker.runIn`
 
 ### 6.x.x => 7.0.0
 
