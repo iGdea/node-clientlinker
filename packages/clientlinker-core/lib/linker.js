@@ -2,9 +2,9 @@
 
 const _ = require('lodash');
 const debug = require('debug')('clientlinker:linker');
-const Client = require('./client').Client;
-const Flow = require('./flow').Flow;
-const Runtime = require('./runtime/client_runtime').ClientRuntime;
+const { Client } = require('./client');
+const { Flow } = require('./flow');
+const { ClientRuntime } = require('./runtime/client_runtime');
 const utils = require('./utils');
 const { EventEmitter } = require('events');
 
@@ -116,7 +116,7 @@ class Linker extends EventEmitter {
 		}
 
 		const data = this._parseAction(action);
-		const runtime = new Runtime(this, action, args[1], args[2], options);
+		const runtime = new ClientRuntime(this, action, args[1], args[2], options);
 		if (env) runtime.env = env;
 		runtime.method = data.method;
 		runtime.client = data.client;
@@ -159,7 +159,7 @@ class Linker extends EventEmitter {
 	async methods() {
 		const clients = this._clients;
 
-		const promises = _.map(clients, async function(client) {
+		const promises = _.map(clients, async (client) => {
 			const methodList = await client.methods();
 			return {
 				client: client,
@@ -171,7 +171,7 @@ class Linker extends EventEmitter {
 
 		// 整理
 		const map = {};
-		list.forEach(function(item) {
+		list.forEach(item => {
 			map[item.client.name] = item;
 		});
 
@@ -191,7 +191,7 @@ class Linker extends EventEmitter {
 			const client = clients[clientName];
 			if (client) client.cache = {};
 		} else {
-			_.each(clients, function(item) {
+			_.each(clients, item => {
 				item.cache = {};
 			});
 		}

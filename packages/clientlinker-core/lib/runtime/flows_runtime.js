@@ -79,7 +79,7 @@ class FlowsRuntime {
 
 	toJSON() {
 		return {
-			runned: this.runned.map(function(item) {
+			runned: this.runned.map(item => {
 				return item.toJSON();
 			}),
 		};

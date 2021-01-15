@@ -25,7 +25,7 @@ function clientlinker(options) {
 	const linker = new Linker(options);
 	// client options
 	if (options.clients) {
-		_.each(options.clients, function(handler, name) {
+		_.each(options.clients, (handler, name) => {
 			linker.client(name, handler);
 		});
 	}
@@ -33,15 +33,15 @@ function clientlinker(options) {
 	if (options.customFlows) {
 		deprecate('`options.customFlows` will not be supported.');
 
-		_.each(options.customFlows, function(handler, name) {
-			linker.flow(name, function(flow) {
+		_.each(options.customFlows, (handler, name) => {
+			linker.flow(name, flow => {
 				flow.run = handler;
 				if (handler.methods) flow.methods = handler.methods;
 			});
 		});
 	}
 
-	linker.clients().then(function(clients) {
+	linker.clients().then(clients => {
 		debug('init clients:%s', Object.keys(clients));
 	});
 
