@@ -6,6 +6,7 @@
     "bootstrap": "lerna bootstrap --no-ci",
     "ls": "lerna ls",
     "pub": "lerna publish",
+    "pub2": "cd packages; for i in clientlinker*; do cd $i; npm publish; cd ..; done",
     "test": "lerna run test --",
     "test-ci": "lerna run test-ci --",
     "test-cov": "lerna run test-cov --"
