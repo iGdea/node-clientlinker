@@ -37,20 +37,22 @@ linker.flow(
 
 suite
 	.add('#native promise', deferred => {
-		new Promise(r => methodHandler().then(r))
-			.then(deferred.resolve.bind(deferred));
+		methodHandler()
+			.then(() => deferred.resolve());
 	}, { defer: true })
 	.add('#native promise2', deferred => {
-		methodHandler().then(deferred.resolve.bind(deferred));
+		methodHandler()
+			.then(methodHandler)
+			.then(() => deferred.resolve());
 	}, { defer: true })
 
 	.add('#clientlinker', deferred => {
 		linker.run('client.method')
-			.then(deferred.resolve.bind(deferred));
+			.then(() => deferred.resolve());
 	}, { defer: true })
 	.add('#clientlinker2', deferred => {
 		linker.run('client2.method')
-			.then(deferred.resolve.bind(deferred));
+			.then(() => deferred.resolve());
 	}, { defer: true })
 
 	.on('cycle', function(event) {
