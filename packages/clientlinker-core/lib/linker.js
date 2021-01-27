@@ -99,7 +99,7 @@ class Linker extends EventEmitter {
 		return this.runIn(arguments, 'run');
 	}
 
-	async runIn([action, query, body, options], source, env) {
+	runIn([action, query, body, options], source, env) {
 		const data = this._parseAction(action);
 
 		const runtime = new ClientRuntime(this, action, query, body, options);
