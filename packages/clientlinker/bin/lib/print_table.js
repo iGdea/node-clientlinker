@@ -1,5 +1,3 @@
-'use strict';
-
 const table = require('table');
 const useSymbole = (exports.useSymbole =
 	// = process.platform == 'win32' ? '\u221A' : '✓';

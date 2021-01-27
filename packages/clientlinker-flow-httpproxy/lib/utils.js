@@ -1,5 +1,3 @@
-'use strict';
-
 exports.formatLogTime = formatLogTime;
 function formatLogTime(date) {
 	return (

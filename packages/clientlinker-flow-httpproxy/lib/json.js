@@ -1,5 +1,3 @@
-'use strict';
-
 const KEY = Date.now() + process.pid + Math.floor(Math.random() * 10000);
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 

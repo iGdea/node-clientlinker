@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('expect.js');
 const request = require('request');
 const httpproxy = require('../flow/httpproxy');

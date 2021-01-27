@@ -1,5 +1,3 @@
-'use strict';
-
 const _ = require('lodash');
 const rlutils = require('./rlutils');
 const printTable = require('./print_table').printTable;

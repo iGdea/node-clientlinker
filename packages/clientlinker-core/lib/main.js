@@ -1,5 +1,3 @@
-'use strict';
-
 const _ = require('lodash');
 const Linker = require('./linker').Linker;
 const debug = require('debug')('clientlinker');

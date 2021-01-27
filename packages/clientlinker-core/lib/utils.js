@@ -1,5 +1,3 @@
-'use strict';
-
 exports.newNotFoundError = newNotFoundError;
 function newNotFoundError(type, runtime) {
 	const err = new Error('CLIENTLINKER:NotFound,' + runtime.action);

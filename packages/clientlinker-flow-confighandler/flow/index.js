@@ -1,5 +1,3 @@
-'use strict';
-
 const confighandler = require('./confighandler');
 const methods = require('./methods');
 

@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('expect.js');
 const rlutils = require('../bin/lib/rlutils');
 const Command = require('../bin/lib/command').Command;

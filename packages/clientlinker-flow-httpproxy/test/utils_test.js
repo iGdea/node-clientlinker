@@ -1,5 +1,3 @@
-'use strict';
-
 let http = require('http');
 let expr = require('express');
 let debug = require('debug')('clientlinker-flow-httpproxy:utils_test');

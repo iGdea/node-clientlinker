@@ -2,8 +2,6 @@
  * 校验数据完整性
  */
 
-'use strict';
-
 const debug = require('debug')('clientlinker-flow-httpproxy:route');
 const signature = require('../lib/signature');
 

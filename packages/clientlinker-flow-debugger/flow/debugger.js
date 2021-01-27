@@ -1,5 +1,3 @@
-'use strict';
-
 const debug = require('debug')('clientlinker-flow-debugger');
 
 module.exports = debuggerFlow;

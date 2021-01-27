@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('expect.js');
 const clientlinker = require('clientlinker-core');
 const confighandlerTest = require('clientlinker-flow-confighandler-test');

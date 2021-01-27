@@ -1,5 +1,3 @@
-'use strict';
-
 const PromiseMap = require('p-map');
 const fs = require('fs').promises;
 const debug = require('debug')('clientlinker-flow-localfile:methods');

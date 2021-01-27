@@ -1,5 +1,3 @@
-'use strict';
-
 const clientlinker = require('../');
 const expect = require('expect.js');
 

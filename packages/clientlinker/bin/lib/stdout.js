@@ -1,5 +1,3 @@
-'use strict';
-
 const util = require('util');
 
 exports.is_verbose = true;

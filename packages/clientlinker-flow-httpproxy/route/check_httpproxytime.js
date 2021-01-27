@@ -6,8 +6,6 @@
  * 服务器时间和本地时间可能不一致，或者线程通讯卡顿；容易导致数据校验失败
  */
 
-'use strict';
-
 const debug = require('debug')('clientlinker-flow-httpproxy:route');
 const LRUCache = require('lru-cache');
 const utils = require('../lib/utils');

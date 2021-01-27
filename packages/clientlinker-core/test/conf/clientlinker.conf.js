@@ -1,5 +1,3 @@
-'use strict';
-
 let clientlinker = require('../../');
 
 let linker = clientlinker({

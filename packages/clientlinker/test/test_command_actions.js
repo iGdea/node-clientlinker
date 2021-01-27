@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('expect.js');
 const commandActions = require('../bin/lib/command_actions');
 const printTable = require('../bin/lib/print_table');

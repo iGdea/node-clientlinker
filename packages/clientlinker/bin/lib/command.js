@@ -1,5 +1,3 @@
-'use strict';
-
 const Command2 = require('commander').Command;
 const pkg = require('../../package.json');
 const rlutils = require('./rlutils');

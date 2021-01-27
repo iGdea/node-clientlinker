@@ -1,5 +1,3 @@
-'use strict';
-
 const debuggerFlow = require('./debugger');
 
 module.exports = function(flow) {

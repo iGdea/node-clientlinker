@@ -1,5 +1,3 @@
-'use strict';
-
 const httpproxy = require('./httpproxy');
 const methods = require('./methods');
 

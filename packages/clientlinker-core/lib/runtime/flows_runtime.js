@@ -1,5 +1,3 @@
-'use strict';
-
 const debug = require('debug')('clientlinker:flows_runtime');
 const FlowRuntime = require('./flow_runtime').FlowRuntime;
 const utils = require('../utils');

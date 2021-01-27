@@ -1,5 +1,3 @@
-'use strict';
-
 const crypto = require('crypto');
 
 exports.sha_content = sha_content;

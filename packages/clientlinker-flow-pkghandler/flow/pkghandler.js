@@ -1,5 +1,3 @@
-'use strict';
-
 const debug = require('debug')('clientlinker-flow-pkghandler');
 
 exports = module.exports = function pkghandler(runtime, callback) {

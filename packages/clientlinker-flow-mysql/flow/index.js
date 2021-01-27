@@ -1,5 +1,3 @@
-'use strict';
-
 const mysqlFlow = require('./mysql');
 
 module.exports = function(flow) {

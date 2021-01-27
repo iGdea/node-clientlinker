@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('expect.js');
 const json = require('../lib/json');
 

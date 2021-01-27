@@ -1,5 +1,3 @@
-'use strict';
-
 const rlutils = require('../bin/lib/rlutils');
 const expect = require('expect.js');
 const clientlinker = require('../');

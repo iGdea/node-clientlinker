@@ -1,5 +1,3 @@
-'use strict';
-
 const httpAction = require('./http_action');
 const reqUniqKey = require('./req_uniq_key');
 

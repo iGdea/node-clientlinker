@@ -1,5 +1,3 @@
-'use strict';
-
 const pkghandler = require('./pkghandler');
 const methods = require('./methods');
 

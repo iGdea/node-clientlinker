@@ -1,5 +1,3 @@
-'use strict';
-
 const Command = require('./lib/command').Command;
 const commandActions = require('./lib/command_actions');
 const stdout = require('./lib/stdout');

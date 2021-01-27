@@ -2,8 +2,6 @@
  * 校验数据时效性和唯一性
  */
 
-'use strict';
-
 const debug = require('debug')('clientlinker-flow-httpproxy:route');
 const LRUCache = require('lru-cache');
 const reqUniqKey = require('./req_uniq_key');

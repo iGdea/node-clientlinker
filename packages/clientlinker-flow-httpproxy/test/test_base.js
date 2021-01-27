@@ -1,5 +1,3 @@
-'use strict';
-
 let expect = require('expect.js');
 let utilsTestHttpproxy = require('./utils_test');
 let confighandlerTest = require('clientlinker-flow-confighandler-test');
