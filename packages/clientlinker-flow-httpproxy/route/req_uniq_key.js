@@ -1,5 +1,4 @@
-const Promise = require('bluebird');
-const rawBody = Promise.promisify(require('raw-body'));
+const rawBody = require('util').promisify(require('raw-body'));
 const aesid = require('aesid');
 
 exports = module.exports = reqUniqKey;

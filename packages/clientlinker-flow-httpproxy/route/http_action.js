@@ -1,7 +1,6 @@
-const Promise = require('bluebird');
 const _ = require('lodash');
 const debug = require('debug')('clientlinker-flow-httpproxy:route');
-const rawBody = Promise.promisify(require('raw-body'));
+const rawBody = require('util').promisify(require('raw-body'));
 const json = require('../lib/json');
 const utils = require('../lib/utils');
 
