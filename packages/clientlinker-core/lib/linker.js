@@ -3,12 +3,14 @@ const debug = require('debug')('clientlinker:linker');
 const { Client } = require('./client');
 const { Flow } = require('./flow');
 const { ClientRuntime } = require('./runtime/client_runtime');
+const deprecate = require('depd')('clientlinker');
 const utils = require('./utils');
-const { EventEmitter } = require('events');
+// const { EventEmitter } = require('events');
 
-class Linker extends EventEmitter {
+class Linker {
+// class Linker extends EventEmitter {
 	constructor(options) {
-		super();
+		// super();
 
 		this._clients = {};
 		this.flows = {};
@@ -96,25 +98,36 @@ class Linker extends EventEmitter {
 
 	// 标准输入参数
 	run() {
-		return this.runIn(arguments, 'run');
+		const runtime = this._runtime.apply(this, arguments);
+		if (!runtime.client) {
+			return Promise.reject(utils.newNotFoundError('NO CLIENT', runtime));
+		}
+
+		// 通过这种手段，同步情况下，暴露runtime
+		// runtime保存着运行时的所有数据，方便进行调试
+		this.lastRuntime = runtime;
+
+		return runtime.run_();
 	}
 
-	runIn([action, query, body, options], source, env) {
+	runtime() {
+		const runtime = this._runtime.apply(this, arguments);
+
+		// 直接使用Promise包裹，比async性能好
+		return runtime.client
+			? Promise.resolve(runtime)
+			: Promise.reject(utils.newNotFoundError('NO CLIENT', runtime))
+	}
+
+	_runtime(action, query, body, options, env) {
 		const data = this._parseAction(action);
 
 		const runtime = new ClientRuntime(this, action, query, body, options);
 		if (env) runtime.env = env;
 		runtime.method = data.method;
 		runtime.client = data.client;
-		runtime.env.source = source;
 
-		// 通过这种手段，同步情况下，暴露runtime
-		// runtime保存着运行时的所有数据，方便进行调试
-		this.lastRuntime = runtime;
-
-		if (!runtime.client) throw utils.newNotFoundError('NO CLIENT', runtime);
-
-		return runtime.run_();
+		return runtime;
 	}
 
 	// 解析action
@@ -179,3 +192,11 @@ exports.Linker = Linker;
 
 Linker.prototype.JSON = utils.JSON;
 Linker.prototype.version = require('../package.json').version;
+Linker.prototype.runIn = deprecate.function(async function([
+	action, query, body, callback, options
+] = [], source, env) {
+	return this.run(
+		action, query, body, typeof callback === 'function' ? options : callback,
+		env
+	);
+}, '`runIn` will not be supported.');

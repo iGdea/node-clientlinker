@@ -172,7 +172,7 @@ describe('#run_error', function() {
 	describe('#retry', function() {
 		it('#in defualts', function() {
 			let runTimes = 0;
-			let triggerTimes = 0;
+			// let triggerTimes = 0;
 			const linker = clientlinker({
 				flows: ['timingCheck', 'confighandler'],
 				customFlows: {
@@ -204,14 +204,14 @@ describe('#run_error', function() {
 			const retPromise = linker.run('client.method').then(function(data) {
 				expect(data).to.be(555);
 				expect(runTimes).to.be(2);
-				expect(triggerTimes).to.be(2);
+				// expect(triggerTimes).to.be(2);
 			});
 
-			const lastRuntime = linker.lastRuntime;
+			// const lastRuntime = linker.lastRuntime;
 
-			linker.on('retry', function({ runtime }) {
-				if (runtime === lastRuntime) triggerTimes++;
-			});
+			// linker.on('retry', function({ runtime }) {
+			// 	if (runtime === lastRuntime) triggerTimes++;
+			// });
 
 			return retPromise;
 		});

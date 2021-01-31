@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const debug = require('debug')('clientlinker-flow-httpproxy');
-const deprecate = require('depd')('clientlinker-flow-httpproxy');
+// const deprecate = require('depd')('clientlinker-flow-httpproxy');
 const request = require('request');
 const signature = require('../lib/signature');
 const json = require('../lib/json');
@@ -36,11 +36,10 @@ async function httpproxy(runtime, callback) {
 
 	// headers 头部信息往往比其他部分更新神奇
 	debug(
-		'<%s> httpproxyHeaders: %o, env: %o, tmp: %o',
+		'<%s> httpproxyHeaders: %o, env: %o',
 		runtime.action,
 		params.headers,
 		requestBody.env,
-		requestBody.tmp
 	);
 
 	const { response, body } = await requestPromise(params);
@@ -59,36 +58,15 @@ async function httpproxy(runtime, callback) {
 		return callback.next();
 	}
 
-	// httpproxy运行后的变化，不需要同步过来
-	// if (data.env) {
-	// 	const keepEnv = { source: runtime.env.source };
-	// 	_.extend(runtime.env, data.env, keepEnv);
-	// }
-	// if (data.tmp) {
-	// 	const keepTmp = { httpproxyLevel: runtime.tmp.httpproxyLevel };
-	// 	_.extend(runtime.tmp, data.tmp, keepTmp);
-	// }
-
-	if (data.tmp && data.tmp.httpproxyLevelTotal) {
-		runtime.tmp.httpproxyLevelTotal = data.tmp.httpproxyLevelTotal;
-	}
-
 	// 预留接口，在客户端显示server端日志
 	if (data.httpproxy_msg && Array.isArray(data.httpproxy_msg)) {
 		data.httpproxy_msg.forEach(msg => debug('[route response] %s', msg));
 	}
 
-	// 预留接口，在客户端现实server端兼容日志
-	if (data.httpproxy_deprecate && Array.isArray(data.httpproxy_deprecate)) {
-		data.httpproxy_deprecate.forEach(msg =>
-			deprecate('[route response] ' + msg)
-		);
-	}
-
-	if (response && response.statusCode != 200) {
+	if (response && response.statusCode !== 200) {
 		const err = new Error('httpproxy,response!200,' + response.statusCode);
 		debug('request err:%o', err);
-		if (response.statusCode == 501) {
+		if (response.statusCode === 501) {
 			runtime.debug && runtime.debug('httpproxyResponseError', err);
 			return callback.next();
 		}
@@ -108,11 +86,8 @@ function getRequestBody(runtime) {
 	if (!options.httpproxy) return false;
 
 	let httpproxyMaxLevel = options.httpproxyMaxLevel;
-	let httpproxyNextLevel = runtime.tmp.httpproxyLevel || 0;
-	let httpproxyLevelTotal =
-		runtime.tmp.httpproxyLevelTotal || httpproxyNextLevel;
+	let httpproxyNextLevel = runtime.env.httpproxyLevel || 0;
 	httpproxyNextLevel++;
-	httpproxyLevelTotal++;
 
 	if (
 		(!httpproxyMaxLevel && httpproxyMaxLevel !== 0) ||
@@ -131,15 +106,14 @@ function getRequestBody(runtime) {
 		return false;
 	}
 
-	runtime.tmp.httpproxyLevel = httpproxyNextLevel;
-	runtime.tmp.httpproxyLevelTotal = httpproxyLevelTotal;
-
 	const body = {
 		query: runtime.query,
 		body: runtime.body,
 		options: runtime.options,
-		env: runtime.env,
-		tmp: runtime.tmp
+		env: {
+			...runtime.env,
+			httpproxyLevel: httpproxyNextLevel,
+		},
 	};
 
 	return body;

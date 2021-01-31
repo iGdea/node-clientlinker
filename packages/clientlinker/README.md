@@ -106,6 +106,8 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
  * remove `andToError`
  * remove ext errinfo of `expandError`
  * remove `callback` param of `clientlinker.run` and `clientlinker.runIn`
+ * remove `retry` event
+ * remove `runtime.tmp`
 
 ### 6.x.x => 7.0.0
 

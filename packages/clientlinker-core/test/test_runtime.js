@@ -2,7 +2,7 @@ const clientlinker = require('../');
 const expect = require('expect.js');
 
 describe('#runtime', function() {
-	it('#runtime of retPromise', function() {
+	it('#get runtime', function() {
 		const linker = clientlinker();
 		linker.client('client', {});
 
@@ -23,7 +23,7 @@ describe('#runtime', function() {
 		const linker = clientlinker({
 			flows: ['custom1'],
 			customFlows: {
-				custom1: function(runtime) {
+				custom1(runtime) {
 					runtime.debug('key1', 21);
 				}
 			},
@@ -95,7 +95,8 @@ describe('#runtime', function() {
 				body: 'body',
 				options: 'run_options',
 				client: 'client',
-				env: { source: 'run' },
+				env:  {},
+				// env: { source: 'run' },
 				debugData: {},
 			});
 		});

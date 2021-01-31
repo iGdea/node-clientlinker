@@ -17,13 +17,9 @@ class ClientRuntime {
 		// 保存框架运行过程中的数据
 		// 如果使用httpproxy，必须是可以被序列化的
 		this.env = {};
-		// 保存运行过程中的数据，和env区别：会在重试的时候清理
-		// 比如httproxy运行次数
-		// 如果使用httpproxy，必须是可以被序列化的
-		this.tmp = {};
 
 		// 执行过程中额外生成的一些数据
-		this._debugData = {};
+		this._debugData = null;
 
 		// 运行中的状态
 		this.retry = [];
@@ -31,36 +27,31 @@ class ClientRuntime {
 	}
 
 	run() {
+		if (this.lastTry) this.retry = [];
 		return this.run_();
 	}
 
-	async run_(err) {
+	run_(err) {
 		const onetry = new FlowsRuntime(this);
 		this.lastTry = onetry;
-		this.tmp = {};
 
-		// 执行逻辑放到下一个event loop， linker.lastRuntime 在当前就可以获取到，逻辑更加清晰
-		// 也方便run之后，对runtime进行参数调整：clientlinker-flow-httpproxy修改tmp变量
-		await this.retry.push(onetry);
+		this.retry.push(onetry);
 
 		// 减少client linker的逻辑，将retry放到linker
 		// 否则要绑定removeAllListner
-		this.linker.emit('retry', {
-			runtime: this,
-			error: err
-		});
+		// this.linker.emit('retry', { runtime: this, error: err });
 
-		let promise = onetry.run_();
+		let promise = onetry.run();
 		const retry = this.options && this.options.retry || this.client.options.retry;
 		if (this.retry.length < retry) {
-			promise = promise.catch(err => this.run_(err));
+			promise = promise.catch(() => this.run_(err));
 		}
 
 		return promise;
 	}
 
 	debug(key, val) {
-		const data = this._debugData;
+		const data = this._debugData || (this._debugData = {});
 		switch (arguments.length) {
 			case 0:
 				return data;

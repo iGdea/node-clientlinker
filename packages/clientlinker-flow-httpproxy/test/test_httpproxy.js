@@ -130,7 +130,7 @@ describe('#httpproxy', function() {
 			let httpproxyKey = 'xxfde&d023';
 			initTestSvrLinker({
 				defaults: {
-					httpproxyKey: httpproxyKey
+					httpproxyKey
 				}
 			});
 
@@ -138,7 +138,7 @@ describe('#httpproxy', function() {
 				confighandlerTest.run(
 					initLinker({
 						defaults: {
-							httpproxyKey: httpproxyKey
+							httpproxyKey
 						}
 					})
 				);
@@ -150,7 +150,7 @@ describe('#httpproxy', function() {
 						const linker = initLinker({
 							flows: ['custom'],
 							defaults: {
-								httpproxyKey: httpproxyKey
+								httpproxyKey
 							},
 							customFlows: {
 								custom: function custom(runtime) {
@@ -202,7 +202,7 @@ describe('#httpproxy', function() {
 					const linker = initLinker({
 						flows: ['custom'],
 						defaults: {
-							httpproxyKey: httpproxyKey
+							httpproxyKey
 						},
 						customFlows: {
 							custom: function custom(runtime) {
@@ -246,7 +246,7 @@ describe('#httpproxy', function() {
 					const linker = initLinker({
 						flows: ['custom'],
 						defaults: {
-							httpproxyKey: httpproxyKey
+							httpproxyKey
 						},
 						customFlows: {
 							custom: function custom(runtime) {
@@ -277,62 +277,51 @@ describe('#httpproxy', function() {
 		});
 
 		describe('#httpproxyMaxLevel', function() {
-			function descKey(svrLevel) {
-				function itClientKey(clientLevel) {
-					it('#client run level:' + clientLevel, function() {
-						let linker = initLinker({
-							defaults: {
-								httpproxyMaxLevel: clientLevel
-							}
-						});
-						let retPromise = linker.run(
-							'client_its.method_no_exists'
-						);
-						let runtime = linker.lastRuntime;
-
-						return retPromise.then(
-							function() {
-								expect().fail();
-							},
-							function(err) {
-								expect(err.CLIENTLINKER_TYPE).to.be(
-									'CLIENT FLOW OUT'
-								);
-								expect(runtime.env.source).to.be('run');
-
-								if (clientLevel === 0) {
-									expect(
-										runtime.tmp.httpproxyLevelTotal
-									).to.be(undefined);
-									expect(runtime.tmp.httpproxyLevel).to.be(
-										undefined
-									);
-									let responseError = runtime.retry[0].getFlowRuntime(
-										'httpproxy'
-									).httpproxyResponseError;
-									expect(responseError).to.be(undefined);
-								} else {
-									let targetSvrLevel =
-										svrLevel > 0 ? svrLevel : 1;
-									expect(
-										runtime.tmp.httpproxyLevelTotal
-									).to.be(targetSvrLevel);
-									expect(runtime.tmp.httpproxyLevel).to.be(1);
-									let responseError = runtime.debug(
-										'httpproxyResponseError'
-									);
-									expect(responseError.message).to.be(
-										'httpproxy,response!200,501'
-									);
-									expect(err.message.substr(0, 22)).to.be(
-										'CLIENTLINKER:NotFound,'
-									);
-								}
-							}
-						);
+			function itClientKey(clientLevel) {
+				it('#client run level:' + clientLevel, function() {
+					let linker = initLinker({
+						defaults: {
+							httpproxyMaxLevel: clientLevel
+						}
 					});
-				}
+					let retPromise = linker.run(
+						'client_its.method_no_exists'
+					);
+					let runtime = linker.lastRuntime;
 
+					return retPromise.then(
+						function() {
+							expect().fail();
+						},
+						function(err) {
+							expect(err.CLIENTLINKER_TYPE).to.be(
+								'CLIENT FLOW OUT'
+							);
+							// expect(runtime.env.source).to.be('run');
+							expect(runtime.env.httpproxyLevel).to.be(undefined);
+
+							if (clientLevel === 0) {
+								const responseError = runtime.retry[0].getFlowRuntime(
+									'httpproxy'
+								).httpproxyResponseError;
+								expect(responseError).to.be(undefined);
+							} else {
+								const responseError = runtime.debug(
+									'httpproxyResponseError'
+								);
+								expect(responseError.message).to.be(
+									'httpproxy,response!200,501'
+								);
+								expect(err.message.substr(0, 22)).to.be(
+									'CLIENTLINKER:NotFound,'
+								);
+							}
+						}
+					);
+				});
+			}
+
+			function descKey(svrLevel) {
 				describe('#svrLevel:' + svrLevel, function() {
 					initTestSvrLinker({
 						// flows: ['httpproxy'],

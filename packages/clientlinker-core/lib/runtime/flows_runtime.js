@@ -23,17 +23,13 @@ class FlowsRuntime {
 		}
 	}
 
-	async run() {
-		return this.run_();
-	}
-
-	run_() {
+	run() {
 		const runner = this.nextRunner();
 
 		if (!runner) {
 			const runtime = this.runtime;
 			debug('flow out: %s', runtime.action);
-			throw utils.newNotFoundError('CLIENT NO FLOWS', runtime);
+			return Promise.reject(utils.newNotFoundError('CLIENT NO FLOWS', runtime));
 		}
 
 		// const client = runtime.client;
@@ -47,7 +43,7 @@ class FlowsRuntime {
 		// 	clientFlows.length
 		// );
 
-		return runner.run_();
+		return runner.run();
 	}
 
 	nextRunner() {

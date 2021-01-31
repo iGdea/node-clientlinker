@@ -1,12 +1,12 @@
-let http = require('http');
-let expr = require('express');
-let debug = require('debug')('clientlinker-flow-httpproxy:utils_test');
-let clientlinker = require('clientlinker-core');
-let proxyRoute = require('../route');
-let expect = require('expect.js');
-let confighandlerFlow = require('clientlinker-flow-confighandler');
-let confighandlerTest = require('clientlinker-flow-confighandler-test');
-let httpproxyFlow = require('../');
+const http = require('http');
+const expr = require('express');
+const debug = require('debug')('clientlinker-flow-httpproxy:utils_test');
+const clientlinker = require('clientlinker-core');
+const proxyRoute = require('../route');
+// const expect = require('expect.js');
+const confighandlerFlow = require('clientlinker-flow-confighandler');
+const confighandlerTest = require('clientlinker-flow-confighandler-test');
+const httpproxyFlow = require('../');
 
 exports.PORT = 3423;
 exports.initLinker = initLinker;
@@ -14,7 +14,7 @@ function initLinker(options) {
 	options || (options = {});
 	options.flows || (options.flows = ['httpproxy']);
 
-	let httpproxyQuery = options.httpproxyQuery
+	const httpproxyQuery = options.httpproxyQuery
 		? '?' + options.httpproxyQuery
 		: '';
 	(options.defaults || (options.defaults = {})).httpproxy =
@@ -27,7 +27,7 @@ function initLinker(options) {
 	options.clients.client_svr_noflows = {};
 	options.clients.client_svr_not_exists = {};
 
-	let linker = clientlinker(options);
+	const linker = clientlinker(options);
 	linker.flow('httpproxy', httpproxyFlow);
 	linker.flow('confighandler', confighandlerFlow);
 

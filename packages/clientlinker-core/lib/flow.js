@@ -17,5 +17,3 @@ class Flow {
 }
 
 exports.Flow = Flow;
-
-// require('./deps/dep_flow').proto(Flow);
