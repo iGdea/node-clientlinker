@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-confighandler-test",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Test for clientlinker confighandler",
   "main": "index.js",
   "keywords": [
