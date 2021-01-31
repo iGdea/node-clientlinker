@@ -1,5 +1,4 @@
 const Benchmark = require('benchmark');
-const suite = new Benchmark.Suite();
 const clientlinker = require('../');
 
 function methodHandler() {
@@ -33,20 +32,31 @@ linker.flow(
 	require('clientlinker-flow-confighandler-test').flows.confighandler
 );
 
+const suite = new Benchmark.Suite();
 suite
 	.add('#native promise', deferred => {
 		methodHandler()
 			.then(() => deferred.resolve());
 	}, { defer: true })
+	.add('#native async', async (deferred) => {
+		await methodHandler();
+		deferred.resolve();
+	}, { defer: true })
+	.add('#clientlinker', deferred => {
+		linker.run('client.method')
+			.then(() => deferred.resolve());
+	}, { defer: true })
+
+
 	.add('#native promise2', deferred => {
 		methodHandler()
 			.then(methodHandler)
 			.then(() => deferred.resolve());
 	}, { defer: true })
-
-	.add('#clientlinker', deferred => {
-		linker.run('client.method')
-			.then(() => deferred.resolve());
+	.add('#native async2', async (deferred) => {
+		await methodHandler();
+		await methodHandler();
+		deferred.resolve();
 	}, { defer: true })
 	.add('#clientlinker2', deferred => {
 		linker.run('client2.method')
