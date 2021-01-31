@@ -49,7 +49,7 @@ function initSvrLinker(options) {
 	};
 	options.customFlows || (options.customFlows = {});
 	options.customFlows.custom = function(runtime, callback) {
-		expect(runtime.env.source).to.be('httpproxy');
+		// expect(runtime.env.source).to.be('httpproxy');
 		return callback.next();
 	};
 
