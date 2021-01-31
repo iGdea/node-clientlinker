@@ -1,0 +1,34 @@
+{
+  "name": "clientlinker-benchmark",
+  "version": "1.0.0",
+  "description": "clientlinker benchmark",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env DEBUG=clientlinker* mocha test/test_*"
+  },
+  "keywords": [
+    "clientlinker",
+    "benchmark"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Bacra/node-clientlinker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bacra/node-clientlinker/issues"
+  },
+  "homepage": "https://github.com/Bacra/node-clientlinker#readme",
+  "author": "Bacra <bacra.woo@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=10.16.0"
+  },
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "clientlinker-core": "^11.1.0",
+    "clientlinker-flow-confighandler-test": "^3.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  }
+}

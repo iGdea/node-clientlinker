@@ -1,5 +1,5 @@
 const Benchmark = require('benchmark');
-const clientlinker = require('../');
+const clientlinker = require('clientlinker-core');
 
 function methodHandler() {
 	return Promise.resolve();
