@@ -63,6 +63,30 @@ suite
 			.then(() => deferred.resolve());
 	}, { defer: true })
 
+
+	.add('#native promise3', deferred => {
+		Promise.all([
+			methodHandler(),
+			methodHandler()
+		])
+			.then(() => deferred.resolve());
+	}, { defer: true })
+	.add('#native async3', async (deferred) => {
+		await Promise.all([
+			methodHandler(),
+			methodHandler()
+		]);
+		deferred.resolve();
+	}, { defer: true })
+	.add('#clientlinker3', deferred => {
+		Promise.all([
+			linker.run('client.method'),
+			linker.run('client.method')
+		])
+			.then(() => deferred.resolve());
+	}, { defer: true })
+
+
 	.on('cycle', function(event) {
 		console.log(String(event.target));
 	})
