@@ -1,10 +1,9 @@
 {
   "name": "clientlinker-benchmark",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "clientlinker benchmark",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [
     "clientlinker",
     "benchmark"
@@ -24,7 +23,7 @@
   },
   "dependencies": {
     "benchmark": "^2.1.4",
-    "clientlinker-core": "^11.1.0",
+    "clientlinker-core": "^12.0.0",
     "clientlinker-flow-confighandler-test": "^3.1.0"
   },
   "devDependencies": {
