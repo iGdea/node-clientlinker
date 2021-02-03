@@ -111,21 +111,20 @@ exports.runAction = function runAction(
 	ignoreRunError
 ) {
 	options || (options = {});
-	let retPromise;
-	const args = [action, query, body, null, options];
+	const args = [action, query, body, options];
 	const str = printTpl.runActionStart(action, query, body, options);
 	stdout.log(str);
 
 	// 兼容老的linker
-	if (linker.runIn) retPromise = linker.runIn(args, 'cli');
-	else retPromise = linker.run.apply(linker, args);
+	const retPromise = linker.run.apply(linker, args);
+	const runtime = retPromise.lastRuntime;
 
 	return retPromise.then(
 		function(data) {
 			const str = printTpl.runActionEnd(
 				action,
 				'data',
-				retPromise.runtime,
+				runtime,
 				data
 			);
 			stdout.log(str);
@@ -136,7 +135,7 @@ exports.runAction = function runAction(
 			const str = printTpl.runActionEnd(
 				action,
 				'error',
-				retPromise.runtime,
+				runtime,
 				err
 			);
 			stdout.error(str);
