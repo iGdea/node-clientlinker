@@ -4,7 +4,6 @@
   "description": "clientlinker benchmark",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env DEBUG=clientlinker* mocha test/test_*"
   },
   "keywords": [
     "clientlinker",

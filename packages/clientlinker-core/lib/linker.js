@@ -97,7 +97,12 @@ class Linker {
 	}
 
 	// 标准输入参数
-	run() {
+	run(action, query, body, options) {
+		return this.runIn(action, query, body, options);
+	}
+
+	// 相比run，多了env
+	runIn() {
 		const runtime = this._runtime.apply(this, arguments);
 		if (!runtime.client) {
 			return Promise.reject(utils.newNotFoundError('NO CLIENT', runtime));
@@ -192,11 +197,3 @@ exports.Linker = Linker;
 
 Linker.prototype.JSON = utils.JSON;
 Linker.prototype.version = require('../package.json').version;
-Linker.prototype.runIn = deprecate.function(async function([
-	action, query, body, callback, options
-] = [], source, env) {
-	return this.run(
-		action, query, body, typeof callback === 'function' ? options : callback,
-		env
-	);
-}, '`runIn` will not be supported.');

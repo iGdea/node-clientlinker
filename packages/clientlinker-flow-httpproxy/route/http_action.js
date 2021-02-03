@@ -128,7 +128,7 @@ function runAction(
 				httpproxyHeaders: headers,
 				httpproxyQuery: query
 			};
-			const retPromise = linker.run(action, body.query, body.body, body.options, env);
+			const retPromise = linker.runIn(action, body.query, body.body, body.options, env);
 			const runtime = linker.lastRuntime;
 
 			return retPromise

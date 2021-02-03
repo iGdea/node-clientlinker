@@ -78,9 +78,6 @@ module.exports = linker;
 ```javascript
 var linker = require('./clientlinker.conf.js');
 
-linker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
-
-// or use promise
 linker.run('mail.read', userid, {mailid: 'xxxx'}, options)
   .then(function(data){});
 ```
