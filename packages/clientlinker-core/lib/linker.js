@@ -102,8 +102,8 @@ class Linker {
 	}
 
 	// 相比run，多了env
-	runIn() {
-		const runtime = this._runtime.apply(this, arguments);
+	runIn(action, query, body, options, env) {
+		const runtime = this._runtime(action, query, body, options, env);
 		if (!runtime.client) {
 			return Promise.reject(utils.newNotFoundError('NO CLIENT', runtime));
 		}
