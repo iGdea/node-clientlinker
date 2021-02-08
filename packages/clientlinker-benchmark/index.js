@@ -4,7 +4,7 @@ const path = require('path');
 
 const versions = glob.sync('*', { cwd: `${__dirname}/versions` })
 	.map(v => +v)
-	.sort((a, b) => a > b ? 1 : -1);
+	.sort((a, b) => a > b ? -1 : 1);
 const taskFiles = glob.sync('*.js', { cwd: `${__dirname}/run`, absolute: true });
 
 // console.log(versions, taskFiles);
