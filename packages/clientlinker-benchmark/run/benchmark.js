@@ -1,5 +1,6 @@
+/* global clientlinker */
+
 const Benchmark = require('benchmark');
-const clientlinker = require('clientlinker-core');
 
 function methodHandler() {
 	return Promise.resolve();

@@ -3,7 +3,9 @@
   "version": "1.0.1",
   "description": "clientlinker benchmark",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "bootstrap": "cd versions; for i in *.x; do echo $i; cd $i; npm install; cd ..; done"
+  },
   "keywords": [
     "clientlinker",
     "benchmark"
@@ -24,7 +26,8 @@
   "dependencies": {
     "benchmark": "^2.1.4",
     "clientlinker-core": "^12.0.0",
-    "clientlinker-flow-confighandler-test": "^3.1.0"
+    "clientlinker-flow-confighandler-test": "^3.1.0",
+    "glob": "^7.1.6"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"
