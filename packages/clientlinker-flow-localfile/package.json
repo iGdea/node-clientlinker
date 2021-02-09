@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-localfile",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Localfile flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "p-map": "^4.0.0"
   },
   "devDependencies": {
-    "clientlinker-core": "^12.0.0",
+    "clientlinker-core": "^12.0.1",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
