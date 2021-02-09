@@ -1,27 +1,15 @@
 os:
   - linux
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
-
 language: node_js
+
 node_js:
   - "lts/*"
   - "stable"
 
 install:
-  - export CXX=g++-4.8
-  - $CXX --version
   - npm install
   - npm run bootstrap
-
-before_install:
-  - npm install -g node-gyp
-  - rm -rf ~/.node-gyp/
 
 script:
   - npm run lint
