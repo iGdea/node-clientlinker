@@ -27,7 +27,8 @@
     "benchmark": "^2.1.4",
     "clientlinker-core": "^12.0.0",
     "clientlinker-flow-confighandler-test": "^3.1.0",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "hdr-histogram-js": "^2.0.1"
   },
   "devDependencies": {
     "cross-env": "^5.2.0"
