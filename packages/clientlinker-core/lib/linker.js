@@ -5,13 +5,9 @@ const { Flow } = require('./flow');
 const { ClientRuntime } = require('./runtime/client_runtime');
 const deprecate = require('depd')('clientlinker');
 const utils = require('./utils');
-// const { EventEmitter } = require('events');
 
 class Linker {
-// class Linker extends EventEmitter {
 	constructor(options) {
-		// super();
-
 		this._clients = {};
 		this.flows = {};
 		// 包含初始化client的一些配置
