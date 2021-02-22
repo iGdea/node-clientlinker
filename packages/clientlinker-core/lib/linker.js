@@ -30,7 +30,6 @@ class Linker {
 			);
 		}
 		if (arguments.length == 1) {
-			debug('get client instead of set');
 			return this._clients[clientName];
 		}
 		if (typeof options != 'object') {
@@ -70,7 +69,6 @@ class Linker {
 		if (typeof flowName != 'string') {
 			throw new Error('CLIENTLINKER:FlowNameMustBeString,' + flowName);
 		} else if (arguments.length == 1) {
-			debug('get client instead of set');
 			return this.flows[flowName];
 		} else if (typeof handler != 'function') {
 			throw new Error(
