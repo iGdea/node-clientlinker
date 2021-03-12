@@ -4,7 +4,7 @@
   "description": "clientlinker benchmark",
   "main": "index.js",
   "scripts": {
-    "bootstrap": "cd versions; for i in *.x; do echo $i; cd $i; npm install; cd ..; done"
+    "bootstrap": "cd versions; for i in *; do echo $i; cd $i; npm install; cd ..; done"
   },
   "keywords": [
     "clientlinker",
