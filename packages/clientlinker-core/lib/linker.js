@@ -41,11 +41,8 @@ class Linker {
 		if (!options.flows) options.flows = [];
 		else options.flows = options.flows.slice();
 
-		const client = (this._clients[clientName] = new Client(
-			clientName,
-			this,
-			options
-		));
+		const client = new Client(clientName, this, options);
+		this._clients[clientName] = client;
 		debug('add client:%s', clientName);
 
 		return client;
