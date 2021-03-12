@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-benchmark",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "clientlinker benchmark",
   "main": "index.js",
   "private": true,
