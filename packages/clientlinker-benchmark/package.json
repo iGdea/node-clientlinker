@@ -3,6 +3,7 @@
   "version": "1.1.1",
   "description": "clientlinker benchmark",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "bootstrap": "cd versions; for i in *; do echo $i; cd $i; npm install; cd ..; done"
   },
