@@ -57,7 +57,7 @@ class FlowsRuntime {
 			(flowName = clientFlows[index]);
 			index++
 		) {
-			flow = client.linker.flow(flowName);
+			flow = client.linker.flows[flowName];
 			if (flow) break;
 			this.runned.push(null);
 		}

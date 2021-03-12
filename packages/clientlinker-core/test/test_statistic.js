@@ -25,6 +25,6 @@ describe('#statistic', () => {
 		// console.log(data.inRun[0]);
 		// 注意：debug也会加入，所以这里需要特别留意
 		// async会生成两个promise
-		expect(data.inRun.length).to.be(3);
+		expect(data.inRun.length).to.be(2);
 	});
 });
