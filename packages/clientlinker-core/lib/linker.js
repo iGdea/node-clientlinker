@@ -33,20 +33,13 @@ class Linker {
 			);
 		}
 
-		const defaultFlowOptions = options &&
-			!options.flows &&
-			this.options.defaults &&
-			this.options.defaults.flows && {
-				flows: this.options.defaults.flows.slice()
-			};
-
 		options = {
 			...this.options.defaults,
-			...defaultFlowOptions,
 			...options
 		};
 
 		if (!options.flows) options.flows = [];
+		else options.flows = options.flows.slice();
 
 		const client = (this._clients[clientName] = new Client(
 			clientName,
