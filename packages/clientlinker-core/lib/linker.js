@@ -21,7 +21,7 @@ class Linker {
 	client(clientName, options) {
 		if (typeof clientName != 'string') {
 			throw new Error(
-				'CLIENTLINKER:ClientNameMustBeString,' + clientName
+				`CLIENTLINKER:ClientNameMustBeString,${clientName}`
 			);
 		}
 		if (arguments.length == 1) {
@@ -29,7 +29,7 @@ class Linker {
 		}
 		if (typeof options != 'object') {
 			throw new Error(
-				'CLIENTLINKER:ClientOptionsMustBeObject,' + clientName
+				`CLIENTLINKER:ClientOptionsMustBeObject,${clientName}`
 			);
 		}
 
@@ -51,12 +51,14 @@ class Linker {
 	// 注册flower
 	flow(flowName, handler) {
 		if (typeof flowName != 'string') {
-			throw new Error('CLIENTLINKER:FlowNameMustBeString,' + flowName);
+			throw new Error(
+			`'CLIENTLINKER:FlowNameMustBeString,${flowName}`
+			);
 		} else if (arguments.length == 1) {
 			return this.flows[flowName];
 		} else if (typeof handler != 'function') {
 			throw new Error(
-				'CLIENTLINKER:FlowHandlerMustBeFunction,' + flowName
+			`CLIENTLINKER:FlowHandlerMustBeFunction,${flowName}`
 			);
 		}
 
@@ -64,12 +66,14 @@ class Linker {
 		handler(flow, this);
 
 		if (typeof flow.run != 'function') {
-			throw new Error('CLIENTLINKER:Flow.runMustBeFunction,' + flowName);
+			throw new Error(
+				`CLIENTLINKER:Flow.runMustBeFunction,${flowName}`
+			);
 		}
 
 		if (flow.methods && typeof flow.methods != 'function') {
 			throw new Error(
-				'CLIENTLINKER:Flow.methodsMustBeFunction,' + flowName
+				`CLIENTLINKER:Flow.methodsMustBeFunction,${flowName}`
 			);
 		}
 
