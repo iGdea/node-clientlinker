@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const FlowsRuntime = require('./flows_runtime').FlowsRuntime;
+const { FlowsRuntime } = require('./flows_runtime');
 
 class ClientRuntime {
 	constructor(linker, action, query, body, options) {

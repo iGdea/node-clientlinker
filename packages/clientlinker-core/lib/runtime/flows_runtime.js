@@ -1,5 +1,5 @@
 const debug = require('debug')('clientlinker:flows_runtime');
-const FlowRuntime = require('./flow_runtime').FlowRuntime;
+const { FlowRuntime } = require('./flow_runtime');
 const utils = require('../utils');
 
 class FlowsRuntime {

@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Linker = require('./linker').Linker;
+const { Linker } = require('./linker');
 const debug = require('debug')('clientlinker');
 const deprecate = require('depd')('clientlinker');
 

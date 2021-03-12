@@ -3,7 +3,6 @@ const debug = require('debug')('clientlinker:linker');
 const { Client } = require('./client');
 const { Flow } = require('./flow');
 const { ClientRuntime } = require('./runtime/client_runtime');
-const deprecate = require('depd')('clientlinker');
 const utils = require('./utils');
 
 class Linker {
@@ -41,12 +40,11 @@ class Linker {
 				flows: this.options.defaults.flows.slice()
 			};
 
-		options = _.extend(
-			{},
-			this.options.defaults,
-			defaultFlowOptions,
-			options
-		);
+		options = {
+			...this.options.defaults,
+			...defaultFlowOptions,
+			...options
+		};
 
 		if (!options.flows) options.flows = [];
 
