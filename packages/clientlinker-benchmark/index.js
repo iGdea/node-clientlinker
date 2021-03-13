@@ -14,7 +14,13 @@ taskFiles.forEach(taskfile => {
 	versions.forEach(version => {
 		console.log();
 		console.log(` >>> run clientlinker, task: ${path.basename(taskfile)} pkg ver: ${version}`);
-		spawnSync(process.execPath, [`--require=${__dirname}/versions/${version}`, taskfile], { stdio: [ null, process.stdout, process.stderr ] });
+		spawnSync(process.execPath,
+			[
+				`--require=${__dirname}/versions/${version}`,
+				taskfile,
+				version === 9999 ? '--all' : '--only-clientlinker'
+			],
+			{ stdio: [ null, process.stdout, process.stderr ] });
 	});
 	// console.log(p.stdout.toString().trim());
 });
