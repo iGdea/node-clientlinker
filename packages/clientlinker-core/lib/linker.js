@@ -48,7 +48,13 @@ class Linker {
 		return client;
 	}
 
-	// 注册flower
+	/**
+	 * 注册/获取flower
+	 *
+	 * @param {string}        flowName
+	 * @param {function/Flow} handler
+	 * @returns {Flow}
+	 */
 	flow(flowName, handler) {
 		if (typeof flowName != 'string') {
 			throw new Error(
@@ -56,14 +62,19 @@ class Linker {
 			);
 		} else if (arguments.length == 1) {
 			return this.flows[flowName];
-		} else if (typeof handler != 'function') {
+		}
+
+		let flow;
+		if (handler instanceof Flow) {
+			flow = handler;
+		} else if (typeof handler !== 'function') {
 			throw new Error(
 			`CLIENTLINKER:FlowHandlerMustBeFunction,${flowName}`
 			);
+		} else {
+			flow = new Flow(flowName);
+			handler(flow, this);
 		}
-
-		const flow = new Flow(flowName);
-		handler(flow, this);
 
 		if (typeof flow.run != 'function') {
 			throw new Error(
