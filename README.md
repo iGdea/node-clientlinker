@@ -19,5 +19,5 @@ A solution to break out of network and OS.
 | clientlinker-flow-mysql           | [![NPM Version](https://img.shields.io/npm/v/clientlinker-flow-mysql.svg)](https://www.npmjs.org/package/clientlinker-flow-mysql)  |
 
 
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-clientlinker.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-clientlinker
+[coveralls-image]: https://img.shields.io/coveralls/iGdea/node-clientlinker.svg
+[coveralls-url]: https://coveralls.io/github/iGdea/node-clientlinker

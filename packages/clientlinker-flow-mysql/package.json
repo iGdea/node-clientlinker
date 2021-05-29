@@ -26,10 +26,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/node-clientlinker.git"
+    "url": "git@github.com:iGdea/node-clientlinker.git"
   },
   "bugs": {
-    "url": "https://github.com/igdea/node-clientlinker/issues"
+    "url": "https://github.com/iGdea/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/igdea/node-clientlinker/tree/master/packages/clientlinker-flow-mysql"
+  "homepage": "https://github.com/iGdea/node-clientlinker/tree/master/packages/clientlinker-flow-mysql"
 }
