@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-benchmark",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "clientlinker benchmark",
   "main": "index.js",
   "private": true,
@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "benchmark": "^2.1.4",
-    "clientlinker": "^13.1.2",
-    "clientlinker-flow-confighandler-test": "^3.1.1",
+    "clientlinker": "^13.1.3",
+    "clientlinker-flow-confighandler-test": "^3.1.2",
     "glob": "^7.1.7",
     "hdr-histogram-js": "^2.0.1"
   },
