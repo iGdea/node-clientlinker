@@ -12,8 +12,8 @@
     "test-cov": "lerna run test-cov --"
   },
   "devDependencies": {
-    "lerna": "^3.16.4",
-    "eslint": "^6.5.1",
+    "lerna": "^4.0.0",
+    "eslint": "^7.27.0",
     "eslint-config-brcjs": "^1.2.0"
   }
 }
