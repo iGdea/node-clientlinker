@@ -20,8 +20,6 @@ npm install clientlinker-core --save
 
 ## Options
 
-Linker Options Exmaple, see [Optons](https://github.com/Bacra/node-clientlinker/wiki/Linker-Options)
-or [Self Flows Options](https://github.com/Bacra/node-clientlinker/wiki/Self-Flows-Options)
 
 ```javascript
 {
