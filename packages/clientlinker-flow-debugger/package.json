@@ -21,7 +21,7 @@
   "devDependencies": {
     "clientlinker-core": "^12.2.1",
     "clientlinker-flow-confighandler": "^4.1.5",
-    "cross-env": "^5.2.0",
+    "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
