@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env DEBUG=clientlinker-flow-httpproxy* mocha test/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+    "test-cov": "nyc --reporter=lcov --reporter=text-summary mocha -- test/test_*"
   },
   "keywords": [
     "clientlinker",
@@ -32,7 +31,7 @@
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
     "express": "^4.17.1",
-    "istanbul": "^0.4.5",
+    "nyc": "^15.1.0",
     "mkdirp": "^1.0.4",
     "mocha": "^8.4.0"
   },

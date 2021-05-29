@@ -8,7 +8,6 @@
     "pub": "lerna version",
     "pub2": "lerna publish from-package -y",
     "test": "lerna run test --",
-    "test-ci": "lerna run test-ci --",
     "test-cov": "lerna run test-cov --"
   },
   "devDependencies": {
