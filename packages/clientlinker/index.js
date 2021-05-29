@@ -1,1 +1,4 @@
-module.exports = require('clientlinker-core');
+exports = module.exports = require('./lib/main');
+exports.util = {
+	parseAction: require('./lib/utils').parseAction
+};

@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const clientlinker = require('clientlinker-core');
+const clientlinker = require('clientlinker');
 const confighandlerTest = require('clientlinker-flow-confighandler-test');
 
 describe('#pkghandler', function() {

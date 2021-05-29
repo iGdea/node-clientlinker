@@ -1,1 +1,1 @@
-global.clientlinker = require('clientlinker-core');
+global.clientlinker = require('clientlinker');

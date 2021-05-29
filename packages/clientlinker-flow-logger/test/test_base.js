@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const clientlinker = require('clientlinker-core');
+const clientlinker = require('clientlinker');
 const logger = require('../flow/logger');
 const loggerFlow = require('../');
 const confighanlderFlow = require('clientlinker-flow-confighandler');

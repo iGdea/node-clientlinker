@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const clientlinker = require('clientlinker-core');
+const clientlinker = require('clientlinker');
 
 describe('#localfile', function() {
 	it('#base', function() {

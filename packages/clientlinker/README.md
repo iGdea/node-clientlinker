@@ -14,7 +14,6 @@ A solution to break out of network and OS.
 
 ```shell
 npm install clientlinker --save
-npm install clientlinker -g
 ```
 
 # Usage
@@ -70,7 +69,6 @@ linker.client(name, clientOptions);
 module.exports = linker;
 ```
 
-
 ## Run
 
 ### Run in Server
@@ -78,26 +76,11 @@ module.exports = linker;
 ```javascript
 var linker = require('./clientlinker.conf.js');
 
-linker.run('mail.read', userid, {mailid: 'xxxx'}, callback, options);
-
-// or use promise
 linker.run('mail.read', userid, {mailid: 'xxxx'}, options)
   .then(function(data){});
 ```
 
-### Run in Terminal
-
-```shell
-#### List all Clients and Methods
-clientlinker list ./clientlinker.conf.js
-
-#### Run action directly in Terminal
-clientlinker run ./clientlinker.conf.js
-clientlinker exec ./clientlinker.conf.js mail.method --body=body
-```
-
-
-# Upgrade
+## Upgrade
 
 ### 11.x.x => 12.0.0
 
@@ -106,6 +89,34 @@ clientlinker exec ./clientlinker.conf.js mail.method --body=body
  * remove `callback` param of `clientlinker.run` and `clientlinker.runIn`
  * remove `retry` event
  * remove `runtime.tmp`
+
+### 10x
+
+Remove deps handlers
+
+`runtime.runOptions` `runtime.methodKey` `runtime.lastFlow`
+`flow.register`
+`runtime.getRunnedFlowByName` `runtime.runnedFlows` `runtime.isFinished` `runtime.isStarted`
+`linker.add` `linker.addClient` `linker.parseMethodKey` `linker.getFlow` `linker.runByKey` `linker.bindFlow` `linker.loadFlow`
+`linker.onInit` `linker.runInShell`
+
+Remove attrs
+`runtime.promise`
+
+Remove options
+`option.clientDefaultOptions`
+
+Flow not support `init` callback.
+
+Remove callback handlers of `flow.run(runtime, callback)`
+
+`callback.toFuncCallback`
+`callback.reject` `callback.resolve` `callback.callback` `callback.nextAndResolve` `callback.promise` `callback.nextRunner`
+
+`flow.run` ret switch to Promise always.
+
+Remove `retry` event of `runtime`. Add `retry` event of `linker`.
+
 
 ### 6.x.x => 7.0.0
 
@@ -128,7 +139,6 @@ If you do not modify custom flow and use `callback.next` in flow, the rpc will t
 ### 4.x.x => 5.0.0
 
  * Please upgrade server first, if you are using `httpproxy` flow
-
 
 
 [npm-image]: https://img.shields.io/npm/v/clientlinker.svg

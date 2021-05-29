@@ -1,5 +1,5 @@
 let expect = require('expect.js');
-let clientlinker = require('clientlinker-core');
+let clientlinker = require('clientlinker');
 
 describe('#debugger', function() {
 	let linker = clientlinker({

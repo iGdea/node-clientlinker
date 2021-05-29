@@ -4,13 +4,9 @@
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/clientlinker_cli.js ./test/conf/clientlinker.conf.js ls",
     "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
-  },
-  "bin": {
-    "clientlinker": "bin/clientlinker_cli.js"
   },
   "keywords": [
     "client",
@@ -26,27 +22,24 @@
   "bugs": {
     "url": "https://github.com/igdea/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/igdea/node-clientlinker#readme",
+  "homepage": "https://github.com/igdea/node-clientlinker/tree/master/packages/clientlinker",
   "author": "Bacra <bacra.woo@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=10.16.0"
+  },
   "dependencies": {
-    "chalk": "^2.4.1",
-    "clientlinker-core": "^12.2.2",
-    "commander": "2.9.0",
-    "debug": "^3.1.0",
-    "depd": "^1.1.2",
-    "lodash": "^4.17.10",
-    "table": "5.0.2"
+    "debug": "^4.3.1",
+    "depd": "^2.0.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "benchmark": "^2.1.4",
-    "clientlinker-flow-confighandler": "^4.1.6",
+    "async-statistic": "^1.1.0",
     "clientlinker-flow-confighandler-test": "^3.1.1",
-    "clientlinker-flow-pkghandler": "^4.1.6",
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
-    "mkdirp": "^0.5.1",
-    "mocha": "^5.2.0"
+    "mkdirp": "^1.0.4",
+    "mocha": "^8.4.0"
   }
 }

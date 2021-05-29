@@ -1,7 +1,7 @@
 const http = require('http');
 const expr = require('express');
 const debug = require('debug')('clientlinker-flow-httpproxy:utils_test');
-const clientlinker = require('clientlinker-core');
+const clientlinker = require('clientlinker');
 const proxyRoute = require('../route');
 // const expect = require('expect.js');
 const confighandlerFlow = require('clientlinker-flow-confighandler');

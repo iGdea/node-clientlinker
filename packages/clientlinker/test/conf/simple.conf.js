@@ -18,12 +18,12 @@ let linker = clientlinker({
 		},
 		client2: {
 			confighandler: {
-				method: function(query, body, callback, options) {
-					return Promise.resolve({
+				method: function(query, body, options) {
+					return {
 						query: query,
 						body: body,
 						options: options
-					});
+					};
 				},
 				method2: function() {
 					return Promise.resolve();

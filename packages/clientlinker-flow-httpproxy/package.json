@@ -17,24 +17,24 @@
   "license": "MIT",
   "dependencies": {
     "aesid": "^3.3.1",
-    "ajv": "^6.5.3",
-    "debug": "^3.1.0",
-    "depd": "^1.1.2",
-    "lodash": "^4.17.10",
-    "lru-cache": "^5.1.1",
-    "raw-body": "^2.3.3",
-    "request": "^2.88.0"
+    "ajv": "^8.5.0",
+    "debug": "^4.3.1",
+    "depd": "^2.0.0",
+    "lodash": "^4.17.21",
+    "lru-cache": "^6.0.0",
+    "raw-body": "^2.4.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
-    "clientlinker-core": "^12.2.2",
+    "clientlinker": "^13.1.2",
     "clientlinker-flow-confighandler": "^4.1.6",
     "clientlinker-flow-confighandler-test": "^3.1.1",
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "istanbul": "^0.4.5",
-    "mkdirp": "^0.5.1",
-    "mocha": "^5.2.0"
+    "mkdirp": "^1.0.4",
+    "mocha": "^8.4.0"
   },
   "repository": {
     "type": "git",
