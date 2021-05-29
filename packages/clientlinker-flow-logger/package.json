@@ -4,8 +4,7 @@
   "description": "Logger flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
-    "test": "cross-env DEBUG=clientlinker-flow-logger* mocha test/test_*",
-    "test-cov": "nyc --reporter=lcov --reporter=text-summary mocha -- test/test_*"
+    "test": "cross-env DEBUG=clientlinker-flow-logger* mocha test/test_*"
   },
   "keywords": [
     "clientlinker",
@@ -24,7 +23,6 @@
     "clientlinker-flow-pkghandler": "^4.1.7",
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
-    "nyc": "^15.1.0",
     "mocha": "^8.4.0"
   },
   "repository": {

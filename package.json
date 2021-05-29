@@ -8,10 +8,11 @@
     "pub": "lerna version",
     "pub2": "lerna publish from-package -y",
     "test": "lerna run test --",
-    "test-cov": "lerna run test-cov --"
+    "test-cov": "nyc --reporter=lcov --reporter=text-summary lerna run test"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
+    "nyc": "^15.1.0",
     "eslint": "^7.27.0",
     "eslint-config-brcjs": "^1.2.0"
   }

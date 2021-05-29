@@ -4,8 +4,7 @@
   "description": "Linker all clients whether rpc, addon, http request, mock data, local file ...",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env DEBUG=clientlinker* mocha test/test_*",
-    "test-cov": "nyc --reporter=lcov --reporter=text-summary mocha -- test/test_*"
+    "test": "cross-env DEBUG=clientlinker* mocha test/test_*"
   },
   "keywords": [
     "client",
@@ -37,7 +36,6 @@
     "clientlinker-flow-confighandler-test": "^3.1.2",
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
-    "nyc": "^15.1.0",
     "mkdirp": "^1.0.4",
     "mocha": "^8.4.0"
   }
