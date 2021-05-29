@@ -1,6 +1,6 @@
 {
   "name": "clientlinker-flow-pkghandler",
-  "version": "4.1.7",
+  "version": "4.1.8",
   "description": "Pkghandler flow for clientlinker",
   "main": "flow/index.js",
   "scripts": {
@@ -17,8 +17,8 @@
     "debug": "^4.3.1"
   },
   "devDependencies": {
-    "clientlinker": "^13.1.3",
-    "clientlinker-flow-confighandler-test": "^3.1.2",
+    "clientlinker": "^13.1.4",
+    "clientlinker-flow-confighandler-test": "^3.1.3",
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
     "mocha": "^8.4.0"
