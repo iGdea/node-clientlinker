@@ -28,10 +28,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/node-clientlinker-flow-pkghandler.git"
+    "url": "git@github.com:Bacra/node-clientlinker.git"
   },
   "bugs": {
     "url": "https://github.com/Bacra/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/Bacra/node-clientlinker"
+  "homepage": "https://github.com/Bacra/node-clientlinker/tree/master/packages/clientlinker-flow-pkghandler"
 }
