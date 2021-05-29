@@ -2,14 +2,6 @@ node_modules
 npm-debug.log
 package-lock.json
 
-.gitignore
-.gitmodules
-.gitattributes
-.travis.yml
-.eslintrc.js
-.eslintignore
-.editorconfig
-.npmignore
 .tags*
 .DS_Store
 
