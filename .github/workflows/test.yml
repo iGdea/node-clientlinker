@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
@@ -23,3 +23,12 @@ jobs:
       - run: npm run bootstrap --if-present
       - run: npm run build --if-present
       - run: npm test
+
+      # 覆盖率上报
+      - run: npm run test-cov --if-present
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: './packages/*/coverage/lcov.info'
