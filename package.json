@@ -5,7 +5,7 @@
     "lint": "eslint .",
     "bootstrap": "lerna bootstrap --no-ci",
     "ls": "lerna ls",
-    "pub": "lerna publish",
+    "pub": "lerna version",
     "pub2": "lerna publish from-package -y",
     "test": "lerna run test --",
     "test-ci": "lerna run test-ci --",
