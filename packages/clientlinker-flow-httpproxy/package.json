@@ -41,7 +41,7 @@
     "url": "git@github.com:Bacra/node-clientlinker.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-clientlinker/issues"
+    "url": "https://github.com/igdea/node-clientlinker/issues"
   },
-  "homepage": "https://github.com/Bacra/node-clientlinker/tree/master/packages/clientlinker-flow-httpproxy"
+  "homepage": "https://github.com/igdea/node-clientlinker/tree/master/packages/clientlinker-flow-httpproxy"
 }
