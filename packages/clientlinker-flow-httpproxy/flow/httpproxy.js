@@ -119,23 +119,17 @@ function getRequestBody(runtime) {
 	return body;
 }
 
-const urlCache = {};
 exports.appendUrl_ = appendUrl;
 function appendUrl(url, query) {
-	let rootUrl = urlCache[url];
+	const lastChar = url.charAt(url.length - 1);
+	const splitChar =
+		lastChar == '?' || lastChar == '&'
+			? ''
+			: url.indexOf('?') != -1
+			? '&'
+			: '?';
 
-	if (!rootUrl) {
-		const lastChar = url.charAt(url.length - 1);
-		const splitChar =
-			lastChar == '?' || lastChar == '&'
-				? ''
-				: url.indexOf('?') != -1
-				? '&'
-				: '?';
-		rootUrl = urlCache[url] = url + splitChar;
-	}
-
-	return rootUrl + query;
+	return url + splitChar + query;
 }
 
 exports.getRequestParams_ = getRequestParams;
