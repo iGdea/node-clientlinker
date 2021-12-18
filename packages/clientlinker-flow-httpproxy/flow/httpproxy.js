@@ -170,8 +170,9 @@ function getRequestParams(runtime, body, cginame) {
 
 	// URL 上的action只是为了方便查看抓包请求
 	// 实际以body.action为准
+	// 增加runOptions.httpproxyUrl，方便后续动态调整 path等信息（中心化转发时）
 	const url = appendUrl(
-		options.httpproxy,
+		runOptions.httpproxyUrl || options.httpproxy,
 		'cgi=' + cginame + '&action=' + runtime.action + '&random=' + random
 	);
 
